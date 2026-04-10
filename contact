@@ -14,14 +14,16 @@
 
   <h1>Contact</h1>
 
-  <p>If you’d like to schedule a session or ask a question, I’d be honored to connect.</p>
+  <p>If you’d like to schedule a session, ask a question, or simply explore whether this kind of work is right for you, I’d be honored to connect.</p>
 
-  <p>Email me at:  
+  <p>Email me at:<br>
     <a href="mailto:your-email@example.com">your-email@example.com</a>
   </p>
 
-  <p>If you prefer, you can also request a session through the form below:</p>
+  <p>If you prefer a more structured way to reach out, you can also use the form or scheduling link below:</p>
 
-  <p><em>(Form or scheduling link will go here.)</em></p>
+  <p><em>(Your form or scheduling tool will be added here.)</em></p>
+
+  <p>I look forward to hearing your story and walking with you in this season.</p>
 </body>
 </html>
