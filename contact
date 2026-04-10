@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Contact – BoldHearts</title>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="about.html">About</a> |
+    <a href="services.html">Services</a> |
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <h1>Contact</h1>
+
+  <p>If you’d like to schedule a session or ask a question, I’d be honored to connect.</p>
+
+  <p>Email me at:  
+    <a href="mailto:your-email@example.com">your-email@example.com</a>
+  </p>
+
+  <p>If you prefer, you can also request a session through the form below:</p>
+
+  <p><em>(Form or scheduling link will go here.)</em></p>
+</body>
+</html>
