@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Services – BoldHearts</title>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="about.html">About</a> |
+    <a href="services.html">Services</a> |
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <h1>Services</h1>
+
+  <h2>Spiritual Direction</h2>
+  <p>A quiet, prayerful space to listen for God’s movement in your life. Sessions focus on discernment, presence, and the slow work of spiritual growth.</p>
+
+  <h2>Pastoral Counseling</h2>
+  <p>Support for those navigating emotional or spiritual challenges. This is a compassionate, non‑anxious space for processing grief, transition, identity, and healing.</p>
+
+  <h2>Leadership Soul Care</h2>
+  <p>For pastors, leaders, and founders carrying the weight of responsibility. These sessions offer grounding, clarity, and space to reconnect with your calling.</p>
+
+  <h2>Retreats & Guided Reflection</h2>
+  <p>Half‑day or full‑day experiences designed for rest, listening, and renewal. Includes silence, guided reflection, and prayerful accompaniment.</p>
+</body>
+</html>
