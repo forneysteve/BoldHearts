@@ -1,29 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Contact – BoldHearts</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | BoldHearts</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <nav>
-    <a href="index.html">Home</a> |
-    <a href="about.html">About</a> |
-    <a href="services.html">Services</a> |
-    <a href="contact.html">Contact</a>
-  </nav>
 
-  <h1>Contact</h1>
+    <header class="hero hero-small">
+        <div class="hero-content">
+            <h1>Let’s Begin the Conversation</h1>
+            <p>A first step that doesn’t have to be polished or perfect.</p>
+        </div>
+    </header>
 
-  <p>If you’d like to schedule a session, ask a question, or simply explore whether this kind of work is right for you, I’d be honored to connect.</p>
+    <section class="contact">
+        <h2>Reach Out</h2>
+        <p>
+            If you’re curious about spiritual direction or soul care, you can use the form below to share a bit
+            of what brings you here. I’ll respond with a few possible times for an initial conversation.
+        </p>
 
-  <p>Email me at:<br>
-    <a href="mailto:your-email@example.com">your-email@example.com</a>
-  </p>
+        <div class="contact-grid">
+            <div>
+                <h3>Contact Details</h3>
+                <p><strong>Email:</strong> steve@boldhearts.org</p>
+                <p><strong>Location:</strong> Sedalia, Colorado (virtual sessions available)</p>
+                <p>
+                    Your first session is a gentle, no-pressure space to explore what you’re seeking and how I
+                    might support you.
+                </p>
+            </div>
 
-  <p>If you prefer a more structured way to reach out, you can also use the form or scheduling link below:</p>
+            <form class="contact-form">
+                <label for="name">Name</label>
+                <input id="name" type="text" name="name" placeholder="Your name" />
 
-  <p><em>(Your form or scheduling tool will be added here.)</em></p>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" placeholder="you@example.com" />
 
-  <p>I look forward to hearing your story and walking with you in this season.</p>
+                <label for="reason">What brings you here?</label>
+                <textarea id="reason" name="reason" rows="4" placeholder="A few sentences is enough."></textarea>
+
+                <label for="format">Preferred session format</label>
+                <select id="format" name="format">
+                    <option value="">Select an option</option>
+                    <option value="virtual">Virtual</option>
+                    <option value="in-person">In-person (Sedalia, CO)</option>
+                    <option value="either">Either is fine</option>
+                </select>
+
+                <label for="extra">Anything else you’d like to share?</label>
+                <textarea id="extra" name="extra" rows="3"></textarea>
+
+                <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 BoldHearts — Sedalia, Colorado</p>
+    </footer>
+
 </body>
 </html>
