@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | BoldHearts</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="logo">Bold<span>Hearts</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
     <header class="hero hero-small">
         <div class="hero-content">
-            <h1>Let’s Begin the Conversation</h1>
-            <p>A first step that doesn’t have to be polished or perfect.</p>
+            <h1>Let&rsquo;s Begin the Conversation</h1>
+            <p>A first step that doesn&rsquo;t have to be polished or perfect.</p>
         </div>
     </header>
 
+    <!-- Contact Section -->
     <section class="contact">
-        <h2>Reach Out</h2>
-        <p>
-            If you’re curious about spiritual direction or soul care, you can use the form below to share a bit
-            of what brings you here. I’ll respond with a few possible times for an initial conversation.
-        </p>
-
         <div class="contact-grid">
+
+            <!-- Left Column: Info -->
             <div>
+                <h2>Reach Out</h2>
+                <p>If you&rsquo;re curious about spiritual direction or soul care, you can use the form to share a bit of what brings you here. I&rsquo;ll respond with a few possible times for an initial conversation.</p>
+
                 <h3>Contact Details</h3>
                 <p><strong>Email:</strong> steve@boldhearts.org</p>
                 <p><strong>Location:</strong> Sedalia, Colorado (virtual sessions available)</p>
-                <p>
-                    Your first session is a gentle, no-pressure space to explore what you’re seeking and how I
-                    might support you.
-                </p>
+                <p>Your first session is a gentle, no-pressure space to explore what you&rsquo;re seeking and how I might support you.</p>
             </div>
 
-            <form class="contact-form">
-                <label for="name">Name</label>
-                <input id="name" type="text" name="name" placeholder="Your name" />
-
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email" placeholder="you@example.com" />
-
-                <label for="reason">What brings you here?</label>
-                <textarea id="reason" name="reason" rows="4" placeholder="A few sentences is enough."></textarea>
-
-                <label for="format">Preferred session format</label>
-                <select id="format" name="format">
-                    <option value="">Select an option</option>
-                    <option value="virtual">Virtual</option>
-                    <option value="in-person">In-person (Sedalia, CO)</option>
-                    <option value="either">Either is fine</option>
-                </select>
-
-                <label for="extra">Anything else you’d like to share?</label>
-                <textarea id="extra" name="extra" rows="3"></textarea>
-
+            <!-- Right Column: Form -->
+            <form class="contact-form" action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">What brings you here?</label>
+                    <textarea id="message" name="message" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="format">Preferred session format</label>
+                    <select id="format" name="format">
+                        <option value="">Select an option</option>
+                        <option value="virtual">Virtual</option>
+                        <option value="in-person">In-person (Sedalia, CO)</option>
+                        <option value="either">Either is fine</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Anything else you'd like to share?</label>
+                    <textarea id="notes" name="notes" rows="3"></textarea>
+                </div>
                 <button type="submit" class="btn-primary">Send Message</button>
             </form>
+
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
-        <p>© 2026 BoldHearts — Sedalia, Colorado</p>
+        <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado</p>
     </footer>
 
 </body>

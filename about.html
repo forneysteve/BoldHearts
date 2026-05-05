@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | BoldHearts</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="logo">Bold<span>Hearts</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
     <header class="hero hero-small">
         <div class="hero-content">
             <h1>Why BoldHearts Exists</h1>
@@ -16,26 +30,33 @@
         </div>
     </header>
 
+    <!-- The Heart Behind BoldHearts -->
     <section class="about">
         <h2>The Heart Behind BoldHearts</h2>
-        <p>
-            BoldHearts was created for people who carry weight—emotional, spiritual, relational, vocational—
-            and need a place where they don’t have to hold it alone.
-        </p>
-        <p>
-            This work is rooted in the belief that God is already gently at work in every life.
-            Spiritual direction and pastoral care simply help you notice that movement, name what is true,
-            and discern the next step with courage.
-        </p>
+        <p>BoldHearts was created for people who carry weight&mdash;emotional, spiritual, relational, vocational&mdash;and need a place where they don&rsquo;t have to hold it alone.</p>
+        <p>This work is rooted in the belief that God is already gently at work in every life. Spiritual direction and pastoral care simply help you notice that movement, name what is true, and discern the next step with courage.</p>
     </section>
 
+    <div class="divider"></div>
+
+    <!-- About Steve -->
     <section class="about about-alt">
         <h2>About Steve</h2>
-        <p>
-            I’m Steve Forney—a spiritual director, pastoral counselor, and long-time guide for leaders
-            navigating complexity. My background spans organizational leadership, systems design, and soul care.
-        </p>
-        <p>
-            I’ve walked with people through seasons of transition, burnout, calling shifts, grief, and deep
-            spiritual questions. My approach is contemplative, trauma-aware, and rooted in the Christian
-            tradition, while welcoming people from a wide
+        <p>I&rsquo;m Steve Forney&mdash;a spiritual director, pastoral counselor, and long-time guide for leaders navigating complexity. My background spans organizational leadership, systems design, and soul care.</p>
+        <p>I&rsquo;ve walked with people through seasons of transition, burnout, calling shifts, grief, and deep spiritual questions. My approach is contemplative, trauma-aware, and rooted in the Christian tradition, while welcoming people from a wide range of backgrounds and beliefs.</p>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Want to Learn More?</h2>
+        <p>I&rsquo;d welcome the chance to hear what brings you here.</p>
+        <a href="contact.html" class="btn-primary">Get in Touch</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado</p>
+    </footer>
+
+</body>
+</html>
