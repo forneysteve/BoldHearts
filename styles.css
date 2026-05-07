@@ -1,6 +1,6 @@
 /* ============================================
    BoldHearts — styles.css
-   Palette: Browns, Greys, Blacks
+   Palette: Gold/Cream, Greys, Blacks
    Fonts: Cormorant Garamond (headings) · Inter (body)
    ============================================ */
 
@@ -28,13 +28,13 @@ body {
 }
 
 a {
-  color: #c9a87c;
+  color: #e8d7a0;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #e2c9a3;
+  color: #f5e8c8;
 }
 
 img {
@@ -70,7 +70,7 @@ h2 {
 h3 {
   font-size: 1.35rem;
   margin-bottom: 0.75rem;
-  color: #c9a87c;
+  color: #e8d7a0;
 }
 
 p {
@@ -84,7 +84,7 @@ strong {
 }
 
 em {
-  color: #c9a87c;
+  color: #e8d7a0;
   font-style: italic;
 }
 
@@ -103,7 +103,7 @@ nav {
   align-items: center;
   background: rgba(17, 17, 17, 0.92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+  border-bottom: 1px solid rgba(232, 215, 160, 0.1);
 }
 
 nav .logo {
@@ -116,7 +116,7 @@ nav .logo {
 }
 
 nav .logo span {
-  color: #c9a87c;
+  color: #e8d7a0;
 }
 
 nav .nav-links {
@@ -136,7 +136,7 @@ nav .nav-links a {
 
 nav .nav-links a:hover,
 nav .nav-links a.active {
-  color: #c9a87c;
+  color: #e8d7a0;
 }
 
 
@@ -206,7 +206,7 @@ nav .nav-links a.active {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #c9a87c;
+  color: #e8d7a0;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
@@ -232,7 +232,7 @@ section h2::after {
   display: block;
   width: 60px;
   height: 2px;
-  background: #c9a87c;
+  background: #e8d7a0;
   margin-top: 1rem;
 }
 
@@ -259,7 +259,7 @@ section ul {
 
 .trust-card {
   background: #1e1c1a;
-  border: 1px solid rgba(201, 168, 124, 0.15);
+  border: 1px solid rgba(232, 215, 160, 0.15);
   border-radius: 6px;
   padding: 2rem;
   text-align: center;
@@ -268,7 +268,7 @@ section ul {
 .trust-number {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #c9a87c;
+  color: #e8d7a0;
   margin-bottom: 0.5rem;
 }
 
@@ -305,7 +305,7 @@ section ul {
 
 .step {
   background: #1e1c1a;
-  border: 1px solid rgba(201, 168, 124, 0.12);
+  border: 1px solid rgba(232, 215, 160, 0.12);
   border-radius: 6px;
   padding: 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -322,7 +322,7 @@ section ul {
   justify-content: center;
   width: 50px;
   height: 50px;
-  background-color: #c9a87c;
+  background-color: #e8d7a0;
   color: #111111;
   font-size: 1.5rem;
   font-weight: 700;
@@ -379,7 +379,7 @@ section ul {
 
 .service-card {
   background: #1e1c1a;
-  border: 1px solid rgba(201, 168, 124, 0.12);
+  border: 1px solid rgba(232, 215, 160, 0.12);
   border-radius: 6px;
   overflow: hidden;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -387,7 +387,7 @@ section ul {
 
 .service-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(201, 168, 124, 0.35);
+  border-color: rgba(232, 215, 160, 0.35);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -425,12 +425,12 @@ section ul {
   display: inline-block;
   padding: 0 2rem 2rem;
   font-size: 0.9rem;
-  color: #c9a87c;
+  color: #e8d7a0;
   transition: color 0.3s ease;
 }
 
 .service-link:hover {
-  color: #e2c9a3;
+  color: #f5e8c8;
 }
 
 .services ul {
@@ -449,7 +449,7 @@ section ul {
   content: '\2014';
   position: absolute;
   left: 0;
-  color: #c9a87c;
+  color: #e8d7a0;
 }
 
 .services-alt ul li::before {
@@ -464,8 +464,8 @@ section ul {
   background-color: #1e1b18;
   color: #f0e8df;
   text-align: center;
-  border-top: 1px solid rgba(201, 168, 124, 0.1);
-  border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+  border-top: 1px solid rgba(232, 215, 160, 0.1);
+  border-bottom: 1px solid rgba(232, 215, 160, 0.1);
 }
 
 .quote blockquote {
@@ -493,7 +493,7 @@ section ul {
 
 .audience li {
   padding: 12px 0;
-  border-bottom: 1px solid rgba(201, 168, 124, 0.12);
+  border-bottom: 1px solid rgba(232, 215, 160, 0.12);
   color: #b0a898;
 }
 
@@ -524,7 +524,7 @@ section ul {
 
 .about li {
   padding: 12px 0;
-  border-bottom: 1px solid rgba(201, 168, 124, 0.12);
+  border-bottom: 1px solid rgba(232, 215, 160, 0.12);
   color: #b0a898;
 }
 
@@ -535,8 +535,8 @@ section ul {
   background-color: #1e1b18;
   text-align: center;
   padding: 5rem 2rem;
-  border-top: 1px solid rgba(201, 168, 124, 0.1);
-  border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+  border-top: 1px solid rgba(232, 215, 160, 0.1);
+  border-bottom: 1px solid rgba(232, 215, 160, 0.1);
 }
 
 .cta h2 {
@@ -565,17 +565,17 @@ section ul {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #111111;
-  background-color: #c9a87c;
+  background-color: #e8d7a0;
   padding: 1rem 2.5rem;
   border-radius: 4px;
-  border: 2px solid #c9a87c;
+  border: 2px solid #e8d7a0;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .btn-primary:hover {
   background-color: transparent;
-  color: #c9a87c;
+  color: #e8d7a0;
 }
 
 .btn-secondary {
@@ -585,18 +585,18 @@ section ul {
   font-size: 0.85rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #c9a87c;
+  color: #e8d7a0;
   background-color: transparent;
   padding: 1rem 2.5rem;
   border-radius: 4px;
-  border: 2px solid rgba(201, 168, 124, 0.4);
+  border: 2px solid rgba(232, 215, 160, 0.4);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover {
-  border-color: #c9a87c;
-  background-color: rgba(201, 168, 124, 0.08);
+  border-color: #e8d7a0;
+  background-color: rgba(232, 215, 160, 0.08);
 }
 
 
@@ -646,7 +646,7 @@ section ul {
   padding: 0.9rem 1rem;
   margin-bottom: 1.5rem;
   background-color: #1e1c1a;
-  border: 1px solid rgba(201, 168, 124, 0.15);
+  border: 1px solid rgba(232, 215, 160, 0.15);
   border-radius: 4px;
   color: #d4ccc4;
   font-family: 'Inter', sans-serif;
@@ -659,7 +659,7 @@ section ul {
 .contact-form textarea:focus,
 .contact-form select:focus {
   outline: none;
-  border-color: #c9a87c;
+  border-color: #e8d7a0;
 }
 
 .contact-form textarea {
@@ -669,7 +669,7 @@ section ul {
 
 .contact-form select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c9a87c' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e8d7a0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
@@ -691,7 +691,7 @@ footer {
   background-color: #0d0d0d;
   text-align: center;
   padding: 2.5rem 2rem;
-  border-top: 1px solid rgba(201, 168, 124, 0.08);
+  border-top: 1px solid rgba(232, 215, 160, 0.08);
 }
 
 footer p {
@@ -710,7 +710,7 @@ footer p {
 }
 
 .text-accent {
-  color: #c9a87c;
+  color: #e8d7a0;
 }
 
 .container {
@@ -733,7 +733,7 @@ footer p {
   background: linear-gradient(
     to right,
     transparent,
-    rgba(201, 168, 124, 0.2),
+    rgba(232, 215, 160, 0.2),
     transparent
   );
   margin: 0;
