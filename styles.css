@@ -164,9 +164,9 @@ nav .nav-links a.active {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(17, 17, 17, 0.5) 0%,
-    rgba(17, 17, 17, 0.3) 50%,
-    rgba(17, 17, 17, 0.85) 100%
+    rgba(17, 17, 17, 0.75) 0%,
+    rgba(17, 17, 17, 0.65) 50%,
+    rgba(17, 17, 17, 0.95) 100%
   );
   z-index: 1;
 }
@@ -178,8 +178,8 @@ nav .nav-links a.active {
 .hero-small::before {
   background: linear-gradient(
     to bottom,
-    rgba(17, 17, 17, 0.6) 0%,
-    rgba(17, 17, 17, 0.8) 100%
+    rgba(17, 17, 17, 0.8) 0%,
+    rgba(17, 17, 17, 0.9) 100%
   );
 }
 
@@ -191,7 +191,7 @@ nav .nav-links a.active {
 
 .hero-content h1 {
   margin-bottom: 1.25rem;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
 }
 
 .hero-content p {
@@ -200,6 +200,7 @@ nav .nav-links a.active {
   max-width: 600px;
   margin: 0 auto 2rem;
   line-height: 1.9;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
 }
 
 .hero-content .tagline {
@@ -210,6 +211,7 @@ nav .nav-links a.active {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
 }
 
 .hero-buttons {
