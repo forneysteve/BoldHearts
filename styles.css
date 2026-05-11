@@ -113,6 +113,7 @@ nav .logo {
   color: #f0e8df;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  z-index: 1001;
 }
 
 nav .logo span {
@@ -137,6 +138,59 @@ nav .nav-links a {
 nav .nav-links a:hover,
 nav .nav-links a.active {
   color: #e8d7a0;
+}
+
+/* Hamburger button — hidden on desktop */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 4px;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: #e8d7a0;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger → X animation */
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* CTA nav button */
+.cta-nav {
+  background-color: #e8d7a0;
+  color: #111111 !important;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  font-weight: 500 !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.cta-nav:hover {
+  background-color: #f5e8c8;
+  color: #111111 !important;
 }
 
 
@@ -816,7 +870,7 @@ footer p {
   font-size: 0.8rem;
   letter-spacing: 0.06em;
   max-width: none;
-  margin: 0 auto;
+  margin: 0 auto 0.4rem;
 }
 
 
@@ -868,53 +922,143 @@ footer p {
 }
 
 
-/* ---------- Responsive ---------- */
+/* ============================================
+   RESPONSIVE — Tablet (max 768px)
+   ============================================ */
 
 @media (max-width: 768px) {
+
+  /* Nav — show hamburger, hide links */
+  .nav-toggle {
+    display: flex;
+  }
+
+  nav .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(13, 13, 13, 0.98);
+    backdrop-filter: blur(16px);
+    justify-content: center;
+    z-index: 999;
+  }
+
+  nav .nav-links.open {
+    display: flex;
+  }
+
+  nav .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  nav .nav-links a {
+    display: block;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    padding: 1.25rem 2rem;
+    color: #d4ccc4;
+    border-bottom: 1px solid rgba(232, 215, 160, 0.08);
+  }
+
+  nav .nav-links a:hover,
+  nav .nav-links a.active {
+    color: #e8d7a0;
+    background: rgba(232, 215, 160, 0.05);
+  }
+
+  .cta-nav {
+    background-color: #e8d7a0 !important;
+    color: #111111 !important;
+    margin: 1.5rem auto 0;
+    width: calc(100% - 4rem);
+    border-radius: 4px;
+  }
+
+  /* Hero */
   .hero {
     min-height: 80vh;
-    padding: 4rem 1.5rem;
+    padding: 5rem 1.5rem 3rem;
   }
 
   .hero-small {
     min-height: 40vh;
   }
 
+  .hero-content .tagline {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    padding: 0.9rem 2rem;
+    font-size: 0.8rem;
+  }
+
+  /* Sections */
   section {
     padding: 3.5rem 1.5rem;
   }
 
+  /* Quote */
+  .quote blockquote {
+    font-size: 1.25rem;
+  }
+
+  /* Services */
   .service-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
+  .service-image {
+    height: 180px;
+  }
+
+  /* Steps */
+  .steps-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Trust */
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Contact */
   .contact-grid {
     grid-template-columns: 1fr;
   }
 
-  .steps-container {
-    grid-template-columns: 1fr 1fr;
-  }
-
+  /* Testimonials */
   .testimonials-container {
     min-height: 250px;
   }
 
   .testimonial-controls {
     gap: 1rem;
-  }
-
-  nav {
-    padding: 1rem 1.25rem;
-  }
-
-  nav .nav-links {
-    gap: 1.25rem;
-  }
-
-  nav .nav-links a {
-    font-size: 0.75rem;
   }
 
   h1 {
@@ -924,38 +1068,119 @@ footer p {
   h2 {
     font-size: 1.5rem;
   }
-
-  .btn-primary,
-  .btn-secondary {
-    padding: 0.85rem 2rem;
-    font-size: 0.8rem;
-  }
 }
 
+
+/* ============================================
+   RESPONSIVE — Mobile (max 480px)
+   ============================================ */
+
 @media (max-width: 480px) {
+
+  /* Nav logo */
+  nav .logo {
+    font-size: 1.15rem;
+  }
+
+  nav {
+    padding: 1rem 1.25rem;
+  }
+
+  /* Hero */
   .hero {
-    min-height: 70vh;
-    padding: 3rem 1rem;
+    min-height: 100vh;
+    padding: 5rem 1.25rem 3rem;
+    background-attachment: scroll; /* fixes iOS parallax bug */
   }
 
   .hero-small {
     min-height: 35vh;
   }
 
-  section {
-    padding: 3rem 1rem;
+  .hero-content h1 {
+    font-size: 1.8rem;
   }
 
+  .hero-content .tagline {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+
+  .hero-content p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Sections */
+  section {
+    padding: 3rem 1.25rem;
+  }
+
+  /* Trust */
+  .trust-section {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .trust-card {
+    padding: 1.5rem;
+  }
+
+  .trust-number {
+    font-size: 2rem;
+  }
+
+  /* Steps */
+  .steps-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .step {
+    padding: 1.5rem;
+  }
+
+  /* Services */
   .service-card {
     padding: 0;
   }
 
-  .steps-container {
-    grid-template-columns: 1fr;
+  .service-image {
+    height: 160px;
   }
 
+  /* Quote */
+  .quote {
+    padding: 3rem 1.25rem;
+  }
+
+  .quote blockquote {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  /* Testimonials */
   .testimonials-container {
     min-height: 280px;
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
   }
 
   .testimonial-prev,
@@ -974,11 +1199,14 @@ footer p {
     width: 24px;
   }
 
-  nav .logo {
-    font-size: 1.15rem;
+  /* Audience */
+  .audience li {
+    font-size: 0.9rem;
+    padding: 10px 0;
   }
 
-  .trust-grid {
-    grid-template-columns: 1fr;
+  /* Footer */
+  footer {
+    padding: 2rem 1.25rem;
   }
 }
