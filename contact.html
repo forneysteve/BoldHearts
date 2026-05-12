@@ -14,10 +14,16 @@
     <!-- Navigation -->
     <nav>
         <a href="index.html" class="logo">Bold<span>Hearts</span></a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html">Services</a></li>
             <li><a href="about.html">About</a></li>
+            <li><a href="testimonials.html">Stories</a></li>
             <li><a href="contact.html" class="active">Contact</a></li>
         </ul>
     </nav>
@@ -33,18 +39,15 @@
     <!-- Contact Section -->
     <section class="contact">
         <div class="contact-grid">
-
             <!-- Left Column: Info -->
             <div>
                 <h2>Reach Out</h2>
                 <p>If you&rsquo;re curious about spiritual direction or soul care, you can use the form to share a bit of what brings you here. I&rsquo;ll respond with a few possible times for an initial conversation.</p>
-
                 <h3>Contact Details</h3>
                 <p><strong>Email:</strong> steve@boldhearts.org</p>
                 <p><strong>Location:</strong> Sedalia, Colorado (virtual sessions available)</p>
                 <p>Your first session is a gentle, no-pressure space to explore what you&rsquo;re seeking and how I might support you.</p>
             </div>
-
             <!-- Right Column: Form -->
             <form class="contact-form" action="#" method="POST">
                 <div class="form-group">
@@ -74,7 +77,6 @@
                 </div>
                 <button type="submit" class="btn-primary">Send Message</button>
             </form>
-
         </div>
     </section>
 
@@ -82,6 +84,25 @@
     <footer>
         <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado</p>
     </footer>
+
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks  = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', function () {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        navLinks.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
 
 </body>
 </html>
