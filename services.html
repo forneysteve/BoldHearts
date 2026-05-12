@@ -14,10 +14,16 @@
     <!-- Navigation -->
     <nav>
         <a href="index.html" class="logo">Bold<span>Hearts</span></a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html" class="active">Services</a></li>
             <li><a href="about.html">About</a></li>
+            <li><a href="testimonials.html">Stories</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
     </nav>
@@ -34,17 +40,17 @@
     <section class="services">
         <h2>Core Offerings</h2>
         <div class="service-grid">
-            <div class="service-card">
+            <div class="service-card" style="padding: 2rem;">
                 <h3>Spiritual Direction</h3>
                 <p>A monthly or bi-monthly session focused on noticing God&rsquo;s presence, exploring your inner landscape, and discerning next steps.</p>
                 <p><strong>Format:</strong> 50&ndash;60 minutes &middot; In-person or virtual</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" style="padding: 2rem;">
                 <h3>Pastoral Counseling</h3>
                 <p>Support for seasons of grief, transition, burnout, relational strain, or spiritual disorientation.</p>
                 <p><strong>Format:</strong> 50&ndash;60 minutes</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" style="padding: 2rem;">
                 <h3>Leadership Soul Care</h3>
                 <p>A reflective space for leaders, founders, pastors, and caregivers who carry responsibility for others and need a place to be fully human.</p>
                 <p><strong>Focus:</strong> identity, calling, burnout, complexity, clarity</p>
@@ -90,6 +96,25 @@
     <footer>
         <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado</p>
     </footer>
+
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks  = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', function () {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        navLinks.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
 
 </body>
 </html>
