@@ -4,11 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stories | BoldHearts</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="logo">Bold<span>Hearts</span></a>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
     <header class="hero hero-small">
         <div class="hero-content">
             <h1>Stories from the Journey</h1>
@@ -16,43 +35,158 @@
         </div>
     </header>
 
-    <section class="services">
-        <h2>Testimonials</h2>
-        <div class="service-grid">
-            <div class="service-card">
-                <p>
-                    “BoldHearts gave me space to breathe again. In a season when everything felt heavy and
-                    confusing, our conversations helped me name what was really going on and find a steadier
-                    way forward.”
-                </p>
-                <p><strong>— Leader in transition</strong></p>
+    <!-- Featured Carousel Testimonial -->
+    <section class="testimonials">
+        <h2>What People Are Saying</h2>
+
+        <div class="testimonials-container" id="testimonials-container">
+
+            <div class="testimonial-card active" role="group" aria-label="Testimonial 1 of 6">
+                <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
+                <p class="testimonial-text">BoldHearts gave me space to breathe again. In a season when everything felt heavy and confusing, our conversations helped me name what was really going on and find a steadier way forward.</p>
+                <p class="testimonial-author">Leader in Transition</p>
             </div>
-            <div class="service-card">
-                <p>
-                    “As a pastor, I’m usually the one holding space for others. Having a confidential, grounded
-                    place to be honest about my own questions and fatigue has been a lifeline.”
-                </p>
-                <p><strong>— Pastor</strong></p>
+
+            <div class="testimonial-card" role="group" aria-label="Testimonial 2 of 6">
+                <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
+                <p class="testimonial-text">As a pastor, I&rsquo;m usually the one holding space for others. Having a confidential, grounded place to be honest about my own questions and fatigue has been a lifeline.</p>
+                <p class="testimonial-author">Pastor</p>
             </div>
-            <div class="service-card">
-                <p>
-                    “I’ve done counseling before, but spiritual direction opened a different kind of awareness.
-                    It wasn’t about fixing me—it was about paying attention to what God was already doing.”
-                </p>
-                <p><strong>— Spiritual seeker</strong></p>
+
+            <div class="testimonial-card" role="group" aria-label="Testimonial 3 of 6">
+                <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
+                <p class="testimonial-text">I&rsquo;ve done counseling before, but spiritual direction opened a different kind of awareness. It wasn&rsquo;t about fixing me&mdash;it was about paying attention to what God was already doing.</p>
+                <p class="testimonial-author">Spiritual Seeker</p>
             </div>
+
+            <div class="testimonial-card" role="group" aria-label="Testimonial 4 of 6">
+                <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
+                <p class="testimonial-text">I came in carrying years of leadership weight I hadn&rsquo;t named out loud. Steve created a space where I could finally set it down and figure out what was actually mine to carry.</p>
+                <p class="testimonial-author">Nonprofit Executive</p>
+            </div>
+
+            <div class="testimonial-card" role="group" aria-label="Testimonial 5 of 6">
+                <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
+                <p class="testimonial-text">I wasn&rsquo;t sure I believed in spiritual direction. But after the first session I realized this was exactly what I&rsquo;d been missing&mdash;someone who wasn&rsquo;t trying to fix me, just help me listen.</p>
+                <p class="testimonial-author">Engineer &amp; Father</p>
+            </div>
+
+            <div class="testimonial-card" role="group" aria-label="Testimonial 6 of 6">
+                <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
+                <p class="testimonial-text">The sliding scale made it possible for me to show up at a time when I couldn&rsquo;t have afforded anything standard. That kind of integrity matters. The work itself was transformative.</p>
+                <p class="testimonial-author">Graduate Student</p>
+            </div>
+
+        </div>
+
+        <div class="testimonial-controls" role="group" aria-label="Testimonial navigation">
+            <button class="testimonial-prev" id="prev-btn" aria-label="Previous testimonial">&#8592;</button>
+            <div class="dots-container" id="dots-container" role="tablist" aria-label="Testimonial dots"></div>
+            <button class="testimonial-next" id="next-btn" aria-label="Next testimonial">&#8594;</button>
         </div>
     </section>
 
+    <!-- Written Testimonials Grid -->
+    <section class="services" style="background-color: #151515;">
+        <h2>More Reflections</h2>
+        <div class="service-grid">
+
+            <div class="service-card" style="padding: 2rem;">
+                <p style="color: #a09890; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem;">&ldquo;There&rsquo;s something rare about a guide who isn&rsquo;t trying to steer you anywhere. Steve just helps you see more clearly. The rest follows.&rdquo;</p>
+                <p><strong>&mdash; Business Owner</strong></p>
+            </div>
+
+            <div class="service-card" style="padding: 2rem;">
+                <p style="color: #a09890; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem;">&ldquo;I reached out during a season of profound disorientation. Twelve sessions later, I don&rsquo;t have all the answers&mdash;but I trust the questions more.&rdquo;</p>
+                <p><strong>&mdash; Educator in Transition</strong></p>
+            </div>
+
+            <div class="service-card" style="padding: 2rem;">
+                <p style="color: #a09890; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem;">&ldquo;My faith felt dry and duty-bound. Spiritual direction helped me find what was still alive underneath. I didn&rsquo;t expect it to matter this much.&rdquo;</p>
+                <p><strong>&mdash; Worship Leader</strong></p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- A Note on Privacy -->
+    <section class="about" style="text-align: center;">
+        <h2 style="text-align: center;">A Note on Confidentiality</h2>
+        <p style="margin: 0 auto; text-align: center;">All testimonials are shared with permission and identifying details have been changed to protect privacy. Names are replaced with general descriptors. The words are theirs.</p>
+    </section>
+
+    <!-- CTA -->
     <section class="cta">
         <h2>Want to Explore This Work?</h2>
-        <p>You don’t have to have the right words. You just have to show up as you are.</p>
+        <p>You don&rsquo;t have to have the right words. You just have to show up as you are.</p>
         <a href="contact.html" class="btn-primary">Schedule a Conversation</a>
     </section>
 
+    <!-- Footer -->
     <footer>
-        <p>© 2026 BoldHearts — Sedalia, Colorado</p>
+        <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado | <a href="#">Privacy Policy</a> | <a href="#">Terms</a></p>
     </footer>
+
+    <script>
+        // ── Hamburger nav toggle ──
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks  = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', function () {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        // Close menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // ── Testimonial carousel ──
+        const cards    = Array.from(document.querySelectorAll('.testimonial-card'));
+        const dotsWrap = document.getElementById('dots-container');
+        let current    = 0;
+        let autoTimer;
+
+        // Build dots
+        cards.forEach(function (_, i) {
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('role', 'tab');
+            dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+            dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+            dot.addEventListener('click', function () { goTo(i); resetAuto(); });
+            dotsWrap.appendChild(dot);
+        });
+
+        function goTo(index) {
+            cards[current].classList.remove('active');
+            dotsWrap.children[current].classList.remove('active');
+            dotsWrap.children[current].setAttribute('aria-selected', 'false');
+            current = (index + cards.length) % cards.length;
+            cards[current].classList.add('active');
+            dotsWrap.children[current].classList.add('active');
+            dotsWrap.children[current].setAttribute('aria-selected', 'true');
+        }
+
+        document.getElementById('prev-btn').addEventListener('click', function () { goTo(current - 1); resetAuto(); });
+        document.getElementById('next-btn').addEventListener('click', function () { goTo(current + 1); resetAuto(); });
+
+        function startAuto() { autoTimer = setInterval(function () { goTo(current + 1); }, 6000); }
+        function resetAuto() { clearInterval(autoTimer); startAuto(); }
+
+        startAuto();
+
+        // Pause on hover
+        const container = document.getElementById('testimonials-container');
+        container.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+        container.addEventListener('mouseleave', startAuto);
+    </script>
 
 </body>
 </html>
