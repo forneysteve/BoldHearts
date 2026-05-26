@@ -256,7 +256,7 @@ footer a:hover{color:#e8d7a0}
     <div class="hero-meta">
       <span><i class="ti ti-clock"></i> About 10 minutes</span>
       <span><i class="ti ti-lock"></i> Private &amp; confidential</span>
-      <span><i class="ti ti-checklist"></i> 50 questions</span>
+      <span><i class="ti ti-checklist"></i> 60 questions</span>
     </div>
   </div>
 </section>
@@ -266,7 +266,7 @@ footer a:hover{color:#e8d7a0}
 <div class="progress-wrap" id="progress-section">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-lbl">0 of 50 answered</div>
+    <div class="progress-label" id="progress-lbl">0 of 60 answered</div>
   </div>
 </div>
 
@@ -351,6 +351,20 @@ const REALMS=[
     {t:"I could be vulnerable in this community — share something real — and be received with grace.",self:false},
     {t:"People in my community seek me out — I'm not just a name on a roster.",self:false},
     {t:"The people in my community know what I care about most — my passions have a place here, not just my participation.",self:true}
+  ]},
+  {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',iconBg:'rgba(196,168,130,.12)',bar:'#8a6f4a',
+   desc:'Think about your personal relationship with God — not your theology, but your lived experience of that relationship.',
+   questions:[
+    {t:"I experience God as genuinely aware of me — not just aware of people in general, but specifically attentive to me.",self:false},
+    {t:"I bring my real self to God — not just the version I think is acceptable or spiritual enough.",self:false},
+    {t:"I speak honestly with God — including the things I'm angry about, confused by, or ashamed of.",self:true},
+    {t:"I experience a sense of being genuinely received by God — not just tolerated or managed.",self:false},
+    {t:"I have experienced God showing up for me in a real and personal way — not just theologically, but in my actual life.",self:false},
+    {t:"I feel safe enough with God to be completely undone — not just reverent, but honest.",self:true},
+    {t:"I experience being pursued by God — faith doesn't feel entirely like my own effort keeping things alive.",self:false},
+    {t:"I sense that the things I'm most passionate about connect to how God made me — my calling feels real, not just invented.",self:false},
+    {t:"My relationship with God is moving — I know Him more honestly than I did a year ago.",self:false},
+    {t:"I show up with God as the person I actually am — not the person I think I should be by now.",self:true}
   ]}
 ];
 
@@ -499,7 +513,7 @@ function renderSurvey(){
     });
   });
   html+=`<div class="submit-section">
-    <div class="submit-meta">Answer all required questions to continue — Significant Other is optional</div>
+    <div class="submit-meta">Answer all required questions to continue — Significant Other and Relationship with God are optional</div>
     <button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button>
     <div class="errmsg" id="errmsg"></div>
   </div></div>`;
@@ -520,7 +534,7 @@ function setA(k,v){
 function trySubmit(){
   const unanswered=[];
   REALMS.forEach(r=>{
-    if(r.id==='significant_other')return;
+    if(r.id==='significant_other'||r.id==='god')return;
     r.questions.forEach((_,i)=>{if(answers[r.id+'_'+i]===undefined)unanswered.push(r.id+'_'+i);});
   });
   if(unanswered.length>0){
@@ -598,6 +612,13 @@ const REALM_PATTERNS={
     guarded:"Your community may be more open to you than you're allowing yourself to receive. You may be participating without truly belonging — present, but keeping a careful distance from being fully known.",
     disconnected:"There is significant distance between you and your community right now. You may feel more like an attendee than a member — and you may also be holding back from fully engaging. Something needs to shift here.",
     developing:"There is some real connection in your community, but it hasn't taken root yet. Belonging in community takes time — but there is more available here than you may be experiencing."
+  },
+  god:{
+    open:"There is real, mutual engagement in your relationship with God. You are bringing your honest self and experiencing genuine connection in return. That kind of spiritual intimacy is something many people long for and never quite find.",
+    giver:"You may be showing up in your faith — praying, seeking, engaging — but not experiencing much sense of God's presence or response in return. That can be a profoundly isolating place to be, even in the middle of religious activity.",
+    guarded:"There may be more available to you in your relationship with God than you're currently allowing yourself to receive. Something is keeping you at a careful distance — perhaps past hurt, doubt, or a sense that you need to be further along before you can be fully honest.",
+    disconnected:"There is significant distance in your relationship with God right now — felt on both sides. You may be going through the motions of faith without much lived experience of connection. That distance is worth naming honestly.",
+    developing:"There is something real in your relationship with God, but it hasn't reached the depth it could. You may be in a season of seeking — present, but not yet fully known or knowing. That is a real and honest place to be."
   }
 };
 
