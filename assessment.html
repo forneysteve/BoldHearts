@@ -148,16 +148,20 @@ nav .nav-links a:hover{color:#e8d7a0}
 .bar-pct{font-size:.75rem;font-weight:500;margin-left:6px;width:30px;flex-shrink:0}
 .gap-zone{position:absolute;top:0;height:100%;background:rgba(201,122,90,.12);border-left:1px dashed rgba(201,122,90,.35);border-right:1px dashed rgba(201,122,90,.35)}
 .gap-note{font-size:.7rem;color:#c97a5a;margin-top:4px;margin-left:138px;display:flex;align-items:center;gap:4px}
-.dim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem;margin-bottom:1rem}
-.dim-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-left:3px solid #e8d7a0;border-radius:4px;padding:1rem 1.25rem;display:flex;gap:12px;align-items:flex-start}
+.dim-grid{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
+.dim-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-left:3px solid #e8d7a0;border-radius:4px;padding:1rem 1.25rem}
 .dim-card.low{border-left-color:#c97a5a}
 .dim-card.high{border-left-color:#b5c4a0}
-.dim-info{flex:1}
-.dim-name{font-size:.8rem;font-weight:500;color:#f0e8df;margin-bottom:3px}
-.dim-desc{font-size:.75rem;color:#6a6258;line-height:1.6;margin-bottom:.5rem}
-.dim-bar-wrap{height:2px;background:rgba(255,255,255,.06);border-radius:2px;margin-bottom:2px}
-.dim-bar-inner{height:100%;border-radius:2px;transition:width .9s ease}
-.dim-score{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.dim-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.dim-name{font-size:.85rem;font-weight:500;color:#f0e8df}
+.dim-overall{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700}
+.dim-desc{font-size:.75rem;color:#6a6258;line-height:1.6;margin-bottom:.75rem}
+.dim-realm-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.dim-realm-row:last-child{margin-bottom:0}
+.dim-realm-label{font-size:.7rem;color:#5a5550;width:120px;flex-shrink:0;text-align:right;letter-spacing:.02em}
+.dim-realm-track{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.dim-realm-fill{height:100%;border-radius:3px;transition:width .9s ease}
+.dim-realm-pct{font-size:.7rem;font-weight:500;width:28px;text-align:right;flex-shrink:0}
 
 /* WARNING CARDS */
 .warning-card{background:#1a1614;border:1px solid rgba(232,215,160,.12);border-left:3px solid #e8d7a0;border-radius:4px;padding:1.5rem;margin-bottom:.75rem;display:flex;gap:1.25rem;align-items:flex-start}
@@ -428,6 +432,15 @@ function buildEmailBody(scores){
   REALMS.forEach(r=>{const s=realm[r.id];if(s.answered>0)lines.push(`  ${r.label}: ${s.overall}%`)});
   lines.push('',`How others engage you: ${outAvg}%`,`How you engage others: ${selfAvg}%`);
   if(warnings.length>0){lines.push('','--- WHAT YOUR RESULTS ARE TELLING YOU ---');warnings.forEach(w=>{lines.push('',`>> ${w.title}`);lines.push(w.text)})}
+  const dimScoresEmail=calcDimScores(realm);
+  lines.push('','--- CONNECTION DIMENSIONS (with realm breakdown) ---');
+  dimScoresEmail.forEach(d=>{
+    lines.push('',`${d.name}: ${d.score}% — ${d.score>=75?'Healthy':d.score>=50?'Developing':'Needs attention'}`);
+    d.realmScores.forEach(rs=>{
+      const tag=rs.score>=75?'healthy':rs.score>=50?'developing':'low';
+      lines.push(`    ${rs.label}: ${rs.score}% (${tag})`);
+    });
+  });
   lines.push('','--- A NOTE FROM ME ---');
   if(overall<45)lines.push(`${userName}, your results describe something real — a life where the depth of connection you were made for isn't quite meeting you where you are. I want you to know: this is not who you have to stay. These patterns are workable. I've walked alongside many people who felt exactly what your scores describe, and I've watched them find their way into relationships where they are genuinely known.`);
   else if(overall<65)lines.push(`${userName}, there's real connection in your life — and there are also real gaps. You probably feel that tension yourself. The good news is that your results give us something specific to work with. This isn't about starting from zero. It's about going deeper where depth is possible.`);
@@ -571,12 +584,16 @@ const DIMS=[
 function calcDimScores(realm){
   return DIMS.map(d=>{
     let t=0,n=0;
+    const realmScores=[];
     REALMS.forEach(r=>{
       if(realm[r.id].answered===0)return;
       const v=answers[r.id+'_'+d.qi];
-      if(v!==undefined){t+=v;n++;}
+      if(v!==undefined){
+        t+=v;n++;
+        realmScores.push({label:r.label,icon:r.icon,color:r.color,score:Math.round((v/5)*100)});
+      }
     });
-    return{...d,score:n>0?Math.round((t/(n*5))*100):0};
+    return{...d,score:n>0?Math.round((t/(n*5))*100):0,realmScores};
   });
 }
 
@@ -598,41 +615,60 @@ function renderResults(scores){
     const s=realm[r.id];if(s.answered===0)return'';
     const gap=Math.abs(s.outward-s.self);
     const isHighGap=gap>=15;
+    const isLowOut=s.outward<50;
+    const isLowSelf=s.self<50;
+    const isHealthy=s.outward>=75&&s.self>=75&&gap<15;
     const lo=Math.min(s.outward,s.self);
-    const gapStyle=isHighGap?`<div class="gap-zone" style="left:${lo}%;width:${gap}%"></div>`:'';
-    const gapNote=isHighGap?`<div class="gap-note"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>${gap}% disconnect — worth exploring</div>`:'';
-    const badge=isHighGap?`<span class="gap-badge">gap: ${gap}%</span>`:'';
-    return`<div class="realm-result-row">
+    const gapStyle=isHighGap&&!isLowOut&&!isLowSelf?`<div class="gap-zone" style="left:${lo}%;width:${gap}%"></div>`:'';
+    const outColor=s.outward>=75?'#b5c4a0':s.outward>=50?'#e8d7a0':'#c97a5a';
+    const selfColor=s.self>=75?'#b5c4a0':s.self>=50?'#9aa8b0':'#c97a5a';
+    const rowBorder=isLowOut||isLowSelf?'border-left:3px solid #c97a5a;padding-left:.75rem;':isHighGap?'border-left:3px solid #e8d7a0;padding-left:.75rem;':isHealthy?'border-left:3px solid #b5c4a0;padding-left:.75rem;':'';
+    let notes=[];
+    if(isLowOut&&isLowSelf)notes.push(`<div class="gap-note" style="color:#c97a5a"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>Low engagement on both sides — this area needs real attention</div>`);
+    else if(isLowOut)notes.push(`<div class="gap-note" style="color:#c97a5a"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>Others aren't engaging you much here — you may feel invisible in this context</div>`);
+    else if(isLowSelf)notes.push(`<div class="gap-note" style="color:#c97a5a"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>You may be holding back or disengaged in this area</div>`);
+    else if(isHighGap)notes.push(`<div class="gap-note"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>${gap}% disconnect — worth exploring</div>`);
+    else if(isHealthy)notes.push(`<div class="gap-note" style="color:#b5c4a0"><i class="ti ti-check" aria-hidden="true" style="font-size:11px"></i>Healthy engagement in both directions</div>`);
+    const badge=isLowOut||isLowSelf?`<span class="gap-badge">low</span>`:isHighGap?`<span class="gap-badge">gap: ${gap}%</span>`:isHealthy?`<span class="gap-badge" style="color:#b5c4a0;background:rgba(181,196,160,.1)">healthy</span>`:'';
+    return`<div class="realm-result-row" style="${rowBorder}">
       <div class="realm-result-name"><i class="ti ${r.icon}" style="color:${r.color};font-size:14px"></i>${r.label}${badge}</div>
       <div class="bar-row">
         <div class="bar-row-label">Others engage you</div>
         <div class="bar-track">
-          <div class="bar-fill" style="width:${s.outward}%;background:#e8d7a0"></div>
+          <div class="bar-fill" style="width:${s.outward}%;background:${outColor}"></div>
           ${gapStyle}
         </div>
-        <div class="bar-pct" style="color:#e8d7a0">${s.outward}%</div>
+        <div class="bar-pct" style="color:${outColor}">${s.outward}%</div>
       </div>
       <div class="bar-row">
         <div class="bar-row-label">You engage others</div>
         <div class="bar-track">
-          <div class="bar-fill" style="width:${s.self}%;background:#9aa8b0"></div>
+          <div class="bar-fill" style="width:${s.self}%;background:${selfColor}"></div>
         </div>
-        <div class="bar-pct" style="color:#9aa8b0">${s.self}%</div>
+        <div class="bar-pct" style="color:${selfColor}">${s.self}%</div>
       </div>
-      ${gapNote}
+      ${notes.join('')}
     </div>`;
   }).join('');
   const dimScores=calcDimScores(realm);
   const dimHtml=dimScores.map(d=>{
-    const col=d.score>=70?'#b5c4a0':d.score>=45?'#e8d7a0':'#c97a5a';
-    const cls=d.score>=70?'high':d.score<45?'low':'';
+    const col=d.score>=75?'#b5c4a0':d.score>=50?'#e8d7a0':'#c97a5a';
+    const cls=d.score>=75?'high':d.score<50?'low':'';
+    const realmBars=d.realmScores.map(rs=>{
+      const rc=rs.score>=75?'#b5c4a0':rs.score>=50?'#e8d7a0':'#c97a5a';
+      return`<div class="dim-realm-row">
+        <div class="dim-realm-label"><i class="ti ${rs.icon}" aria-hidden="true" style="font-size:11px;color:${rs.color};margin-right:4px"></i>${rs.label}</div>
+        <div class="dim-realm-track"><div class="dim-realm-fill" style="width:${rs.score}%;background:${rc}"></div></div>
+        <div class="dim-realm-pct" style="color:${rc}">${rs.score}%</div>
+      </div>`;
+    }).join('');
     return`<div class="dim-card ${cls}">
-      <div class="dim-info">
+      <div class="dim-header">
         <div class="dim-name">${d.name}</div>
-        <div class="dim-desc">${d.desc(d.score)}</div>
-        <div class="dim-bar-wrap"><div class="dim-bar-inner" style="width:${d.score}%;background:${col}"></div></div>
+        <div class="dim-overall" style="color:${col}">${d.score}%</div>
       </div>
-      <div class="dim-score" style="color:${col}">${d.score}%</div>
+      <div class="dim-desc">${d.desc(d.score)}</div>
+      ${realmBars}
     </div>`;
   }).join('');
   const warningHtml=warnings.map(w=>`
@@ -857,16 +893,20 @@ nav .nav-links a:hover{color:#e8d7a0}
 .bar-pct{font-size:.75rem;font-weight:500;margin-left:6px;width:30px;flex-shrink:0}
 .gap-zone{position:absolute;top:0;height:100%;background:rgba(201,122,90,.12);border-left:1px dashed rgba(201,122,90,.35);border-right:1px dashed rgba(201,122,90,.35)}
 .gap-note{font-size:.7rem;color:#c97a5a;margin-top:4px;margin-left:138px;display:flex;align-items:center;gap:4px}
-.dim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem;margin-bottom:1rem}
-.dim-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-left:3px solid #e8d7a0;border-radius:4px;padding:1rem 1.25rem;display:flex;gap:12px;align-items:flex-start}
+.dim-grid{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
+.dim-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-left:3px solid #e8d7a0;border-radius:4px;padding:1rem 1.25rem}
 .dim-card.low{border-left-color:#c97a5a}
 .dim-card.high{border-left-color:#b5c4a0}
-.dim-info{flex:1}
-.dim-name{font-size:.8rem;font-weight:500;color:#f0e8df;margin-bottom:3px}
-.dim-desc{font-size:.75rem;color:#6a6258;line-height:1.6;margin-bottom:.5rem}
-.dim-bar-wrap{height:2px;background:rgba(255,255,255,.06);border-radius:2px;margin-bottom:2px}
-.dim-bar-inner{height:100%;border-radius:2px;transition:width .9s ease}
-.dim-score{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.dim-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.dim-name{font-size:.85rem;font-weight:500;color:#f0e8df}
+.dim-overall{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700}
+.dim-desc{font-size:.75rem;color:#6a6258;line-height:1.6;margin-bottom:.75rem}
+.dim-realm-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.dim-realm-row:last-child{margin-bottom:0}
+.dim-realm-label{font-size:.7rem;color:#5a5550;width:120px;flex-shrink:0;text-align:right;letter-spacing:.02em}
+.dim-realm-track{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.dim-realm-fill{height:100%;border-radius:3px;transition:width .9s ease}
+.dim-realm-pct{font-size:.7rem;font-weight:500;width:28px;text-align:right;flex-shrink:0}
 
 /* WARNING CARDS */
 .warning-card{background:#1a1614;border:1px solid rgba(232,215,160,.12);border-left:3px solid #e8d7a0;border-radius:4px;padding:1.5rem;margin-bottom:.75rem;display:flex;gap:1.25rem;align-items:flex-start}
@@ -1137,6 +1177,15 @@ function buildEmailBody(scores){
   REALMS.forEach(r=>{const s=realm[r.id];if(s.answered>0)lines.push(`  ${r.label}: ${s.overall}%`)});
   lines.push('',`How others engage you: ${outAvg}%`,`How you engage others: ${selfAvg}%`);
   if(warnings.length>0){lines.push('','--- WHAT YOUR RESULTS ARE TELLING YOU ---');warnings.forEach(w=>{lines.push('',`>> ${w.title}`);lines.push(w.text)})}
+  const dimScoresEmail=calcDimScores(realm);
+  lines.push('','--- CONNECTION DIMENSIONS (with realm breakdown) ---');
+  dimScoresEmail.forEach(d=>{
+    lines.push('',`${d.name}: ${d.score}% — ${d.score>=75?'Healthy':d.score>=50?'Developing':'Needs attention'}`);
+    d.realmScores.forEach(rs=>{
+      const tag=rs.score>=75?'healthy':rs.score>=50?'developing':'low';
+      lines.push(`    ${rs.label}: ${rs.score}% (${tag})`);
+    });
+  });
   lines.push('','--- A NOTE FROM ME ---');
   if(overall<45)lines.push(`${userName}, your results describe something real — a life where the depth of connection you were made for isn't quite meeting you where you are. I want you to know: this is not who you have to stay. These patterns are workable. I've walked alongside many people who felt exactly what your scores describe, and I've watched them find their way into relationships where they are genuinely known.`);
   else if(overall<65)lines.push(`${userName}, there's real connection in your life — and there are also real gaps. You probably feel that tension yourself. The good news is that your results give us something specific to work with. This isn't about starting from zero. It's about going deeper where depth is possible.`);
@@ -1280,12 +1329,16 @@ const DIMS=[
 function calcDimScores(realm){
   return DIMS.map(d=>{
     let t=0,n=0;
+    const realmScores=[];
     REALMS.forEach(r=>{
       if(realm[r.id].answered===0)return;
       const v=answers[r.id+'_'+d.qi];
-      if(v!==undefined){t+=v;n++;}
+      if(v!==undefined){
+        t+=v;n++;
+        realmScores.push({label:r.label,icon:r.icon,color:r.color,score:Math.round((v/5)*100)});
+      }
     });
-    return{...d,score:n>0?Math.round((t/(n*5))*100):0};
+    return{...d,score:n>0?Math.round((t/(n*5))*100):0,realmScores};
   });
 }
 
@@ -1307,41 +1360,60 @@ function renderResults(scores){
     const s=realm[r.id];if(s.answered===0)return'';
     const gap=Math.abs(s.outward-s.self);
     const isHighGap=gap>=15;
+    const isLowOut=s.outward<50;
+    const isLowSelf=s.self<50;
+    const isHealthy=s.outward>=75&&s.self>=75&&gap<15;
     const lo=Math.min(s.outward,s.self);
-    const gapStyle=isHighGap?`<div class="gap-zone" style="left:${lo}%;width:${gap}%"></div>`:'';
-    const gapNote=isHighGap?`<div class="gap-note"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>${gap}% disconnect — worth exploring</div>`:'';
-    const badge=isHighGap?`<span class="gap-badge">gap: ${gap}%</span>`:'';
-    return`<div class="realm-result-row">
+    const gapStyle=isHighGap&&!isLowOut&&!isLowSelf?`<div class="gap-zone" style="left:${lo}%;width:${gap}%"></div>`:'';
+    const outColor=s.outward>=75?'#b5c4a0':s.outward>=50?'#e8d7a0':'#c97a5a';
+    const selfColor=s.self>=75?'#b5c4a0':s.self>=50?'#9aa8b0':'#c97a5a';
+    const rowBorder=isLowOut||isLowSelf?'border-left:3px solid #c97a5a;padding-left:.75rem;':isHighGap?'border-left:3px solid #e8d7a0;padding-left:.75rem;':isHealthy?'border-left:3px solid #b5c4a0;padding-left:.75rem;':'';
+    let notes=[];
+    if(isLowOut&&isLowSelf)notes.push(`<div class="gap-note" style="color:#c97a5a"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>Low engagement on both sides — this area needs real attention</div>`);
+    else if(isLowOut)notes.push(`<div class="gap-note" style="color:#c97a5a"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>Others aren't engaging you much here — you may feel invisible in this context</div>`);
+    else if(isLowSelf)notes.push(`<div class="gap-note" style="color:#c97a5a"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>You may be holding back or disengaged in this area</div>`);
+    else if(isHighGap)notes.push(`<div class="gap-note"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:11px"></i>${gap}% disconnect — worth exploring</div>`);
+    else if(isHealthy)notes.push(`<div class="gap-note" style="color:#b5c4a0"><i class="ti ti-check" aria-hidden="true" style="font-size:11px"></i>Healthy engagement in both directions</div>`);
+    const badge=isLowOut||isLowSelf?`<span class="gap-badge">low</span>`:isHighGap?`<span class="gap-badge">gap: ${gap}%</span>`:isHealthy?`<span class="gap-badge" style="color:#b5c4a0;background:rgba(181,196,160,.1)">healthy</span>`:'';
+    return`<div class="realm-result-row" style="${rowBorder}">
       <div class="realm-result-name"><i class="ti ${r.icon}" style="color:${r.color};font-size:14px"></i>${r.label}${badge}</div>
       <div class="bar-row">
         <div class="bar-row-label">Others engage you</div>
         <div class="bar-track">
-          <div class="bar-fill" style="width:${s.outward}%;background:#e8d7a0"></div>
+          <div class="bar-fill" style="width:${s.outward}%;background:${outColor}"></div>
           ${gapStyle}
         </div>
-        <div class="bar-pct" style="color:#e8d7a0">${s.outward}%</div>
+        <div class="bar-pct" style="color:${outColor}">${s.outward}%</div>
       </div>
       <div class="bar-row">
         <div class="bar-row-label">You engage others</div>
         <div class="bar-track">
-          <div class="bar-fill" style="width:${s.self}%;background:#9aa8b0"></div>
+          <div class="bar-fill" style="width:${s.self}%;background:${selfColor}"></div>
         </div>
-        <div class="bar-pct" style="color:#9aa8b0">${s.self}%</div>
+        <div class="bar-pct" style="color:${selfColor}">${s.self}%</div>
       </div>
-      ${gapNote}
+      ${notes.join('')}
     </div>`;
   }).join('');
   const dimScores=calcDimScores(realm);
   const dimHtml=dimScores.map(d=>{
-    const col=d.score>=70?'#b5c4a0':d.score>=45?'#e8d7a0':'#c97a5a';
-    const cls=d.score>=70?'high':d.score<45?'low':'';
+    const col=d.score>=75?'#b5c4a0':d.score>=50?'#e8d7a0':'#c97a5a';
+    const cls=d.score>=75?'high':d.score<50?'low':'';
+    const realmBars=d.realmScores.map(rs=>{
+      const rc=rs.score>=75?'#b5c4a0':rs.score>=50?'#e8d7a0':'#c97a5a';
+      return`<div class="dim-realm-row">
+        <div class="dim-realm-label"><i class="ti ${rs.icon}" aria-hidden="true" style="font-size:11px;color:${rs.color};margin-right:4px"></i>${rs.label}</div>
+        <div class="dim-realm-track"><div class="dim-realm-fill" style="width:${rs.score}%;background:${rc}"></div></div>
+        <div class="dim-realm-pct" style="color:${rc}">${rs.score}%</div>
+      </div>`;
+    }).join('');
     return`<div class="dim-card ${cls}">
-      <div class="dim-info">
+      <div class="dim-header">
         <div class="dim-name">${d.name}</div>
-        <div class="dim-desc">${d.desc(d.score)}</div>
-        <div class="dim-bar-wrap"><div class="dim-bar-inner" style="width:${d.score}%;background:${col}"></div></div>
+        <div class="dim-overall" style="color:${col}">${d.score}%</div>
       </div>
-      <div class="dim-score" style="color:${col}">${d.score}%</div>
+      <div class="dim-desc">${d.desc(d.score)}</div>
+      ${realmBars}
     </div>`;
   }).join('');
   const warningHtml=warnings.map(w=>`
