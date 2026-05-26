@@ -444,7 +444,7 @@ function buildEmailBody(scores){
   lines.push('','--- YOUR ENGAGEMENT PATTERNS ---');
   REALMS.forEach(r=>{
     const s=realm[r.id];if(s.answered===0)return;
-    const p=getPattern(s.outward,s.self);
+    const p=getPattern(s.outward,s.self,r.id);
     lines.push(`${r.label}: ${p.name}`);
     lines.push(`  ${p.desc}`);
     lines.push('');
@@ -563,42 +563,55 @@ function submitGate(){
   renderResults(scores);window.scrollTo({top:0,behavior:'smooth'});
 }
 
-const PATTERNS={
-  open:{
-    key:'open',name:'The Open Door',
-    cls:'open',
-    desc:"People are showing up for you and you are showing up for them. This is mutual, healthy engagement — the foundation real connection is built on. Don't take it for granted; this kind of reciprocity is rarer than it looks."
+const REALM_PATTERNS={
+  work:{
+    open:"Your colleagues are engaging you and you are engaging them. There is genuine mutuality here — people know something of the real you, and you are invested in them. That's not common in most workplaces.",
+    giver:"You are showing up for your colleagues more than they are showing up for you. You invest, you notice, you care — but it may not be coming back in equal measure. That imbalance is worth paying attention to.",
+    guarded:"The people at work may be reaching toward you, but you may be holding something back. Connection is available here — but you may not be fully walking through the door.",
+    disconnected:"There is significant distance on both sides at work. You may feel more like a function than a person here — and you may also be keeping your distance in return. Something needs to shift.",
+    developing:"There is some real engagement at work, but it hasn't found its depth yet. Something is present — and something is also holding back. There is more possible here than you're currently experiencing."
   },
-  giver:{
-    key:'giver',name:'The Invisible Giver',
-    cls:'giver',
-    desc:"You are investing in this relationship but not experiencing much coming back. You may feel like you pour out more than you receive — and you're probably right. That imbalance is worth naming."
+  significant_other:{
+    open:"You and your partner are genuinely showing up for each other. There is real mutuality here — you know each other and you are both investing in being known. This is the kind of intimacy most people quietly long for.",
+    giver:"You are investing deeply in this relationship, but may not feel equally known or pursued in return. You may be carrying more of the emotional weight than your partner realizes.",
+    guarded:"Your partner may be reaching toward you — but something in you may be holding back from being fully known. The love may be present, but full intimacy requires letting someone see the parts you haven't shown yet.",
+    disconnected:"There is real distance in this relationship right now — on both sides. This doesn't have to be permanent, but it does need honest attention. Distance this deep rarely closes on its own.",
+    developing:"There is connection in this relationship, but it hasn't reached the depth it could. Something is present — and something is also being held back. There is more available here."
   },
-  guarded:{
-    key:'guarded',name:'The Guarded One',
-    cls:'guarded',
-    desc:"People are reaching toward you — but you may not be letting them all the way in. The connection is available, but something is keeping you at a careful distance from it. The door is open; you just haven't walked through."
+  family:{
+    open:"Your family knows you and you are genuinely present with them. There is real mutuality here — not just shared history, but actual engagement with who you each are becoming.",
+    giver:"You may be more invested in your family relationships than they are in knowing you. You show up, you initiate, you care — but the depth may not always come back.",
+    guarded:"Your family may be more available to you than you're allowing yourself to receive. Something may be keeping you from fully letting your family in — perhaps old roles or old wounds.",
+    disconnected:"There is significant distance in your family relationships right now — felt on both sides. Family disconnection can run deep, but it is also workable with the right kind of attention.",
+    developing:"There is some genuine connection in your family, but it hasn't settled into depth yet. Old patterns, roles, or distance may be keeping things from going further."
   },
-  disconnected:{
-    key:'disconnected',name:'The Disconnected',
-    cls:'disconnected',
-    desc:"There is significant distance on both sides here. This isn't about blame — it's about recognizing that something needs to shift. And that shift is possible, usually faster than people expect."
+  friends:{
+    open:"Your friends are showing up for you and you are showing up for them. There is real reciprocity here — you are known, pursued, and genuinely invested. This is rare and worth protecting.",
+    giver:"You may be a better friend than your friends are to you right now. You initiate, you invest, you show up — but the energy isn't coming back in equal measure. You may be the one keeping these friendships alive, and that gets quietly exhausting.",
+    guarded:"Your friends may be more available to you than you're letting yourself receive. You might be present in your friendships without being fully known in them — showing up but keeping the real you at a careful distance.",
+    disconnected:"There is real distance in your friendships right now — on both sides. You may be going through the motions of friendship without much depth underneath. That doesn't have to stay this way.",
+    developing:"There is something real in your friendships, but it hasn't reached depth yet. Some friendships take longer to root — but this one has more possible than you're currently experiencing."
   },
-  developing:{
-    key:'developing',name:'Still Developing',
-    cls:'guarded',
-    desc:"There is real connection here but it hasn't fully found its footing yet. Something is present — and something is also holding back. This relationship has more room to grow."
+  community:{
+    open:"You are genuinely present in your community and your community is genuinely present with you. You are known here — not just recognized — and that kind of belonging is worth nurturing.",
+    giver:"You may be investing more in your community than your community is investing in you. You show up, you serve, you engage — but you may feel more like a contributor than a member who is truly known.",
+    guarded:"Your community may be more open to you than you're allowing yourself to receive. You may be participating without truly belonging — present, but keeping a careful distance from being fully known.",
+    disconnected:"There is significant distance between you and your community right now. You may feel more like an attendee than a member — and you may also be holding back from fully engaging. Something needs to shift here.",
+    developing:"There is some real connection in your community, but it hasn't taken root yet. Belonging in community takes time — but there is more available here than you may be experiencing."
   }
 };
 
-function getPattern(outward,self_){
+function getPattern(outward,self_,realmId){
   const hiOut=outward>=65,loOut=outward<50;
   const hiSelf=self_>=65,loSelf=self_<50;
-  if(hiOut&&hiSelf)return PATTERNS.open;
-  if(loOut&&loSelf)return PATTERNS.disconnected;
-  if(loOut&&hiSelf)return PATTERNS.giver;
-  if(hiOut&&loSelf)return PATTERNS.guarded;
-  return PATTERNS.developing;
+  const rp=REALM_PATTERNS[realmId]||REALM_PATTERNS.friends;
+  let key,name,cls;
+  if(hiOut&&hiSelf){key='open';name='The Open Door';cls='open';}
+  else if(loOut&&loSelf){key='disconnected';name='The Disconnected';cls='disconnected';}
+  else if(loOut&&hiSelf){key='giver';name='The Invisible Giver';cls='giver';}
+  else if(hiOut&&loSelf){key='guarded';name='The Guarded One';cls='guarded';}
+  else{key='developing';name='Still Developing';cls='guarded';}
+  return{key,name,cls,desc:rp[key]};
 }
 
 const DIMS=[
@@ -728,7 +741,7 @@ function renderResults(scores){
   }).join('');
   const patternHtml=REALMS.map(r=>{
     const s=realm[r.id];if(s.answered===0)return'';
-    const p=getPattern(s.outward,s.self);
+    const p=getPattern(s.outward,s.self,r.id);
     return`<div class="pattern-card ${p.cls}">
       <div class="pattern-realm"><i class="ti ${r.icon}" aria-hidden="true" style="color:${r.color};font-size:12px"></i>${r.label}</div>
       <div class="pattern-name">${p.name}</div>
@@ -760,7 +773,7 @@ function renderResults(scores){
             stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
         </svg>
         <div class="ring-lbl"><div class="big">${overall}%</div><div class="sm">overall</div></div>
-      <div style="text-align:center;font-size:.85rem;color:#a09890;margin-top:.5rem;font-style:italic;font-family:'Cormorant Garamond',serif;max-width:320px;margin-left:auto;margin-right:auto">
+      <div style="text-align:center;font-size:.95rem;color:#a09890;font-style:italic;font-family:'Cormorant Garamond',serif;max-width:340px;margin:1rem auto 1.5rem;line-height:1.6;clear:both;display:block">
         ${overall<40?"Significant disconnection across multiple areas of your life.":overall<60?"Real connection in some areas — real gaps in others.":overall<75?"A meaningful foundation — with room to go deeper.":"Strong engagement across your life — depth is always worth pursuing."}
       </div>
       </div></div>
