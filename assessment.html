@@ -456,6 +456,30 @@ function buildHtmlEmail(scores){
     actionHtml+='<tr><td style="padding:0 12px 14px 0;vertical-align:top;width:32px"><div style="width:28px;height:28px;border-radius:50%;background:#272420;border:1px solid #3a3530;color:#d4b96a;font-size:12px;font-weight:600;text-align:center;line-height:28px">'+(i+1)+'</div></td><td style="padding:0 0 14px;vertical-align:top"><p style="font-size:13px;color:#a09890;line-height:1.8;margin:0"><strong style="color:#d4b96a">'+step.title+'.</strong> '+step.text+'</p></td></tr>';
   });
 
+  // Build Connection Dimensions for email
+  const emailDimScores = calcDimScores(realm);
+  let dimensionsHtml = '';
+  emailDimScores.forEach(d => {
+    const col = d.score>=70?'#7aad6a':d.score>=45?'#d4b96a':'#c97a5a';
+    const barPct = d.score;
+    const filledBlocks = Math.round(barPct/10);
+    const bar = '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(filledBlocks)+'&#9617;'.repeat(10-filledBlocks)+'</span>';
+    const status = d.score>=70?'Healthy':d.score>=45?'Developing':'Needs attention';
+    dimensionsHtml += '<tr><td style="padding:0 0 8px">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+col+';border-radius:4px">'
+      +'<tr><td style="padding:14px 16px">'
+      +'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
+      +'<td><p style="font-size:13px;font-weight:500;color:#f0e8df;margin:0 0 4px">'+d.name+'</p>'
+      +'<p style="font-size:12px;color:#6a6258;margin:0 0 8px">'+d.desc(d.score)+'</p>'
+      +'<p style="font-size:12px;margin:0">'+bar+'</p></td>'
+      +'<td style="text-align:right;vertical-align:top;padding-left:12px;white-space:nowrap">'
+      +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+col+';margin:0">'+d.score+'%</p>'
+      +'<p style="font-size:11px;color:#6a6258;margin:2px 0 0">'+status+'</p>'
+      +'</td></tr></table>'
+      +'</td></tr></table>'
+      +'</td></tr>';
+  });
+
   return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>'
     +'<body style="margin:0;padding:0;background-color:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
     +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
@@ -491,6 +515,9 @@ function buildHtmlEmail(scores){
     // Patterns
     +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Your Engagement Patterns</p>'
     +'<table width="100%" cellpadding="0" cellspacing="0">'+patternsHtml+'</table>'
+    // Connection Dimensions
+    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Connection Dimensions</p>'
+    +'<table width="100%" cellpadding="0" cellspacing="0">'+dimensionsHtml+'</table>'
     // Action plan
     +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Your Action Plan</p>'
     +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;padding:20px 20px 6px;margin:0 0 24px">'
