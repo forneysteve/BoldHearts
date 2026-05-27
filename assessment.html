@@ -61,13 +61,22 @@ nav .nav-links a:hover{color:#e8d7a0}
 .qblock.answered{border-color:rgba(232,215,160,.25)}
 .qnum{font-size:.7rem;color:#5a5550;font-weight:400;margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase}
 .qlabel{font-size:.95rem;color:#d4ccc4;line-height:1.7;margin-bottom:1rem}
-.scale-opts{display:flex;flex-direction:column;gap:5px}
-.sopt{display:flex;align-items:center;gap:12px;padding:9px 14px;border-radius:4px;border:1px solid rgba(232,215,160,.1);cursor:pointer;transition:all .15s;background:#111111;user-select:none}
-.sopt:hover{border-color:rgba(232,215,160,.35);background:#1e1c1a}
-.sopt.sel{background:#1e1c1a;border-color:#e8d7a0}
-.sopt input[type=radio]{accent-color:#e8d7a0;width:15px;height:15px;flex-shrink:0;cursor:pointer}
-.sopt-label{font-size:.875rem;color:#a09890}
-.sopt.sel .sopt-label{color:#e8d7a0;font-weight:500}
+.scale-opts{display:flex;flex-direction:column;gap:0}
+.scale-endlabels{display:flex;justify-content:space-between;padding:0 2px;margin-bottom:6px}
+.scale-endlabel{font-size:.7rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
+.scale-circles{display:flex;align-items:center;justify-content:space-between;gap:0;width:100%}
+.sopt{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:8px 4px;cursor:pointer;user-select:none;position:relative;background:none;border:none}
+.sopt-circle{width:32px;height:32px;border-radius:50%;border:2px solid rgba(232,215,160,.25);background:#111111;transition:all .15s;display:flex;align-items:center;justify-content:center;position:relative}
+.sopt:hover .sopt-circle{border-color:rgba(232,215,160,.6);background:#1e1c1a}
+.sopt.sel .sopt-circle{border-color:#e8d7a0;background:#e8d7a0}
+.sopt.sel .sopt-circle::after{content:'✓';color:#111111;font-size:16px;font-weight:700;line-height:1;display:block}
+.sopt input[type=radio]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.scale-num{font-size:.65rem;color:#4a4540;margin-top:5px;letter-spacing:.04em}
+.sopt.sel .scale-num{color:#e8d7a0}
+@media(max-width:768px){
+  .sopt-circle{width:36px;height:36px}
+  .sopt{padding:6px 2px}
+}
 .submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px}
 .submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem;letter-spacing:.04em}
 .sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#e8d7a0;padding:1rem 2.5rem;border-radius:4px;border:2px solid #e8d7a0;transition:all .3s ease;cursor:pointer}
@@ -234,7 +243,7 @@ footer a:hover{color:#e8d7a0}
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
-const SCALE=[{label:'Agree',val:5},{label:'Somewhat agree',val:4},{label:'Neutral',val:3},{label:'Somewhat disagree',val:2},{label:'Disagree',val:1}];
+const SCALE=[{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
 const REALMS=[
   {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
    desc:'Think about the people you work or study alongside day to day.',
@@ -352,18 +361,18 @@ function calcScores(){
       if(v!==undefined){rt+=v;rn++;allT+=v;allN++;
         if(q.self){st+=v;sn++;}else{ot+=v;on_++;}}
     });
-    realm[r.id]={overall:rn>0?Math.round((rt/(rn*5))*100):0,
-      outward:on_>0?Math.round((ot/(on_*5))*100):0,
-      self:sn>0?Math.round((st/(sn*5))*100):0,answered:rn};
+    realm[r.id]={overall:rn>0?Math.round((rt/(rn*7))*100):0,
+      outward:on_>0?Math.round((ot/(on_*7))*100):0,
+      self:sn>0?Math.round((st/(sn*7))*100):0,answered:rn};
   });
-  return{realm,overall:allN>0?Math.round((allT/(allN*5))*100):0};
+  return{realm,overall:allN>0?Math.round((allT/(allN*7))*100):0};
 }
 function getWarnings(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
   const selfAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].self,0)/ar.length):0;
   const outAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].outward,0)/ar.length):0;
-  const voiceAvg=ar.length>0?Math.round(ar.reduce((a,r)=>{const v=answers[r.id+'_3'];return a+(v!==undefined?v:3);},0)/ar.length*20):50;
+  const voiceAvg=ar.length>0?Math.round(ar.reduce((a,r)=>{const v=answers[r.id+'_3'];return a+(v!==undefined?v:4);},0)/ar.length*(100/7)):50;
   const comp={overall,outward:outAvg,self:selfAvg,voice:voiceAvg};
   return WARNINGS.filter(w=>w.trigger(comp,realm)).slice(0,4);
 }
@@ -511,9 +520,9 @@ function renderSurvey(){
       const k=r.id+'_'+i;const cur=answers[k];
       const opts=SCALE.map((s,si)=>{
         const id='opt_'+k+'_'+si;const sel=cur===s.val;
-        return'<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><span class="sopt-label">'+s.label+'</span></label>';
+        return'<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
       }).join('');
-      html+='<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'"><div class="qnum">Question '+(qNum+1)+'</div><div class="qlabel">'+q.t+'</div><div class="scale-opts">'+opts+'</div></div>';
+      html+='<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'"><div class="qnum">Question '+(qNum+1)+'</div><div class="qlabel">'+q.t+'</div><div class="scale-opts"><div class="scale-endlabels"><span class="scale-endlabel">Disagree</span><span class="scale-endlabel">Agree</span></div><div class="scale-circles">'+opts+'</div></div></div>';
       qNum++;
     });
   });
@@ -523,7 +532,10 @@ function renderSurvey(){
 }
 function setA(k,v){
   answers[k]=v;
-  document.querySelectorAll('[name="'+k+'"]').forEach(el=>{const lbl=el.closest('.sopt');if(lbl)lbl.classList.toggle('sel',el.checked);});
+  document.querySelectorAll('[name="'+k+'"]').forEach(el=>{
+    const lbl=el.closest('.sopt');
+    if(lbl)lbl.classList.toggle('sel',parseInt(el.value)===v);
+  });
   const qb=document.getElementById('q_'+k);if(qb)qb.classList.add('answered');
   updateProgress();
   const em=document.getElementById('errmsg');if(em)em.textContent='';
@@ -595,9 +607,9 @@ function calcDimScores(realm){
     REALMS.forEach(r=>{
       if(realm[r.id].answered===0)return;
       const v=answers[r.id+'_'+d.qi];
-      if(v!==undefined){t+=v;n++;realmScores.push({label:r.label,icon:r.icon,color:r.color,score:Math.round((v/5)*100)});}
+      if(v!==undefined){t+=v;n++;realmScores.push({label:r.label,icon:r.icon,color:r.color,score:Math.round((v/7)*100)});}
     });
-    return{...d,score:n>0?Math.round((t/(n*5))*100):0,realmScores};
+    return{...d,score:n>0?Math.round((t/(n*7))*100):0,realmScores};
   });
 }
 function renderResults(scores){
