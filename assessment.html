@@ -101,8 +101,9 @@ nav .nav-links a:hover{color:#e8d7a0}
 .results-hero h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:.5rem;color:#f0e8df}
 .results-hero h2::after{margin:1rem auto 0;width:60px;height:2px;background:#e8d7a0;content:'';display:block}
 .results-hero p{font-size:.95rem;color:#6a6258;margin:0 auto;max-width:none;letter-spacing:.04em}
-.ring-wrap{display:flex;justify-content:center;margin:2rem 0}
-.ring-inner{position:relative;width:150px;height:150px}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;margin:2rem 0}
+.ring-inner{position:relative;width:150px;height:150px;flex-shrink:0}
+.ring-summary{text-align:center;font-size:.95rem;color:#a09890;font-style:italic;font-family:'Cormorant Garamond',serif;max-width:340px;margin:.75rem auto 0;line-height:1.6}
 .ring-inner svg{transform:rotate(-90deg)}
 .ring-lbl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
 .ring-lbl .big{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:#f0e8df}
@@ -266,10 +267,10 @@ const REALMS=[
     {t:"I feel free to push back or raise concerns without bracing for consequences.",self:false},
     {t:"I show up for my colleagues when things are hard for them, not just when it's convenient.",self:true},
     {t:"At the end of the day, I feel like I belong in this place — not just that I work here.",self:false},
-    {t:"Someone at work has gone out of their way for me in a way that cost them something.",self:false},
+    {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
     {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
     {t:"People at work seek me out — I'm not always the one inserting myself.",self:false},
-    {t:"I bring my real self to work — not just the version that keeps things smooth.",self:true}
+    {t:"My relationships at work allow me to be myself — I don't have to keep parts of me quiet.",self:true}
   ]},
   {id:'significant_other',label:'Significant Other',icon:'ti-heart',color:'#c97a5a',bar:'#c97a5a',
    desc:'Think about your spouse or significant other. Skip this section if not currently applicable.',
@@ -277,11 +278,11 @@ const REALMS=[
     {t:"My partner can read my heart, not just my words — they know when something is wrong before I say it.",self:false},
     {t:"I take responsibility for letting my partner really know me — I don't make them guess.",self:true},
     {t:"My partner knows the parts of me I don't show the rest of the world.",self:false},
-    {t:"I feel completely free to say hard things in this relationship without it costing me the relationship.",self:false},
+    {t:"My partner and I can handle hard conversations — I don't have to protect the relationship by staying quiet.",self:false},
     {t:"I lean toward my partner when they're hurting, rather than waiting for them to ask.",self:true},
     {t:"I feel at home in this relationship — genuinely safe, not just comfortable.",self:false},
     {t:"My partner has shown up for me in ways that required real sacrifice on their part.",self:false},
-    {t:"My partner genuinely knows and champions what I'm most passionate about — not just what I do day to day.",self:false},
+    {t:"My partner genuinely knows and champions what I'm most passionate about — even if it impacts the day to day.",self:false},
     {t:"My partner initiates connection with me — not just responds when I reach out.",self:false},
     {t:"I let my partner see the full weight of who I am — not just the parts I've cleaned up.",self:true}
   ]},
@@ -289,13 +290,13 @@ const REALMS=[
    desc:'Think about your family relationships — answer based on your closest family ties (spouse/children if applicable, otherwise siblings or parents).',
    questions:[
     {t:"My closest family members notice when I'm struggling emotionally — they don't need me to announce it.",self:false},
-    {t:"I work to close the distance in my family relationships rather than waiting for others to do it.",self:true},
-    {t:"My family knows the person I am today — not just the role I've always played among them.",self:false},
+    {t:"I work to improve my family relationships rather than waiting for others to make the first move.",self:true},
+    {t:"My family knows who I am — not just what I do or the role I've always played.",self:false},
     {t:"I can be honest about hard things with my family without it causing lasting damage.",self:false},
     {t:"When a family member is going through something hard, I move toward them rather than stepping back.",self:true},
-    {t:"I feel a genuine sense of belonging in my family — not just obligation or shared history.",self:false},
+    {t:"I feel wanted in my family — not just included because of what I do.",self:false},
     {t:"My family has come through for me in a real and tangible way when I needed it.",self:false},
-    {t:"My family knows what I'm passionate about and takes it seriously — they don't just tolerate it.",self:false},
+    {t:"What I care most about is supported by my family — they engage with it, not just endure it.",self:false},
     {t:"Family members reach out to me — not just when there's a need or an event.",self:false},
     {t:"I let my family see the real texture of my life — the struggles, not just the highlights.",self:true}
   ]},
@@ -461,17 +462,27 @@ function buildHtmlEmail(scores){
   let dimensionsHtml = '';
   emailDimScores.forEach(d => {
     const col = d.score>=70?'#7aad6a':d.score>=45?'#d4b96a':'#c97a5a';
-    const barPct = d.score;
-    const filledBlocks = Math.round(barPct/10);
+    const filledBlocks = Math.round(d.score/10);
     const bar = '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(filledBlocks)+'&#9617;'.repeat(10-filledBlocks)+'</span>';
     const status = d.score>=70?'Healthy':d.score>=45?'Developing':'Needs attention';
+    let realmRows = '';
+    d.realmScores.forEach(rs => {
+      const rc = rs.score>=70?'#7aad6a':rs.score>=45?'#d4b96a':'#c97a5a';
+      const rfilled = Math.round(rs.score/10);
+      const rbar = '<span style="color:'+rc+';font-family:monospace;font-size:11px;letter-spacing:1px">'+'&#9608;'.repeat(rfilled)+'&#9617;'.repeat(10-rfilled)+'</span>';
+      realmRows += '<tr><td style="padding:3px 0;font-size:11px;color:#6a6258;width:130px">'+rs.label+'</td>'
+        +'<td style="padding:3px 0;font-size:11px">'+rbar+'</td>'
+        +'<td style="padding:3px 0;font-size:11px;color:'+rc+';text-align:right;width:36px">'+rs.score+'%</td></tr>';
+    });
     dimensionsHtml += '<tr><td style="padding:0 0 8px">'
       +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+col+';border-radius:4px">'
       +'<tr><td style="padding:14px 16px">'
       +'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
       +'<td><p style="font-size:13px;font-weight:500;color:#f0e8df;margin:0 0 4px">'+d.name+'</p>'
       +'<p style="font-size:12px;color:#6a6258;margin:0 0 8px">'+d.desc(d.score)+'</p>'
-      +'<p style="font-size:12px;margin:0">'+bar+'</p></td>'
+      +'<p style="font-size:12px;margin:0 0 10px">'+bar+'</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0">'+realmRows+'</table>'
+      +'</td>'
       +'<td style="text-align:right;vertical-align:top;padding-left:12px;white-space:nowrap">'
       +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+col+';margin:0">'+d.score+'%</p>'
       +'<p style="font-size:11px;color:#6a6258;margin:2px 0 0">'+status+'</p>'
@@ -490,7 +501,7 @@ function buildHtmlEmail(scores){
     +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Heart Engagement Assessment Results</p></td></tr>'
     // Body
     +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:32px">'
-    +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 16px">Thank you for taking the Heart Engagement Assessment. I\'m glad you did — it takes honesty to sit with questions like these, and that honesty is itself a kind of courage.</p>'
+    +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 16px">Thank you for taking the Heart Engagement Assessment. We\'re glad you did — it takes honesty to sit with questions like these, and that honesty is itself a kind of courage.</p>'
     // Overall score
     +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:24px 0"><tr><td style="padding:24px 28px;text-align:center">'
     +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">Overall Heart Engagement Score</p>'
@@ -517,7 +528,7 @@ function buildHtmlEmail(scores){
     +'<table width="100%" cellpadding="0" cellspacing="0">'+patternsHtml+'</table>'
     // Connection Dimensions
     +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Connection Dimensions</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0">'+dimensionsHtml+'</table>'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px"><tbody>'+dimensionsHtml+'</tbody></table>'
     // Action plan
     +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Your Action Plan</p>'
     +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;padding:20px 20px 6px;margin:0 0 24px">'
@@ -689,7 +700,7 @@ function renderResults(scores){
   const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);return'<div class="pattern-card '+p.cls+'"><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div>';}).join('');
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div><div class="warning-text">'+w.text+'</div></div></div>').join('');
   const actionHtml=actionSteps.map((s,i)=>'<div class="action-step"><div class="step-num">'+(i+1)+'</div><div class="step-text"><strong>'+s.title+'.</strong> '+s.text+'</div></div>').join('');
-  document.getElementById('app').innerHTML='<div class="main"><div class="results-page"><div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Heart Engagement Results</h2><p>'+headline+'</p></div><div class="ring-wrap"><div class="ring-inner"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(232,215,160,.1)" stroke-width="10"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+rc+'" stroke-width="10" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/></svg><div class="ring-lbl"><div class="big">'+overall+'%</div><div class="sm">overall</div></div><div style="text-align:center;font-size:.95rem;color:#a09890;font-style:italic;font-family:\'Cormorant Garamond\',serif;max-width:340px;margin:1rem auto 1.5rem;line-height:1.6;clear:both;display:block">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life — depth is always worth pursuing.')+'</div></div></div><div class="score-cards"><div class="score-card"><div class="score-card-lbl">How others engage you</div><div class="score-card-val" style="color:'+dcolor(outAvg)+'">'+outAvg+'%</div><div class="score-card-tag">'+dtag(outAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+outAvg+'%;background:'+dcolor(outAvg)+'"></div></div></div><div class="score-card"><div class="score-card-lbl">How you engage others</div><div class="score-card-val" style="color:'+dcolor(selfAvg)+'">'+selfAvg+'%</div><div class="score-card-tag">'+dtag(selfAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfAvg+'%;background:'+dcolor(selfAvg)+'"></div></div></div></div><div class="section-label">Scores by realm</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How others engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage others</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div><div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'+(warnings.length>0?'<div class="section-label">Warning signs in your results</div>'+warningHtml:'')+'<div class="section-label">Connection dimensions</div><div class="dim-grid">'+dimHtml+'</div><div class="section-label">Your action plan</div><div class="action-card"><h3>Where to go from here'+(userName?', '+userName:'')+'</h3>'+actionHtml+'</div><div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 30-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:forney.steve@gmail.com?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:forney.steve@gmail.com">forney.steve@gmail.com</a></div></div><button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
+  document.getElementById('app').innerHTML='<div class="main"><div class="results-page"><div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Heart Engagement Results</h2><p>'+headline+'</p></div><div class="ring-wrap"><div class="ring-inner"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(232,215,160,.1)" stroke-width="10"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+rc+'" stroke-width="10" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/></svg><div class="ring-lbl"><div class="big">'+overall+'%</div><div class="sm">overall</div></div></div></div><div class="ring-summary">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life — depth is always worth pursuing.')+'</div><div class="score-cards"><div class="score-card"><div class="score-card-lbl">How others engage you</div><div class="score-card-val" style="color:'+dcolor(outAvg)+'">'+outAvg+'%</div><div class="score-card-tag">'+dtag(outAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+outAvg+'%;background:'+dcolor(outAvg)+'"></div></div></div><div class="score-card"><div class="score-card-lbl">How you engage others</div><div class="score-card-val" style="color:'+dcolor(selfAvg)+'">'+selfAvg+'%</div><div class="score-card-tag">'+dtag(selfAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfAvg+'%;background:'+dcolor(selfAvg)+'"></div></div></div></div><div class="section-label">Scores by realm</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How others engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage others</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div><div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'+(warnings.length>0?'<div class="section-label">Warning signs in your results</div>'+warningHtml:'')+'<div class="section-label">Connection dimensions</div><div class="dim-grid">'+dimHtml+'</div><div class="section-label">Your action plan</div><div class="action-card"><h3>Where to go from here'+(userName?', '+userName:'')+'</h3>'+actionHtml+'</div><div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 30-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:forney.steve@gmail.com?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:forney.steve@gmail.com">forney.steve@gmail.com</a></div></div><button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
 }
 function retake(){
   answers={};userName='';userEmail='';
