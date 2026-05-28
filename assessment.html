@@ -146,7 +146,7 @@ nav .nav-links a:hover{color:#e8d7a0}
 .dim-realm-fill{height:100%;border-radius:3px;transition:width .9s ease}
 .dim-realm-pct{font-size:.7rem;font-weight:500;width:28px;text-align:right;flex-shrink:0}
 .pattern-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem;margin-bottom:1rem}
-.pattern-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1rem 1.25rem}
+.pattern-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start}
 .pattern-card.open{border-left:3px solid #b5c4a0}
 .pattern-card.giver{border-left:3px solid #c97a5a}
 .pattern-card.guarded{border-left:3px solid #e8d7a0}
@@ -270,7 +270,7 @@ const REALMS=[
     {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
     {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
     {t:"People at work seek me out — I'm not always the one inserting myself.",self:false},
-    {t:"My relationships at work allow me to be myself — I don't have to keep parts of me quiet.",self:true}
+    {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
   ]},
   {id:'significant_other',label:'Significant Other',icon:'ti-heart',color:'#c97a5a',bar:'#c97a5a',
    desc:'Think about your spouse or significant other. Skip this section if not currently applicable.',
@@ -284,7 +284,7 @@ const REALMS=[
     {t:"My partner has shown up for me in ways that required real sacrifice on their part.",self:false},
     {t:"My partner genuinely knows and champions what I'm most passionate about — even if it impacts the day to day.",self:false},
     {t:"My partner initiates connection with me — not just responds when I reach out.",self:false},
-    {t:"I let my partner see the full weight of who I am — not just the parts I've cleaned up.",self:true}
+    {t:"I feel free to be myself with my partner — I'm valued for who I am, not just what I contribute.",self:true}
   ]},
   {id:'family',label:'Family',icon:'ti-home-heart',color:'#a09890',bar:'#a09890',
    desc:'Think about your family relationships — answer based on your closest family ties (spouse/children if applicable, otherwise siblings or parents).',
@@ -298,7 +298,7 @@ const REALMS=[
     {t:"My family has come through for me in a real and tangible way when I needed it.",self:false},
     {t:"What I care most about is supported by my family — they engage with it, not just endure it.",self:false},
     {t:"Family members reach out to me — not just when there's a need or an event.",self:false},
-    {t:"I let my family see the real texture of my life — the struggles, not just the highlights.",self:true}
+    {t:"I feel free to be myself in my family — my value isn't tied to what I do or the role I fill.",self:true}
   ]},
   {id:'friends',label:'Friends',icon:'ti-users',color:'#b5c4a0',bar:'#b5c4a0',
    desc:'Think about your close friends and social circle.',
@@ -312,7 +312,7 @@ const REALMS=[
     {t:"At least one friend has been there for me in a way I didn't have to ask for or explain.",self:false},
     {t:"My friends actively encourage the things I feel called to — they don't just nod along.",self:false},
     {t:"My friends reach out first — it's not always me keeping the friendship alive.",self:false},
-    {t:"My friends get the real version of me — the doubts, the dreams, the unfinished parts.",self:true}
+    {t:"I feel free to be myself with my friends — I'm valued for who I am, not just what I bring.",self:true}
   ]},
   {id:'community',label:'Community',icon:'ti-building-community',color:'#9aa8b0',bar:'#9aa8b0',
    desc:'Think about your church, neighborhood, or broader community.',
@@ -326,7 +326,7 @@ const REALMS=[
     {t:"Someone in my community has extended themselves toward me in a way I didn't expect or earn.",self:false},
     {t:"I could be vulnerable in this community — share something real — and be received with grace.",self:false},
     {t:"People in my community seek me out — I'm not just a name on a roster.",self:false},
-    {t:"The people in my community know what I care about most — my passions have a place here, not just my participation.",self:true}
+    {t:"I feel free to be myself in this community — my value isn't tied to what I contribute or perform.",self:true}
   ]},
   {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',iconBg:'rgba(196,168,130,.12)',bar:'#8a6f4a',
    desc:'Think about your personal relationship with God — not your theology, but your lived experience of that relationship.',
@@ -340,7 +340,7 @@ const REALMS=[
     {t:"I experience being pursued by God — faith doesn't feel entirely like my own effort keeping things alive.",self:false},
     {t:"I sense that the things I'm most passionate about connect to how God made me — my calling feels real, not just invented.",self:false},
     {t:"My relationship with God is moving — I know Him more honestly than I did a year ago.",self:false},
-    {t:"I show up with God as the person I actually am — not the person I think I should be by now.",self:true}
+    {t:"I feel free to be myself with God — I'm not valued for my spiritual performance.",self:true}
   ]}
 ];
 const WARNINGS=[
@@ -481,6 +481,7 @@ function buildHtmlEmail(scores){
       +'<td><p style="font-size:13px;font-weight:500;color:#f0e8df;margin:0 0 4px">'+d.name+'</p>'
       +'<p style="font-size:12px;color:#6a6258;margin:0 0 8px">'+d.desc(d.score)+'</p>'
       +'<p style="font-size:12px;margin:0 0 10px">'+bar+'</p>'
+      +(d.writeup&&d.score<70?'<div style="margin-top:10px;padding-top:10px;border-top:1px solid #2a2825">'+d.writeup.split('\n\n').map(p=>'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0 0 8px">'+p+'</p>').join('')+'</div>':'')
       +'<table width="100%" cellpadding="0" cellspacing="0">'+realmRows+'</table>'
       +'</td>'
       +'<td style="text-align:right;vertical-align:top;padding-left:12px;white-space:nowrap">'
@@ -630,26 +631,95 @@ const REALM_PATTERNS={
   community:{open:"You are genuinely present in your community and your community is genuinely present with you. You are known here — not just recognized — and that kind of belonging is worth nurturing.",giver:"You may be investing more in your community than your community is investing in you. You show up, you serve, you engage — but you may feel more like a contributor than a member who is truly known.",guarded:"Your community may be more open to you than you're allowing yourself to receive. You may be participating without truly belonging.",disconnected:"There is significant distance between you and your community right now. You may feel more like an attendee than a member. Something needs to shift here.",developing:"There is some real connection in your community, but it hasn't taken root yet. Belonging in community takes time — but there is more available here than you may be experiencing."},
   god:{open:"There is real, mutual engagement in your relationship with God. You are bringing your honest self and experiencing genuine connection in return. That kind of spiritual intimacy is something many people long for and never quite find.",giver:"You may be showing up in your faith — praying, seeking, engaging — but not experiencing much sense of God's presence or response in return. That can be a profoundly isolating place to be.",guarded:"There may be more available to you in your relationship with God than you're currently allowing yourself to receive. Something is keeping you at a careful distance.",disconnected:"There is significant distance in your relationship with God right now — felt on both sides. You may be going through the motions of faith without much lived experience of connection.",developing:"There is something real in your relationship with God, but it hasn't reached the depth it could. You may be in a season of seeking — present, but not yet fully known or knowing."}
 };
+function getPatternIcon(key){
+  const icons={
+    open:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
+      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <path d="M10 40 A20 20 0 0 1 46 40" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/>
+      <path d="M10 40 A20 20 0 0 1 46 40" fill="none" stroke="#7aad6a" stroke-width="5" stroke-linecap="round" stroke-dasharray="63" stroke-dashoffset="0" opacity="0.9"/>
+      <line x1="28" y1="40" x2="28" y2="22" stroke="#f0e8df" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="28" cy="40" r="3" fill="#f0e8df"/>
+      <circle cx="16" cy="46" r="2.5" fill="#7aad6a"/>
+      <circle cx="24" cy="46" r="2.5" fill="#7aad6a"/>
+      <circle cx="32" cy="46" r="2.5" fill="#7aad6a"/>
+      <circle cx="40" cy="46" r="2.5" fill="#7aad6a"/>
+    </svg>`,
+    giver:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
+      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <rect x="8" y="16" width="40" height="24" rx="4" fill="#111" stroke="#3a3530" stroke-width="1"/>
+      <rect x="13" y="21" width="6" height="14" rx="1.5" fill="#c97a5a" opacity="0.9"/>
+      <rect x="22" y="21" width="6" height="14" rx="1.5" fill="#2a2825"/>
+      <rect x="31" y="21" width="6" height="14" rx="1.5" fill="#2a2825"/>
+      <rect x="40" y="21" width="6" height="14" rx="1.5" fill="#2a2825"/>
+      <text x="10" y="48" font-family="Georgia,serif" font-size="8" fill="#c97a5a" font-weight="700">E</text>
+      <text x="43" y="48" font-family="Georgia,serif" font-size="8" fill="#5a5550" font-weight="700">F</text>
+      <line x1="18" y1="44" x2="40" y2="44" stroke="#3a3530" stroke-width="1"/>
+    </svg>`,
+    guarded:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
+      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <polygon points="28,10 48,42 8,42" fill="none" stroke="#d4b96a" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="28,6 52,46 4,46" fill="none" stroke="#d4b96a" stroke-width="0.5" stroke-linejoin="round" opacity="0.25"/>
+      <rect x="25" y="18" width="6" height="14" rx="2" fill="#d4b96a"/>
+      <circle cx="28" cy="38" r="3" fill="#d4b96a"/>
+    </svg>`,
+    disconnected:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
+      <rect x="1" y="1" width="54" height="54" rx="6" fill="#111" stroke="#2a2825" stroke-width="1"/>
+      <path d="M10 40 A20 20 0 0 1 46 40" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/>
+      <line x1="18" y1="40" x2="38" y2="40" stroke="#3a3530" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="28" cy="40" r="3" fill="#2a2825" stroke="#3a3530" stroke-width="1"/>
+      <circle cx="16" cy="46" r="2.5" fill="#2a2825"/>
+      <circle cx="24" cy="46" r="2.5" fill="#2a2825"/>
+      <circle cx="32" cy="46" r="2.5" fill="#2a2825"/>
+      <circle cx="40" cy="46" r="2.5" fill="#2a2825"/>
+    </svg>`,
+    developing:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
+      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <circle cx="28" cy="28" r="22" fill="none" stroke="#2a2825" stroke-width="1"/>
+      <circle cx="28" cy="28" r="18" fill="#111" stroke="#3a3530" stroke-width="0.5"/>
+      <circle cx="28" cy="10" r="8" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <path d="M21 10 A7 7 0 0 1 35 10" fill="none" stroke="#c97a5a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="28" y1="10" x2="24" y2="4" stroke="#f0e8df" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="28" cy="10" r="1.5" fill="#f0e8df"/>
+      <circle cx="14" cy="36" r="8" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <path d="M7 36 A7 7 0 0 1 21 36" fill="none" stroke="#d4b96a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="14" y1="36" x2="20" y2="28" stroke="#f0e8df" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="14" cy="36" r="1.5" fill="#f0e8df"/>
+      <circle cx="42" cy="36" r="8" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <path d="M35 36 A7 7 0 0 1 49 36" fill="none" stroke="#7aad6a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="42" y1="36" x2="42" y2="28" stroke="#f0e8df" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="42" cy="36" r="1.5" fill="#f0e8df"/>
+      <circle cx="28" cy="28" r="3" fill="#2a2825" stroke="#5a5550" stroke-width="1"/>
+    </svg>`
+  };
+  return icons[key]||icons.developing;
+}
 function getPattern(outward,self_,realmId){
-  const hiOut=outward>=65,loOut=outward<50,hiSelf=self_>=65,loSelf=self_<50;
   const rp=REALM_PATTERNS[realmId]||REALM_PATTERNS.friends;
   let key,name,cls;
-  if(hiOut&&hiSelf){key='open';name='The Open Door';cls='open';}
-  else if(loOut&&loSelf){key='disconnected';name='The Disconnected';cls='disconnected';}
-  else if(loOut&&hiSelf){key='giver';name='The Invisible Giver';cls='giver';}
-  else if(hiOut&&loSelf){key='guarded';name='The Guarded One';cls='guarded';}
-  else{key='developing';name='Still Developing';cls='guarded';}
+  if(hiOut&&hiSelf){key='open';name='All Systems Green';cls='open';}
+  else if(loOut&&loSelf){key='disconnected';name='Engine Off';cls='disconnected';}
+  else if(loOut&&hiSelf){key='giver';name='Running on Empty';cls='giver';}
+  else if(hiOut&&loSelf){key='guarded';name='Warning Light';cls='guarded';}
+  else{key='developing';name='Gauges Fluctuating';cls='guarded';}
   return{key,name,cls,desc:rp[key]};
 }
 const DIMS=[
-  {id:'seen',name:'Being Seen',qi:0,desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often feel like you blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
-  {id:'known',name:'Being Known',qi:2,desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
-  {id:'voice',name:'Having a Voice',qi:3,desc:(p)=>p>=70?'You feel free to speak up and your perspective is genuinely engaged.':p>=45?'Your voice is heard sometimes, but you may hold back more than you realize.':'You may have learned that speaking up costs more than staying quiet. Your voice is shrinking.'},
-  {id:'belonging',name:'Belonging',qi:5,desc:(p)=>p>=70?'You feel genuinely wanted and at home in the key relationships of your life.':p>=45?'You have access to your relationships, but may not always feel truly inside them.':'You often feel like you\'re on the edges — present, but not really included. That gap is real.'},
-  {id:'support',name:'Receiving Support',qi:6,desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not feel fully confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
-  {id:'trust',name:'Trust & Safety',qi:7,desc:(p)=>p>=70?'You feel emotionally safe being imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
-  {id:'chosen',name:'Being Chosen',qi:8,desc:(p)=>p>=70?'People pursue you — you are not always the one keeping connection alive.':p>=45?'You are included, but may not often feel actively sought out or specifically wanted.':'Connection mostly happens on your initiative. You are rarely the one being pursued. That\'s a lonely place to live.'},
-  {id:'fullself',name:'Bringing Your Full Self',qi:9,desc:(p)=>p>=70?'You show up authentically — not just a curated version built to keep things smooth.':p>=45?'You bring more of yourself in some contexts than others, but a managed version often shows up instead.':'You are carrying a version of yourself into your relationships that isn\'t the full you. The real you is waiting.'}
+  {id:'seen',name:'Being Seen',qi:0,
+   writeup:"Most high-functioning people are noticed for what they produce. They get recognized for results, rewarded for performance, valued for what they contribute. What they rarely experience is someone noticing them — not their performance, not their title, not what they bring to the table. Just them.\n\nBeing seen is not the same as being watched. It's about someone being genuinely attuned to you. Someone who notices what you're not saying. Someone who sees that you reach out to people you didn't have to. Who notices the care you extend quietly — the desire you carry for other people's lives to actually get better.\n\nCounselor and author Michael Cusick identifies attention — the experience of being truly seen — as one of the deepest desires of the human heart. Not a luxury. A need. And when that need goes unmet long enough, something shifts. You stop bringing the parts of yourself that no one seems to notice anyway.\n\nThere's a reason the number one cause of leadership failure isn't a skill problem — it's isolation. The most capable people in the room are often the least known. And that gap has a cost that doesn't show up on any dashboard until something breaks.\n\nYour score here is worth sitting with. Not because something is wrong — but because being seen changes everything.",desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often feel like you blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
+  {id:'known',name:'Being Known',qi:2,
+   writeup:"Most people have a partner who knows their schedule, their preferences, and their history. Far fewer have a partner who knows them.\n\nThere's a difference between being familiar and being known. Familiar means they know you take your coffee black, that you get quiet when you're stressed, that you've been doing this job for eleven years. Known means they know what's actually driving you — the fear underneath the ambition, the wound underneath the anger, the longing underneath the silence.\n\nMost of us have settled for familiar without realizing we've done it. It happened gradually — not because anyone failed, but because being fully known requires something most of us were never taught to offer: access. Being known by your partner doesn't cost you what you think it will. It gives you what you didn't know you were missing.\n\nYour score in this area is worth paying attention to. Not because something is broken — but because something better is available.",desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
+  {id:'voice',name:'Having a Voice',qi:3,
+   writeup:"Most people learn early whether their voice is safe. Not in any dramatic way — just through the accumulation of small moments. The time you spoke up and got shut down. The meeting where your idea was ignored until someone else said it. The relationship where honesty cost you more than silence did.\n\nOver time, those moments add up to a decision — usually unconscious — about whether it's worth it to speak. And for a lot of high-functioning people, the answer they've quietly settled on is: probably not.\n\nThe irony is that the people most capable of saying something important are often the ones who have learned to stay quiet. They've gotten good at reading the room. At knowing what will land and what won't. At packaging their real thoughts in ways that are acceptable. It works. And it costs them something they can't quite name.\n\nBut having a voice is about more than safety. It's about impact. It's about whether your words actually land — whether when you speak into someone's life, something shifts. Whether your child leans in when you talk about what matters. Whether your team moves differently because of what you said. Whether a friend at a crossroads walks away changed because you were honest with them.\n\nA lot of high-functioning people are influential without ever feeling like their voice truly matters. They speak. People listen. And they still go home wondering if any of it made a difference. That gap — between being heard and actually mattering — is one of the quietest forms of loneliness there is.\n\nYour score here reflects something real. A shrinking voice doesn't disappear all at once. It gets quieter. And quieter. Until one day you realize you've stopped saying the things you actually believe — and stopped expecting them to matter even if you did.",desc:(p)=>p>=70?'You feel free to speak up and your perspective is genuinely engaged.':p>=45?'Your voice is heard sometimes, but you may hold back more than you realize.':'You may have learned that speaking up costs more than staying quiet. Your voice is shrinking.'},
+  {id:'belonging',name:'Belonging',qi:5,
+   writeup:"Belonging is the most counterfeited experience in human relationships. You can be on the team, in the group, at the table — and still feel like a guest. Present in the room, but not really in the relationship. Included but not chosen. There when it's convenient for everyone, but not missed when you're not.\n\nMost high-functioning people have learned to manufacture belonging. They make themselves useful. They show up consistently. They fill a role well enough that their presence becomes expected. And they mistake that expectation for belonging. It isn't.\n\nReal belonging is not something you earn by performing. It's something you're given because of who you are. It's the difference between being wanted and being needed. Between a group that would reorganize around your absence and one that would simply fill your seat.\n\nMany people call this acceptance — the deep desire to belong not because of what you bring, but because of who you are. Most of us spend years trying to earn the thing that can only be given.\n\nThe cost of not belonging — really belonging — is hard to measure because it doesn't announce itself. It just shows up as a low-grade restlessness. A sense that you're always slightly on the outside of things. That the warmth in the room is real, but somehow it doesn't quite reach you.\n\nYour score here is worth paying attention to. Not because you aren't connected — but because connection and belonging are not the same thing. And only one of them actually satisfies.",desc:(p)=>p>=70?'You feel genuinely wanted and at home in the key relationships of your life.':p>=45?'You have access to your relationships, but may not always feel truly inside them.':'You often feel like you\'re on the edges — present, but not really included. That gap is real.'},
+  {id:'support',name:'Receiving Support',qi:6,
+   writeup:"Most self-sufficient people don't have a support problem. They have a receiving problem.\n\nThe people around them would show up if asked. Some of them are already trying. But somewhere along the way, this person learned that needing help was a liability. That handling things alone was strength. That letting someone in when things were hard was a risk not worth taking.\n\nSo they got good at managing. At appearing fine. At deflecting concern with humor, competence, or a quick pivot to someone else's needs. And the people who love them learned to stop asking — not because they stopped caring, but because the door was always closed.\n\nHere's what that costs: not just the support you didn't receive, but the intimacy that comes from being helped. There is something that happens between two people when one of them is genuinely there for the other in a hard moment. Something that doesn't happen any other way. When you consistently close that door, you don't just handle things alone — you stay alone.\n\nThe capacity to receive is not weakness. It's actually one of the clearest indicators of how open your heart is. A heart that is hurt, guarded, or shut down won't let support land — even when it's offered freely. A heart that is open and trusting can receive, and in receiving, it connects.\n\nYour score here isn't just about whether people show up for you. It's about whether you let them.",desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not feel fully confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
+  {id:'trust',name:'Trust & Safety',qi:7,
+   writeup:"There is a difference between a relationship that is comfortable and one that is safe. Comfortable means the tension is managed. Safe means you don't have to manage it.\n\nMost people have plenty of comfortable relationships. Relationships where things run smoothly because everyone has learned what to say and what not to say. Where conflict is avoided not because it isn't there, but because bringing it up costs too much. Where you can relax — but only up to a point.\n\nReal safety is rarer. It's the experience of being in a relationship where you can be wrong, weak, uncertain, or undone — and not lose your standing. Where failure doesn't change how you're regarded. Where you can say 'I don't know' or 'I'm not okay' without managing the aftermath.\n\nFor high-functioning people, this is often the hardest thing to find — and the hardest thing to admit they're missing. Because they've built their lives on competence. On having answers. On being the person others lean on. The idea that they might need a place to not have it together feels foreign. Sometimes threatening.\n\nBut here's what the absence of safety costs over time: you become increasingly alone in the places that matter most. Not lonely in an obvious way — you're surrounded by people. But alone in the sense that no one really knows what's happening inside you. And you've stopped expecting them to.\n\nSafety isn't just a nice feature in a relationship. It's the condition that makes real connection possible. Without it, everything stays on the surface — no matter how long you've known each other.\n\nYour score here reflects the quality of the ground beneath your relationships. Not how many you have — but how deep they actually go.",desc:(p)=>p>=70?'You feel emotionally safe being imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
+  {id:'chosen',name:'Being Chosen',qi:8,
+   writeup:"There is a particular kind of loneliness that comes from always being the one who reaches out. You're the one who initiates. Who checks in. Who keeps the friendship alive. Who makes the plan. And if you stopped — you're not entirely sure anyone would notice.\n\nMost relationally capable people have learned to live with this imbalance without naming it. They tell themselves they're just the initiator type. That some people are givers and some are takers. That it's fine. But underneath that reasoning is something that doesn't feel fine at all — the quiet suspicion that if they stopped showing up, the relationship would simply go dark.\n\nBeing chosen is one of the deepest relational needs a person has. Not just being included — but being sought. Pursued. Thought of when you're not in the room. Having someone reach out not because they need something, but because they wanted to hear your voice.\n\nFor leaders and high-capacity people, this is often the loneliest gap. They are needed everywhere. Sought out for what they can do, what they know, what they can solve. But rarely pursued simply for who they are. The demand for their capacity can actually mask a profound absence of genuine pursuit.\n\nThere's a word for this experience — affection. Not romantic affection, but the experience of someone saying with their actions: when I see you, I want to be with you. That's what being chosen feels like. And its absence — even in a full and busy life — leaves something hollow that productivity and influence can't fill.\n\nYour score here is worth sitting with. Not as an indictment of the people in your life — but as an honest look at whether you are truly being pursued, or simply being used well.",desc:(p)=>p>=70?'People pursue you — you are not always the one keeping connection alive.':p>=45?'You are included, but may not often feel actively sought out or specifically wanted.':'Connection mostly happens on your initiative. You are rarely the one being pursued. That\'s a lonely place to live.'},
+  {id:'fullself',name:'Freedom to Be Myself',qi:9,
+   writeup:"Most people have never stopped to ask the question: do I actually know who I am when no one is watching?\n\nFor high-functioning people, identity tends to form around performance. Around what they're good at, what they've built, what others expect from them. It happens gradually — not as a choice, but as an adaptation. You learn what works. What gets rewarded. What keeps things smooth. And you become very good at being that version of yourself.\n\nThe problem is that version isn't you. It's a role. And roles are exhausting to maintain — because they require constant management. Constant awareness of how you're coming across. Constant calibration between what you actually think and what's safe to say.\n\nFreedom to be yourself is not a personality trait. It's a relational experience. It happens when the people around you make it safe to stop performing. When your value in the relationship is clearly not tied to what you produce, what you know, or how well you show up. When you can be uncertain, unimpressive, or just ordinary — and nothing changes.\n\nMost people don't know how much they're performing until they experience a relationship where they don't have to. The contrast is striking. Something in you exhales. You didn't realize how long you'd been holding your breath.\n\nYour score here reflects something important — not just about your relationships, but about you. Whether you have places in your life where you are free to simply be. And whether you've let yourself want that.",desc:(p)=>p>=70?'You feel free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You experience some freedom to be yourself, but in certain contexts you still feel pressure to perform or prove your worth.':'You may feel that your place in relationships is conditional on what you do or produce. The freedom to simply be yourself feels thin or absent.'}
 ];
 function calcDimScores(realm){
   return DIMS.map(d=>{
@@ -695,9 +765,10 @@ function renderResults(scores){
     const col=d.score>=75?'#b5c4a0':d.score>=50?'#e8d7a0':'#c97a5a';
     const cls=d.score>=75?'high':d.score<50?'low':'';
     const realmBars=d.realmScores.map(rs=>{const rc2=rs.score>=75?'#b5c4a0':rs.score>=50?'#e8d7a0':'#c97a5a';return'<div class="dim-realm-row"><div class="dim-realm-label"><i class="ti '+rs.icon+'" style="font-size:11px;color:'+rs.color+';margin-right:4px"></i>'+rs.label+'</div><div class="dim-realm-track"><div class="dim-realm-fill" style="width:'+rs.score+'%;background:'+rc2+'"></div></div><div class="dim-realm-pct" style="color:'+rc2+'">'+rs.score+'%</div></div>';}).join('');
-    return'<div class="dim-card '+cls+'"><div class="dim-header"><div class="dim-name">'+d.name+'</div><div class="dim-overall" style="color:'+col+'">'+d.score+'%</div></div><div class="dim-desc">'+d.desc(d.score)+'</div>'+realmBars+'</div>';
+    const writeupHtml=d.writeup&&d.score<70?'<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(232,215,160,.08)">'+d.writeup.split('\n\n').map(p=>'<p style="font-size:.85rem;color:#a09890;line-height:1.8;margin-bottom:.75rem">'+p+'</p>').join('')+'</div>':'';
+    return'<div class="dim-card '+cls+'"><div class="dim-header"><div class="dim-name">'+d.name+'</div><div class="dim-overall" style="color:'+col+'">'+d.score+'%</div></div><div class="dim-desc">'+d.desc(d.score)+'</div>'+realmBars+writeupHtml+'</div>';
   }).join('');
-  const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);return'<div class="pattern-card '+p.cls+'"><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div>';}).join('');
+  const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);return'<div class="pattern-card '+p.cls+'" style="display:flex;gap:1rem;align-items:flex-start">'+getPatternIcon(p.key)+'<div><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div></div>';}).join('');
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div><div class="warning-text">'+w.text+'</div></div></div>').join('');
   const actionHtml=actionSteps.map((s,i)=>'<div class="action-step"><div class="step-num">'+(i+1)+'</div><div class="step-text"><strong>'+s.title+'.</strong> '+s.text+'</div></div>').join('');
   document.getElementById('app').innerHTML='<div class="main"><div class="results-page"><div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Heart Engagement Results</h2><p>'+headline+'</p></div><div class="ring-wrap"><div class="ring-inner"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(232,215,160,.1)" stroke-width="10"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+rc+'" stroke-width="10" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/></svg><div class="ring-lbl"><div class="big">'+overall+'%</div><div class="sm">overall</div></div></div></div><div class="ring-summary">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life — depth is always worth pursuing.')+'</div><div class="score-cards"><div class="score-card"><div class="score-card-lbl">How others engage you</div><div class="score-card-val" style="color:'+dcolor(outAvg)+'">'+outAvg+'%</div><div class="score-card-tag">'+dtag(outAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+outAvg+'%;background:'+dcolor(outAvg)+'"></div></div></div><div class="score-card"><div class="score-card-lbl">How you engage others</div><div class="score-card-val" style="color:'+dcolor(selfAvg)+'">'+selfAvg+'%</div><div class="score-card-tag">'+dtag(selfAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfAvg+'%;background:'+dcolor(selfAvg)+'"></div></div></div></div><div class="section-label">Scores by realm</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How others engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage others</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div><div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'+(warnings.length>0?'<div class="section-label">Warning signs in your results</div>'+warningHtml:'')+'<div class="section-label">Connection dimensions</div><div class="dim-grid">'+dimHtml+'</div><div class="section-label">Your action plan</div><div class="action-card"><h3>Where to go from here'+(userName?', '+userName:'')+'</h3>'+actionHtml+'</div><div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 30-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:forney.steve@gmail.com?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:forney.steve@gmail.com">forney.steve@gmail.com</a></div></div><button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
