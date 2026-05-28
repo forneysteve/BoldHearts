@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -252,7 +253,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v2.4</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v2.5</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -635,61 +636,51 @@ const REALM_PATTERNS={
 function getPatternIcon(key){
   const icons={
     open:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <path d="M10 40 A20 20 0 0 1 46 40" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/>
-      <path d="M10 40 A20 20 0 0 1 46 40" fill="none" stroke="#7aad6a" stroke-width="5" stroke-linecap="round" stroke-dasharray="63" stroke-dashoffset="0" opacity="0.9"/>
-      <line x1="28" y1="40" x2="28" y2="22" stroke="#f0e8df" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="28" cy="40" r="3" fill="#f0e8df"/>
-      <circle cx="16" cy="46" r="2.5" fill="#7aad6a"/>
-      <circle cx="24" cy="46" r="2.5" fill="#7aad6a"/>
-      <circle cx="32" cy="46" r="2.5" fill="#7aad6a"/>
-      <circle cx="40" cy="46" r="2.5" fill="#7aad6a"/>
+      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/>
+      <circle cx="28" cy="18" r="8" fill="#2a2825"/>
+      <circle cx="28" cy="33" r="8" fill="#2a2825"/>
+      <circle cx="28" cy="47" r="8" fill="#4a9e3f"/>
+      <circle cx="28" cy="47" r="5" fill="#6bc45e" opacity="0.9"/>
     </svg>`,
     giver:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <rect x="8" y="16" width="40" height="24" rx="4" fill="#111" stroke="#3a3530" stroke-width="1"/>
-      <rect x="13" y="21" width="6" height="14" rx="1.5" fill="#c97a5a" opacity="0.9"/>
-      <rect x="22" y="21" width="6" height="14" rx="1.5" fill="#2a2825"/>
-      <rect x="31" y="21" width="6" height="14" rx="1.5" fill="#2a2825"/>
-      <rect x="40" y="21" width="6" height="14" rx="1.5" fill="#2a2825"/>
-      <text x="10" y="48" font-family="Georgia,serif" font-size="8" fill="#c97a5a" font-weight="700">E</text>
-      <text x="43" y="48" font-family="Georgia,serif" font-size="8" fill="#5a5550" font-weight="700">F</text>
-      <line x1="18" y1="44" x2="40" y2="44" stroke="#3a3530" stroke-width="1"/>
+      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <circle cx="28" cy="28" r="22" fill="#111" stroke="#2a2825" stroke-width="1"/>
+      <path d="M8 32 A22 22 0 0 1 48 32" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/>
+      <path d="M8 32 A22 22 0 0 1 16 14" fill="none" stroke="#c97a5a" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+      <text x="10" y="38" font-family="Georgia,serif" font-size="9" fill="#c97a5a" font-weight="700">E</text>
+      <text x="42" y="38" font-family="Georgia,serif" font-size="9" fill="#5a5550" font-weight="700">F</text>
+      <line x1="28" y1="28" x2="14" y2="24" stroke="#f0e8df" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="28" cy="28" r="3" fill="#1a1816" stroke="#f0e8df" stroke-width="1.5"/>
     </svg>`,
     guarded:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <polygon points="28,10 48,42 8,42" fill="none" stroke="#d4b96a" stroke-width="2" stroke-linejoin="round"/>
-      <polygon points="28,6 52,46 4,46" fill="none" stroke="#d4b96a" stroke-width="0.5" stroke-linejoin="round" opacity="0.25"/>
-      <rect x="25" y="18" width="6" height="14" rx="2" fill="#d4b96a"/>
-      <circle cx="28" cy="38" r="3" fill="#d4b96a"/>
+      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/>
+      <circle cx="28" cy="18" r="8" fill="#2a2825"/>
+      <circle cx="28" cy="33" r="8" fill="#b8952a" opacity="0.95"/>
+      <circle cx="28" cy="33" r="5" fill="#d4b96a" opacity="0.9"/>
+      <circle cx="28" cy="47" r="8" fill="#2a2825"/>
     </svg>`,
     disconnected:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="6" fill="#111" stroke="#2a2825" stroke-width="1"/>
-      <path d="M10 40 A20 20 0 0 1 46 40" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/>
-      <line x1="18" y1="40" x2="38" y2="40" stroke="#3a3530" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="28" cy="40" r="3" fill="#2a2825" stroke="#3a3530" stroke-width="1"/>
-      <circle cx="16" cy="46" r="2.5" fill="#2a2825"/>
-      <circle cx="24" cy="46" r="2.5" fill="#2a2825"/>
-      <circle cx="32" cy="46" r="2.5" fill="#2a2825"/>
-      <circle cx="40" cy="46" r="2.5" fill="#2a2825"/>
+      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/>
+      <circle cx="28" cy="18" r="8" fill="#8a2a2a" opacity="0.9"/>
+      <circle cx="28" cy="18" r="5" fill="#c97a5a" opacity="0.85"/>
+      <circle cx="28" cy="33" r="8" fill="#2a2825"/>
+      <circle cx="28" cy="47" r="8" fill="#2a2825"/>
     </svg>`,
     developing:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="6" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <circle cx="28" cy="28" r="22" fill="none" stroke="#2a2825" stroke-width="1"/>
-      <circle cx="28" cy="28" r="18" fill="#111" stroke="#3a3530" stroke-width="0.5"/>
-      <circle cx="28" cy="10" r="8" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <path d="M21 10 A7 7 0 0 1 35 10" fill="none" stroke="#c97a5a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      <line x1="28" y1="10" x2="24" y2="4" stroke="#f0e8df" stroke-width="1.2" stroke-linecap="round"/>
-      <circle cx="28" cy="10" r="1.5" fill="#f0e8df"/>
-      <circle cx="14" cy="36" r="8" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <path d="M7 36 A7 7 0 0 1 21 36" fill="none" stroke="#d4b96a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      <line x1="14" y1="36" x2="20" y2="28" stroke="#f0e8df" stroke-width="1.2" stroke-linecap="round"/>
-      <circle cx="14" cy="36" r="1.5" fill="#f0e8df"/>
-      <circle cx="42" cy="36" r="8" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <path d="M35 36 A7 7 0 0 1 49 36" fill="none" stroke="#7aad6a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      <line x1="42" y1="36" x2="42" y2="28" stroke="#f0e8df" stroke-width="1.2" stroke-linecap="round"/>
-      <circle cx="42" cy="36" r="1.5" fill="#f0e8df"/>
-      <circle cx="28" cy="28" r="3" fill="#2a2825" stroke="#5a5550" stroke-width="1"/>
+      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
+      <rect x="6" y="10" width="44" height="36" rx="3" fill="#111" stroke="#2a2825" stroke-width="1"/>
+      <rect x="14" y="18" width="16" height="10" rx="2" fill="none" stroke="#d4b96a" stroke-width="2"/>
+      <line x1="14" y1="22" x2="10" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
+      <line x1="10" y1="19" x2="10" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
+      <line x1="30" y1="22" x2="34" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
+      <line x1="34" y1="19" x2="34" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
+      <line x1="20" y1="18" x2="20" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
+      <line x1="25" y1="18" x2="25" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
+      <rect x="12" y="16" width="20" height="14" rx="3" fill="#d4b96a" opacity="0.07"/>
+      <text x="28" y="38" font-family="Georgia,serif" font-size="6" fill="#d4b96a" text-anchor="middle" letter-spacing=".06em">CHECK ENGINE</text>
     </svg>`
   };
   return icons[key]||icons.developing;
@@ -702,12 +693,12 @@ function getPattern(outward,self_,realmId){
   else if(loOut&&loSelf){key='disconnected';name='Engine Off';cls='disconnected';}
   else if(loOut&&hiSelf){key='giver';name='Running on Empty';cls='giver';}
   else if(hiOut&&loSelf){key='guarded';name='Warning Light';cls='guarded';}
-  else{key='developing';name='Gauges Fluctuating';cls='guarded';}
+  else{key='developing';name='Check Engine';cls='guarded';}
   return{key,name,cls,desc:rp[key]};
 }
 const DIMS=[
   {id:'seen',name:'Being Seen',qi:0,
-   writeup:"Most high-functioning people are noticed for what they produce. They get recognized for results, rewarded for performance, valued for what they contribute. What they rarely experience is someone noticing them — not their performance, not their title, not what they bring to the table. Just them.\n\nBeing seen is not the same as being watched. It's about someone being genuinely attuned to you. Someone who notices what you're not saying. Someone who sees that you reach out to people you didn't have to. Who notices the care you extend quietly — the desire you carry for other people's lives to actually get better.\n\nCounselor and author Michael Cusick identifies attention — the experience of being truly seen — as one of the deepest desires of the human heart. Not a luxury. A need. And when that need goes unmet long enough, something shifts. You stop bringing the parts of yourself that no one seems to notice anyway.\n\nThere's a reason the number one cause of leadership failure isn't a skill problem — it's isolation. The most capable people in the room are often the least known. And that gap has a cost that doesn't show up on any dashboard until something breaks.\n\nYour score here is worth sitting with. Not because something is wrong — but because being seen changes everything.",desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often feel like you blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
+   writeup:"Most high-functioning people are noticed for what they produce. They get recognized for results, rewarded for performance, valued for what they contribute. What they rarely experience is someone noticing them — not their performance, not their title, not what they bring to the table. Just them.\n\nBeing seen is not the same as being watched. It's about someone being genuinely attuned to you. Someone who notices what you're not saying. Someone who sees that you reach out to people you didn't have to. Who notices the care you extend quietly — the desire you carry for other people's lives to actually get better.\n\nSome counselors and therapists point to attention — the experience of being truly seen — as one of the deepest desires of the human heart. Not a luxury. A need. And when that need goes unmet long enough, something shifts. You stop bringing the parts of yourself that no one seems to notice anyway.\n\nThere's a reason the number one cause of leadership failure isn't a skill problem — it's isolation. The most capable people in the room are often the least known. And that gap has a cost that doesn't show up on any dashboard until something breaks.\n\nYour score here is worth sitting with. Not because something is wrong — but because being seen changes everything.",desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often feel like you blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
   {id:'known',name:'Being Known',qi:2,
    writeup:"Most people have a partner who knows their schedule, their preferences, and their history. Far fewer have a partner who knows them.\n\nThere's a difference between being familiar and being known. Familiar means they know you take your coffee black, that you get quiet when you're stressed, that you've been doing this job for eleven years. Known means they know what's actually driving you — the fear underneath the ambition, the wound underneath the anger, the longing underneath the silence.\n\nMost of us have settled for familiar without realizing we've done it. It happened gradually — not because anyone failed, but because being fully known requires something most of us were never taught to offer: access. Being known by your partner doesn't cost you what you think it will. It gives you what you didn't know you were missing.\n\nYour score in this area is worth paying attention to. Not because something is broken — but because something better is available.",desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
   {id:'voice',name:'Having a Voice',qi:3,
