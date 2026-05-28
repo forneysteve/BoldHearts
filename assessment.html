@@ -252,7 +252,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v2.3</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v2.4</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -695,6 +695,7 @@ function getPatternIcon(key){
   return icons[key]||icons.developing;
 }
 function getPattern(outward,self_,realmId){
+  const hiOut=outward>=65,loOut=outward<50,hiSelf=self_>=65,loSelf=self_<50;
   const rp=REALM_PATTERNS[realmId]||REALM_PATTERNS.friends;
   let key,name,cls;
   if(hiOut&&hiSelf){key='open';name='All Systems Green';cls='open';}
