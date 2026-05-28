@@ -621,7 +621,8 @@ function submitGate(){
   const htmlEmail=buildHtmlEmail(scores);
   emailjs.init(EJSPUB);
   emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).catch(e=>console.error('Email error:',e));
-  renderResults(scores);window.scrollTo({top:0,behavior:'smooth'});
+  renderResults(scores);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 const REALM_PATTERNS={
   work:{open:"Your colleagues are engaging you and you are engaging them. There is genuine mutuality here — people know something of the real you, and you are invested in them. That's not common in most workplaces.",giver:"You are showing up for your colleagues more than they are showing up for you. You invest, you notice, you care — but it may not be coming back in equal measure. That imbalance is worth paying attention to.",guarded:"The people at work may be reaching toward you, but you may be holding something back. Connection is available here — but you may not be fully walking through the door.",disconnected:"There is significant distance on both sides at work. You may feel more like a function than a person here — and you may also be keeping your distance in return. Something needs to shift.",developing:"There is some real engagement at work, but it hasn't found its depth yet. Something is present — and something is also holding back. There is more possible here than you're currently experiencing."},
