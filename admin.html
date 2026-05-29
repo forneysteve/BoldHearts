@@ -148,10 +148,11 @@ body{font-family:'Inter',sans-serif;font-weight:300;background:#0d0d0d;color:#d4
             <th>Date</th>
             <th>Overall</th>
             <th>Work</th>
-            <th>Sig. Other</th>
             <th>Family</th>
             <th>Friends</th>
             <th>Community</th>
+            <th>God</th>
+            <th>Self</th>
             <th>Warnings</th>
           </tr>
         </thead>
@@ -278,10 +279,11 @@ function renderTable(rows){
       <td class="date-cell">${dateStr}</td>
       <td>${scorePill(r[3])}</td>
       <td>${scorePill(r[4])}</td>
-      <td>${scorePill(r[5])}</td>
       <td>${scorePill(r[6])}</td>
       <td>${scorePill(r[7])}</td>
       <td>${scorePill(r[8])}</td>
+      <td>${scorePill(r[19])}</td>
+      <td>${scorePill(r[20])}</td>
       <td style="font-size:.72rem;color:#6a6258">${shortWarnings}</td>
     </tr>`;
   }).join('');
@@ -313,6 +315,8 @@ function showModal(idx){
     {label:'Family', idx:6},
     {label:'Friends', idx:7},
     {label:'Community', idx:8},
+    {label:'Relationship with God', idx:19},
+    {label:'Relationship with Self', idx:20},
   ];
 
   const dimCols = [
