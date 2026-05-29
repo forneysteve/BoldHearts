@@ -253,7 +253,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.8</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.9</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -486,8 +486,8 @@ function buildHtmlEmail(scores){
       +'<td><p style="font-size:13px;font-weight:500;color:#f0e8df;margin:0 0 4px">'+d.name+'</p>'
       +'<p style="font-size:12px;color:#6a6258;margin:0 0 8px">'+d.desc(d.score)+'</p>'
       +'<p style="font-size:12px;margin:0 0 10px">'+bar+'</p>'
+      +(d.writeup&&d.score<70?'':'')
       +'<table width="100%" cellpadding="0" cellspacing="0">'+realmRows+'</table>'
-      +(d.writeup&&d.score<70?'<div style="margin-top:10px;padding-top:10px;border-top:1px solid #2a2825">'+d.writeup.split('\n\n').map(p=>'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0 0 8px">'+p+'</p>').join('')+'</div>':'')
       +'</td>'
       +'<td style="text-align:right;vertical-align:top;padding-left:12px;white-space:nowrap">'
       +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+col+';margin:0">'+d.score+'%</p>'
