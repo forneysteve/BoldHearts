@@ -253,7 +253,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.3</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.4</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -627,6 +627,7 @@ function saveToSheets(scores){
   const getDim=(id)=>{const d=dimScores.find(d=>d.id===id);return d?d.score+'%':'';};
   fetch(SHEETS_URL,{
     method:'POST',
+    mode:'no-cors',
     body:JSON.stringify({
       name:userName,
       email:userEmail,
@@ -646,7 +647,7 @@ function saveToSheets(scores){
       freedom_to_be_myself:getDim('fullself'),
       patterns:patterns,
       warnings:warningList,
-      version:'v3.0'
+      version:'v3.3'
     })
   }).catch(e=>console.error('Sheets error:',e));
 }
