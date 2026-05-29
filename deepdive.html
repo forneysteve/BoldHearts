@@ -399,21 +399,17 @@ async function submitGate(){
   // Generate Claude personal note
   const personalNote=CLAUDE_API_KEY!=='REPLACE_WITH_YOUR_API_KEY'?await generatePersonalNote(scores,prevScores):'';
 
-  // Save to sheets
-  const{realm}=scores;
-  fetch(SHEETS_URL,{
-    method:'POST',
-    body:JSON.stringify({
-      name:userName,email:userEmail,
-      overall:'Deep Dive: '+scores.overall+'%',
-      work:'',significant_other:'',family:'',friends:'',community:'',
-      being_seen:'',being_known:'',having_a_voice:'',belonging:'',
-      receiving_support:'',trust_safety:'',being_chosen:'',freedom_to_be_myself:'',
-      patterns:'God: '+realm.god.overall+'% | Self: '+realm.self.overall+'%',
-      warnings:'Deep Dive Assessment',
-      version:'DD-v1.0'
-    })
-  }).catch(e=>console.error('Sheets error:',e));
+  // Save to sheets - update existing Assessment 1 row
+  const ddParams=new URLSearchParams({
+    action:'deepdive',
+    name:userName,
+    email:userEmail,
+    god:realm.god?realm.god.overall+'%':'',
+    self:realm.self?realm.self.overall+'%':'',
+    deepdive_overall:scores.overall+'%'
+  });
+  const ddImg=new Image();
+  ddImg.src=SHEETS_URL+'?'+ddParams.toString();
 
   renderResults(scores,personalNote,prevScores);
   window.scrollTo({top:0,behavior:'smooth'});
