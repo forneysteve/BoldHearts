@@ -253,7 +253,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.2</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.3</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -408,7 +408,8 @@ function getActionPlan(scores){
   if(outAvg<50)steps.push({title:'Name the gap out loud',text:"Start by simply acknowledging to yourself — and perhaps to one trusted person — that you don't feel as seen or known as you'd like to be. Naming it isn't weakness. It's the first honest step toward something different."});
   if(selfAvg<50)steps.push({title:'Practice one small disclosure',text:"Choose one relationship where you've been guarded and share something real — not everything, just something true. Watch what happens. Most people discover the risk was smaller than the fear."});
   if(low.length>0)steps.push({title:'Give focused attention to '+low[0].label,text:"Your lowest scoring area is "+low[0].label+". That's not an accident — it's information. Consider what one small, specific step toward deeper connection in that context might look like for you this month."});
-  steps.push({title:"Don't do this alone",text:"These patterns didn't form overnight, and they won't shift overnight either. But they do shift — with the right kind of accompaniment. A guide who understands these dynamics can help you move much faster than you could alone."});
+  steps.push({title:'Go deeper',text:'Two foundational layers of this assessment remain — your relationship with God and your relationship with yourself. These often explain everything else. <a href="deepdive.html" style="color:#e8d7a0;border-bottom:1px solid rgba(232,215,160,.3)">Take the Deep Dive Assessment</a> to complete the picture.'});
+  steps.push({title:'Consider working with a guide',text:"These patterns didn't form overnight and they won't shift overnight either. But they do shift — with the right kind of accompaniment. A guide who understands these dynamics can help you move much faster than you could alone."});
   return steps.slice(0,5);
 }
 
@@ -823,12 +824,6 @@ function renderResults(scores){
     // 8. Action plan
     +'<div class="section-label">Your action plan</div><div class="action-card"><h3>Where to go from here'+(userName?', '+userName:'')+'</h3>'+actionHtml+'</div>'
     // 9. Discovery call
-    +'<div class="section-label">Complete the picture</div>'
-    +'<div style="background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:2rem">'
-    +'<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.4rem;font-weight:700;color:#f0e8df;margin-bottom:.5rem">Two foundational pieces remain.</p>'
-    +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1.25rem">Your heart engagement with God and your relationship with yourself are the deepest layers of this assessment — and the ones that often explain everything else. Contact BoldHearts to unlock the complete Heart Engagement Assessment.</p>'
-    +'<a href="mailto:admin@boldhearts.org?subject=Complete Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would like to unlock the complete assessment including the God and Self sections." style="display:inline-block;font-family:\'Inter\',sans-serif;font-weight:500;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:#111;background:#c4a882;padding:.75rem 1.75rem;border-radius:4px;text-decoration:none">Contact BoldHearts</a>'
-    +'</div>'
     +'<div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 15-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
 }
