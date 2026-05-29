@@ -253,7 +253,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.6</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.7</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -625,28 +625,33 @@ function saveToSheets(scores){
   const patterns=ar.map(r=>{const p=getPattern(realm[r.id].outward,realm[r.id].self,r.id);return r.label+': '+p.name;}).join(' | ');
   const warningList=warnings.map(w=>w.title).join(' | ')||'None';
   const getDim=(id)=>{const d=dimScores.find(d=>d.id===id);return d?d.score+'%':'';};
-  // Save to Google Sheets via form submission
-  const formData=new FormData();
-  formData.append('name',userName);
-  formData.append('email',userEmail);
-  formData.append('overall',overall+'%');
-  formData.append('work',realm.work?realm.work.overall+'%':'');
-  formData.append('significant_other',realm.significant_other?realm.significant_other.overall+'%':'');
-  formData.append('family',realm.family?realm.family.overall+'%':'');
-  formData.append('friends',realm.friends?realm.friends.overall+'%':'');
-  formData.append('community',realm.community?realm.community.overall+'%':'');
-  formData.append('being_seen',getDim('seen'));
-  formData.append('being_known',getDim('known'));
-  formData.append('having_a_voice',getDim('voice'));
-  formData.append('belonging',getDim('belonging'));
-  formData.append('receiving_support',getDim('support'));
-  formData.append('trust_safety',getDim('trust'));
-  formData.append('being_chosen',getDim('chosen'));
-  formData.append('freedom_to_be_myself',getDim('fullself'));
-  formData.append('patterns',patterns);
-  formData.append('warnings',warningList);
-  formData.append('version','v3.4');
-  fetch(SHEETS_URL,{method:'POST',mode:'no-cors',body:formData}).catch(e=>console.error('Sheets error:',e));
+
+  const params=new URLSearchParams({
+    action:'write',
+    name:userName,
+    email:userEmail,
+    overall:overall+'%',
+    work:realm.work?realm.work.overall+'%':'',
+    significant_other:realm.significant_other?realm.significant_other.overall+'%':'',
+    family:realm.family?realm.family.overall+'%':'',
+    friends:realm.friends?realm.friends.overall+'%':'',
+    community:realm.community?realm.community.overall+'%':'',
+    being_seen:getDim('seen'),
+    being_known:getDim('known'),
+    having_a_voice:getDim('voice'),
+    belonging:getDim('belonging'),
+    receiving_support:getDim('support'),
+    trust_safety:getDim('trust'),
+    being_chosen:getDim('chosen'),
+    freedom_to_be_myself:getDim('fullself'),
+    patterns:patterns,
+    warnings:warningList,
+    version:'v3.6'
+  });
+
+  // Use GET request with URL params — most reliable with Apps Script no-cors
+  fetch(SHEETS_URL+'?'+params.toString(),{method:'GET',mode:'no-cors'})
+    .catch(e=>console.error('Sheets error:',e));
 }
 function submitGate(){
   const name=document.getElementById('gname').value.trim();
