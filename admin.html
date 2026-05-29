@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BoldHearts Admin</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -382,7 +382,12 @@ function showModal(idx){
 
     <!-- Version -->
     <div style="font-size:.68rem;color:#3a3530;text-align:right">Assessment ${r[19]||''}</div>
-  `;
+
+    <!-- Send Deep Dive -->
+    <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(196,168,130,.1);text-align:center">
+      <a href="mailto:${r[2]}?subject=Your BoldHearts Deep Dive Assessment&body=Hi ${r[1]},%0D%0A%0D%0AThank you for completing the Heart Engagement Assessment. Based on our conversation, I'd like to invite you to complete the Deep Dive — the final two foundational layers of your assessment.%0D%0A%0D%0AClick here to begin:%0D%0Ahttps://boldhearts.org/deepdive.html%0D%0A%0D%0AUse the same email address you used for your first assessment so we can combine your complete results.%0D%0A%0D%0AThis is where the picture comes together.%0D%0A%0D%0AI'm for you,%0D%0ASteve Forney%0D%0ABoldHearts" style="display:inline-block;background:#c4a882;color:#111;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.75rem 1.75rem;border-radius:4px;text-decoration:none">Send Deep Dive Invitation</a>
+      <div style="font-size:.72rem;color:#5a5550;margin-top:.6rem">Opens a pre-filled email to ${r[1]||'this person'}</div>
+    </div>
 
   document.getElementById('modal-body').innerHTML = html;
   document.getElementById('modal-overlay').classList.add('open');
