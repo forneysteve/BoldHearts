@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoldHearts Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;font-weight:300;background:#0d0d0d;color:#d4ccc4;min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.login-card{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:3rem;width:100%;max-width:420px;text-align:center}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.25rem}
+.login-logo span{color:#e8d7a0}
+.login-sub{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#5a5550;margin-bottom:2.5rem}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;text-align:left}
+.login-field label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#6a6258}
+.login-field input{width:100%;padding:.9rem 1rem;background:#111;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:300}
+.login-field input:focus{outline:none;border-color:#e8d7a0}
+.login-btn{width:100%;padding:1rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.5rem}
+.login-btn:hover{background:#f5e8c8}
+.login-err{font-size:.82rem;color:#c97a5a;margin-top:.75rem;min-height:18px}
+
+/* DASHBOARD */
+.dashboard{display:none;min-height:100vh}
+.dash-header{background:#111;border-bottom:1px solid rgba(232,215,160,.1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.dash-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#f0e8df;letter-spacing:.12em;text-transform:uppercase}
+.dash-logo span{color:#e8d7a0}
+.dash-meta{font-size:.75rem;color:#5a5550;letter-spacing:.06em}
+.logout-btn{background:none;border:1px solid rgba(232,215,160,.2);color:#6a6258;font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem 1rem;border-radius:4px;cursor:pointer}
+.logout-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
+
+.dash-body{max-width:1200px;margin:0 auto;padding:2rem}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem}
+.stat-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.5rem}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df}
+.stat-sub{font-size:.72rem;color:#6a6258;margin-top:.25rem}
+
+/* SEARCH */
+.search-row{display:flex;gap:1rem;margin-bottom:1.25rem;align-items:center}
+.search-input{flex:1;padding:.75rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.875rem;font-weight:300}
+.search-input:focus{outline:none;border-color:#e8d7a0}
+.search-input::placeholder{color:#3a3530}
+.refresh-btn{padding:.75rem 1.25rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:4px;color:#6a6258;font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.refresh-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
+
+/* TABLE */
+.table-wrap{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;overflow:hidden}
+.results-table{width:100%;border-collapse:collapse}
+.results-table th{padding:.75rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;font-weight:400;border-bottom:1px solid rgba(232,215,160,.1);background:#161412;white-space:nowrap}
+.results-table td{padding:.9rem 1rem;font-size:.82rem;color:#a09890;border-bottom:1px solid rgba(232,215,160,.06);vertical-align:middle}
+.results-table tr:last-child td{border-bottom:none}
+.results-table tr:hover td{background:rgba(232,215,160,.03);cursor:pointer}
+.score-pill{display:inline-block;padding:2px 8px;border-radius:3px;font-size:.72rem;font-weight:500;letter-spacing:.04em}
+.score-high{background:rgba(181,196,160,.12);color:#b5c4a0}
+.score-mid{background:rgba(232,215,160,.1);color:#e8d7a0}
+.score-low{background:rgba(201,122,90,.1);color:#c97a5a}
+.name-cell{color:#f0e8df;font-weight:400}
+.email-cell{color:#6a6258;font-size:.78rem}
+.date-cell{color:#5a5550;font-size:.75rem;white-space:nowrap}
+.empty-state{text-align:center;padding:4rem 2rem;color:#5a5550;font-size:.875rem}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:#111;border:1px solid rgba(232,215,160,.15);border-radius:6px;width:100%;max-width:680px;position:relative;margin:auto}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid rgba(232,215,160,.1)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#f0e8df}
+.modal-close{background:none;border:none;color:#5a5550;font-size:1.25rem;cursor:pointer;padding:.25rem}
+.modal-close:hover{color:#e8d7a0}
+.modal-body{padding:1.5rem;max-height:80vh;overflow-y:auto}
+
+/* Loading */
+.loading{text-align:center;padding:3rem;color:#5a5550;font-size:.875rem}
+.loading-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e8d7a0;margin:0 3px;animation:bounce .8s infinite}
+.loading-dot:nth-child(2){animation-delay:.15s}
+.loading-dot:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+@media(max-width:768px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .dash-body{padding:1rem}
+  .results-table th:nth-child(n+5){display:none}
+  .results-table td:nth-child(n+5){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">Bold<span>Hearts</span></div>
+    <div class="login-sub">Admin Dashboard</div>
+    <div class="login-field">
+      <label for="pw">Password</label>
+      <input type="password" id="pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-logo">Bold<span>Hearts</span> <span style="font-size:.7rem;color:#5a5550;letter-spacing:.06em;font-family:'Inter',sans-serif;font-weight:300;margin-left:.5rem">Admin</span></div>
+    <div style="display:flex;align-items:center;gap:1.5rem">
+      <div class="dash-meta" id="dash-meta">Loading...</div>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+    <!-- Stats -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card"><div class="stat-label">Total Submissions</div><div class="stat-val" id="stat-total">—</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Overall Score</div><div class="stat-val" id="stat-avg">—</div></div>
+      <div class="stat-card"><div class="stat-label">This Month</div><div class="stat-val" id="stat-month">—</div></div>
+      <div class="stat-card"><div class="stat-label">Latest Submission</div><div class="stat-val" id="stat-latest" style="font-size:1.1rem">—</div></div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-row">
+      <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="loading" id="table-loading">
+        <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
+      </div>
+      <table class="results-table" id="results-table" style="display:none">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date</th>
+            <th>Overall</th>
+            <th>Work</th>
+            <th>Sig. Other</th>
+            <th>Family</th>
+            <th>Friends</th>
+            <th>Community</th>
+            <th>Warnings</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div class="empty-state" id="empty-state" style="display:none">No submissions found.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Results</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const PASSWORD = 'boldhearts2026';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
+
+let allRows = [];
+
+function doLogin(){
+  const pw = document.getElementById('pw').value;
+  const err = document.getElementById('login-err');
+  if(pw === PASSWORD){
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  } else {
+    err.textContent = 'Incorrect password.';
+    document.getElementById('pw').value = '';
+  }
+}
+
+function doLogout(){
+  document.getElementById('login-wrap').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('pw').value = '';
+  allRows = [];
+}
+
+function scoreClass(score){
+  const n = parseInt(score);
+  if(n >= 70) return 'score-high';
+  if(n >= 45) return 'score-mid';
+  return 'score-low';
+}
+
+function scorePill(val){
+  if(!val || val === '') return '<span style="color:#3a3530">—</span>';
+  return `<span class="score-pill ${scoreClass(val)}">${val}</span>`;
+}
+
+async function loadData(){
+  document.getElementById('table-loading').style.display = 'block';
+  document.getElementById('results-table').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'none';
+
+  try {
+    const res = await fetch(SHEETS_URL + '?action=read');
+    const data = await res.json();
+
+    if(data.rows && data.rows.length > 0){
+      allRows = data.rows;
+      renderTable(allRows);
+      updateStats(allRows);
+    } else {
+      document.getElementById('table-loading').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'block';
+    }
+  } catch(e){
+    document.getElementById('table-loading').style.display = 'none';
+    document.getElementById('empty-state').textContent = 'Error loading data. Make sure the Apps Script is deployed correctly.';
+    document.getElementById('empty-state').style.display = 'block';
+  }
+}
+
+function updateStats(rows){
+  document.getElementById('stat-total').textContent = rows.length;
+
+  const scores = rows.map(r => parseInt(r[3])).filter(n => !isNaN(n));
+  const avg = scores.length > 0 ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+  document.getElementById('stat-avg').textContent = avg + '%';
+
+  const now = new Date();
+  const thisMonth = rows.filter(r => {
+    const d = new Date(r[0]);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+  document.getElementById('stat-month').textContent = thisMonth;
+
+  if(rows.length > 0){
+    const latest = new Date(rows[rows.length-1][0]);
+    document.getElementById('stat-latest').textContent = latest.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  }
+
+  document.getElementById('dash-meta').textContent = rows.length + ' total submissions';
+}
+
+function renderTable(rows){
+  document.getElementById('table-loading').style.display = 'none';
+
+  if(rows.length === 0){
+    document.getElementById('empty-state').style.display = 'block';
+    return;
+  }
+
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = rows.slice().reverse().map((r, i) => {
+    const originalIdx = rows.length - 1 - i;
+    const date = new Date(r[0]);
+    const dateStr = date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const warnings = r[18] || '—';
+    const shortWarnings = warnings.length > 40 ? warnings.substring(0,40)+'...' : warnings;
+    return `<tr onclick="showModal(${originalIdx})">
+      <td class="name-cell">${r[1]||'—'}</td>
+      <td class="email-cell">${r[2]||'—'}</td>
+      <td class="date-cell">${dateStr}</td>
+      <td>${scorePill(r[3])}</td>
+      <td>${scorePill(r[4])}</td>
+      <td>${scorePill(r[5])}</td>
+      <td>${scorePill(r[6])}</td>
+      <td>${scorePill(r[7])}</td>
+      <td>${scorePill(r[8])}</td>
+      <td style="font-size:.72rem;color:#6a6258">${shortWarnings}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('results-table').style.display = 'table';
+}
+
+function filterTable(){
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allRows.filter(r =>
+    (r[1]||'').toLowerCase().includes(q) ||
+    (r[2]||'').toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+}
+
+function showModal(idx){
+  const r = allRows[idx];
+  if(!r) return;
+
+  document.getElementById('modal-title').textContent = (r[1]||'Unknown') + "'s Results";
+
+  const cols = ['Timestamp','Name','Email','Overall','Work','Significant Other','Family','Friends','Community',
+    'Being Seen','Being Known','Having a Voice','Belonging','Receiving Support','Trust & Safety','Being Chosen','Freedom to Be Myself','Patterns','Warnings','Version'];
+
+  const realmCols = [
+    {label:'Work / School', idx:4},
+    {label:'Significant Other', idx:5},
+    {label:'Family', idx:6},
+    {label:'Friends', idx:7},
+    {label:'Community', idx:8},
+  ];
+
+  const dimCols = [
+    {label:'Being Seen', idx:9},
+    {label:'Being Known', idx:10},
+    {label:'Having a Voice', idx:11},
+    {label:'Belonging', idx:12},
+    {label:'Receiving Support', idx:13},
+    {label:'Trust & Safety', idx:14},
+    {label:'Being Chosen', idx:15},
+    {label:'Freedom to Be Myself', idx:16},
+  ];
+
+  function bar(pct){
+    const n = parseInt(pct)||0;
+    const col = n>=70?'#b5c4a0':n>=45?'#e8d7a0':'#c97a5a';
+    return `<div style="display:flex;align-items:center;gap:8px">
+      <div style="flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+        <div style="width:${n}%;height:100%;background:${col};border-radius:3px"></div>
+      </div>
+      <span style="font-size:.75rem;color:${col};width:36px;text-align:right">${pct||'—'}</span>
+    </div>`;
+  }
+
+  const date = new Date(r[0]).toLocaleString('en-US',{month:'long',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+
+  let html = `
+    <!-- Header -->
+    <div style="text-align:center;padding:1rem 0 1.5rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:${parseInt(r[3])>=70?'#b5c4a0':parseInt(r[3])>=45?'#e8d7a0':'#c97a5a'}">${r[3]||'—'}</div>
+      <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-top:.25rem">Overall Score</div>
+      <div style="font-size:.78rem;color:#5a5550;margin-top:.5rem">${date}</div>
+      <div style="font-size:.78rem;color:#6a6258;margin-top:.25rem">${r[2]||''}</div>
+    </div>
+
+    <!-- Realm Scores -->
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Scores by Realm</div>
+      ${realmCols.map(c=>`
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:.6rem">
+          <div style="width:120px;font-size:.78rem;color:#6a6258;text-align:right;flex-shrink:0">${c.label}</div>
+          <div style="flex:1">${bar(r[c.idx])}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Dimension Scores -->
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Connection Dimensions</div>
+      ${dimCols.map(c=>`
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:.6rem">
+          <div style="width:140px;font-size:.78rem;color:#6a6258;text-align:right;flex-shrink:0">${c.label}</div>
+          <div style="flex:1">${bar(r[c.idx])}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Patterns -->
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Engagement Patterns</div>
+      ${(r[17]||'—').split(' | ').map(p=>`<div style="font-size:.82rem;color:#a09890;margin-bottom:.4rem">• ${p}</div>`).join('')}
+    </div>
+
+    <!-- Warnings -->
+    <div style="margin-bottom:1rem">
+      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Warning Signs</div>
+      ${(r[18]||'None').split(' | ').map(w=>`<div style="font-size:.82rem;color:#c97a5a;margin-bottom:.4rem">• ${w}</div>`).join('')}
+    </div>
+
+    <!-- Version -->
+    <div style="font-size:.68rem;color:#3a3530;text-align:right">Assessment ${r[19]||''}</div>
+  `;
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeModal();
+  if(e.key === 'Enter' && document.getElementById('login-wrap').style.display !== 'none') doLogin();
+});
+</script>
+</body>
+</html>
