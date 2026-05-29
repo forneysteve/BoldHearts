@@ -253,7 +253,7 @@ footer a:hover{color:#e8d7a0}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.7</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a> &nbsp;|&nbsp; <a href="https://forneysteve.github.io/BoldHearts/contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.8</p>
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
@@ -626,6 +626,7 @@ function saveToSheets(scores){
   const warningList=warnings.map(w=>w.title).join(' | ')||'None';
   const getDim=(id)=>{const d=dimScores.find(d=>d.id===id);return d?d.score+'%':'';};
 
+  // Save to Google Sheets via image pixel trick (bypasses CORS)
   const params=new URLSearchParams({
     action:'write',
     name:userName,
@@ -646,12 +647,10 @@ function saveToSheets(scores){
     freedom_to_be_myself:getDim('fullself'),
     patterns:patterns,
     warnings:warningList,
-    version:'v3.6'
+    version:'v3.7'
   });
-
-  // Use GET request with URL params — most reliable with Apps Script no-cors
-  fetch(SHEETS_URL+'?'+params.toString(),{method:'GET',mode:'no-cors'})
-    .catch(e=>console.error('Sheets error:',e));
+  const img=new Image();
+  img.src=SHEETS_URL+'?'+params.toString();
 }
 function submitGate(){
   const name=document.getElementById('gname').value.trim();
