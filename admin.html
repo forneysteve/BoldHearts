@@ -452,15 +452,16 @@ function buildDeepDiveGmailUrl(r){
   var email   = r[2] || '';
   var overall = parseScore(r[3]) || '—';
   var subject = encodeURIComponent('Your BoldHearts Deep Dive Assessment');
-  var body = 'Hi ' + name + ',' +
-    '\n\nThank you for taking the Heart Engagement Assessment. Your overall score was ' + overall + '% — and I've been thinking about what that picture is telling us.' +
-    '\n\nThere are two foundational layers we haven't looked at yet: your relationship with God and your relationship with yourself. In my experience, these are the layers that explain almost everything else. They're also the ones most people have never been asked about directly.' +
-    '\n\nThe Deep Dive takes about 5 minutes. It's 20 questions — honest ones, the kind worth sitting with.' +
-    '\n\nTake the Deep Dive here:\nhttps://boldhearts.org/deepdive.html' +
-    '\n\nUse the same email address you used for your first assessment so we can combine your complete results into one picture.' +
-    '\n\nThis is where things start to come together, ' + name + '. I'm looking forward to seeing the full picture with you.' +
-    '\n\nI'm for you,' +
-    '\n\nSteve Forney\nBoldHearts | Spiritual Direction · Pastoral Counseling · Leadership Soul Care\nboldhearts.org';
+  var line1 = "Hi " + name + ",";
+  var line2 = "Thank you for taking the Heart Engagement Assessment. Your overall score was " + overall + "% - and I have been thinking about what that picture is telling us.";
+  var line3 = "There are two foundational layers we have not looked at yet: your relationship with God and your relationship with yourself. In my experience, these are the layers that explain almost everything else. They are also the ones most people have never been asked about directly.";
+  var line4 = "The Deep Dive takes about 5 minutes. It is 20 questions - honest ones, the kind worth sitting with.";
+  var line5 = "Take the Deep Dive here:\nhttps://boldhearts.org/deepdive.html";
+  var line6 = "Use the same email address you used for your first assessment so we can combine your complete results into one picture.";
+  var line7 = "This is where things start to come together, " + name + ". I am looking forward to seeing the full picture with you.";
+  var line8 = "I am for you,";
+  var line9 = "Steve Forney\nBoldHearts | Spiritual Direction - Pastoral Counseling - Leadership Soul Care\nboldhearts.org";
+  var body = line1 + "\n\n" + line2 + "\n\n" + line3 + "\n\n" + line4 + "\n\n" + line5 + "\n\n" + line6 + "\n\n" + line7 + "\n\n" + line8 + "\n\n" + line9;
   return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email) + '&su=' + subject + '&body=' + encodeURIComponent(body);
 }
 
