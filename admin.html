@@ -447,6 +447,39 @@ function renderGuidePanel(r){
   ${closing}`;
 }
 
+function buildDeepDiveGmailUrl(r){
+  const name    = r[1] || 'there';
+  const email   = r[2] || '';
+  const overall = parseScore(r[3]) || '—';
+
+  const subject = encodeURIComponent('Your BoldHearts Deep Dive Assessment');
+
+  const body = encodeURIComponent(
+`Hi ${name},
+
+Thank you for taking the Heart Engagement Assessment. Your overall score was ${overall}% — and I've been thinking about what that picture is telling us.
+
+There are two foundational layers we haven't looked at yet: your relationship with God and your relationship with yourself. In my experience, these are the layers that explain almost everything else. They're also the ones most people have never been asked about directly.
+
+The Deep Dive takes about 5 minutes. It's 20 questions — honest ones, the kind worth sitting with.
+
+Take the Deep Dive here:
+https://boldhearts.org/deepdive.html
+
+Use the same email address you used for your first assessment so we can combine your complete results into one picture.
+
+This is where things start to come together, ${name}. I'm looking forward to seeing the full picture with you.
+
+I'm for you,
+
+Steve Forney
+BoldHearts | Spiritual Direction · Pastoral Counseling · Leadership Soul Care
+boldhearts.org`
+  );
+
+  return \`https://mail.google.com/mail/?view=cm&fs=1&to=\${encodeURIComponent(email)}&su=\${subject}&body=\${body}\`;
+}
+
 function showModal(idx){
   const r = allRows[idx];
   if(!r) return;
@@ -529,8 +562,8 @@ function showModal(idx){
     </div>
 
     <div style="padding-top:1.5rem;border-top:1px solid rgba(196,168,130,.1);text-align:center">
-      <a href="mailto:${r[2]}?subject=Your BoldHearts Deep Dive Assessment&body=Hi ${r[1]},%0D%0A%0D%0AThank you for completing the Heart Engagement Assessment. Based on our conversation, I'd like to invite you to complete the Deep Dive — the final two foundational layers of your assessment.%0D%0A%0D%0AClick here to begin:%0D%0Ahttps://boldhearts.org/deepdive.html%0D%0A%0D%0AUse the same email address you used for your first assessment so we can combine your complete results.%0D%0A%0D%0AThis is where the picture comes together.%0D%0A%0D%0AI'm for you,%0D%0ASteve Forney%0D%0ABoldHearts" style="display:inline-block;background:#c4a882;color:#111;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.75rem 1.75rem;border-radius:4px;text-decoration:none">Send Deep Dive Invitation</a>
-      <div style="font-size:.72rem;color:#5a5550;margin-top:.6rem">Opens a pre-filled email to ${r[1]||'this person'}</div>
+      <a href="${buildDeepDiveGmailUrl(r)}" target="_blank" style="display:inline-block;background:#c4a882;color:#111;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.75rem 1.75rem;border-radius:4px;text-decoration:none">Send Deep Dive Invitation</a>
+      <div style="font-size:.72rem;color:#5a5550;margin-top:.6rem">Opens a pre-filled email in Gmail — just hit Send</div>
     </div>`;
 
   document.getElementById('modal-body').innerHTML = `
