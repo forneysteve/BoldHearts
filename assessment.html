@@ -631,7 +631,17 @@ function saveToSheets(scores){
     freedom_to_be_myself:getDim('fullself'),
     patterns:patterns,
     warnings:warningList,
-    version:'v4.0'
+    version:'v4.0',
+    work_outward:realm.work?realm.work.outward+'%':'',
+    work_self:realm.work?realm.work.self+'%':'',
+    partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
+    partner_self:realm.significant_other?realm.significant_other.self+'%':'',
+    family_outward:realm.family?realm.family.outward+'%':'',
+    family_self:realm.family?realm.family.self+'%':'',
+    friends_outward:realm.friends?realm.friends.outward+'%':'',
+    friends_self:realm.friends?realm.friends.self+'%':'',
+    community_outward:realm.community?realm.community.outward+'%':'',
+    community_self:realm.community?realm.community.self+'%':''
   });
   const img=new Image();
   img.src=SHEETS_URL+'?'+params.toString();
