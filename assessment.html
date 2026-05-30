@@ -277,7 +277,7 @@ const REALMS=[
     {t:"At the end of the day, I belong in this place — not just show up here.",self:false},
     {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
     {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
-    {t:"People at work seek me out — I'm not always the one inserting myself.",self:false},
+    {t:"The work I do connects to something I actually believe I'm built for — not just a job I'm good at.",self:false},
     {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
   ]},
   {id:'significant_other',label:'Significant Other',icon:'ti-heart',color:'#c97a5a',bar:'#c97a5a',
@@ -291,7 +291,7 @@ const REALMS=[
     {t:"This relationship is a safe place for me — genuinely safe, not just comfortable.",self:false},
     {t:"My partner has shown up for me in ways that required real sacrifice on their part.",self:false},
     {t:"My partner genuinely knows and champions what I'm most passionate about — even if it impacts the day to day.",self:false},
-    {t:"My partner initiates connection with me — not just responds when I reach out.",self:false},
+    {t:"My partner knows what I'm called to and actively champions it — not just tolerates it.",self:false},
     {t:"I feel free to be myself with my partner — I'm valued for who I am, not just what I contribute.",self:true}
   ]},
   {id:'family',label:'Family',icon:'ti-home-heart',color:'#a09890',bar:'#a09890',
@@ -305,7 +305,7 @@ const REALMS=[
     {t:"My family wants me around — not just because of what I contribute or the role I fill.",self:false},
     {t:"My family comes through for me when things are hard — not just in easy times.",self:false},
     {t:"What I care most about is supported by my family — they engage with it, not just endure it.",self:false},
-    {t:"Family members reach out to me — not just when there's a need or an event.",self:false},
+    {t:"My family has a sense of shared purpose — we're moving toward something together, not just managing life.",self:false},
     {t:"I feel free to be myself in my family — my value isn't tied to what I do or the role I fill.",self:true}
   ]},
   {id:'friends',label:'Friends',icon:'ti-users',color:'#b5c4a0',bar:'#b5c4a0',
@@ -319,7 +319,7 @@ const REALMS=[
     {t:"My friends genuinely want me around — they choose me, not just include me.",self:false},
     {t:"My friends show up for me without being asked — they notice and respond without me having to explain.",self:false},
     {t:"My friends actively encourage what I'm most passionate about — they don't just nod along.",self:false},
-    {t:"My friends reach out first — it's not always me keeping the friendship alive.",self:false},
+    {t:"My friends know what I'm most passionate about and actively encourage it — they don't just nod along.",self:false},
     {t:"My friends are there for me as a person — not just because of what I bring to the table like humor, connections, or advice.",self:true}
   ]},
   {id:'community',label:'Community',icon:'ti-building-community',color:'#9aa8b0',bar:'#9aa8b0',
@@ -333,7 +333,7 @@ const REALMS=[
     {t:"I truly belong in this community — I'm not just a visitor who keeps coming back.",self:false},
     {t:"Someone in my community has extended themselves toward me in a way I didn't expect or earn.",self:false},
     {t:"I could be vulnerable in this community — share something real — and be received with grace.",self:false},
-    {t:"People in my community seek me out — I'm not just a name on a roster.",self:false},
+    {t:"I have a specific contribution in this community that fits who I actually am — I'm not just filling a seat.",self:false},
     {t:"In this community, I don't have to perform to belong — I'm valued for who I am, not what I do.",self:true}
   ]},
 ];
@@ -627,7 +627,7 @@ function saveToSheets(scores){
     belonging:getDim('belonging'),
     receiving_support:getDim('support'),
     trust_safety:getDim('trust'),
-    being_chosen:getDim('chosen'),
+    calling:getDim('calling'),
     freedom_to_be_myself:getDim('fullself'),
     patterns:patterns,
     warnings:warningList,
@@ -745,8 +745,8 @@ const DIMS=[
    desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not feel fully confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
   {id:'trust',name:'Trust & Safety',qi:7,
    desc:(p)=>p>=70?'You feel emotionally safe being imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
-  {id:'chosen',name:'Being Chosen',qi:8,
-   desc:(p)=>p>=70?'People pursue you — you are not always the one keeping connection alive.':p>=45?'You are included, but may not often feel actively sought out or specifically wanted.':'Connection mostly happens on your initiative. You are rarely the one being pursued. That\'s a lonely place to live.'},
+  {id:'calling',name:'Calling',qi:8,
+   desc:(p)=>p>=70?'You know what you are built for and the people around you know it and engage it.':p>=45?'You have some sense of calling, but it may not be clearly named or actively supported by those around you.':'The connection between who you are and what you do feels thin or absent. That gap has a cost.'},
   {id:'fullself',name:'Freedom to Be Myself',qi:9,
    desc:(p)=>p>=70?'You feel free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You experience some freedom to be yourself, but in certain contexts you still feel pressure to perform or prove your worth.':'You may feel that your place in relationships is conditional on what you do or produce. The freedom to simply be yourself feels thin or absent.'}
 ];
