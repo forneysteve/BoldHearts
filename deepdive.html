@@ -398,12 +398,21 @@ async function submitGate(){
   });
   new Image().src = SHEETS_URL + '?' + ddParams.toString();
 
-  // 2. Fetch Assessment 1 scores from Sheets for the worker
+  // 2. Fetch Assessment 1 scores from Sheets for the worker (JSONP to avoid CORS)
   let prevRow = null;
   try {
-    const res  = await fetch(SHEETS_URL + '?action=lookup&email=' + encodeURIComponent(email));
-    const data = await res.json();
-    if(data.row) prevRow = data.row;
+    prevRow = await new Promise((resolve) => {
+      const cbName = '_bh_cb_' + Date.now();
+      const script = document.createElement('script');
+      const timeout = setTimeout(() => { resolve(null); try{ delete window[cbName]; script.remove(); }catch(e){} }, 5000);
+      window[cbName] = (data) => {
+        clearTimeout(timeout);
+        resolve(data.row || null);
+        try{ delete window[cbName]; script.remove(); }catch(e){}
+      };
+      script.src = SHEETS_URL + '?action=lookup&email=' + encodeURIComponent(email) + '&callback=' + cbName;
+      document.head.appendChild(script);
+    });
   } catch(e){ console.log('Could not fetch A1 scores:', e); }
 
   // Build assessment1 object from the Sheets row
