@@ -448,36 +448,20 @@ function renderGuidePanel(r){
 }
 
 function buildDeepDiveGmailUrl(r){
-  const name    = r[1] || 'there';
-  const email   = r[2] || '';
-  const overall = parseScore(r[3]) || '—';
-
-  const subject = encodeURIComponent('Your BoldHearts Deep Dive Assessment');
-
-  const body = encodeURIComponent(
-`Hi ${name},
-
-Thank you for taking the Heart Engagement Assessment. Your overall score was ${overall}% — and I've been thinking about what that picture is telling us.
-
-There are two foundational layers we haven't looked at yet: your relationship with God and your relationship with yourself. In my experience, these are the layers that explain almost everything else. They're also the ones most people have never been asked about directly.
-
-The Deep Dive takes about 5 minutes. It's 20 questions — honest ones, the kind worth sitting with.
-
-Take the Deep Dive here:
-https://boldhearts.org/deepdive.html
-
-Use the same email address you used for your first assessment so we can combine your complete results into one picture.
-
-This is where things start to come together, ${name}. I'm looking forward to seeing the full picture with you.
-
-I'm for you,
-
-Steve Forney
-BoldHearts | Spiritual Direction · Pastoral Counseling · Leadership Soul Care
-boldhearts.org`
-  );
-
-  return \`https://mail.google.com/mail/?view=cm&fs=1&to=\${encodeURIComponent(email)}&su=\${subject}&body=\${body}\`;
+  var name    = r[1] || 'there';
+  var email   = r[2] || '';
+  var overall = parseScore(r[3]) || '—';
+  var subject = encodeURIComponent('Your BoldHearts Deep Dive Assessment');
+  var body = 'Hi ' + name + ',' +
+    '\n\nThank you for taking the Heart Engagement Assessment. Your overall score was ' + overall + '% — and I've been thinking about what that picture is telling us.' +
+    '\n\nThere are two foundational layers we haven't looked at yet: your relationship with God and your relationship with yourself. In my experience, these are the layers that explain almost everything else. They're also the ones most people have never been asked about directly.' +
+    '\n\nThe Deep Dive takes about 5 minutes. It's 20 questions — honest ones, the kind worth sitting with.' +
+    '\n\nTake the Deep Dive here:\nhttps://boldhearts.org/deepdive.html' +
+    '\n\nUse the same email address you used for your first assessment so we can combine your complete results into one picture.' +
+    '\n\nThis is where things start to come together, ' + name + '. I'm looking forward to seeing the full picture with you.' +
+    '\n\nI'm for you,' +
+    '\n\nSteve Forney\nBoldHearts | Spiritual Direction · Pastoral Counseling · Leadership Soul Care\nboldhearts.org';
+  return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email) + '&su=' + subject + '&body=' + encodeURIComponent(body);
 }
 
 function showModal(idx){
