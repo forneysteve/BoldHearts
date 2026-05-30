@@ -235,16 +235,28 @@ function doLogout(){
   allRows = [];
 }
 
+function parseScore(val){
+  if(!val || val === '') return null;
+  // Handle decimal (0.75) or percentage string (75%) or plain number (75)
+  const s = val.toString().trim();
+  if(s.endsWith('%')) return parseInt(s);
+  const n = parseFloat(s);
+  if(n > 0 && n <= 1) return Math.round(n * 100);
+  return Math.round(n);
+}
+
 function scoreClass(score){
-  const n = parseInt(score);
+  const n = parseScore(score);
+  if(n === null) return '';
   if(n >= 70) return 'score-high';
   if(n >= 45) return 'score-mid';
   return 'score-low';
 }
 
 function scorePill(val){
-  if(!val || val === '') return '<span style="color:#3a3530">—</span>';
-  return `<span class="score-pill ${scoreClass(val)}">${val}</span>`;
+  const n = parseScore(val);
+  if(n === null) return '<span style="color:#3a3530">—</span>';
+  return `<span class="score-pill ${scoreClass(val)}">${n}%</span>`;
 }
 
 async function loadData(){
@@ -365,32 +377,31 @@ const REALM_DEFS = [
 ];
 
 function twoBar(outward, self_, label){
-  // outward = how others engage you, self_ = how you engage others
-  const ov = parseInt(outward) || 0;
-  const sv = parseInt(self_)   || 0;
+  const ov = parseScore(outward) || 0;
+  const sv = parseScore(self_)   || 0;
   const oc = ov>=70?'#b5c4a0':ov>=45?'#e8d7a0':'#c97a5a';
   const sc = sv>=70?'#b5c4a0':sv>=45?'#9aa8b0':'#c97a5a';
   return `<div class="realm-block-name">${label}</div>
     <div class="bar-row">
       <div class="bar-label">Others → You</div>
       <div class="bar-track"><div class="bar-fill" style="width:${ov}%;background:${oc}"></div></div>
-      <div class="bar-pct" style="color:${oc}">${outward||'—'}</div>
+      <div class="bar-pct" style="color:${oc}">${ov}%</div>
     </div>
     <div class="bar-row">
       <div class="bar-label">You → Others</div>
       <div class="bar-track"><div class="bar-fill" style="width:${sv}%;background:${sc}"></div></div>
-      <div class="bar-pct" style="color:${sc}">${self_||'—'}</div>
+      <div class="bar-pct" style="color:${sc}">${sv}%</div>
     </div>`;
 }
 
 function singleBar(val, label){
-  const n = parseInt(val) || 0;
+  const n = parseScore(val) || 0;
   const col = n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
   return `<div class="realm-block-name">${label}</div>
     <div class="bar-row">
       <div class="bar-label">Overall</div>
       <div class="bar-track"><div class="bar-fill" style="width:${n}%;background:${col}"></div></div>
-      <div class="bar-pct" style="color:${col}">${val||'—'}</div>
+      <div class="bar-pct" style="color:${col}">${n}%</div>
     </div>`;
 }
 
@@ -454,13 +465,13 @@ function showModal(idx){
   ];
 
   function bar(pct){
-    const n = parseInt(pct)||0;
+    const n = parseScore(pct)||0;
     const col = n>=70?'#b5c4a0':n>=45?'#e8d7a0':'#c97a5a';
     return `<div style="display:flex;align-items:center;gap:8px">
       <div style="flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
         <div style="width:${n}%;height:100%;background:${col};border-radius:3px"></div>
       </div>
-      <span style="font-size:.75rem;color:${col};width:36px;text-align:right">${pct||'—'}</span>
+      <span style="font-size:.75rem;color:${col};width:36px;text-align:right">${n}%</span>
     </div>`;
   }
 
@@ -483,7 +494,7 @@ function showModal(idx){
   // ── SCORES TAB ──
   const scoresHtml = `
     <div style="text-align:center;padding:1rem 0 1.5rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:${parseInt(r[3])>=70?'#b5c4a0':parseInt(r[3])>=45?'#e8d7a0':'#c97a5a'}">${r[3]||'—'}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:${parseScore(r[3])>=70?'#b5c4a0':parseScore(r[3])>=45?'#e8d7a0':'#c97a5a'}">${parseScore(r[3])||'—'}%</div>
       <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-top:.25rem">Overall Score</div>
       <div style="font-size:.78rem;color:#5a5550;margin-top:.5rem">${date}</div>
       <div style="font-size:.78rem;color:#6a6258;margin-top:.25rem">${r[2]||''}</div>
