@@ -253,8 +253,22 @@ async function loadData(){
   document.getElementById('empty-state').style.display = 'none';
 
   try {
-    const res = await fetch(SHEETS_URL + '?action=read');
-    const data = await res.json();
+    const data = await new Promise((resolve, reject) => {
+      const cbName = '_bh_read_' + Date.now();
+      const script = document.createElement('script');
+      const timeout = setTimeout(() => {
+        reject(new Error('Timeout'));
+        try{ delete window[cbName]; script.remove(); }catch(e){}
+      }, 10000);
+      window[cbName] = (data) => {
+        clearTimeout(timeout);
+        resolve(data);
+        try{ delete window[cbName]; script.remove(); }catch(e){}
+      };
+      script.src = SHEETS_URL + '?action=read&callback=' + cbName;
+      document.head.appendChild(script);
+    });
+
     if(data.rows && data.rows.length > 0){
       allRows = data.rows;
       renderTable(allRows);
@@ -265,7 +279,7 @@ async function loadData(){
     }
   } catch(e){
     document.getElementById('table-loading').style.display = 'none';
-    document.getElementById('empty-state').textContent = 'Error loading data.';
+    document.getElementById('empty-state').textContent = 'Error loading data. Make sure the Apps Script is deployed correctly.';
     document.getElementById('empty-state').style.display = 'block';
   }
 }
