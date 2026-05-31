@@ -141,6 +141,9 @@ nav .nav-links a:hover{color:#e8d7a0}
 .guide-closing{background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.5rem 1.75rem;margin-top:1.5rem}
 .guide-closing-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem}
 .guide-closing-text{font-size:.92rem;color:#c0b8b0;line-height:1.95;font-style:italic}
+.practice-block{background:#1a1714;border:1px solid rgba(196,168,130,.15);border-left:3px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.practice-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#f0e8df;margin-bottom:.5rem}
+.practice-body{font-size:.88rem;color:#c0b8b0;line-height:1.95}
 
 .prev-scores-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
 
@@ -488,7 +491,7 @@ async function submitGate(){
   }
 
   // 5. Render results
-  renderResults(scores, guide, assessment1);
+  renderResults(scores, guide, assessment1, prevRow);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -515,25 +518,223 @@ function renderGuide(guide){
     + closing;
 }
 
-function renderResults(scores, guide, a1){
+function renderResults(scores, guide, a1, prevRow){
   const { realm, overall } = scores;
   const godScore  = realm.god  ? realm.god.overall  : 0;
   const selfScore = realm.self ? realm.self.overall : 0;
   const godColor  = dcolor(godScore);
   const selfColor = dcolor(selfScore);
 
-  const prevSection = a1
-    ? '<div class="section-label">Heart Engagement Assessment (Part 1)</div>'
-      +'<div class="prev-scores-card"><span style="font-size:.85rem;color:#a09890">Overall Heart Engagement Score</span><span style="font-family:\'Cormorant Garamond\',serif;font-size:1.8rem;font-weight:700;color:#e8d7a0">'+a1.overall+'</span></div>'
-    : '';
+  function ps(val){
+    if(!val||val==='') return '—';
+    const s = val.toString().trim();
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(n>0&&n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+  function psColor(val){
+    const s = ps(val); if(s==='—') return '#5a5550';
+    const n = parseInt(s);
+    return n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
+  }
+  function dimBar(val,color){
+    const s = val||'—'; const n = parseInt(s);
+    const w = isNaN(n)?0:Math.min(n,100);
+    return '<div style="display:flex;align-items:center;gap:6px">'
+      +'<div style="flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
+      +'<div style="width:'+w+'%;height:100%;background:'+color+';border-radius:3px"></div>'
+      +'</div><span style="font-size:.68rem;color:'+color+';width:30px;text-align:right">'+s+'</span></div>';
+  }
+  function ddScore(realmId,qi){
+    const v=answers[realmId+'_'+qi];
+    return v!==undefined?Math.round((v/7)*100)+'%':'—';
+  }
+  function ddColor(realmId,qi){
+    const v=answers[realmId+'_'+qi];
+    if(v===undefined) return '#5a5550';
+    const n=Math.round((v/7)*100);
+    return n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
+  }
+
+  const DIM_DEFS = [
+    {name:'Being Seen',    ddqi:0},
+    {name:'Being Known',   ddqi:1},
+    {name:'Having a Voice',ddqi:2},
+    {name:'Belonging',     ddqi:3},
+    {name:'Receiving Support',ddqi:4},
+    {name:'Trust & Safety',ddqi:5},
+    {name:'Freedom',       ddqi:6},
+    {name:'Calling',       ddqi:7},
+  ];
+
+  // Realm overall cols from sheet row (0-based): work=4,partner=5,family=6,friends=7,community=8
+  const REALM_OVERALL = [
+    {label:'Work',      col:4},
+    {label:'Partner',   col:5},
+    {label:'Family',    col:6},
+    {label:'Friends',   col:7},
+    {label:'Community', col:8},
+  ];
+
+  let dimMatrixHtml = '';
+  if(a1 && prevRow){
+    const headers = ['Dimension','Work','Partner','Family','Friends','Community','God','Self'];
+    const headerRow = headers.map(h=>'<th style="padding:.5rem .6rem;text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;font-weight:400;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap">'+h+'</th>').join('');
+
+    const rows = DIM_DEFS.map(d=>{
+      const realmCells = REALM_OVERALL.map(r=>{
+        const v = ps(prevRow[r.col]);
+        const c = psColor(v);
+        return '<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05)">'+dimBar(v,c)+'</td>';
+      }).join('');
+      const gv=ddScore('god',d.ddqi); const gc=ddColor('god',d.ddqi);
+      const sv=ddScore('self',d.ddqi); const sc=ddColor('self',d.ddqi);
+      return '<tr>'
+        +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05);font-size:.72rem;color:#a09890;white-space:nowrap">'+d.name+'</td>'
+        +realmCells
+        +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05)">'+dimBar(gv,gc)+'</td>'
+        +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05)">'+dimBar(sv,sc)+'</td>'
+        +'</tr>';
+    }).join('');
+
+    dimMatrixHtml = '<div class="section-label">Connection Dimensions Across All Contexts</div>'
+      +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;overflow-x:auto;margin-bottom:1.5rem">'
+      +'<table style="width:100%;border-collapse:collapse;min-width:580px">'
+      +'<thead><tr>'+headerRow+'</tr></thead>'
+      +'<tbody>'+rows+'</tbody>'
+      +'</table></div>';
+  }
+
+  // Car pattern logic
+  function getPattern(out, self_){
+    const hiOut=out>=65, loOut=out<50, hiSelf=self_>=65, loSelf=self_<50;
+    if(hiOut&&hiSelf) return {name:'All Systems Green', cls:'open', color:'#b5c4a0'};
+    if(loOut&&loSelf) return {name:'Engine Off', cls:'disconnected', color:'#c97a5a'};
+    if(loOut&&hiSelf) return {name:'Running on Empty', cls:'giver', color:'#c97a5a'};
+    if(hiOut&&loSelf) return {name:'Warning Light', cls:'guarded', color:'#e8d7a0'};
+    return {name:'Check Engine', cls:'developing', color:'#e8d7a0'};
+  }
+
+  function realmRow(label, outVal, selfVal, outLabel, selfLabel){
+    const out = parseInt(outVal)||0;
+    const self_ = parseInt(selfVal)||0;
+    const pattern = getPattern(out, self_);
+    const outColor = out>=70?'#b5c4a0':out>=45?'#e8d7a0':'#c97a5a';
+    const selfColor = self_>=70?'#b5c4a0':self_>=45?'#9aa8b0':'#c97a5a';
+    return '<div style="margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(232,215,160,.07)">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+      +'<div style="font-size:.85rem;color:#b0a898">'+label+'</div>'
+      +'<div style="font-size:.72rem;color:'+pattern.color+';background:rgba(255,255,255,.05);padding:2px 8px;border-radius:3px">'+pattern.name+'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">'
+      +'<div style="font-size:.68rem;color:#5a5550;width:110px;flex-shrink:0;text-align:right">'+outLabel+'</div>'
+      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
+      +'<div style="width:'+out+'%;height:100%;background:'+outColor+';border-radius:3px"></div></div>'
+      +'<div style="font-size:.72rem;color:'+outColor+';width:34px;text-align:right">'+out+'%</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<div style="font-size:.68rem;color:#5a5550;width:110px;flex-shrink:0;text-align:right">'+selfLabel+'</div>'
+      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
+      +'<div style="width:'+self_+'%;height:100%;background:'+selfColor+';border-radius:3px"></div></div>'
+      +'<div style="font-size:.72rem;color:'+selfColor+';width:34px;text-align:right">'+self_+'%</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  let realmSectionHtml = '<div class="section-label">Scores by Realm</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
+    +'<div style="font-size:.65rem;color:#3a3530;margin-bottom:1rem;display:flex;gap:1.5rem">'
+    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#e8d7a0;border-radius:2px"></span>Others → You / God → You / Awareness</span>'
+    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#9aa8b0;border-radius:2px"></span>You → Others / You → God / Care</span>'
+    +'</div>'
+    // God and Self first
+    + realmRow('Relationship with God', godToYou, youToGod, 'God → You', 'You → God')
+    + realmRow('Relationship with Self', selfAwareness, selfCare, 'Awareness', 'Care');
+
+  // Add A1 realm rows if available
+  if(a1 && prevRow){
+    const realmDefs = [
+      {label:'Work / School',     out:26, self_:27},
+      {label:'Significant Other', out:28, self_:29},
+      {label:'Family',            out:30, self_:31},
+      {label:'Friends',           out:32, self_:33},
+      {label:'Community',         out:34, self_:35},
+    ];
+    realmDefs.forEach(r => {
+      const ov = parseInt((ps(prevRow[r.out])||'0').replace('%',''))||0;
+      const sv = parseInt((ps(prevRow[r.self_])||'0').replace('%',''))||0;
+      if(ov>0||sv>0){
+        realmSectionHtml += realmRow(r.label, ov, sv, 'Others → You', 'You → Others');
+      }
+    });
+  }
+  realmSectionHtml += '</div>';
+
+  const prevSection = '<div style="text-align:center;padding:1rem 0 1.5rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem">'
+    +(a1?'<div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.5rem">Overall Heart Engagement Score</div>'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:2.2rem;font-weight:700;color:#e8d7a0">'+ps(a1.overall)+'</div>':'')
+    +'</div>'
+    + realmSectionHtml
+    + dimMatrixHtml;
+
+  // Calculate God outward/self split and Self awareness/care split
+  const godOutward = ['god_0','god_1','god_3','god_4'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const godOutwardN = ['god_0','god_1','god_3','god_4'].filter(k=>answers[k]!==undefined).length;
+  const godSelf_ = ['god_2','god_5','god_6','god_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const godSelfN = ['god_2','god_5','god_6','god_7'].filter(k=>answers[k]!==undefined).length;
+  const godToYou = godOutwardN>0?Math.round((godOutward/(godOutwardN*7))*100):0;
+  const youToGod = godSelfN>0?Math.round((godSelf_/(godSelfN*7))*100):0;
+
+  // Self: awareness = questions 0,1,2,6 | care = questions 3,4,5,7
+  const selfAware = ['self_0','self_1','self_2','self_6'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const selfAwareN = ['self_0','self_1','self_2','self_6'].filter(k=>answers[k]!==undefined).length;
+  const selfCare_ = ['self_3','self_4','self_5','self_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const selfCareN = ['self_3','self_4','self_5','self_7'].filter(k=>answers[k]!==undefined).length;
+  const selfAwareness = selfAwareN>0?Math.round((selfAware/(selfAwareN*7))*100):0;
+  const selfCare = selfCareN>0?Math.round((selfCare_/(selfCareN*7))*100):0;
+
+  const godToYouColor = dcolor(godToYou);
+  const youToGodColor = dcolor(youToGod);
+  const awarenessColor = dcolor(selfAwareness);
+  const careColor = dcolor(selfCare);
+
+  function miniBar(pct, color){
+    return '<div style="display:flex;align-items:center;gap:8px;margin-top:.5rem">'
+      +'<div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">'
+      +'<div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:2px"></div>'
+      +'</div><span style="font-size:.72rem;color:'+color+';width:32px;text-align:right">'+pct+'%</span></div>';
+  }
 
   document.getElementById('app').innerHTML = '<div class="main"><div class="results-page">'
     // Header
     +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Deep Dive Results</h2><p>The foundation layer — your relationship with God and with yourself.</p></div>'
-    // Score cards
+    // Score cards - God with outward/self split, Self with awareness/care split
     +'<div class="score-cards">'
-    +'<div class="score-card"><div class="score-card-lbl">Relationship with God</div><div class="score-card-val" style="color:'+godColor+'">'+godScore+'%</div><div class="score-card-tag">'+dtag(godScore)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+godScore+'%;background:'+godColor+'"></div></div></div>'
-    +'<div class="score-card"><div class="score-card-lbl">Relationship with Self</div><div class="score-card-val" style="color:'+selfColor+'">'+selfScore+'%</div><div class="score-card-tag">'+dtag(selfScore)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfScore+'%;background:'+selfColor+'"></div></div></div>'
+    +'<div class="score-card">'
+    +'<div class="score-card-lbl">Satisfaction with Relationship with God</div>'
+    +'<div class="score-card-val" style="color:'+godColor+'">'+godScore+'%</div>'
+    +'<div class="score-card-tag">'+dtag(godScore)+'</div>'
+    +'<div class="score-bar"><div class="score-bar-fill" style="width:'+godScore+'%;background:'+godColor+'"></div></div>'
+    +'<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(196,168,130,.1)">'
+    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem">God → You</div>'
+    +miniBar(godToYou, godToYouColor)
+    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-top:.75rem;margin-bottom:.4rem">You → God</div>'
+    +miniBar(youToGod, youToGodColor)
+    +'</div>'
+    +'</div>'
+    +'<div class="score-card">'
+    +'<div class="score-card-lbl">Satisfaction with Relationship with Self</div>'
+    +'<div class="score-card-val" style="color:'+selfColor+'">'+selfScore+'%</div>'
+    +'<div class="score-card-tag">'+dtag(selfScore)+'</div>'
+    +'<div class="score-bar"><div class="score-bar-fill" style="width:'+selfScore+'%;background:'+selfColor+'"></div></div>'
+    +'<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(196,168,130,.1)">'
+    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem">Awareness</div>'
+    +miniBar(selfAwareness, awarenessColor)
+    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-top:.75rem;margin-bottom:.4rem">Care</div>'
+    +miniBar(selfCare, careColor)
+    +'</div>'
+    +'</div>'
     +'</div>'
     // A1 scores
     + prevSection
