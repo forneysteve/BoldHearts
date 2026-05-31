@@ -208,7 +208,7 @@ footer a:hover{color:#c4a882}
     <div class="hero-meta">
       <span><i class="ti ti-clock"></i> About 5 minutes</span>
       <span><i class="ti ti-lock"></i> Private &amp; confidential</span>
-      <span><i class="ti ti-checklist"></i> 20 questions</span>
+      <span><i class="ti ti-checklist"></i> 16 questions</span>
     </div>
   </div>
 </section>
@@ -218,7 +218,7 @@ footer a:hover{color:#c4a882}
 <div class="progress-wrap" id="progress-section">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-lbl">0 of 20 answered</div>
+    <div class="progress-label" id="progress-lbl">0 of 16 answered</div>
   </div>
 </div>
 
@@ -226,7 +226,7 @@ footer a:hover{color:#c4a882}
 
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a> &nbsp;|&nbsp; v2.0</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.0</p>
 </footer>
 
 <script>
@@ -239,30 +239,26 @@ const DEEP_REALMS = [
   {id:'god', label:'Relationship with God', icon:'ti-star', color:'#c4a882',
    desc:'Answer honestly — not how you think you should answer, but what is actually true right now.',
    questions:[
-    {t:"I am satisfied with my spiritual life right now.", self:false},
-    {t:"God shows up in the ways I want him to.", self:false},
-    {t:"My faith is something I'm growing in — not just maintaining.", self:false},
-    {t:"I talk to God about the things I'd rather not say out loud.", self:true},
-    {t:"I feel close to God right now — not just committed to him.", self:false},
-    {t:"My relationship with God is honest — I bring what's actually there, not what sounds right.", self:true},
-    {t:"I experience God as present in my daily life, not just on Sundays or in crisis.", self:false},
-    {t:"I trust God with the things that matter most to me right now.", self:false},
-    {t:"My sense of calling feels alive — I know what I'm built for and I'm living toward it.", self:false},
-    {t:"I could describe what God has been doing in my life in the last six months.", self:false}
+    {t:"There are moments I can point to where God met a specific need in my life — in a way that felt personal, not coincidental.", self:false},
+    {t:"I talk to God about the parts of my life I'd rather not look at.", self:false},
+    {t:"When I pray, I believe God will answer and things will get better.", self:true},
+    {t:"There are moments in my day where I'm aware that I am God's — not performing for him, just his.", self:false},
+    {t:"I can point to specific moments in the last year where I believe God showed up in my actual life — not just in theory.", self:false},
+    {t:"I bring my worst moments to God — not just my best ones.", self:true},
+    {t:"When I'm with God, I don't perform — I don't show up as the version of myself I think he wants.", self:true},
+    {t:"I have a sense of what God built me for — and I'm living toward it, not just thinking about it.", self:false}
   ]},
   {id:'self', label:'Relationship with Self', icon:'ti-user', color:'#9aa8b0',
    desc:'Answer based on what is actually true — not what you aspire to or what sounds healthy.',
    questions:[
+    {t:"When something shifts in me — a new reaction, an unexpected emotion, a pattern I notice — I pay attention to it rather than push past it.", self:true},
+    {t:"I know what actually drives me — including the parts I'm not proud of.", self:true},
+    {t:"I am honest with myself about what's really going on in my life — I don't minimize or rationalize.", self:true},
     {t:"I like who I am becoming.", self:true},
-    {t:"I know what I actually feel — not just what I think I should feel.", self:true},
-    {t:"I am honest with myself about what's really going on in my life.", self:true},
     {t:"I take care of myself the way I take care of the people I love.", self:true},
-    {t:"I can be alone without needing to fill the silence.", self:true},
-    {t:"I treat myself with the same grace I'd give a close friend.", self:true},
-    {t:"I know what drives me — including the parts I'm not proud of.", self:true},
-    {t:"I am at peace with where I am right now.", self:false},
-    {t:"The gap between who I am in public and who I am in private is small.", self:true},
-    {t:"I am becoming the person I want to be.", self:true}
+    {t:"I can be alone and at rest — I don't need constant noise, screens, or activity to feel okay.", self:true},
+    {t:"The person I am in private is recognizably the same person I am in public.", self:true},
+    {t:"I have a clear sense of what I'm built for — and I'm taking steps toward it, not just carrying it as an idea.", self:true}
   ]}
 ];
 
@@ -316,7 +312,7 @@ function renderSurvey(){
       qNum++;
     });
   });
-  html += '<div class="submit-section"><div class="submit-meta">Answer all 20 questions to see your complete results</div><button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  html += '<div class="submit-section"><div class="submit-meta">Answer all 16 questions to see your complete results</div><button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
   document.getElementById('app').innerHTML = html;
   updateProgress();
 }
@@ -416,6 +412,11 @@ async function submitGate(){
   } catch(e){ console.log('Could not fetch A1 scores:', e); }
 
   // Build assessment1 object from the Sheets row
+  // Dimension question indices: seen=0, known=2, voice=3, belonging=5, support=6, trust=7, freedom=9, calling=8
+  // Deep dive dimension indices: seen=0, known=1, voice=2, belonging=3, support=4, trust=5, freedom=6, calling=7
+  function pct(val){ if(!val&&val!==0)return'?'; const n=parseFloat(val.toString().replace('%','')); if(n>0&&n<=1)return Math.round(n*100)+'%'; return Math.round(n)+'%'; }
+  function ddPct(realmId, qi){ const v=answers[realmId+'_'+qi]; return v!==undefined?Math.round((v/7)*100)+'%':'?'; }
+
   const assessment1 = prevRow ? {
     overall:   prevRow[3]  || '',
     work:      prevRow[4]  || '',
@@ -424,7 +425,41 @@ async function submitGate(){
     friends:   prevRow[7]  || '',
     community: prevRow[8]  || '',
     patterns:  prevRow[17] || '',
-    warnings:  prevRow[18] || ''
+    warnings:  prevRow[18] || '',
+    dimensions: {
+      // Being Seen (qi:0 in A1, qi:0 in DD)
+      seen_work:      pct(prevRow[26]), seen_partner: pct(prevRow[28]),
+      seen_family:    pct(prevRow[30]), seen_friends: pct(prevRow[32]),
+      seen_community: pct(prevRow[34]), seen_god: ddPct('god',0), seen_self: ddPct('self',0),
+      // Being Known (qi:2 in A1, qi:1 in DD)
+      known_work:      pct(prevRow[26]), known_partner: pct(prevRow[28]),
+      known_family:    pct(prevRow[30]), known_friends: pct(prevRow[32]),
+      known_community: pct(prevRow[34]), known_god: ddPct('god',1), known_self: ddPct('self',1),
+      // Having a Voice (qi:3, qi:2)
+      voice_work:      pct(prevRow[26]), voice_partner: pct(prevRow[28]),
+      voice_family:    pct(prevRow[30]), voice_friends: pct(prevRow[32]),
+      voice_community: pct(prevRow[34]), voice_god: ddPct('god',2), voice_self: ddPct('self',2),
+      // Belonging (qi:5, qi:3)
+      belonging_work:      pct(prevRow[26]), belonging_partner: pct(prevRow[28]),
+      belonging_family:    pct(prevRow[30]), belonging_friends: pct(prevRow[32]),
+      belonging_community: pct(prevRow[34]), belonging_god: ddPct('god',3), belonging_self: ddPct('self',3),
+      // Receiving Support (qi:6, qi:4)
+      support_work:      pct(prevRow[26]), support_partner: pct(prevRow[28]),
+      support_family:    pct(prevRow[30]), support_friends: pct(prevRow[32]),
+      support_community: pct(prevRow[34]), support_god: ddPct('god',4), support_self: ddPct('self',4),
+      // Trust & Safety (qi:7, qi:5)
+      trust_work:      pct(prevRow[26]), trust_partner: pct(prevRow[28]),
+      trust_family:    pct(prevRow[30]), trust_friends: pct(prevRow[32]),
+      trust_community: pct(prevRow[34]), trust_god: ddPct('god',5), trust_self: ddPct('self',5),
+      // Freedom (qi:9, qi:6)
+      freedom_work:      pct(prevRow[26]), freedom_partner: pct(prevRow[28]),
+      freedom_family:    pct(prevRow[30]), freedom_friends: pct(prevRow[32]),
+      freedom_community: pct(prevRow[34]), freedom_god: ddPct('god',6), freedom_self: ddPct('self',6),
+      // Calling (qi:8, qi:7)
+      calling_work:      pct(prevRow[26]), calling_partner: pct(prevRow[28]),
+      calling_family:    pct(prevRow[30]), calling_friends: pct(prevRow[32]),
+      calling_community: pct(prevRow[34]), calling_god: ddPct('god',7), calling_self: ddPct('self',7),
+    }
   } : null;
 
   // Build deepdive object
@@ -523,7 +558,23 @@ document.getElementById('nav-toggle').addEventListener('click', function(){
   document.getElementById('nav-links').classList.toggle('open');
 });
 
-renderSurvey();
+function checkTestMode(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('test') !== 'true') return false;
+  DEEP_REALMS.forEach(r => {
+    r.questions.forEach((_,i) => {
+      answers[r.id+'_'+i] = Math.floor(Math.random()*4)+3;
+    });
+  });
+  // Make god scores a bit lower to simulate spiritual dryness
+  DEEP_REALMS.find(r=>r.id==='god').questions.forEach((_,i) => {
+    answers['god_'+i] = Math.floor(Math.random()*3)+1;
+  });
+  return false;
+}
+
+if(!checkTestMode()) renderSurvey();
+else { renderSurvey(); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),300); }
 </script>
 </body>
 </html>
