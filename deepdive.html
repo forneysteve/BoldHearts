@@ -546,47 +546,48 @@ function renderResults(scores, guide, a1, prevRow){
     const v = answers[realmId+'_'+qi];
     return v!==undefined ? Math.round((v/7)*100) : null;
   }
-  function ddBar(pct){
-    if(pct===null) return '<span style="color:#3a3530;font-size:.68rem">—</span>';
-    const col = pct>=70?'#b5c4a0':pct>=45?'#c4a882':'#c97a5a';
-    return '<div style="display:flex;align-items:center;gap:4px">'
-      +'<div style="flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+pct+'%;height:100%;background:'+col+'"></div></div>'
-      +'<span style="font-size:.65rem;color:'+col+';white-space:nowrap">'+pct+'%</span>'
+
+  function contextBar(label, pct, color){
+    if(pct===null||pct===undefined) return '';
+    const col = color || (pct>=70?'#b5c4a0':pct>=45?'#c4a882':'#c97a5a');
+    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">'
+      +'<div style="font-size:.72rem;color:#6a6258;width:100px;flex-shrink:0;text-align:right">'+label+'</div>'
+      +'<div style="flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
+      +'<div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:3px"></div>'
+      +'</div>'
+      +'<span style="font-size:.72rem;color:'+col+';width:34px;text-align:right">'+pct+'%</span>'
       +'</div>';
   }
-  function realmBar(val){
+
+  function realmContextBar(label, val){
     const n = psn(val);
-    if(!n) return '<span style="color:#3a3530;font-size:.68rem">—</span>';
+    if(!n) return '';
     const col = n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
-    return '<div style="display:flex;align-items:center;gap:4px">'
-      +'<div style="flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+n+'%;height:100%;background:'+col+'"></div></div>'
-      +'<span style="font-size:.65rem;color:'+col+';white-space:nowrap">'+n+'%</span>'
-      +'</div>';
+    return contextBar(label, n, col);
   }
 
-  const headers = ['Dimension','God','Self','Work','Partner','Family','Friends','Community'];
-  const headerRow = headers.map(h => '<th style="padding:.5rem .6rem;text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;font-weight:400;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap">'+h+'</th>').join('');
-
-  const dimRows = DIM_DEFS.map(d => {
+  const dimBlocks = DIM_DEFS.map(d => {
     const godPct  = ddPct('god',  d.ddqi_god);
     const selfPct = ddPct('self', d.ddqi_self);
-    const realmCells = prevRow
-      ? REALM_OVERALL_COLS.map(r => '<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)">'+realmBar(prevRow[r.col])+'</td>').join('')
-      : REALM_OVERALL_COLS.map(() => '<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)"><span style="color:#3a3530;font-size:.68rem">—</span></td>').join('');
-    return '<tr>'
-      +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04);font-size:.72rem;color:#a09890;white-space:nowrap">'+d.name+'</td>'
-      +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)">'+ddBar(godPct)+'</td>'
-      +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)">'+ddBar(selfPct)+'</td>'
-      + realmCells
-      +'</tr>';
+
+    let bars = '';
+    bars += contextBar('God',  godPct,  godPct!==null?(godPct>=70?'#b5c4a0':godPct>=45?'#c4a882':'#c97a5a'):null);
+    bars += contextBar('Self', selfPct, selfPct!==null?(selfPct>=70?'#b5c4a0':selfPct>=45?'#9aa8b0':'#c97a5a'):null);
+
+    if(prevRow){
+      REALM_OVERALL_COLS.forEach(r => {
+        bars += realmContextBar(r.label, prevRow[r.col]);
+      });
+    }
+
+    return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.08);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.6rem">'
+      +'<div style="font-size:.78rem;font-weight:500;color:#f0e8df;margin-bottom:.75rem;letter-spacing:.02em">'+d.name+'</div>'
+      + bars
+      +'</div>';
   }).join('');
 
   const dimMatrixHtml = '<div class="section-label">Connection Dimensions Across All Contexts</div>'
-    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;overflow-x:auto;margin-bottom:1.5rem">'
-    +'<table style="width:100%;border-collapse:collapse;min-width:580px">'
-    +'<thead><tr>'+headerRow+'</tr></thead>'
-    +'<tbody>'+dimRows+'</tbody>'
-    +'</table></div>';
+    +'<div style="margin-bottom:1.5rem">'+dimBlocks+'</div>';
 
   // Overall A1 score
   const overallSection = a1
