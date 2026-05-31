@@ -525,7 +525,28 @@ function renderResults(scores, guide, a1, prevRow){
   const godColor  = dcolor(godScore);
   const selfColor = dcolor(selfScore);
 
-  function ps(val){
+  // Calculate God outward/self split and Self awareness/care split
+  const godOutward = ['god_0','god_1','god_3','god_4'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const godOutwardN = ['god_0','god_1','god_3','god_4'].filter(k=>answers[k]!==undefined).length;
+  const godSelf_ = ['god_2','god_5','god_6','god_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const godSelfN = ['god_2','god_5','god_6','god_7'].filter(k=>answers[k]!==undefined).length;
+  const godToYou = godOutwardN>0?Math.round((godOutward/(godOutwardN*7))*100):0;
+  const youToGod = godSelfN>0?Math.round((godSelf_/(godSelfN*7))*100):0;
+
+  // Self: awareness = questions 0,1,2,6 | care = questions 3,4,5,7
+  const selfAware = ['self_0','self_1','self_2','self_6'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const selfAwareN = ['self_0','self_1','self_2','self_6'].filter(k=>answers[k]!==undefined).length;
+  const selfCare_ = ['self_3','self_4','self_5','self_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
+  const selfCareN = ['self_3','self_4','self_5','self_7'].filter(k=>answers[k]!==undefined).length;
+  const selfAwareness = selfAwareN>0?Math.round((selfAware/(selfAwareN*7))*100):0;
+  const selfCare = selfCareN>0?Math.round((selfCare_/(selfCareN*7))*100):0;
+
+  const godToYouColor = dcolor(godToYou);
+  const youToGodColor = dcolor(youToGod);
+  const awarenessColor = dcolor(selfAwareness);
+  const careColor = dcolor(selfCare);
+
+    function ps(val){
     if(!val||val==='') return '—';
     const s = val.toString().trim();
     if(s.endsWith('%')) return s;
@@ -677,27 +698,6 @@ function renderResults(scores, guide, a1, prevRow){
     +'</div>'
     + realmSectionHtml
     + dimMatrixHtml;
-
-  // Calculate God outward/self split and Self awareness/care split
-  const godOutward = ['god_0','god_1','god_3','god_4'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const godOutwardN = ['god_0','god_1','god_3','god_4'].filter(k=>answers[k]!==undefined).length;
-  const godSelf_ = ['god_2','god_5','god_6','god_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const godSelfN = ['god_2','god_5','god_6','god_7'].filter(k=>answers[k]!==undefined).length;
-  const godToYou = godOutwardN>0?Math.round((godOutward/(godOutwardN*7))*100):0;
-  const youToGod = godSelfN>0?Math.round((godSelf_/(godSelfN*7))*100):0;
-
-  // Self: awareness = questions 0,1,2,6 | care = questions 3,4,5,7
-  const selfAware = ['self_0','self_1','self_2','self_6'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const selfAwareN = ['self_0','self_1','self_2','self_6'].filter(k=>answers[k]!==undefined).length;
-  const selfCare_ = ['self_3','self_4','self_5','self_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const selfCareN = ['self_3','self_4','self_5','self_7'].filter(k=>answers[k]!==undefined).length;
-  const selfAwareness = selfAwareN>0?Math.round((selfAware/(selfAwareN*7))*100):0;
-  const selfCare = selfCareN>0?Math.round((selfCare_/(selfCareN*7))*100):0;
-
-  const godToYouColor = dcolor(godToYou);
-  const youToGodColor = dcolor(youToGod);
-  const awarenessColor = dcolor(selfAwareness);
-  const careColor = dcolor(selfCare);
 
   function miniBar(pct, color){
     return '<div style="display:flex;align-items:center;gap:8px;margin-top:.5rem">'
