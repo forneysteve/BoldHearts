@@ -403,7 +403,7 @@ async function submitGate(){
     prevRow = await new Promise((resolve) => {
       const cbName = '_bh_cb_' + Date.now();
       const script = document.createElement('script');
-      const timeout = setTimeout(() => { resolve(null); try{ delete window[cbName]; script.remove(); }catch(e){} }, 5000);
+      const timeout = setTimeout(() => { resolve(null); try{ delete window[cbName]; script.remove(); }catch(e){} }, 10000);
       window[cbName] = (data) => {
         clearTimeout(timeout);
         resolve(data.row || null);
