@@ -22,7 +22,6 @@ h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f0e8df
 h1{font-size:clamp(2.2rem,5vw,3.5rem);letter-spacing:.02em}
 h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:1.5rem}
 p{margin-bottom:1rem;max-width:720px}
-
 nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(17,17,17,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.1)}
 nav .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase}
 nav .logo span{color:#e8d7a0}
@@ -35,7 +34,6 @@ nav .nav-links a:hover{color:#e8d7a0}
 .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
 .hero{position:relative;width:100%;min-height:55vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 5rem;background-color:#1a1714;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(17,17,17,.8) 0%,rgba(17,17,17,.7) 50%,rgba(17,17,17,.95) 100%);z-index:1}
 .hero-content{position:relative;z-index:2;max-width:800px;margin:0 auto}
@@ -44,22 +42,18 @@ nav .nav-links a:hover{color:#e8d7a0}
 .hero-content p{font-size:1.1rem;color:#b0a898;max-width:580px;margin:0 auto 2rem;line-height:1.9}
 .hero-meta{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;font-size:.85rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
 .hero-meta span{display:flex;align-items:center;gap:6px}
-
 .progress-wrap{background:rgba(17,17,17,.95);border-bottom:1px solid rgba(232,215,160,.1);padding:.75rem 2rem;position:sticky;top:73px;z-index:99;backdrop-filter:blur(8px)}
 .progress-row{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:1.25rem}
 .progress-bar-bg{flex:1;height:2px;background:rgba(196,168,130,.15);border-radius:2px;overflow:hidden}
 .progress-bar-fill{height:100%;background:#c4a882;border-radius:2px;transition:width .3s ease}
 .progress-label{font-size:.75rem;color:#6a6258;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
-
 .main{max-width:860px;margin:0 auto;padding:3rem 2rem 5rem}
-
 .realm-hdr{display:flex;align-items:flex-start;gap:1.25rem;margin:3rem 0 1.25rem;padding:1.5rem 2rem;background:#1e1c1a;border:1px solid rgba(196,168,130,.2);border-radius:4px}
 .realm-hdr:first-child{margin-top:1rem}
 .realm-icon{width:46px;height:46px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(196,168,130,.08);color:#c4a882}
 .realm-hdr-text h2{font-size:1.5rem;margin-bottom:3px;color:#f0e8df}
 .realm-hdr-text h2::after{display:none}
 .realm-hdr-text p{font-size:.9rem;color:#6a6258;line-height:1.6;margin:0;max-width:none}
-
 .qblock{background:#1a1816;border:1px solid rgba(196,168,130,.08);border-radius:4px;padding:1.5rem;margin-bottom:.6rem;transition:border-color .2s ease}
 .qblock.answered{border-color:rgba(196,168,130,.3)}
 .qnum{font-size:.7rem;color:#5a5550;font-weight:400;margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase}
@@ -75,13 +69,11 @@ nav .nav-links a:hover{color:#e8d7a0}
 .sopt input[type=radio]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
 .scale-num{font-size:.65rem;color:#4a4540;margin-top:5px;letter-spacing:.04em}
 .sopt.sel .scale-num{color:#c4a882}
-
 .submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(196,168,130,.12);border-radius:4px}
 .submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem;letter-spacing:.04em}
 .sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#c4a882;padding:1rem 2.5rem;border-radius:4px;border:2px solid #c4a882;transition:all .3s ease;cursor:pointer}
 .sub-btn:hover{background-color:transparent;color:#c4a882}
 .errmsg{font-size:.85rem;color:#c97a5a;margin-top:12px;min-height:18px}
-
 .gate-wrap{max-width:860px;margin:0 auto;padding:5rem 2rem;min-height:60vh;display:flex;align-items:center;justify-content:center}
 .gate-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:3rem;max-width:500px;width:100%;text-align:center}
 .gate-icon{width:64px;height:64px;background:rgba(196,168,130,.08);border:1px solid rgba(196,168,130,.2);border-radius:4px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:28px;color:#c4a882}
@@ -96,8 +88,6 @@ nav .nav-links a:hover{color:#e8d7a0}
 .gate-btn:hover{background-color:transparent;color:#c4a882}
 .gate-btn:disabled{opacity:.5;cursor:not-allowed}
 .gate-note{font-size:.75rem;color:#5a5550;margin-top:1rem;letter-spacing:.04em}
-
-/* Generating state */
 .generating-wrap{max-width:860px;margin:0 auto;padding:5rem 2rem;min-height:60vh;display:flex;align-items:center;justify-content:center}
 .generating-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:3rem;max-width:500px;width:100%;text-align:center}
 .generating-icon{font-size:2.5rem;margin-bottom:1.5rem;opacity:.7}
@@ -109,25 +99,13 @@ nav .nav-links a:hover{color:#e8d7a0}
 .generating-dot:nth-child(2){animation-delay:.2s}
 .generating-dot:nth-child(3){animation-delay:.4s}
 @keyframes genpulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
-
 .results-page{animation:fadeUp .4s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .results-hero{text-align:center;padding:2rem 0 2.5rem;border-bottom:1px solid rgba(196,168,130,.15);margin-bottom:2.5rem}
 .results-hero h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:.5rem;color:#f0e8df}
 .results-hero h2::after{margin:1rem auto 0;width:60px;height:2px;background:#c4a882;content:'';display:block}
 .results-hero p{font-size:.95rem;color:#6a6258;margin:0 auto;letter-spacing:.04em}
-
 .section-label{font-size:.7rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(196,168,130,.1)}
-
-.score-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
-.score-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.12);border-radius:4px;padding:1.25rem 1.5rem}
-.score-card-lbl{font-size:.7rem;color:#6a6258;font-weight:400;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
-.score-card-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700}
-.score-card-tag{font-size:.75rem;color:#6a6258;margin-top:3px}
-.score-bar{height:2px;border-radius:2px;background:rgba(196,168,130,.1);margin-top:12px}
-.score-bar-fill{height:100%;border-radius:2px}
-
-/* Guide styles */
 .guide-title-block{text-align:center;padding:1rem 0 2rem;border-bottom:1px solid rgba(196,168,130,.12);margin-bottom:2rem}
 .guide-main-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;color:#f0e8df;margin-bottom:.5rem;line-height:1.3}
 .guide-subtitle{font-size:.95rem;color:#6a6258;font-style:italic;line-height:1.7}
@@ -141,15 +119,6 @@ nav .nav-links a:hover{color:#e8d7a0}
 .guide-closing{background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.5rem 1.75rem;margin-top:1.5rem}
 .guide-closing-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem}
 .guide-closing-text{font-size:.92rem;color:#c0b8b0;line-height:1.95;font-style:italic}
-.practice-block{background:#1a1714;border:1px solid rgba(196,168,130,.15);border-left:3px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem}
-.practice-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#f0e8df;margin-bottom:.5rem}
-.practice-body{font-size:.88rem;color:#c0b8b0;line-height:1.95}
-
-.prev-scores-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
-
-.action-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.12);border-radius:4px;padding:2rem;margin-bottom:.75rem}
-.action-card h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#f0e8df;margin-bottom:1.25rem}
-
 .discovery-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
 .discovery-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
 .discovery-card p{font-size:.95rem;color:#a09890;line-height:1.9;margin:0 auto 2rem;max-width:500px}
@@ -157,16 +126,13 @@ nav .nav-links a:hover{color:#e8d7a0}
 .discovery-btn:hover{background-color:transparent;color:#c4a882}
 .discovery-email{font-size:.8rem;color:#5a5550}
 .discovery-email a{color:#a09890}
-
 .retake-btn{display:block;margin:2rem auto 0;padding:.75rem 2rem;background:transparent;border:1px solid rgba(196,168,130,.2);border-radius:4px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;cursor:pointer;font-family:'Inter',sans-serif;transition:all .3s ease}
 .retake-btn:hover{border-color:#c4a882;color:#c4a882}
-
 footer{background-color:#0d0d0d;text-align:center;padding:2.5rem 2rem;border-top:1px solid rgba(196,168,130,.08)}
 footer p{color:#5a5550;font-size:.8rem;letter-spacing:.06em;max-width:none;margin:0 auto .4rem}
 footer a{color:#6a6258}
 footer a:hover{color:#c4a882}
 .divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(196,168,130,.15),transparent)}
-
 @media(max-width:768px){
   .nav-toggle{display:flex}
   nav .nav-links{display:none;flex-direction:column;align-items:center;gap:0;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(13,13,13,.98);backdrop-filter:blur(16px);justify-content:center;z-index:999}
@@ -178,7 +144,6 @@ footer a:hover{color:#c4a882}
   .main{padding:2rem 1.25rem 4rem}
   .gate-wrap{padding:3rem 1.25rem}
   .generating-wrap{padding:3rem 1.25rem}
-  .score-cards{grid-template-columns:1fr}
   nav{padding:1rem 1.25rem}
   .progress-wrap{top:57px}
   .sopt-circle{width:34px;height:34px}
@@ -188,7 +153,6 @@ footer a:hover{color:#c4a882}
 </style>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="logo">Bold<span>Hearts</span></a>
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
@@ -202,7 +166,6 @@ footer a:hover{color:#c4a882}
     <li><a href="contact.html" class="cta-nav">Schedule Now</a></li>
   </ul>
 </nav>
-
 <section class="hero">
   <div class="hero-content">
     <div class="hero-tagline">Deep Dive Assessment</div>
@@ -215,27 +178,21 @@ footer a:hover{color:#c4a882}
     </div>
   </div>
 </section>
-
 <div class="divider"></div>
-
 <div class="progress-wrap" id="progress-section">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
     <div class="progress-label" id="progress-lbl">0 of 16 answered</div>
   </div>
 </div>
-
 <div id="app"></div>
-
 <div class="divider"></div>
 <footer>
   <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.0</p>
 </footer>
-
 <script>
 const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
-
 const SCALE = [{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
 
 const DEEP_REALMS = [
@@ -365,7 +322,7 @@ function showGenerating(){
   document.getElementById('app').innerHTML = '<div class="generating-wrap"><div class="generating-card">'
     +'<div class="generating-icon">✦</div>'
     +'<h2>Building your guide.</h2>'
-    +'<p>We\'re reading your complete results across all 70 questions and writing a personal Spiritual Direction Guide. This takes about 20–30 seconds.</p>'
+    +'<p>We\'re reading your complete results across all 70 questions and writing a personal Spiritual Direction Guide. This takes about 20-30 seconds.</p>'
     +'<div class="generating-dots"><div class="generating-dot"></div><div class="generating-dot"></div><div class="generating-dot"></div></div>'
     +'</div></div>';
 }
@@ -374,109 +331,67 @@ async function submitGate(){
   const name  = document.getElementById('gname').value.trim();
   const email = document.getElementById('gemail').value.trim();
   const err   = document.getElementById('gate-err');
-
   if(!name){  err.textContent = 'Please enter your first name.'; return; }
   if(!email || !email.includes('@')){ err.textContent = 'Please enter a valid email address.'; return; }
-
   userName  = name;
   userEmail = email;
-
   const btn = document.getElementById('gate-btn');
-  if(btn){ btn.textContent = 'Working…'; btn.disabled = true; }
-
+  if(btn){ btn.textContent = 'Working...'; btn.disabled = true; }
   const scores = calcScores();
 
-  // 1. Save Deep Dive scores to Sheets
+  // Save Deep Dive scores to Sheets
   const ddParams = new URLSearchParams({
-    action: 'deepdive',
-    name: userName,
-    email: userEmail,
+    action: 'deepdive', name: userName, email: userEmail,
     god:  scores.realm.god  ? scores.realm.god.overall+'%'  : '',
     self: scores.realm.self ? scores.realm.self.overall+'%' : '',
     deepdive_overall: scores.overall+'%'
   });
   new Image().src = SHEETS_URL + '?' + ddParams.toString();
 
-  // 2. Fetch Assessment 1 scores from Sheets for the worker (JSONP to avoid CORS)
+  // Fetch Assessment 1 scores via worker
   let prevRow = null;
   try {
-    prevRow = await new Promise((resolve) => {
-      const cbName = '_bh_cb_' + Date.now();
-      const script = document.createElement('script');
-      const timeout = setTimeout(() => { resolve(null); try{ delete window[cbName]; script.remove(); }catch(e){} }, 10000);
-      window[cbName] = (data) => {
-        clearTimeout(timeout);
-        console.log('JSONP lookup returned:', JSON.stringify(data).substring(0, 200));
-        resolve(data.row || null);
-        try{ delete window[cbName]; script.remove(); }catch(e){}
-      };
-      script.src = SHEETS_URL + '?action=lookup&email=' + encodeURIComponent(email) + '&callback=' + cbName;
-      document.head.appendChild(script);
+    const lookupRes = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'lookup', email: email })
     });
+    const lookupData = await lookupRes.json();
+    console.log('Lookup result:', lookupData.status);
+    if(lookupData.row) prevRow = lookupData.row;
   } catch(e){ console.log('Could not fetch A1 scores:', e); }
+  console.log('prevRow:', prevRow ? 'found ('+prevRow.length+' cols)' : 'null');
 
-  // Build assessment1 object from the Sheets row
-  // Dimension question indices: seen=0, known=2, voice=3, belonging=5, support=6, trust=7, freedom=9, calling=8
-  // Deep dive dimension indices: seen=0, known=1, voice=2, belonging=3, support=4, trust=5, freedom=6, calling=7
-  function pct(val){ if(!val&&val!==0)return'?'; const n=parseFloat(val.toString().replace('%','')); if(n>0&&n<=1)return Math.round(n*100)+'%'; return Math.round(n)+'%'; }
-  function ddPct(realmId, qi){ const v=answers[realmId+'_'+qi]; return v!==undefined?Math.round((v/7)*100)+'%':'?'; }
+  // Build assessment1 object
+  function ps(val){
+    if(!val && val!==0) return '—';
+    const s = val.toString().trim();
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
 
   const assessment1 = prevRow ? {
-    overall:   prevRow[3]  || '',
-    work:      prevRow[4]  || '',
-    partner:   prevRow[5]  || '',
-    family:    prevRow[6]  || '',
-    friends:   prevRow[7]  || '',
-    community: prevRow[8]  || '',
+    overall:   ps(prevRow[3]),
+    work:      ps(prevRow[4]),
+    partner:   ps(prevRow[5]),
+    family:    ps(prevRow[6]),
+    friends:   ps(prevRow[7]),
+    community: ps(prevRow[8]),
     patterns:  prevRow[17] || '',
-    warnings:  prevRow[18] || '',
-    dimensions: {
-      // Being Seen (qi:0 in A1, qi:0 in DD)
-      seen_work:      pct(prevRow[26]), seen_partner: pct(prevRow[28]),
-      seen_family:    pct(prevRow[30]), seen_friends: pct(prevRow[32]),
-      seen_community: pct(prevRow[34]), seen_god: ddPct('god',0), seen_self: ddPct('self',0),
-      // Being Known (qi:2 in A1, qi:1 in DD)
-      known_work:      pct(prevRow[26]), known_partner: pct(prevRow[28]),
-      known_family:    pct(prevRow[30]), known_friends: pct(prevRow[32]),
-      known_community: pct(prevRow[34]), known_god: ddPct('god',1), known_self: ddPct('self',1),
-      // Having a Voice (qi:3, qi:2)
-      voice_work:      pct(prevRow[26]), voice_partner: pct(prevRow[28]),
-      voice_family:    pct(prevRow[30]), voice_friends: pct(prevRow[32]),
-      voice_community: pct(prevRow[34]), voice_god: ddPct('god',2), voice_self: ddPct('self',2),
-      // Belonging (qi:5, qi:3)
-      belonging_work:      pct(prevRow[26]), belonging_partner: pct(prevRow[28]),
-      belonging_family:    pct(prevRow[30]), belonging_friends: pct(prevRow[32]),
-      belonging_community: pct(prevRow[34]), belonging_god: ddPct('god',3), belonging_self: ddPct('self',3),
-      // Receiving Support (qi:6, qi:4)
-      support_work:      pct(prevRow[26]), support_partner: pct(prevRow[28]),
-      support_family:    pct(prevRow[30]), support_friends: pct(prevRow[32]),
-      support_community: pct(prevRow[34]), support_god: ddPct('god',4), support_self: ddPct('self',4),
-      // Trust & Safety (qi:7, qi:5)
-      trust_work:      pct(prevRow[26]), trust_partner: pct(prevRow[28]),
-      trust_family:    pct(prevRow[30]), trust_friends: pct(prevRow[32]),
-      trust_community: pct(prevRow[34]), trust_god: ddPct('god',5), trust_self: ddPct('self',5),
-      // Freedom (qi:9, qi:6)
-      freedom_work:      pct(prevRow[26]), freedom_partner: pct(prevRow[28]),
-      freedom_family:    pct(prevRow[30]), freedom_friends: pct(prevRow[32]),
-      freedom_community: pct(prevRow[34]), freedom_god: ddPct('god',6), freedom_self: ddPct('self',6),
-      // Calling (qi:8, qi:7)
-      calling_work:      pct(prevRow[26]), calling_partner: pct(prevRow[28]),
-      calling_family:    pct(prevRow[30]), calling_friends: pct(prevRow[32]),
-      calling_community: pct(prevRow[34]), calling_god: ddPct('god',7), calling_self: ddPct('self',7),
-    }
+    warnings:  prevRow[18] || ''
   } : null;
 
-  // Build deepdive object
   const deepdive = {
     god:     scores.realm.god  ? scores.realm.god.overall+'%'  : '',
     self:    scores.realm.self ? scores.realm.self.overall+'%' : '',
     overall: scores.overall+'%'
   };
 
-  // 3. Show generating state
   showGenerating();
 
-  // 4. Call the Cloudflare Worker
+  // Call worker for guide
   let guide = null;
   try {
     const res = await fetch(WORKER_URL, {
@@ -491,14 +406,12 @@ async function submitGate(){
     console.error('Worker fetch error:', e);
   }
 
-  // 5. Render results
   renderResults(scores, guide, assessment1, prevRow);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function renderGuide(guide){
   if(!guide) return '<div style="text-align:center;padding:2rem;color:#5a5550;font-size:.875rem">Your guide could not be generated. Please try again or contact admin@boldhearts.org.</div>';
-
   const sections = (guide.sections || []).map(s => {
     const paragraphs = (s.content || '').split(/\n\n+/).map(p => '<p>'+p.trim()+'</p>').join('');
     return '<div class="guide-section">'
@@ -506,27 +419,20 @@ function renderGuide(guide){
       +'<div class="guide-section-body">'+paragraphs+'</div>'
       +'</div>';
   }).join('');
-
   const closing = guide.closingNote
     ? '<div class="guide-closing"><div class="guide-closing-label">A Note from Steve</div><div class="guide-closing-text">'+guide.closingNote+'</div></div>'
     : '';
-
   return '<div class="guide-title-block">'
     +'<div class="guide-main-title">'+(guide.title||'Your Spiritual Direction Guide')+'</div>'
     +'<div class="guide-subtitle">'+(guide.subtitle||'')+'</div>'
     +'</div>'
-    + sections
-    + closing;
+    + sections + closing;
 }
 
 function renderResults(scores, guide, a1, prevRow){
-  const { realm, overall } = scores;
-  const godScore  = realm.god  ? realm.god.overall  : 0;
-  const selfScore = realm.self ? realm.self.overall : 0;
-  const godColor  = dcolor(godScore);
-  const selfColor = dcolor(selfScore);
+  const { realm } = scores;
 
-  // Calculate God outward/self split and Self awareness/care split
+  // God outward/self split
   const godOutward = ['god_0','god_1','god_3','god_4'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
   const godOutwardN = ['god_0','god_1','god_3','god_4'].filter(k=>answers[k]!==undefined).length;
   const godSelf_ = ['god_2','god_5','god_6','god_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
@@ -534,7 +440,7 @@ function renderResults(scores, guide, a1, prevRow){
   const godToYou = godOutwardN>0?Math.round((godOutward/(godOutwardN*7))*100):0;
   const youToGod = godSelfN>0?Math.round((godSelf_/(godSelfN*7))*100):0;
 
-  // Self: awareness = questions 0,1,2,6 | care = questions 3,4,5,7
+  // Self awareness/care split
   const selfAware = ['self_0','self_1','self_2','self_6'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
   const selfAwareN = ['self_0','self_1','self_2','self_6'].filter(k=>answers[k]!==undefined).length;
   const selfCare_ = ['self_3','self_4','self_5','self_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
@@ -542,56 +448,93 @@ function renderResults(scores, guide, a1, prevRow){
   const selfAwareness = selfAwareN>0?Math.round((selfAware/(selfAwareN*7))*100):0;
   const selfCare = selfCareN>0?Math.round((selfCare_/(selfCareN*7))*100):0;
 
-  const godToYouColor = dcolor(godToYou);
-  const youToGodColor = dcolor(youToGod);
-  const awarenessColor = dcolor(selfAwareness);
-  const careColor = dcolor(selfCare);
-
-    function ps(val){
-    if(!val||val==='') return '—';
+  function ps(val){
+    if(!val && val!==0) return '—';
     const s = val.toString().trim();
     if(s.endsWith('%')) return s;
     const n = parseFloat(s);
-    if(n>0&&n<=1) return Math.round(n*100)+'%';
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
     return Math.round(n)+'%';
   }
+  function psn(val){
+    const s = ps(val); return s==='—'?0:parseInt(s);
+  }
   function psColor(val){
-    const s = ps(val); if(s==='—') return '#5a5550';
-    const n = parseInt(s);
-    return n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
-  }
-  function dimBar(val,color){
-    const s = val||'—'; const n = parseInt(s);
-    const w = isNaN(n)?0:Math.min(n,100);
-    return '<div style="display:flex;align-items:center;gap:6px">'
-      +'<div style="flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
-      +'<div style="width:'+w+'%;height:100%;background:'+color+';border-radius:3px"></div>'
-      +'</div><span style="font-size:.68rem;color:'+color+';width:30px;text-align:right">'+s+'</span></div>';
-  }
-  function ddScore(realmId,qi){
-    const v=answers[realmId+'_'+qi];
-    return v!==undefined?Math.round((v/7)*100)+'%':'—';
-  }
-  function ddColor(realmId,qi){
-    const v=answers[realmId+'_'+qi];
-    if(v===undefined) return '#5a5550';
-    const n=Math.round((v/7)*100);
+    const n = psn(val);
     return n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
   }
 
+  function getPattern(out, self_){
+    const hiOut=out>=65, loOut=out<50, hiSelf=self_>=65, loSelf=self_<50;
+    if(hiOut&&hiSelf) return {name:'All Systems Green', color:'#b5c4a0'};
+    if(loOut&&loSelf) return {name:'Engine Off', color:'#c97a5a'};
+    if(loOut&&hiSelf) return {name:'Running on Empty', color:'#c97a5a'};
+    if(hiOut&&loSelf) return {name:'Warning Light', color:'#e8d7a0'};
+    return {name:'Check Engine', color:'#e8d7a0'};
+  }
+
+  function realmRow(label, outVal, selfVal, outLabel, selfLabel){
+    const out = typeof outVal==='number'?outVal:psn(outVal);
+    const sv  = typeof selfVal==='number'?selfVal:psn(selfVal);
+    const pattern = getPattern(out, sv);
+    const outColor = out>=70?'#b5c4a0':out>=45?'#e8d7a0':'#c97a5a';
+    const selfColor = sv>=70?'#b5c4a0':sv>=45?'#9aa8b0':'#c97a5a';
+    return '<div style="margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(232,215,160,.07)">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
+      +'<div style="font-size:.85rem;color:#b0a898">'+label+'</div>'
+      +'<div style="font-size:.72rem;color:'+pattern.color+';background:rgba(255,255,255,.05);padding:2px 10px;border-radius:3px">'+pattern.name+'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">'
+      +'<div style="font-size:.68rem;color:#5a5550;width:140px;flex-shrink:0;text-align:right">'+outLabel+'</div>'
+      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+out+'%;height:100%;background:'+outColor+';border-radius:3px"></div></div>'
+      +'<div style="font-size:.72rem;color:'+outColor+';width:34px;text-align:right">'+out+'%</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<div style="font-size:.68rem;color:#5a5550;width:140px;flex-shrink:0;text-align:right">'+selfLabel+'</div>'
+      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+sv+'%;height:100%;background:'+selfColor+';border-radius:3px"></div></div>'
+      +'<div style="font-size:.72rem;color:'+selfColor+';width:34px;text-align:right">'+sv+'%</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  // Build realm section - God and Self first, then A1 realms
+  let realmHtml = '<div class="section-label">Scores by Realm</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
+    +'<div style="font-size:.65rem;color:#3a3530;margin-bottom:1rem;display:flex;gap:1.5rem;flex-wrap:wrap">'
+    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#e8d7a0;border-radius:2px"></span>How God/others engage you / Awareness</span>'
+    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#9aa8b0;border-radius:2px"></span>How you engage God/others / Care</span>'
+    +'</div>'
+    + realmRow('Relationship with God', godToYou, youToGod, 'How God engages you', 'How you engage God')
+    + realmRow('Relationship with Self', selfAwareness, selfCare, 'Awareness of Self', 'Care of Self');
+
+  if(prevRow){
+    const realmDefs = [
+      {label:'Work / School',     out:26, sv:27},
+      {label:'Significant Other', out:28, sv:29},
+      {label:'Family',            out:30, sv:31},
+      {label:'Friends',           out:32, sv:33},
+      {label:'Community',         out:34, sv:35},
+    ];
+    realmDefs.forEach(r => {
+      const ov = psn(prevRow[r.out]);
+      const sv = psn(prevRow[r.sv]);
+      realmHtml += realmRow(r.label, ov, sv, 'Others engage you', 'You engage others');
+    });
+  }
+  realmHtml += '</div>';
+
+  // Dimension matrix
   const DIM_DEFS = [
-    {name:'Being Seen',    ddqi:0},
-    {name:'Being Known',   ddqi:1},
-    {name:'Having a Voice',ddqi:2},
-    {name:'Belonging',     ddqi:3},
-    {name:'Receiving Support',ddqi:4},
-    {name:'Trust & Safety',ddqi:5},
-    {name:'Freedom',       ddqi:6},
-    {name:'Calling',       ddqi:7},
+    {name:'Being Seen',       ddqi_god:0, ddqi_self:0},
+    {name:'Being Known',      ddqi_god:1, ddqi_self:1},
+    {name:'Having a Voice',   ddqi_god:2, ddqi_self:2},
+    {name:'Belonging',        ddqi_god:3, ddqi_self:3},
+    {name:'Receiving Support',ddqi_god:4, ddqi_self:4},
+    {name:'Trust & Safety',   ddqi_god:5, ddqi_self:5},
+    {name:'Freedom',          ddqi_god:6, ddqi_self:6},
+    {name:'Calling',          ddqi_god:7, ddqi_self:7},
   ];
-
-  // Realm overall cols from sheet row (0-based): work=4,partner=5,family=6,friends=7,community=8
-  const REALM_OVERALL = [
+  const REALM_OVERALL_COLS = [
     {label:'Work',      col:4},
     {label:'Partner',   col:5},
     {label:'Family',    col:6},
@@ -599,125 +542,67 @@ function renderResults(scores, guide, a1, prevRow){
     {label:'Community', col:8},
   ];
 
-  let dimMatrixHtml = '';
-  if(a1 && prevRow){
-    const headers = ['Dimension','Work','Partner','Family','Friends','Community','God','Self'];
-    const headerRow = headers.map(h=>'<th style="padding:.5rem .6rem;text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;font-weight:400;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap">'+h+'</th>').join('');
-
-    const rows = DIM_DEFS.map(d=>{
-      const realmCells = REALM_OVERALL.map(r=>{
-        const v = ps(prevRow[r.col]);
-        const c = psColor(v);
-        return '<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05)">'+dimBar(v,c)+'</td>';
-      }).join('');
-      const gv=ddScore('god',d.ddqi); const gc=ddColor('god',d.ddqi);
-      const sv=ddScore('self',d.ddqi); const sc=ddColor('self',d.ddqi);
-      return '<tr>'
-        +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05);font-size:.72rem;color:#a09890;white-space:nowrap">'+d.name+'</td>'
-        +realmCells
-        +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05)">'+dimBar(gv,gc)+'</td>'
-        +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.05)">'+dimBar(sv,sc)+'</td>'
-        +'</tr>';
-    }).join('');
-
-    dimMatrixHtml = '<div class="section-label">Connection Dimensions Across All Contexts</div>'
-      +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;overflow-x:auto;margin-bottom:1.5rem">'
-      +'<table style="width:100%;border-collapse:collapse;min-width:580px">'
-      +'<thead><tr>'+headerRow+'</tr></thead>'
-      +'<tbody>'+rows+'</tbody>'
-      +'</table></div>';
+  function ddPct(realmId, qi){
+    const v = answers[realmId+'_'+qi];
+    return v!==undefined ? Math.round((v/7)*100) : null;
   }
-
-  // Car pattern logic
-  function getPattern(out, self_){
-    const hiOut=out>=65, loOut=out<50, hiSelf=self_>=65, loSelf=self_<50;
-    if(hiOut&&hiSelf) return {name:'All Systems Green', cls:'open', color:'#b5c4a0'};
-    if(loOut&&loSelf) return {name:'Engine Off', cls:'disconnected', color:'#c97a5a'};
-    if(loOut&&hiSelf) return {name:'Running on Empty', cls:'giver', color:'#c97a5a'};
-    if(hiOut&&loSelf) return {name:'Warning Light', cls:'guarded', color:'#e8d7a0'};
-    return {name:'Check Engine', cls:'developing', color:'#e8d7a0'};
+  function ddBar(pct){
+    if(pct===null) return '<span style="color:#3a3530;font-size:.68rem">—</span>';
+    const col = pct>=70?'#b5c4a0':pct>=45?'#c4a882':'#c97a5a';
+    return '<div style="display:flex;align-items:center;gap:4px">'
+      +'<div style="flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+pct+'%;height:100%;background:'+col+'"></div></div>'
+      +'<span style="font-size:.65rem;color:'+col+';white-space:nowrap">'+pct+'%</span>'
+      +'</div>';
   }
-
-  function realmRow(label, outVal, selfVal, outLabel, selfLabel){
-    const out = parseInt(outVal)||0;
-    const self_ = parseInt(selfVal)||0;
-    const pattern = getPattern(out, self_);
-    const outColor = out>=70?'#b5c4a0':out>=45?'#e8d7a0':'#c97a5a';
-    const selfColor = self_>=70?'#b5c4a0':self_>=45?'#9aa8b0':'#c97a5a';
-    return '<div style="margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(232,215,160,.07)">'
-      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
-      +'<div style="font-size:.85rem;color:#b0a898">'+label+'</div>'
-      +'<div style="font-size:.72rem;color:'+pattern.color+';background:rgba(255,255,255,.05);padding:2px 8px;border-radius:3px">'+pattern.name+'</div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">'
-      +'<div style="font-size:.68rem;color:#5a5550;width:110px;flex-shrink:0;text-align:right">'+outLabel+'</div>'
-      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
-      +'<div style="width:'+out+'%;height:100%;background:'+outColor+';border-radius:3px"></div></div>'
-      +'<div style="font-size:.72rem;color:'+outColor+';width:34px;text-align:right">'+out+'%</div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px">'
-      +'<div style="font-size:.68rem;color:#5a5550;width:110px;flex-shrink:0;text-align:right">'+selfLabel+'</div>'
-      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
-      +'<div style="width:'+self_+'%;height:100%;background:'+selfColor+';border-radius:3px"></div></div>'
-      +'<div style="font-size:.72rem;color:'+selfColor+';width:34px;text-align:right">'+self_+'%</div>'
-      +'</div>'
+  function realmBar(val){
+    const n = psn(val);
+    if(!n) return '<span style="color:#3a3530;font-size:.68rem">—</span>';
+    const col = n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
+    return '<div style="display:flex;align-items:center;gap:4px">'
+      +'<div style="flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+n+'%;height:100%;background:'+col+'"></div></div>'
+      +'<span style="font-size:.65rem;color:'+col+';white-space:nowrap">'+n+'%</span>'
       +'</div>';
   }
 
-  let realmSectionHtml = '<div class="section-label">Scores by Realm</div>'
-    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
-    +'<div style="font-size:.65rem;color:#3a3530;margin-bottom:1rem;display:flex;gap:1.5rem">'
-    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#e8d7a0;border-radius:2px"></span>Others → You / God → You / Awareness</span>'
-    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#9aa8b0;border-radius:2px"></span>You → Others / You → God / Care</span>'
-    +'</div>'
-    // God and Self first
-    + realmRow('Relationship with God', godToYou, youToGod, 'How God engages you', 'How you engage God')
-    + realmRow('Relationship with Self', selfAwareness, selfCare, 'Awareness of Self', 'Care of Self');
+  const headers = ['Dimension','God','Self','Work','Partner','Family','Friends','Community'];
+  const headerRow = headers.map(h => '<th style="padding:.5rem .6rem;text-align:left;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;font-weight:400;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap">'+h+'</th>').join('');
 
-  // Add A1 realm rows if available
-  if(a1 && prevRow){
-    const realmDefs = [
-      {label:'Work / School',     out:26, self_:27},
-      {label:'Significant Other', out:28, self_:29},
-      {label:'Family',            out:30, self_:31},
-      {label:'Friends',           out:32, self_:33},
-      {label:'Community',         out:34, self_:35},
-    ];
-    realmDefs.forEach(r => {
-      const ov = parseInt((ps(prevRow[r.out])||'0').replace('%',''))||0;
-      const sv = parseInt((ps(prevRow[r.self_])||'0').replace('%',''))||0;
-      if(ov>0||sv>0){
-        realmSectionHtml += realmRow(r.label, ov, sv, 'Others → You', 'You → Others');
-      }
-    });
-  }
-  realmSectionHtml += '</div>';
+  const dimRows = DIM_DEFS.map(d => {
+    const godPct  = ddPct('god',  d.ddqi_god);
+    const selfPct = ddPct('self', d.ddqi_self);
+    const realmCells = prevRow
+      ? REALM_OVERALL_COLS.map(r => '<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)">'+realmBar(prevRow[r.col])+'</td>').join('')
+      : REALM_OVERALL_COLS.map(() => '<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)"><span style="color:#3a3530;font-size:.68rem">—</span></td>').join('');
+    return '<tr>'
+      +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04);font-size:.72rem;color:#a09890;white-space:nowrap">'+d.name+'</td>'
+      +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)">'+ddBar(godPct)+'</td>'
+      +'<td style="padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.04)">'+ddBar(selfPct)+'</td>'
+      + realmCells
+      +'</tr>';
+  }).join('');
 
-  const prevSection = '<div style="text-align:center;padding:1rem 0 1.5rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem">'
-    +(a1?'<div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.5rem">Overall Heart Engagement Score</div>'
-    +'<div style="font-family:Cormorant Garamond,serif;font-size:2.2rem;font-weight:700;color:#e8d7a0">'+ps(a1.overall)+'</div>':'')
-    +'</div>'
-    + realmSectionHtml
-    + dimMatrixHtml;
+  const dimMatrixHtml = '<div class="section-label">Connection Dimensions Across All Contexts</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;overflow-x:auto;margin-bottom:1.5rem">'
+    +'<table style="width:100%;border-collapse:collapse;min-width:580px">'
+    +'<thead><tr>'+headerRow+'</tr></thead>'
+    +'<tbody>'+dimRows+'</tbody>'
+    +'</table></div>';
 
-  function miniBar(pct, color){
-    return '<div style="display:flex;align-items:center;gap:8px;margin-top:.5rem">'
-      +'<div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">'
-      +'<div style="width:'+pct+'%;height:100%;background:'+color+';border-radius:2px"></div>'
-      +'</div><span style="font-size:.72rem;color:'+color+';width:32px;text-align:right">'+pct+'%</span></div>';
-  }
+  // Overall A1 score
+  const overallSection = a1
+    ? '<div style="text-align:center;padding:1.5rem;background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'
+      +'<div style="font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem">Overall Heart Engagement Score (Assessment 1)</div>'
+      +'<div style="font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:700;color:#e8d7a0">'+a1.overall+'</div>'
+      +'</div>'
+    : '';
 
   document.getElementById('app').innerHTML = '<div class="main"><div class="results-page">'
-    // Header
     +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Deep Dive Results</h2><p>The foundation layer — your relationship with God and with yourself.</p></div>'
-    // Score cards - God with outward/self split, Self with awareness/care split
-
-    // A1 scores
-    + prevSection
-    // Spiritual Direction Guide
+    + overallSection
+    + realmHtml
+    + dimMatrixHtml
     +'<div class="section-label">Your Spiritual Direction Guide</div>'
     + renderGuide(guide)
-    // Discovery CTA
     +'<div class="discovery-card"><h3>Let\'s talk about your complete results.</h3><p>A free 15-minute Discovery Call is the best next step. Bring both assessments and we\'ll look at the full picture together — what your scores are really telling us about your heart, your relationships, and what a path forward could look like.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Complete Heart Assessment&body=Hi Steve, I just completed both the Heart Engagement Assessment and the Deep Dive. I\'d love to schedule a Discovery Call to discuss my complete results." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Deep Dive</button>'
     +'</div></div>';
@@ -743,7 +628,6 @@ function checkTestMode(){
       answers[r.id+'_'+i] = Math.floor(Math.random()*4)+3;
     });
   });
-  // Make god scores a bit lower to simulate spiritual dryness
   DEEP_REALMS.find(r=>r.id==='god').questions.forEach((_,i) => {
     answers['god_'+i] = Math.floor(Math.random()*3)+1;
   });
