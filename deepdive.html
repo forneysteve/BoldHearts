@@ -406,6 +406,7 @@ async function submitGate(){
       const timeout = setTimeout(() => { resolve(null); try{ delete window[cbName]; script.remove(); }catch(e){} }, 10000);
       window[cbName] = (data) => {
         clearTimeout(timeout);
+        console.log('JSONP lookup returned:', JSON.stringify(data).substring(0, 200));
         resolve(data.row || null);
         try{ delete window[cbName]; script.remove(); }catch(e){}
       };
@@ -670,8 +671,8 @@ function renderResults(scores, guide, a1, prevRow){
     +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#9aa8b0;border-radius:2px"></span>You → Others / You → God / Care</span>'
     +'</div>'
     // God and Self first
-    + realmRow('Relationship with God', godToYou, youToGod, 'God → You', 'You → God')
-    + realmRow('Relationship with Self', selfAwareness, selfCare, 'Awareness', 'Care');
+    + realmRow('Relationship with God', godToYou, youToGod, 'How God engages you', 'How you engage God')
+    + realmRow('Relationship with Self', selfAwareness, selfCare, 'Awareness of Self', 'Care of Self');
 
   // Add A1 realm rows if available
   if(a1 && prevRow){
@@ -710,32 +711,7 @@ function renderResults(scores, guide, a1, prevRow){
     // Header
     +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Deep Dive Results</h2><p>The foundation layer — your relationship with God and with yourself.</p></div>'
     // Score cards - God with outward/self split, Self with awareness/care split
-    +'<div class="score-cards">'
-    +'<div class="score-card">'
-    +'<div class="score-card-lbl">Satisfaction with Relationship with God</div>'
-    +'<div class="score-card-val" style="color:'+godColor+'">'+godScore+'%</div>'
-    +'<div class="score-card-tag">'+dtag(godScore)+'</div>'
-    +'<div class="score-bar"><div class="score-bar-fill" style="width:'+godScore+'%;background:'+godColor+'"></div></div>'
-    +'<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(196,168,130,.1)">'
-    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem">God → You</div>'
-    +miniBar(godToYou, godToYouColor)
-    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-top:.75rem;margin-bottom:.4rem">You → God</div>'
-    +miniBar(youToGod, youToGodColor)
-    +'</div>'
-    +'</div>'
-    +'<div class="score-card">'
-    +'<div class="score-card-lbl">Satisfaction with Relationship with Self</div>'
-    +'<div class="score-card-val" style="color:'+selfColor+'">'+selfScore+'%</div>'
-    +'<div class="score-card-tag">'+dtag(selfScore)+'</div>'
-    +'<div class="score-bar"><div class="score-bar-fill" style="width:'+selfScore+'%;background:'+selfColor+'"></div></div>'
-    +'<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(196,168,130,.1)">'
-    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem">Awareness</div>'
-    +miniBar(selfAwareness, awarenessColor)
-    +'<div style="font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-top:.75rem;margin-bottom:.4rem">Care</div>'
-    +miniBar(selfCare, careColor)
-    +'</div>'
-    +'</div>'
-    +'</div>'
+
     // A1 scores
     + prevSection
     // Spiritual Direction Guide
