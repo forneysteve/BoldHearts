@@ -182,7 +182,9 @@ body{font-family:'Inter',sans-serif;font-weight:300;background:#0d0d0d;color:#d4
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Date</th>
+            <th>Assessment</th>
+            <th>Deep Dive</th>
+            <th>Guide</th>
             <th>Overall</th>
             <th>Work</th>
             <th>Family</th>
@@ -190,7 +192,6 @@ body{font-family:'Inter',sans-serif;font-weight:300;background:#0d0d0d;color:#d4
             <th>Community</th>
             <th>God</th>
             <th>Self</th>
-            <th>Guide</th>
             <th>Warnings</th>
           </tr>
         </thead>
@@ -331,11 +332,21 @@ function renderTable(rows){
     const warnings = r[18] || '—';
     const shortWarnings = warnings.length > 30 ? warnings.substring(0,30)+'...' : warnings;
     const hasGuide = !!(r[24]);
+    const hasDeepdive = !!(r[19] || r[20]);
     const guideDot = hasGuide ? '<span class="guide-badge" title="Guide available"></span>' : '';
+    // Deep dive date — stored in col 25 (guide_date) when guide generated, or detect from version col
+    const ddDone = hasDeepdive;
+    const ddDateStr = ddDone ? '<span style="color:#c4a882;font-size:.72rem">✓ Done</span>' : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+    // Guide date from col 26 (index 25 = guide_json, 26 = guide_date... wait col 26 is index 25)
+    // Cols are 1-indexed in sheet but 0-indexed in array: col26=index25=guide_json, col27=index26=guide_date
+    const guideDateRaw = r[25];
+    const guideDateStr = guideDateRaw ? new Date(guideDateRaw).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
     return `<tr onclick="showModal(${originalIdx})">
       <td class="name-cell">${r[1]||'—'}${guideDot}</td>
       <td class="email-cell">${r[2]||'—'}</td>
       <td class="date-cell">${dateStr}</td>
+      <td class="date-cell">${ddDateStr}</td>
+      <td style="font-size:.72rem;color:${hasGuide?'#c4a882':'#3a3530'}">${hasGuide?guideDateStr:'—'}</td>
       <td>${scorePill(r[3])}</td>
       <td>${scorePill(r[4])}</td>
       <td>${scorePill(r[6])}</td>
@@ -343,7 +354,6 @@ function renderTable(rows){
       <td>${scorePill(r[8])}</td>
       <td>${scorePill(r[19])}</td>
       <td>${scorePill(r[20])}</td>
-      <td style="font-size:.72rem;color:${hasGuide?'#c4a882':'#3a3530'}">${hasGuide?'✓ Ready':'—'}</td>
       <td style="font-size:.72rem;color:#6a6258">${shortWarnings}</td>
     </tr>`;
   }).join('');
