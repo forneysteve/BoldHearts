@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Interior Health Assessment | BoldHearts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#d4ccc4;background-color:#111111}
+a{color:#e8d7a0;text-decoration:none;transition:color .3s ease}
+a:hover{color:#f5e8c8}
+ul{list-style:none}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f0e8df;line-height:1.2}
+h1{font-size:clamp(2.2rem,5vw,3.5rem);letter-spacing:.02em}
+h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:1.5rem}
+p{margin-bottom:1rem;max-width:720px}
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(17,17,17,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.1)}
+nav .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase}
+nav .logo span{color:#e8d7a0}
+nav .nav-links{display:flex;gap:2rem;list-style:none}
+nav .nav-links a{font-size:.85rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#a09890}
+nav .nav-links a:hover{color:#e8d7a0}
+.cta-nav{background-color:#e8d7a0;color:#111111 !important;padding:.5rem 1.25rem;border-radius:4px;font-weight:500 !important}
+.nav-toggle{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;z-index:1001;padding:4px}
+.nav-toggle span{display:block;width:24px;height:2px;background-color:#e8d7a0;border-radius:2px;transition:all .3s ease;transform-origin:center}
+.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-dropdown{position:relative}
+.nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;margin-top:.5rem;z-index:1001;backdrop-filter:blur(12px)}
+.nav-dropdown:hover .dropdown-menu,.nav-dropdown.open .dropdown-menu{display:block}
+.dropdown-menu li{list-style:none}
+.dropdown-menu li a{display:block;padding:.65rem 1.25rem;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a09890;white-space:nowrap;transition:color .2s,background .2s}
+.dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
+.dropdown-menu li+li{border-top:1px solid rgba(232,215,160,.08)}
+.nav-dropdown>a::after{content:' ▾';font-size:.6rem;opacity:.6}
+.hero{position:relative;width:100%;min-height:55vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 5rem;background-color:#1a1714;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(17,17,17,.8) 0%,rgba(17,17,17,.7) 50%,rgba(17,17,17,.95) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;max-width:800px;margin:0 auto}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#c4a882;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.hero-content h1{margin-bottom:1.25rem;text-shadow:0 4px 24px rgba(0,0,0,.8)}
+.hero-content p{font-size:1.1rem;color:#b0a898;max-width:580px;margin:0 auto 2rem;line-height:1.9}
+.hero-meta{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;font-size:.85rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
+.hero-meta span{display:flex;align-items:center;gap:6px}
+.progress-wrap{background:rgba(17,17,17,.95);border-bottom:1px solid rgba(232,215,160,.1);padding:.75rem 2rem;position:sticky;top:73px;z-index:99;backdrop-filter:blur(8px)}
+.progress-row{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:1.25rem}
+.progress-bar-bg{flex:1;height:2px;background:rgba(196,168,130,.15);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:#c4a882;border-radius:2px;transition:width .3s ease}
+.progress-label{font-size:.75rem;color:#6a6258;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
+.main{max-width:860px;margin:0 auto;padding:3rem 2rem 5rem}
+.realm-hdr{display:flex;align-items:flex-start;gap:1.25rem;margin:3rem 0 1.25rem;padding:1.5rem 2rem;background:#1e1c1a;border:1px solid rgba(196,168,130,.2);border-radius:4px}
+.realm-hdr:first-child{margin-top:1rem}
+.realm-icon{width:46px;height:46px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(196,168,130,.08);color:#c4a882}
+.realm-hdr-text h2{font-size:1.5rem;margin-bottom:3px;color:#f0e8df}
+.realm-hdr-text h2::after{display:none}
+.realm-hdr-text p{font-size:.9rem;color:#6a6258;line-height:1.6;margin:0;max-width:none}
+.dim-badge{display:inline-block;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;background:rgba(196,168,130,.06);border:1px solid rgba(196,168,130,.12);border-radius:3px;padding:2px 7px;margin-right:4px;margin-bottom:2px}
+.qblock{background:#1a1816;border:1px solid rgba(196,168,130,.08);border-radius:4px;padding:1.5rem;margin-bottom:.6rem;transition:border-color .2s ease}
+.qblock.answered{border-color:rgba(196,168,130,.3)}
+.qnum{font-size:.7rem;color:#5a5550;font-weight:400;margin-bottom:4px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem}
+.qlabel{font-size:.95rem;color:#d4ccc4;line-height:1.7;margin-bottom:1rem}
+.scale-endlabels{display:flex;justify-content:space-between;padding:0 2px;margin-bottom:6px}
+.scale-endlabel{font-size:.7rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
+.scale-circles{display:flex;align-items:center;justify-content:space-between;width:100%}
+.sopt{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:8px 4px;cursor:pointer;user-select:none;background:none;border:none}
+.sopt-circle{width:32px;height:32px;border-radius:50%;border:2px solid rgba(196,168,130,.25);background:#111111;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.sopt:hover .sopt-circle{border-color:rgba(196,168,130,.6);background:#1e1c1a}
+.sopt.sel .sopt-circle{border-color:#c4a882;background:#c4a882}
+.sopt.sel .sopt-circle::after{content:'✓';color:#111111;font-size:16px;font-weight:700;line-height:1;display:block}
+.sopt input[type=radio]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.scale-num{font-size:.65rem;color:#4a4540;margin-top:5px;letter-spacing:.04em}
+.sopt.sel .scale-num{color:#c4a882}
+.submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(196,168,130,.12);border-radius:4px}
+.submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem;letter-spacing:.04em}
+.sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#c4a882;padding:1rem 2.5rem;border-radius:4px;border:2px solid #c4a882;transition:all .3s ease;cursor:pointer}
+.sub-btn:hover{background-color:transparent;color:#c4a882}
+.errmsg{font-size:.85rem;color:#c97a5a;margin-top:12px;min-height:18px}
+.gate-wrap{max-width:860px;margin:0 auto;padding:5rem 2rem;min-height:60vh;display:flex;align-items:center;justify-content:center}
+.gate-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:3rem;max-width:500px;width:100%;text-align:center}
+.gate-icon{width:64px;height:64px;background:rgba(196,168,130,.08);border:1px solid rgba(196,168,130,.2);border-radius:4px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:28px;color:#c4a882}
+.gate-card h2{font-size:2rem;margin-bottom:.5rem;color:#f0e8df}
+.gate-card h2::after{display:none}
+.gate-card>p{font-size:.95rem;color:#a09890;line-height:1.8;margin-bottom:2rem}
+.gate-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;text-align:left}
+.gate-field label{font-size:.75rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#6a6258}
+.gate-field input{width:100%;padding:.9rem 1rem;background:#111111;border:1px solid rgba(196,168,130,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:300;transition:border-color .3s ease}
+.gate-field input:focus{outline:none;border-color:#c4a882}
+.gate-btn{width:100%;padding:1rem;background-color:#c4a882;color:#111111;border:2px solid #c4a882;border-radius:4px;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s ease;margin-top:.5rem}
+.gate-btn:hover{background-color:transparent;color:#c4a882}
+.gate-btn:disabled{opacity:.5;cursor:not-allowed}
+.gate-note{font-size:.75rem;color:#5a5550;margin-top:1rem;letter-spacing:.04em}
+.generating-wrap{max-width:860px;margin:0 auto;padding:5rem 2rem;min-height:60vh;display:flex;align-items:center;justify-content:center}
+.generating-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:3rem;max-width:500px;width:100%;text-align:center}
+.generating-icon{font-size:2.5rem;margin-bottom:1.5rem;opacity:.7}
+.generating-card h2{font-size:1.8rem;margin-bottom:.75rem;color:#f0e8df}
+.generating-card h2::after{display:none}
+.generating-card p{font-size:.95rem;color:#6a6258;line-height:1.8;margin:0 auto}
+.generating-dots{display:flex;justify-content:center;gap:8px;margin-top:2rem}
+.generating-dot{width:8px;height:8px;border-radius:50%;background:#c4a882;animation:genpulse 1.2s infinite}
+.generating-dot:nth-child(2){animation-delay:.2s}
+.generating-dot:nth-child(3){animation-delay:.4s}
+@keyframes genpulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+.results-page{animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.results-hero{text-align:center;padding:2rem 0 2.5rem;border-bottom:1px solid rgba(196,168,130,.15);margin-bottom:2.5rem}
+.results-hero h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:.5rem;color:#f0e8df}
+.results-hero h2::after{margin:1rem auto 0;width:60px;height:2px;background:#c4a882;content:'';display:block}
+.results-hero p{font-size:.95rem;color:#6a6258;margin:0 auto;letter-spacing:.04em}
+.section-label{font-size:.7rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(196,168,130,.1)}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-bottom:2rem}
+.score-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.12);border-radius:4px;padding:1.25rem 1.5rem}
+.score-card-lbl{font-size:.7rem;color:#6a6258;font-weight:400;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
+.score-card-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
+.score-card-tag{font-size:.75rem;color:#6a6258;margin-top:3px}
+.score-bar{height:2px;border-radius:2px;background:rgba(196,168,130,.1);margin-top:12px}
+.score-bar-fill{height:100%;border-radius:2px}
+.dim-scores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.dim-score-card{background:#1a1816;border:1px solid rgba(196,168,130,.08);border-radius:4px;padding:1rem 1.25rem}
+.dim-score-name{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem}
+.dim-score-val{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700}
+.guide-title-block{text-align:center;padding:1rem 0 2rem;border-bottom:1px solid rgba(196,168,130,.12);margin-bottom:2rem}
+.guide-main-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;color:#f0e8df;margin-bottom:.5rem;line-height:1.3}
+.guide-subtitle{font-size:.95rem;color:#6a6258;font-style:italic;line-height:1.7}
+.guide-section{background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.75rem;margin-bottom:.75rem}
+.guide-section-hdr{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.guide-section-icon{font-size:1.1rem;line-height:1}
+.guide-section-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;font-weight:400}
+.guide-section-body{font-size:.92rem;color:#c0b8b0;line-height:2}
+.guide-section-body p{margin-bottom:1rem}
+.guide-section-body p:last-child{margin-bottom:0}
+.guide-closing{background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.5rem 1.75rem;margin-top:1.5rem}
+.guide-closing-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem}
+.guide-closing-text{font-size:.92rem;color:#c0b8b0;line-height:1.95;font-style:italic}
+.discovery-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem}
+.discovery-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
+.discovery-card p{font-size:.95rem;color:#a09890;line-height:1.9;margin:0 auto 2rem;max-width:500px}
+.discovery-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#c4a882;padding:1rem 2.5rem;border-radius:4px;border:2px solid #c4a882;transition:all .3s ease;text-decoration:none;margin-bottom:1rem}
+.discovery-btn:hover{background-color:transparent;color:#c4a882}
+.discovery-email{font-size:.8rem;color:#5a5550}
+.discovery-email a{color:#a09890}
+.retake-btn{display:block;margin:2rem auto 0;padding:.75rem 2rem;background:transparent;border:1px solid rgba(196,168,130,.2);border-radius:4px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;cursor:pointer;font-family:'Inter',sans-serif;transition:all .3s ease}
+.retake-btn:hover{border-color:#c4a882;color:#c4a882}
+footer{background-color:#0d0d0d;text-align:center;padding:2.5rem 2rem;border-top:1px solid rgba(196,168,130,.08)}
+footer p{color:#5a5550;font-size:.8rem;letter-spacing:.06em;max-width:none;margin:0 auto .4rem}
+footer a{color:#6a6258}
+footer a:hover{color:#c4a882}
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(196,168,130,.15),transparent)}
+@media(max-width:768px){
+  .nav-toggle{display:flex}
+  nav .nav-links{display:none;flex-direction:column;align-items:center;gap:0;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(13,13,13,.98);backdrop-filter:blur(16px);justify-content:center;z-index:999}
+  nav .nav-links.open{display:flex}
+  nav .nav-links li{width:100%;text-align:center}
+  nav .nav-links a{display:block;font-size:1.1rem;letter-spacing:.12em;padding:1.25rem 2rem;color:#d4ccc4;border-bottom:1px solid rgba(196,168,130,.08)}
+  .cta-nav{background-color:#c4a882 !important;color:#111111 !important;margin:1.5rem auto 0;width:calc(100% - 4rem);border-radius:4px}
+  .hero{padding:6rem 1.5rem 3rem}
+  .main{padding:2rem 1.25rem 4rem}
+  .gate-wrap{padding:3rem 1.25rem}
+  .generating-wrap{padding:3rem 1.25rem}
+  nav{padding:1rem 1.25rem}
+  .progress-wrap{top:57px}
+  .sopt-circle{width:34px;height:34px}
+  .sopt{padding:6px 1px}
+  .scale-num{font-size:.6rem}
+  .score-grid{grid-template-columns:1fr 1fr}
+  .dim-scores-grid{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Bold<span>Hearts</span></a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="testimonials.html">Stories</a></li>
+    <li class="nav-dropdown">
+      <a href="#">Resources</a>
+      <ul class="dropdown-menu">
+        <li><a href="relational.html">Relational Health Assessment</a></li>
+        <li><a href="sample_guide.html">Sample Interior Guide</a></li>
+        <li><a href="leadership_guide_sample.html">Leadership Assessment</a></li>
+      </ul>
+    </li>
+    <li><a href="contact.html" class="cta-nav">Schedule Now</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tagline">Interior Health Assessment</div>
+    <h1>The Interior Layer</h1>
+    <p>This assessment doesn't ask whether you're carrying something hard. It assumes you are. These questions are about what you're doing with it.</p>
+    <div class="hero-meta">
+      <span><i class="ti ti-clock"></i> About 8 minutes</span>
+      <span><i class="ti ti-lock"></i> Private &amp; confidential</span>
+      <span><i class="ti ti-checklist"></i> 36 questions</span>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+<div class="progress-wrap" id="progress-section">
+  <div class="progress-row">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-lbl">0 of 36 answered</div>
+  </div>
+</div>
+<div id="app"></div>
+<div class="divider"></div>
+<footer>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a> &nbsp;|&nbsp; v2.0</p>
+</footer>
+<script>
+const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
+const SCALE = [{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
+
+// Dimensions in order for each theme
+const DIMS = ['awareness','honesty','movement','safety','direction','peace'];
+const DIM_LABELS = {
+  awareness: 'Awareness',
+  honesty:   'Honesty',
+  movement:  'Movement',
+  safety:    'Safety',
+  direction: 'Direction',
+  peace:     'Peace'
+};
+
+// Reverse scored: theme_dimIndex
+const REVERSE_SCORED = {
+  grief:  [2],  // Movement — same place as a year ago
+  desire: [2]   // Movement — don't see much movement
+};
+
+const THEMES = [
+  {
+    id:'grief',
+    label:'Grief & Loss',
+    icon:'ti-heart-broken',
+    color:'#a09890',
+    desc:'Think honestly about the losses, disappointments, and hard seasons of your life.',
+    questions:[
+      {t:"When I think about the hard seasons of my life, I can name specifically what I lost and what it cost me.", dim:'awareness'},
+      {t:"When loss comes, I let it land rather than stay busy until it passes.", dim:'honesty'},
+      {t:"When I think about my significant losses, I am in the same place I was a year ago — nothing has shifted.", dim:'movement', reverse:true},
+      {t:"When grief surfaces, I can let it be there without immediately trying to fix it, suppress it, or explain it away.", dim:'safety'},
+      {t:"When I sit with my losses, I can see what they've pointed me toward — a clarity or compassion I didn't have before.", dim:'direction'},
+      {t:"When the hard things I've been through come to mind, there's a settledness in me — not because they're resolved, but because I'm no longer at war with them.", dim:'peace'}
+    ]
+  },
+  {
+    id:'shame',
+    label:'Shame & Guilt',
+    icon:'ti-eye-off',
+    color:'#8a7a8a',
+    desc:'Think honestly about how you relate to your failures, mistakes, and the parts of yourself you\'d rather hide.',
+    questions:[
+      {t:"When shame surfaces, I can name what it's actually about — it has a specific source, not just a vague weight.", dim:'awareness'},
+      {t:"When stuff I'm not proud of comes to mind, I can look at it without it pulling me under.", dim:'honesty'},
+      {t:"When I think about something I'm ashamed of, it doesn't carry the same weight it did — something has shifted in me.", dim:'movement'},
+      {t:"When shame surfaces, I don't have to immediately hide it or perform around it — I can let it be there long enough to look at it.", dim:'safety'},
+      {t:"When I look at my failures honestly, I can see what they've made me — more honest, more compassionate, more real.", dim:'direction'},
+      {t:"When I think about my history, I'm not bracing — I can look at what I've done without it rewriting how I see myself today.", dim:'peace'}
+    ]
+  },
+  {
+    id:'fear',
+    label:'Fear & Anxiety',
+    icon:'ti-alert-triangle',
+    color:'#b09060',
+    desc:'Think honestly about what drives your decisions and what you protect yourself from.',
+    questions:[
+      {t:"When anxiety shows up, I can usually name what's actually driving it — it's not just a vague unease.", dim:'awareness'},
+      {t:"When fear is behind a decision I'm making, I can usually catch it before I dress it up as something else.", dim:'honesty'},
+      {t:"When something important needs to be said or done, fear doesn't regularly keep me from it.", dim:'movement'},
+      {t:"When fear shows up, I don't have to immediately resolve it or push past it — I can sit with it long enough to understand it.", dim:'safety'},
+      {t:"When I pay attention to what I'm afraid of, I can usually see what it's telling me about what I actually care about.", dim:'direction'},
+      {t:"When things are uncertain, there's a steadiness underneath — not certainty, but something that holds.", dim:'peace'}
+    ]
+  },
+  {
+    id:'anger',
+    label:'Anger',
+    icon:'ti-flame',
+    color:'#c97a5a',
+    desc:'Think honestly about how you handle what\'s wrong — in your life and around you.',
+    questions:[
+      {t:"When I'm honest with myself, I can name what I'm actually angry about — including what I haven't said out loud.", dim:'awareness'},
+      {t:"When anger shows up, I can see the thoughts and emotions underneath it — anger is just the surface.", dim:'honesty'},
+      {t:"When I trace anger from a year ago, something has changed — it hasn't just hardened into the same resentment.", dim:'movement'},
+      {t:"When I'm angry, I don't have to immediately convert it into something more acceptable — I can let it be what it is.", dim:'safety'},
+      {t:"When I trace my anger back, I can usually see what wrong it's pointing toward — it's a signal, not just a reaction.", dim:'direction'},
+      {t:"When I think about the people or situations I've been most hurt by, I'm not still white-knuckling it — there's been some release.", dim:'peace'}
+    ]
+  },
+  {
+    id:'desire',
+    label:'Desire & Hope',
+    icon:'ti-star',
+    color:'#c4a882',
+    desc:'Think honestly about what your heart is still alive to — what you long for, hope for, want.',
+    questions:[
+      {t:"When I get quiet, I can name what I actually want — not the safe version, the real one underneath.", dim:'awareness'},
+      {t:"When I want something I'm not sure will happen, I let myself want it anyway — I don't protect myself by shutting it down.", dim:'honesty'},
+      {t:"When I compare my hopes and desires to where I was a year ago, I don't see much movement.", dim:'movement', reverse:true},
+      {t:"When I want something deeply, I don't have to immediately talk myself out of it — I can let the wanting be there.", dim:'safety'},
+      {t:"When I pay attention to my deepest desires, they point me somewhere — toward a calling or contribution that is more fully mine.", dim:'direction'},
+      {t:"When what I want doesn't come through, I can hold that disappointment without it shutting down my capacity to hope again.", dim:'peace'}
+    ]
+  },
+  {
+    id:'joy',
+    label:'Joy & Delight',
+    icon:'ti-sun',
+    color:'#b5c4a0',
+    desc:'Think honestly about your capacity to receive goodness, beauty, and pleasure.',
+    questions:[
+      {t:"When I look at my life right now, I can point to specific things that genuinely bring me delight — not vague contentment, actual delight.", dim:'awareness'},
+      {t:"When something good happens, I let it land — I don't immediately brace for it to end or find a reason it doesn't count.", dim:'honesty'},
+      {t:"When I compare now to a year ago, my capacity for joy and delight has not shrunk — if anything it has grown.", dim:'movement'},
+      {t:"When something delights me, I don't have to immediately minimize it or brace for it to end — I can just receive it.", dim:'safety'},
+      {t:"When I pay attention to what delights me, it tells me something true about how I'm wired — I take it seriously as a signal.", dim:'direction'},
+      {t:"When life is hard, there's still something underneath that holds — a quiet that doesn't depend on circumstances being right.", dim:'peace'}
+    ]
+  }
+];
+
+// Randomize theme order
+function getRandomizedThemes(){
+  const themes = [...THEMES];
+  for(let i = themes.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [themes[i], themes[j]] = [themes[j], themes[i]];
+  }
+  return themes;
+}
+
+let answers = {}, userName = '', userEmail = '';
+let randomizedThemes = getRandomizedThemes();
+
+function totalQs(){ return THEMES.reduce((a,t) => a + t.questions.length, 0); }
+function totalAns(){ return Object.keys(answers).length; }
+function dcolor(p){ return p>=70 ? '#b5c4a0' : p>=45 ? '#c4a882' : '#c97a5a'; }
+function dtag(p){ return p>=70 ? 'All Systems Green' : p>=55 ? 'Check Engine' : p>=40 ? 'Running on Fumes' : 'Engine Off'; }
+
+function gapInsight(theme){
+  const ids = Object.keys(theme).filter(id => theme[id] && theme[id].overall > 0);
+  if(ids.length < 2) return '';
+  const sorted = ids.sort((a,b) => theme[a].overall - theme[b].overall);
+  const lowest = sorted[0];
+  const highest = sorted[sorted.length-1];
+  const gap = theme[highest].overall - theme[lowest].overall;
+  const labels = {grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'};
+
+  const insights = [];
+
+  // Grief lower than Desire
+  if(theme.grief && theme.desire && theme.desire.overall - theme.grief.overall >= 15)
+    insights.push('Your Grief is significantly lower than your Desire — the wanting is still there, but something unprocessed may be blocking it from moving.');
+
+  // Fear and Shame both low
+  if(theme.fear && theme.shame && theme.fear.overall < 50 && theme.shame.overall < 50)
+    insights.push('Your Fear and Shame scores are both low — that combination usually means something is being both hidden and avoided at the same time.');
+
+  // Joy lowest of all
+  const joyScore = theme.joy ? theme.joy.overall : 100;
+  const avgOthers = ids.filter(id=>id!=='joy').reduce((a,id)=>a+theme[id].overall,0) / (ids.length-1);
+  if(theme.joy && joyScore < 45 && joyScore < avgOthers - 10)
+    insights.push('Your Joy is your lowest score — when joy drops this low, it\'s usually not about circumstances. It\'s about what has accumulated underneath.');
+
+  // Movement stalled (anger low — suppressed)
+  if(theme.anger && theme.anger.overall < 40)
+    insights.push('Your Anger score is very low — low anger rarely means nothing is wrong. It usually means something has gone underground rather than been processed.');
+
+  return insights.length > 0
+    ? '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-left:3px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
+      +'<div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem">What the Pattern Is Telling You</div>'
+      + insights.map(i => '<p style="font-size:.88rem;color:#c0b8b0;line-height:1.9;margin-bottom:.6rem">'+i+'</p>').join('')
+      +'</div>'
+    : '';
+}
+
+function calcScores(){
+  const theme = {};
+  const dim = {awareness:0,honesty:0,movement:0,safety:0,direction:0,peace:0};
+  const dimN = {awareness:0,honesty:0,movement:0,safety:0,direction:0,peace:0};
+  let allT = 0, allN = 0;
+
+  THEMES.forEach(t => {
+    let tt = 0, tn = 0;
+    t.questions.forEach((q, i) => {
+      const v = answers[t.id+'_'+i];
+      if(v !== undefined){
+        const scored = q.reverse ? (8 - v) : v;
+        tt += scored; tn++;
+        allT += scored; allN++;
+        if(q.dim){
+          dim[q.dim] = (dim[q.dim]||0) + scored;
+          dimN[q.dim] = (dimN[q.dim]||0) + 1;
+        }
+      }
+    });
+    theme[t.id] = {
+      overall: tn > 0 ? Math.round((tt/(tn*7))*100) : 0,
+      answered: tn
+    };
+  });
+
+  const dimScores = {};
+  DIMS.forEach(d => {
+    dimScores[d] = dimN[d] > 0 ? Math.round((dim[d]/(dimN[d]*7))*100) : 0;
+  });
+
+  return { theme, dimScores, overall: allN > 0 ? Math.round((allT/(allN*7))*100) : 0 };
+}
+
+function updateProgress(){
+  const pct = Math.round((totalAns()/totalQs())*100);
+  const pb  = document.getElementById('progress-bar');
+  const lbl = document.getElementById('progress-lbl');
+  if(pb)  pb.style.width = pct+'%';
+  if(lbl) lbl.textContent = totalAns()+' of '+totalQs()+' answered';
+}
+
+function renderSurvey(){
+  let html = '<div class="main">'; let qNum = 0;
+  randomizedThemes.forEach(t => {
+    html += '<div class="realm-hdr"><div class="realm-icon"><i class="ti '+t.icon+'" style="color:'+t.color+'"></i></div><div class="realm-hdr-text"><h2>'+t.label+'</h2><p>'+t.desc+'</p></div></div>';
+    t.questions.forEach((q, i) => {
+      const k = t.id+'_'+i; const cur = answers[k];
+      const opts = SCALE.map((s, si) => {
+        const id = 'opt_'+k+'_'+si; const sel = cur===s.val;
+        return '<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
+      }).join('');
+      const dimLabel = '';
+      html += '<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'">'
+        +'<div class="qnum">Question '+(qNum+1)+' '+dimLabel+'</div>'
+        +'<div class="qlabel">'+q.t+'</div>'
+        +'<div class="scale-opts"><div class="scale-endlabels"><span class="scale-endlabel">Disagree</span><span class="scale-endlabel">Agree</span></div>'
+        +'<div class="scale-circles">'+opts+'</div></div></div>';
+      qNum++;
+    });
+  });
+  html += '<div class="submit-section"><div class="submit-meta">Answer all 36 questions honestly — there are no right answers</div><button class="sub-btn" onclick="trySubmit()">See My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  document.getElementById('app').innerHTML = html;
+  updateProgress();
+}
+
+function setA(k, v){
+  answers[k] = v;
+  document.querySelectorAll('[name="'+k+'"]').forEach(el => {
+    const lbl = el.closest('.sopt');
+    if(lbl) lbl.classList.toggle('sel', parseInt(el.value)===v);
+  });
+  const qb = document.getElementById('q_'+k); if(qb) qb.classList.add('answered');
+  updateProgress();
+  const em = document.getElementById('errmsg'); if(em) em.textContent = '';
+}
+
+function trySubmit(){
+  const unanswered = [];
+  THEMES.forEach(t => {
+    t.questions.forEach((_, i) => { if(answers[t.id+'_'+i]===undefined) unanswered.push(t.id+'_'+i); });
+  });
+  if(unanswered.length > 0){
+    const em = document.getElementById('errmsg');
+    if(em) em.textContent = unanswered.length+' question'+(unanswered.length>1?'s':'')+' still need'+(unanswered.length===1?'s':'')+' an answer.';
+    const first = document.getElementById('q_'+unanswered[0]);
+    if(first) first.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  renderGate();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderGate(){
+  document.getElementById('progress-section').style.display = 'none';
+  document.getElementById('app').innerHTML = '<div class="gate-wrap"><div class="gate-card">'
+    +'<div class="gate-icon"><i class="ti ti-heart"></i></div>'
+    +'<h2>Your results are ready.</h2>'
+    +'<p>Enter your name and the same email you used for the Relational Health Assessment — we\'ll combine everything into your complete picture and generate your personal Spiritual Direction Guide.</p>'
+    +'<div class="gate-field"><label for="gname">First Name</label><input type="text" id="gname" placeholder="Your first name" autocomplete="given-name"></div>'
+    +'<div class="gate-field"><label for="gemail">Email Address</label><input type="email" id="gemail" placeholder="Same email as Assessment 1" autocomplete="email"></div>'
+    +'<button class="gate-btn" id="gate-btn" onclick="submitGate()">Generate My Guide &rarr;</button>'
+    +'<div class="errmsg" id="gate-err"></div>'
+    +'<div class="gate-note">Use the same email from your Relational Health Assessment to combine your complete results.</div>'
+    +'</div></div>';
+}
+
+function showGenerating(){
+  document.getElementById('app').innerHTML = '<div class="generating-wrap"><div class="generating-card">'
+    +'<div class="generating-icon">✦</div>'
+    +'<h2>Building your Interior Guide.</h2>'
+    +'<p>We\'re reading your complete results and writing a personal Spiritual Direction Guide. This takes about 20-30 seconds.</p>'
+    +'<div class="generating-dots"><div class="generating-dot"></div><div class="generating-dot"></div><div class="generating-dot"></div></div>'
+    +'</div></div>';
+}
+
+async function submitGate(){
+  const name  = document.getElementById('gname').value.trim();
+  const email = document.getElementById('gemail').value.trim();
+  const err   = document.getElementById('gate-err');
+  if(!name){  err.textContent = 'Please enter your first name.'; return; }
+  if(!email || !email.includes('@')){ err.textContent = 'Please enter a valid email address.'; return; }
+  userName  = name;
+  userEmail = email;
+  const btn = document.getElementById('gate-btn');
+  if(btn){ btn.textContent = 'Working...'; btn.disabled = true; }
+
+  const scores = calcScores();
+
+  // Save to Sheets
+  const params = new URLSearchParams({
+    action: 'heartsoul',
+    name: userName,
+    email: userEmail,
+    grief_score:   scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
+    shame_score:   scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
+    fear_score:    scores.theme.fear    ? scores.theme.fear.overall+'%'    : '',
+    anger_score:   scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
+    desire_score:  scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
+    joy_score:     scores.theme.joy     ? scores.theme.joy.overall+'%'     : '',
+    hs_overall:    scores.overall+'%',
+    awareness_score: scores.dimScores.awareness+'%',
+    honesty_score:   scores.dimScores.honesty+'%',
+    movement_score:  scores.dimScores.movement+'%',
+    safety_score:    scores.dimScores.safety+'%',
+    direction_score: scores.dimScores.direction+'%',
+    peace_score:     scores.dimScores.peace+'%'
+  });
+  new Image().src = SHEETS_URL + '?' + params.toString();
+
+  // Fetch Assessment 1 scores via worker
+  let prevRow = null;
+  try {
+    const lookupRes = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'lookup', email: email })
+    });
+    const lookupData = await lookupRes.json();
+    if(lookupData.row) prevRow = lookupData.row;
+  } catch(e){ console.log('Could not fetch A1 scores:', e); }
+
+  function ps(val){
+    if(!val && val!==0) return '—';
+    const s = val.toString().trim();
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+
+  const assessment1 = prevRow ? {
+    overall:   ps(prevRow[3]),
+    work:      ps(prevRow[4]),
+    partner:   ps(prevRow[5]),
+    family:    ps(prevRow[6]),
+    friends:   ps(prevRow[7]),
+    community: ps(prevRow[8]),
+    god:       ps(prevRow[44]),
+    patterns:  prevRow[17] || '',
+    warnings:  prevRow[18] || ''
+  } : null;
+
+  const heartsoul = {
+    grief:     scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
+    shame:     scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
+    fear:      scores.theme.fear    ? scores.theme.fear.overall+'%'    : '',
+    anger:     scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
+    desire:    scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
+    joy:       scores.theme.joy     ? scores.theme.joy.overall+'%'     : '',
+    overall:   scores.overall+'%',
+    awareness: scores.dimScores.awareness+'%',
+    honesty:   scores.dimScores.honesty+'%',
+    movement:  scores.dimScores.movement+'%',
+    safety:    scores.dimScores.safety+'%',
+    direction: scores.dimScores.direction+'%',
+    peace:     scores.dimScores.peace+'%'
+  };
+
+  showGenerating();
+
+  let guide = null;
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: userName, email: userEmail, assessment1, heartsoul, rawAnswers: answers })
+    });
+    const data = await res.json();
+    if(data.guide) guide = data.guide;
+    else console.error('Worker error:', data);
+  } catch(e){
+    console.error('Worker fetch error:', e);
+  }
+
+  renderResults(scores, guide, assessment1, prevRow);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderGuide(guide){
+  if(!guide) return '<div style="text-align:center;padding:2rem;color:#5a5550;font-size:.875rem">Your guide could not be generated. Please try again or contact admin@boldhearts.org.</div>';
+  const sections = (guide.sections || []).map(s => {
+    const paragraphs = (s.content || '').split(/\n\n+/).map(p => '<p>'+p.trim()+'</p>').join('');
+    return '<div class="guide-section">'
+      +'<div class="guide-section-hdr"><span class="guide-section-icon">'+s.icon+'</span><span class="guide-section-label">'+s.label+'</span></div>'
+      +'<div class="guide-section-body">'+paragraphs+'</div>'
+      +'</div>';
+  }).join('');
+  const closing = '';
+  return '<div class="guide-title-block">'
+    +'<div class="guide-main-title">'+(guide.title||'Your Spiritual Direction Guide')+'</div>'
+    +'<div class="guide-subtitle">'+(guide.subtitle||'')+'</div>'
+    +'</div>'
+    + sections + closing;
+}
+
+function renderResults(scores, guide, a1, prevRow){
+  const { theme, dimScores, overall } = scores;
+
+  function ps(val){
+    if(!val && val!==0) return '—';
+    const s = val.toString().trim();
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+
+  // Overall ring
+  const oc = dcolor(overall);
+  const overallRing = '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:2rem">'
+    +'<div style="position:relative;width:150px;height:150px">'
+    +'<svg width="150" height="150" viewBox="0 0 150 150">'
+    +'<circle cx="75" cy="75" r="60" fill="none" stroke="rgba(196,168,130,.1)" stroke-width="10"/>'
+    +'<circle cx="75" cy="75" r="60" fill="none" stroke="'+oc+'" stroke-width="10" '
+    +'stroke-dasharray="'+(2*Math.PI*60).toFixed(1)+'" stroke-dashoffset="'+(2*Math.PI*60*(1-overall/100)).toFixed(1)+'" '
+    +'stroke-linecap="round" transform="rotate(-90 75 75)"/>'
+    +'</svg>'
+    +'<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:2.4rem;font-weight:700;color:#f0e8df;line-height:1">'+overall+'%</div>'
+    +'<div style="font-size:.65rem;color:#6a6258;letter-spacing:.08em;text-transform:uppercase;margin-top:2px">overall</div>'
+    +'</div></div>'
+    +'<div style="font-size:.92rem;color:#6a6258;font-style:italic;margin-top:.5rem;font-family:Cormorant Garamond,serif">'
+    +(overall>=70?'The heart is largely open and moving.':overall>=45?'The heart is present — and carrying more than it shows.':'The heart is working hard to keep it together.')
+    +'</div></div>';
+
+  // Theme rings
+  const themeRings = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem">'
+    + THEMES.map(t => {
+      const s = theme[t.id];
+      const pct = s ? s.overall : 0;
+      const col = dcolor(pct);
+      return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem .75rem;text-align:center">'
+        +'<div style="position:relative;width:80px;height:80px;margin:0 auto .6rem">'
+        +'<svg width="80" height="80" viewBox="0 0 80 80">'
+        +'<circle cx="40" cy="40" r="32" fill="none" stroke="rgba(196,168,130,.08)" stroke-width="6"/>'
+        +'<circle cx="40" cy="40" r="32" fill="none" stroke="'+col+'" stroke-width="6" '
+        +'stroke-dasharray="'+(2*Math.PI*32).toFixed(1)+'" stroke-dashoffset="'+(2*Math.PI*32*(1-pct/100)).toFixed(1)+'" '
+        +'stroke-linecap="round" transform="rotate(-90 40 40)"/>'
+        +'</svg>'
+        +'<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">'
+        +'<div style="font-family:Cormorant Garamond,serif;font-size:1.15rem;font-weight:700;color:'+col+'">'+pct+'%</div>'
+        +'</div></div>'
+        +'<div style="font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:#6a6258;line-height:1.3">'+t.label+'</div>'
+        +'<div style="font-size:.65rem;color:'+col+';margin-top:.2rem">'+dtag(pct)+'</div>'
+        +'</div>';
+    }).join('')
+    +'</div>';
+
+  // Interior / Exterior split
+  const interiorIds = ["grief","shame","fear","anger"];
+  const exteriorIds = ["desire","joy"];
+  const intAvg = Math.round(interiorIds.reduce((a,id)=>a+(theme[id]?theme[id].overall:0),0)/interiorIds.length);
+  const extAvg = Math.round(exteriorIds.reduce((a,id)=>a+(theme[id]?theme[id].overall:0),0)/exteriorIds.length);
+  const intCol = dcolor(intAvg); const extCol = dcolor(extAvg);
+
+  const splitCards = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem">'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-left:3px solid '+intCol+';border-radius:4px;padding:1.25rem 1.5rem">'
+    +'<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem">What You Carry</div>'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;font-weight:700;color:'+intCol+'">'+intAvg+'%</div>'
+    +'<div style="font-size:.7rem;color:#5a5550;margin-top:.3rem">Grief · Shame · Fear · Anger</div>'
+    +'</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-left:3px solid '+extCol+';border-radius:4px;padding:1.25rem 1.5rem">'
+    +'<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem">What Opens You</div>'
+    +'<div style="font-family:Cormorant Garamond,serif;font-size:1.8rem;font-weight:700;color:'+extCol+'">'+extAvg+'%</div>'
+    +'<div style="font-size:.7rem;color:#5a5550;margin-top:.3rem">Desire · Joy</div>'
+    +'</div></div>';
+
+  // Dimension bars
+  const dimDescs = {
+    awareness:"Can you name it specifically?",
+    honesty:"Can you own it without minimizing?",
+    movement:"Are you moving through it or stuck?",
+    safety:"Is it safe for this to exist in you?",
+    direction:"Can you see where it is pointing?",
+    peace:"Is there settledness even amid what is unresolved?"
+  };
+  const dimBarsHtml = '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.5rem;margin-bottom:1.5rem">'
+    +'<div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:1.25rem">How You Navigate What You Carry</div>'
+    + DIMS.map(d => {
+      const pct = dimScores[d]||0;
+      const col = dcolor(pct);
+      return '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(196,168,130,.05)">'
+        +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
+        +'<div><span style="font-size:.82rem;font-weight:500;color:#f0e8df">'+DIM_LABELS[d]+'</span>'
+        +'<span style="font-size:.7rem;color:#4a4540;margin-left:.5rem">'+dimDescs[d]+'</span></div>'
+        +'<span style="font-family:Cormorant Garamond,serif;font-size:1.1rem;font-weight:700;color:'+col+'">'+pct+'%</span>'
+        +'</div>'
+        +'<div style="height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden">'
+        +'<div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:4px"></div>'
+        +'</div></div>';
+    }).join('')
+    +'</div>';
+
+  const a1Section = '';
+
+  document.getElementById('app').innerHTML = '<div class="main"><div class="results-page">'
+    +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Interior Results</h2>'
+    +'<p>An honest picture of the condition of your heart.</p></div>'
+    + a1Section
+    + overallRing
+    +'<div class="section-label">Scores by Theme</div>'
+    + themeRings
+    + splitCards
+    + gapInsight(theme)
+    +'<div class="section-label">Scores by Dimension</div>'
+    + dimBarsHtml
+    +'<div class="section-label">Your Interior Guide</div>'
+    + renderGuide(guide)
+    +'<div class="discovery-card"><h3>Let\'s talk about your complete results.</h3>'
+    +'<p>A free 15-minute Discovery Call is the best next step. Bring both assessments and we\'ll look at the full picture together.</p>'
+    +'<a href="mailto:admin@boldhearts.org?subject=Discovery Call — Complete Assessment&body=Hi Steve, I just completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Request a Discovery Call</a>'
+    +'<div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
+    +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button>'
+    +'</div></div>';
+}
+
+
+function retake(){
+  answers = {}; userName = ''; userEmail = '';
+  randomizedThemes = getRandomizedThemes();
+  document.getElementById('progress-section').style.display = '';
+  renderSurvey();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+document.getElementById('nav-toggle').addEventListener('click', function(){
+  this.classList.toggle('open');
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+document.querySelectorAll('.nav-dropdown > a').forEach(function(a){
+  a.addEventListener('click', function(e){
+    if(window.innerWidth <= 768){
+      e.preventDefault();
+      this.closest('.nav-dropdown').classList.toggle('open');
+    }
+  });
+});
+
+function checkTestMode(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('test') !== 'true') return false;
+
+  // Simulate realistic pattern:
+  // Grief & Shame low (unprocessed interior), Fear moderate, Anger low
+  // Desire moderate (heart still alive), Joy low-moderate
+  const ranges = {
+    grief:  [1,3],  // low — unprocessed
+    shame:  [1,3],  // low — carrying weight
+    fear:   [2,4],  // moderate — some awareness
+    anger:  [1,3],  // low — suppressed
+    desire: [3,5],  // moderate — still wanting
+    joy:    [2,4],  // low-moderate — diminished
+  };
+
+  THEMES.forEach(t => {
+    const [min, max] = ranges[t.id] || [3,6];
+    t.questions.forEach((_, i) => {
+      answers[t.id+'_'+i] = min + Math.floor(Math.random()*(max-min+1));
+    });
+  });
+  return false;
+}
+
+if(!checkTestMode()) renderSurvey();
+else { renderSurvey(); setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),300); }
+</script>
+</body>
+</html>
