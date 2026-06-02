@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,67 +10,75 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+    .nav-dropdown{position:relative}
+    .nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;margin-top:.5rem;z-index:1001;backdrop-filter:blur(12px)}
+    .nav-dropdown:hover .dropdown-menu,.nav-dropdown.open .dropdown-menu{display:block}
+    .dropdown-menu li{list-style:none}
+    .dropdown-menu li a{display:block;padding:.65rem 1.25rem;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a09890;white-space:nowrap;transition:color .2s,background .2s}
+    .dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
+    .dropdown-menu li+li{border-top:1px solid rgba(232,215,160,.08)}
+    .nav-dropdown>a::after{content:' ▾';font-size:.6rem;opacity:.6}
+    </style>
 </head>
 <body>
 
-    <!-- Navigation -->
     <nav>
         <a href="index.html" class="logo">Bold<span>Hearts</span></a>
         <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html">Services</a></li>
             <li><a href="about.html">About</a></li>
-            <li><a href="assessment.html">testimonials</a></li>
-            <li><a href="assessment.html">Assessment</a></li>
+            <li><a href="testimonials.html" class="active">Stories</a></li>
+            <li class="nav-dropdown">
+                <a href="#">Resources</a>
+                <ul class="dropdown-menu">
+                    <li><a href="assessment.html">Relational Health Assessment</a></li>
+                    <li><a href="sample_guide.html">Sample Spiritual Direction Guide</a></li>
+                    <li><a href="leadership_guide_sample.html">Leadership Assessment</a></li>
+                </ul>
+            </li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
     </nav>
 
-    <!-- Hero -->
     <header class="hero hero-small">
         <div class="hero-content">
-            <h1>Stories from the Journey</h1>
+            <h1>Stories from the Work</h1>
             <p>Reflections from people who have walked this road.</p>
         </div>
     </header>
 
-    <!-- Featured Carousel Testimonial -->
     <section class="testimonials">
         <h2>What People Are Saying</h2>
-
         <div class="testimonials-container" id="testimonials-container">
 
-            <div class="testimonial-card active" role="group" aria-label="Testimonial 1 of 6">
+            <div class="testimonial-card active" role="group" aria-label="Testimonial 1 of 4">
                 <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
-                <p class="testimonial-text">
-"Working with Steve has been an incredible gift. He has been a true friend, a guide, and a source of wisdom for navigating the life of faith. He has opened my eyes to the rich practice of spiritual direction and has made me more and more convinced of the importance of it." </p>
+                <p class="testimonial-text">Working with Steve has been an incredible gift. He has been a true friend, a guide, and a source of wisdom for navigating the life of faith. He has opened my eyes to the rich practice of spiritual direction and has made me more and more convinced of the importance of it.</p>
                 <p class="testimonial-author">Leader in Transition</p>
             </div>
 
-            <div class="testimonial-card" role="group" aria-label="Testimonial 2 of 6">
+            <div class="testimonial-card" role="group" aria-label="Testimonial 2 of 4">
                 <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
-                <p class="testimonial-text">"Steve has been a voice that has pushed me towards the truth, towards healing, and ultimately towards a more authentic relationship of listening and love with the Lord. I am immensely grateful for him and the work he does as a spiritual director and friend."</p>
+                <p class="testimonial-text">Steve has been a voice that has pushed me towards the truth, towards healing, and ultimately towards a more authentic relationship of listening and love with the Lord. I am immensely grateful for him and the work he does as a spiritual director and friend.</p>
                 <p class="testimonial-author">Pastor</p>
             </div>
 
-            <div class="testimonial-card" role="group" aria-label="Testimonial 3 of 6">
+            <div class="testimonial-card" role="group" aria-label="Testimonial 3 of 4">
                 <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
-                <p class="testimonial-text">"I'm a big fan of Steve's.  His care and concern, his big heart, and his unique healing presence have helped me immensely in moving away from destructive patterns towards God and new life."</p>
+                <p class="testimonial-text">I&rsquo;m a big fan of Steve&rsquo;s. His care and concern, his big heart, and his unique healing presence have helped me immensely in moving away from destructive patterns towards God and new life.</p>
                 <p class="testimonial-author">Spiritual Seeker</p>
             </div>
 
-
-            <div class="testimonial-card" role="group" aria-label="Testimonial 5 of 6">
+            <div class="testimonial-card" role="group" aria-label="Testimonial 4 of 4">
                 <div class="testimonial-quote" aria-hidden="true">&ldquo;</div>
                 <p class="testimonial-text">I wasn&rsquo;t sure I believed in spiritual direction. But after the first session I realized this was exactly what I&rsquo;d been missing&mdash;someone who wasn&rsquo;t trying to fix me, just help me listen.</p>
                 <p class="testimonial-author">Engineer &amp; Father</p>
             </div>
-
 
         </div>
 
@@ -80,49 +89,40 @@
         </div>
     </section>
 
-    <!-- Written Testimonials Grid -->
     <section class="services" style="background-color: #151515;">
         <h2>More Reflections</h2>
         <div class="service-grid">
-
             <div class="service-card" style="padding: 2rem;">
                 <p style="color: #a09890; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem;">&ldquo;There&rsquo;s something rare about a guide who isn&rsquo;t trying to steer you anywhere. Steve just helps you see more clearly. The rest follows.&rdquo;</p>
                 <p><strong>&mdash; Business Owner</strong></p>
             </div>
-
             <div class="service-card" style="padding: 2rem;">
                 <p style="color: #a09890; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem;">&ldquo;I reached out during a season of profound disorientation. Several sessions later, I don&rsquo;t have all the answers&mdash;but I trust the questions more.&rdquo;</p>
                 <p><strong>&mdash; Educator in Transition</strong></p>
             </div>
-
             <div class="service-card" style="padding: 2rem;">
                 <p style="color: #a09890; font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem;">&ldquo;My faith felt dry and duty-bound. Spiritual direction helped me find what was still alive underneath. I didn&rsquo;t expect it to matter this much.&rdquo;</p>
                 <p><strong>&mdash; Worship Leader</strong></p>
             </div>
-
         </div>
     </section>
 
-    <!-- A Note on Privacy -->
     <section class="about" style="text-align: center;">
         <h2 style="text-align: center;">A Note on Confidentiality</h2>
         <p style="margin: 0 auto; text-align: center;">All testimonials are shared with permission and identifying details have been changed to protect privacy. Names are replaced with general descriptors. The words are theirs.</p>
     </section>
 
-    <!-- CTA -->
     <section class="cta">
         <h2>Want to Explore This Work?</h2>
         <p>You don&rsquo;t have to have the right words. You just have to show up as you are.</p>
         <a href="contact.html" class="btn-primary">Schedule a Conversation</a>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado | <a href="#">Privacy Policy</a> | <a href="#">Terms</a></p>
     </footer>
 
     <script>
-        // ── Hamburger nav toggle ──
         const navToggle = document.querySelector('.nav-toggle');
         const navLinks  = document.querySelector('.nav-links');
 
@@ -132,7 +132,6 @@
             navToggle.setAttribute('aria-expanded', isOpen);
         });
 
-        // Close menu when a link is clicked
         navLinks.querySelectorAll('a').forEach(function (link) {
             link.addEventListener('click', function () {
                 navLinks.classList.remove('open');
@@ -141,13 +140,20 @@
             });
         });
 
-        // ── Testimonial carousel ──
+        document.querySelectorAll('.nav-dropdown > a').forEach(function(a) {
+            a.addEventListener('click', function(e) {
+                if(window.innerWidth <= 768) {
+                    e.preventDefault();
+                    this.closest('.nav-dropdown').classList.toggle('open');
+                }
+            });
+        });
+
         const cards    = Array.from(document.querySelectorAll('.testimonial-card'));
         const dotsWrap = document.getElementById('dots-container');
         let current    = 0;
         let autoTimer;
 
-        // Build dots
         cards.forEach(function (_, i) {
             const dot = document.createElement('button');
             dot.className = 'dot' + (i === 0 ? ' active' : '');
@@ -176,7 +182,6 @@
 
         startAuto();
 
-        // Pause on hover
         const container = document.getElementById('testimonials-container');
         container.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
         container.addEventListener('mouseleave', startAuto);
