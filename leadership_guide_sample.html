@@ -104,6 +104,38 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
   body{padding:1.5rem}
   .closing-card{background:#1a1816 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+
+@media(max-width:700px){
+  body{padding:1.5rem 1.25rem 4rem}
+  .doc-header{padding:2rem 0 1.5rem}
+  .doc-title{font-size:1.8rem}
+  .doc-subtitle{font-size:.85rem}
+  .score-overview{grid-template-columns:1fr 1fr;gap:.6rem}
+  .score-card-val{font-size:1.6rem}
+  .bar-label{width:100px;font-size:.7rem}
+  .bar-pct{font-size:.7rem}
+  .pattern-grid{grid-template-columns:1fr}
+  .dim-key{grid-template-columns:1fr}
+  .finding-card{padding:1rem 1.25rem}
+  .finding-title{font-size:1rem}
+  .finding-body{font-size:.8rem}
+  .plan-body{font-size:.8rem}
+  .closing-card{padding:1.75rem 1.25rem}
+  .closing-card h3{font-size:1.4rem}
+  .closing-card p{font-size:.85rem}
+  .section-title{font-size:1.4rem}
+  .pull-quote p{font-size:1.1rem}
+  .leadership-inner{flex-direction:column !important}
+  .leadership-inner > div{min-width:unset !important;width:100% !important}
+}
+
+@media(max-width:480px){
+  .scores-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -1.25rem;padding:0 1.25rem}
+  .scores-table{min-width:480px}
+  .scores-table th{font-size:.54rem;padding:.35rem .3rem}
+  .scores-table td{padding:.4rem .3rem}
+  .pill{font-size:.6rem;padding:1px 3px}
+}
 </style>
 </head>
 <body>
@@ -228,7 +260,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
   <p>Individual scores by anonymous participant across all 10 dimensions.</p>
 </div>
 
-<table class="scores-table">
+<div class="scores-table-wrap"><table class="scores-table">
   <thead>
     <tr>
       <th>Leader</th>
@@ -258,7 +290,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
     <tr><td>Leader J</td><td><span class="pill pill-mid">67%</span></td><td><span class="pill pill-mid">57%</span></td><td><span class="pill pill-mid">57%</span></td><td><span class="pill pill-high">71%</span></td><td><span class="pill pill-mid">62%</span></td><td><span class="pill pill-mid">57%</span></td><td><span class="pill pill-mid">67%</span></td><td><span class="pill pill-high">76%</span></td><td><span class="pill pill-mid">52%</span></td><td><span class="pill pill-high">76%</span></td><td><span class="pill pill-mid">64%</span></td></tr>
     <tr><td>Team Average</td><td><span class="pill pill-mid">61%</span></td><td><span class="pill pill-low">48%</span></td><td><span class="pill pill-low">51%</span></td><td><span class="pill pill-mid">67%</span></td><td><span class="pill pill-mid">57%</span></td><td><span class="pill pill-low">49%</span></td><td><span class="pill pill-mid">62%</span></td><td><span class="pill pill-high">75%</span></td><td><span class="pill pill-low">42%</span></td><td><span class="pill pill-high">71%</span></td><td><span class="pill pill-mid">59%</span></td></tr>
   </tbody>
-</table>
+</table></div>
 
 <div class="divider"></div>
 
