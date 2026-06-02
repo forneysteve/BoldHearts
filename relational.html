@@ -77,6 +77,38 @@ nav .nav-links a:hover{color:#e8d7a0}
 @media(max-width:768px){
   .sopt-circle{width:36px;height:36px}
   .sopt{padding:6px 2px}
+  /* Results page mobile */
+  .results-main{padding:2rem 1.25rem 4rem}
+  .results-hero h2{font-size:1.6rem}
+  .overall-ring-wrap{padding:1.5rem 0}
+  .realm-results-card{padding:1.25rem}
+  .bar-row-label{width:90px;font-size:.65rem}
+  .bar-pct{font-size:.65rem;width:26px}
+  .gap-note{margin-left:0;margin-top:6px}
+  .dim-grid{grid-template-columns:1fr 1fr}
+  .pattern-grid{grid-template-columns:1fr}
+  .dim-card{padding:.9rem 1rem}
+  .dim-card-name{font-size:.62rem}
+  .dim-card-score{font-size:1.4rem}
+  .pattern-card{padding:1rem 1.25rem}
+  .pattern-title{font-size:1rem}
+  .step-card{padding:1.5rem 1.25rem}
+  .step-card h3{font-size:1.4rem}
+  .action-item{gap:.75rem}
+  .action-num{width:26px;height:26px;font-size:.85rem;flex-shrink:0}
+  .deepdive-card{padding:2rem 1.5rem}
+  .deepdive-card h3{font-size:1.5rem}
+  .section-label{font-size:.62rem}
+  .realm-hdr{padding:1rem 1.25rem;gap:.75rem}
+  .realm-icon{width:36px;height:36px;font-size:16px}
+  .realm-hdr-text h2{font-size:1.2rem}
+}
+
+@media(max-width:480px){
+  .bar-row-label{width:70px;font-size:.6rem}
+  .bar-row{gap:4px}
+  .dim-grid{grid-template-columns:1fr 1fr}
+  .pattern-card-title{font-size:.9rem}
 }
 .submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px}
 .submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem;letter-spacing:.04em}
@@ -437,142 +469,96 @@ function scoreBar(pct,color){
 }
 function buildHtmlEmail(scores){
   const{realm,overall}=scores;
-  const warnings=getWarnings(scores);
-  const actionSteps=getActionPlan(scores);
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
-  const selfAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].self,0)/ar.length):0;
-  const outAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].outward,0)/ar.length):0;
-  const oc=overall>=70?'#7aad6a':overall>=45?'#d4b96a':'#c97a5a';
-  const noteText=overall<45?userName+", your results describe something real — a life where the depth of connection you were made for isn't quite meeting you where you are. I want you to know: this is not who you have to stay. These patterns are workable. I've walked alongside many people who felt exactly what your scores describe, and I've watched them find their way into relationships where they are genuinely known."
-    :overall<65?userName+", there's real connection in your life — and there are also real gaps. You probably feel that tension yourself. The good news is that your results give us something specific to work with. This isn't about starting from zero. It's about going deeper where depth is possible."
-    :userName+", your results show a meaningful foundation of connection. Even so, the areas where you scored lower are worth attention — because even people who are generally well-connected often carry a quiet hunger for something deeper in specific places. That hunger is worth listening to.";
+  const rc=overall>=75?'#b5c4a0':overall>=50?'#e8d7a0':'#c97a5a';
+  const rtag=overall>=75?'All Systems Green':overall>=55?'Check Engine':overall>=40?'Running on Fumes':'Engine Off';
 
-  let realmRows='';
-  REALMS.forEach(r=>{
-    const s=realm[r.id];if(s.answered===0)return;
-    const oc2=s.outward>=70?'#7aad6a':s.outward>=45?'#d4b96a':'#c97a5a';
-    const sc=s.self>=70?'#7aad6a':s.self>=45?'#d4b96a':'#c97a5a';
-    realmRows+='<tr><td style="padding:10px 12px;border-bottom:1px solid #2a2825;color:#c8c0b8;font-size:13px;width:140px">'+r.label+'</td>'
-      +'<td style="padding:10px 12px;border-bottom:1px solid #2a2825;font-size:12px">'+scoreBar(s.outward,oc2)+'</td>'
-      +'<td style="padding:10px 12px;border-bottom:1px solid #2a2825;font-size:12px">'+scoreBar(s.self,sc)+'</td></tr>';
-  });
-
-  let warningsHtml='';
-  if(warnings.length>0){
-    warningsHtml='<tr><td colspan="2" style="padding:28px 0 10px"><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 14px;border-bottom:1px solid #2a2825;padding-bottom:8px">Warning Signs in Your Results</p></td></tr>';
-    warnings.forEach(w=>{
-      const bc=w.severity==='red'?'#c97a5a':'#d4b96a';
-      warningsHtml+='<tr><td colspan="2" style="padding:0 0 10px"><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+bc+';border-radius:4px"><tr><td style="padding:16px 18px"><p style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#f0e8df;margin:0 0 4px">'+w.title+'</p>'+(w.subtitle?'<p style="font-size:11px;color:#6a6258;font-style:italic;margin:0 0 8px">'+w.subtitle+'</p>':'')+' <p style="font-size:13px;color:#a09890;line-height:1.8;margin:0">'+w.text+'</p></td></tr></table></td></tr>';
-    });
+  function dcolor(p){return p>=75?'#b5c4a0':p>=50?'#e8d7a0':'#c97a5a';}
+  function dtag(p){return p>=75?'All Systems Green':p>=55?'Check Engine':p>=40?'Running on Fumes':'Engine Off';}
+  function bar(pct,col){
+    const n=Math.round(pct/10);
+    return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';
   }
 
-  let patternsHtml='';
-  REALMS.forEach(r=>{
-    const s=realm[r.id];if(s.answered===0)return;
-    const p=getPattern(s.outward,s.self,r.id);
-    const bc=p.cls==='open'?'#7aad6a':p.cls==='giver'?'#c97a5a':p.cls==='disconnected'?'#c97a5a':'#d4b96a';
-    patternsHtml+='<tr><td colspan="2" style="padding:0 0 8px"><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+bc+';border-radius:4px"><tr><td style="padding:14px 16px"><p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;margin:0 0 4px">'+r.label+'</p><p style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#f0e8df;margin:0 0 6px">'+p.name+'</p><p style="font-size:13px;color:#a09890;line-height:1.7;margin:0">'+p.desc+'</p></td></tr></table></td></tr>';
-  });
+  // Realm rows
+  const realmRowsHtml = ar.map(r=>{
+    const s=realm[r.id];
+    const col=dcolor(s.overall);
+    const tag=dtag(s.overall);
+    return '<tr>'
+      +'<td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td>'
+      +'<td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td>'
+      +'<td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+tag+'</td>'
+      +'</tr>';
+  }).join('');
 
-  let actionHtml='';
-  actionSteps.forEach((step,i)=>{
-    actionHtml+='<tr><td style="padding:0 12px 14px 0;vertical-align:top;width:32px"><div style="width:28px;height:28px;border-radius:50%;background:#272420;border:1px solid #3a3530;color:#d4b96a;font-size:12px;font-weight:600;text-align:center;line-height:28px">'+(i+1)+'</div></td><td style="padding:0 0 14px;vertical-align:top"><p style="font-size:13px;color:#a09890;line-height:1.8;margin:0"><strong style="color:#d4b96a">'+step.title+'.</strong> '+step.text+'</p></td></tr>';
-  });
+  // Dimension rows
+  const dimScores=calcDimScores(realm);
+  const dimRowsHtml = dimScores.map(d=>{
+    const col=dcolor(d.score);
+    const tag=dtag(d.score);
+    return '<tr>'
+      +'<td style="padding:6px 12px;font-size:12px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+d.name+'</td>'
+      +'<td style="padding:6px 12px;border-bottom:1px solid #2a2825">'+bar(d.score,col)+'</td>'
+      +'<td style="padding:6px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825">'+tag+'</td>'
+      +'</tr>';
+  }).join('');
 
-  const emailDimScores = calcDimScores(realm);
-  let dimensionsHtml = '';
-  emailDimScores.forEach(d => {
-    const col = d.score>=70?'#7aad6a':d.score>=45?'#d4b96a':'#c97a5a';
-    const filledBlocks = Math.round(d.score/10);
-    const bar = '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(filledBlocks)+'&#9617;'.repeat(10-filledBlocks)+'</span>';
-    const status = d.score>=70?'Healthy':d.score>=45?'Developing':'Needs attention';
-    let realmRows2 = '';
-    d.realmScores.forEach(rs => {
-      const rc = rs.score>=70?'#7aad6a':rs.score>=45?'#d4b96a':'#c97a5a';
-      const rfilled = Math.round(rs.score/10);
-      const rbar = '<span style="color:'+rc+';font-family:monospace;font-size:11px;letter-spacing:1px">'+'&#9608;'.repeat(rfilled)+'&#9617;'.repeat(10-rfilled)+'</span>';
-      realmRows2 += '<tr><td style="padding:3px 0;font-size:11px;color:#6a6258;width:130px">'+rs.label+'</td>'
-        +'<td style="padding:3px 0;font-size:11px">'+rbar+'</td>'
-        +'<td style="padding:3px 0;font-size:11px;color:'+rc+';text-align:right;width:36px">'+rs.score+'%</td></tr>';
-    });
-    dimensionsHtml += '<tr><td style="padding:0 0 8px">'
-      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+col+';border-radius:4px">'
+  // Pattern rows
+  const patterns=getEngagementPatterns(scores);
+  const patternHtml = patterns.slice(0,2).map(p=>{
+    return '<tr><td colspan="3" style="padding:0 0 10px">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid #c4a882;border-radius:4px">'
       +'<tr><td style="padding:14px 16px">'
-      +'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
-      +'<td><p style="font-size:13px;font-weight:500;color:#f0e8df;margin:0 0 4px">'+d.name+'</p>'
-      +'<p style="font-size:12px;color:#6a6258;margin:0 0 8px">'+d.desc(d.score)+'</p>'
-      +'<p style="font-size:12px;margin:0 0 10px">'+bar+'</p>'
-      +'<table width="100%" cellpadding="0" cellspacing="0">'+realmRows2+'</table>'
-      +'</td>'
-      +'<td style="text-align:right;vertical-align:top;padding-left:12px;white-space:nowrap">'
-      +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+col+';margin:0">'+d.score+'%</p>'
-      +'<p style="font-size:11px;color:#6a6258;margin:2px 0 0">'+status+'</p>'
-      +'</td></tr></table>'
-      +'</td></tr></table>'
-      +'</td></tr>';
-  });
+      +'<p style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#f0e8df;margin:0 0 4px">'+p.title+'</p>'
+      +'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+p.text+'</p>'
+      +'</td></tr></table></td></tr>';
+  }).join('');
 
-  // Deep Dive CTA block in email
-  const deepDiveEmailBlock = '<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #3a3530;border-top:3px solid #c4a882;border-radius:4px;margin:0 0 24px;text-align:center"><tr><td style="padding:28px 24px">'
-    +'<p style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin:0 0 10px">Step 2 of 2</p>'
-    +'<p style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#f0e8df;margin:0 0 10px">The picture isn\'t complete yet.</p>'
-    +'<p style="font-size:13px;color:#a09890;line-height:1.8;margin:0 0 20px">The Heart &amp; Soul Assessment goes deeper — your relationship with yourself, grief, shame, fear, desire, and joy. These often explain everything else.</p>'
-    +'<a href="https://boldhearts.org/deepdive.html" style="display:inline-block;background:#c4a882;color:#111;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:14px 28px;border-radius:4px;text-decoration:none">Take the Deep Dive &rarr;</a>'
-    +'<p style="font-size:11px;color:#6a6258;margin:12px 0 0">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</p>'
-    +'</td></tr></table>';
-
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>'
-    +'<body style="margin:0;padding:0;background-color:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
+    +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
     +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
     +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
-    +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:28px 32px;text-align:center;border-bottom:none">'
-    +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#d4b96a">Hearts</span></p>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Heart Engagement Assessment Results</p></td></tr>'
-    +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:32px">'
-    +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 16px">Thank you for taking the Heart Engagement Assessment. We\'re glad you did — it takes honesty to sit with questions like these, and that honesty is itself a kind of courage.</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:24px 0"><tr><td style="padding:24px 28px;text-align:center">'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">Overall Heart Engagement Score</p>'
-    +'<p style="font-family:Georgia,serif;font-size:52px;font-weight:700;color:'+oc+';margin:0;line-height:1">'+overall+'%</p>'
-    +'<p style="font-size:13px;color:#6a6258;margin:8px 0 0;font-style:italic">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life.')+'</p>'
-    +'</td></tr></table>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px"><tr>'
-    +'<td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;padding:16px 20px"><p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;margin:0 0 6px">How Others Engage You</p><p style="font-family:Georgia,serif;font-size:32px;font-weight:700;color:'+(outAvg>=70?'#7aad6a':outAvg>=45?'#d4b96a':'#c97a5a')+';margin:0">'+outAvg+'%</p><p style="font-size:12px;color:#6a6258;margin:4px 0 0">'+dtag(outAvg)+'</p></td>'
-    +'<td width="4%"></td>'
-    +'<td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;padding:16px 20px"><p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;margin:0 0 6px">How You Engage Others</p><p style="font-family:Georgia,serif;font-size:32px;font-weight:700;color:'+(selfAvg>=70?'#7aad6a':selfAvg>=45?'#d4b96a':'#c97a5a')+';margin:0">'+selfAvg+'%</p><p style="font-size:12px;color:#6a6258;margin:4px 0 0">'+dtag(selfAvg)+'</p></td>'
-    +'</tr></table>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Scores by Realm</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px">'
-    +'<tr style="background:#1a1714"><th style="padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6a6258;font-weight:400;border-bottom:1px solid #2a2825">Realm</th>'
-    +'<th style="padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6a6258;font-weight:400;border-bottom:1px solid #2a2825">Others &#8594; You</th>'
-    +'<th style="padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6a6258;font-weight:400;border-bottom:1px solid #2a2825">You &#8594; Others</th></tr>'
-    +realmRows+'</table>'
-    +'<table width="100%" cellpadding="0" cellspacing="0">'+warningsHtml+'</table>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Your Engagement Patterns</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0">'+patternsHtml+'</table>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Connection Dimensions</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px"><tbody>'+dimensionsHtml+'</tbody></table>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:28px 0 10px;border-bottom:1px solid #2a2825;padding-bottom:8px">Your Action Plan</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;padding:20px 20px 6px;margin:0 0 24px">'
-    +'<tr><td colspan="2" style="padding:0 0 14px"><p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f0e8df;margin:0">Where to go from here'+(userName?', '+userName:'')+'</p></td></tr>'
-    +actionHtml+'</table>'
-    + deepDiveEmailBlock
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid #d4b96a;border-radius:4px;margin:0 0 28px"><tr><td style="padding:20px 22px">'
-    +'<p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;margin:0 0 10px">A Note from Me</p>'
-    +'<p style="font-size:14px;color:#c8c0b8;line-height:1.9;margin:0">'+noteText+'</p></td></tr></table>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #3a3530;border-radius:4px;margin:0 0 28px;text-align:center"><tr><td style="padding:28px 24px">'
-    +'<p style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#f0e8df;margin:0 0 10px">Let\'s talk about your results.</p>'
-    +'<p style="font-size:13px;color:#a09890;line-height:1.8;margin:0 0 20px">A free 15-minute Discovery Call is the best next step. No pressure, no agenda — just an honest conversation about what your scores are really telling you and what a path forward could look like.</p>'
-    +'<a href="mailto:admin@boldhearts.org?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." style="display:inline-block;background:#d4b96a;color:#111;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:14px 28px;border-radius:4px;text-decoration:none">Request a Discovery Call</a>'
-    +'<p style="font-size:12px;color:#6a6258;margin:14px 0 0">or reply to this email &nbsp;&middot;&nbsp; <a href="mailto:admin@boldhearts.org" style="color:#a09890">admin@boldhearts.org</a></p>'
-    +'</td></tr></table>'
-    +'<p style="font-size:14px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br>'
-    +'<strong style="color:#d4b96a">Steve Forney</strong><br>'
-    +'<span style="color:#6a6258;font-size:13px">BoldHearts &nbsp;|&nbsp; Spiritual Direction &middot; Pastoral Counseling &middot; Leadership Soul Care</span><br>'
-    +'<a href="https://boldhearts.org" style="color:#6a6258;font-size:13px">boldhearts.org</a></p>'
+    // Header
+    +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
+    +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p>'
+    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p>'
     +'</td></tr>'
-    +'<tr><td style="padding:20px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 BoldHearts &nbsp;&middot;&nbsp; Sedalia, Colorado</p></td></tr>'
+    // Body
+    +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
+    +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">Here are your Relational Health Assessment results.</p>'
+    // Overall
+    +'<div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
+    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 4px">Overall</p>'
+    +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+rc+';margin:0 0 2px">'+overall+'%</p>'
+    +'<p style="font-size:12px;color:'+rc+';margin:0">'+rtag+'</p>'
+    +'</div>'
+    // Realm scores
+    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Realm</p>'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
+    +'<tbody>'+realmRowsHtml+'</tbody></table>'
+    // Dimensions
+    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Dimension</p>'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
+    +'<tbody>'+dimRowsHtml+'</tbody></table>'
+    // Patterns
+    +(patterns.length>0?'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 10px;border-bottom:1px solid #2a2825;padding-bottom:6px">Engagement Patterns</p>'
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px"><tbody>'+patternHtml+'</tbody></table>':'')
+    // Step 2 CTA
+    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #3a3530;border-top:3px solid #e8d7a0;border-radius:4px;text-align:center;margin:0 0 24px"><tr><td style="padding:24px">'
+    +'<p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin:0 0 8px">Next Step</p>'
+    +'<p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f0e8df;margin:0 0 8px">The picture isn\'t complete yet.</p>'
+    +'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0 0 16px">Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p>'
+    +'<a href="https://boldhearts.org/interior.html" style="display:inline-block;background:#e8d7a0;color:#111;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 24px;border-radius:4px;text-decoration:none">Take the Interior Health Assessment &rarr;</a>'
+    +'<p style="font-size:11px;color:#5a5550;margin:10px 0 0">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; Use the same email</p>'
+    +'</td></tr></table>'
+    +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
+    +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
+    +'</td></tr>'
+    +'<tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 BoldHearts &nbsp;&middot;&nbsp; Sedalia, Colorado</p></td></tr>'
     +'</table></td></tr></table></body></html>';
 }
+
 
 function updateProgress(){
   const pct=Math.round((totalAns()/totalQs())*100);
@@ -863,7 +849,7 @@ function renderResults(scores){
         +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0">These scores are worth your time and attention. Consider one honest conversation — one relationship where you stop managing and start showing up differently. That\'s enough for now.</p>'
         +'</div></div>';
     })()
-    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The picture isn\'t complete yet.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
+    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
     // 10. Discovery call
     +'<div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 15-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
