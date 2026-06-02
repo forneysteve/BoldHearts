@@ -405,7 +405,7 @@ function renderSurvey(){
         const id = 'opt_'+k+'_'+si; const sel = cur===s.val;
         return '<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
       }).join('');
-      const dimLabel = q.dim ? '<span class="dim-badge">'+DIM_LABELS[q.dim]+'</span>' : '';
+      const dimLabel = '';
       html += '<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'">'
         +'<div class="qnum">Question '+(qNum+1)+' '+dimLabel+'</div>'
         +'<div class="qlabel">'+q.t+'</div>'
