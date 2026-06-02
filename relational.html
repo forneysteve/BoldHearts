@@ -224,7 +224,8 @@ footer a:hover{color:#e8d7a0}
 }
 
 .nav-dropdown{position:relative}
-.nav-dropdown .dropdown-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;margin-top:.5rem;z-index:1001;backdrop-filter:blur(12px)}
+.nav-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;z-index:1001;backdrop-filter:blur(12px)}
+.nav-dropdown>a{padding-bottom:12px;margin-bottom:-12px}
 .nav-dropdown:hover .dropdown-menu,.nav-dropdown.open .dropdown-menu{display:block}
 .dropdown-menu li a{display:block;padding:.65rem 1.25rem;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a09890;white-space:nowrap;transition:color .2s,background .2s}
 .dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
