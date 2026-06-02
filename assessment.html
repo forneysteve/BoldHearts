@@ -343,7 +343,7 @@ const REALMS=[
     {t:"God delights in who I am, not just the stuff I do for Him.",self:false},
     {t:"When I pray, I believe God will answer and things will get better.",self:true},
     {t:"There are moments in my day where I'm aware that I am God's — not performing for Him, just His.",self:false},
-    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, and mentally.",self:true},
+    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, mentally, relationally, and financially.",self:true},
     {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
     {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
     {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true}
@@ -833,10 +833,22 @@ function renderResults(scores){
     +'<div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
     // 7. Warning signs
     +(warnings.length>0?'<div class="section-label">Warning signs in your results</div>'+warningHtml:'')
-    // 8. Action plan
-    +'<div class="section-label">Your action plan</div><div class="action-card"><h3>Where to go from here'+(userName?', '+userName:'')+'</h3>'+actionHtml+'</div>'
-    // 9. Deep Dive CTA — prominent standalone card
-    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The picture isn\'t complete yet.</h3><p>The Heart Engagement Assessment measures how connected you feel across the relationships in your life. But two foundational layers remain — your relationship with God and your relationship with yourself. These often explain everything else.</p><a href="deepdive.html" class="deepdive-btn">Take the Deep Dive &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
+    // 8 & 9. Two step blocks
+    +(()=>{
+      const realmsSorted = REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
+      const lowestRealm = realmsSorted[0];
+      const dimScores2 = calcDimScores(realm);
+      const lowestDim = dimScores2.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
+      const realmLine = lowestRealm ? 'Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong> at '+realm[lowestRealm.id].overall+'%. This is not a verdict — it\'s a place to begin. Something in that context is worth a closer look.' : '';
+      const dimLine = lowestDim ? 'Across all your relationships, your lowest dimension is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong> at '+lowestDim.score+'%. '+lowestDim.desc(lowestDim.score) : '';
+      return '<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3>'
+        +'<div style="text-align:left;max-width:520px;margin:0 auto 1.5rem">'
+        +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1rem">'+realmLine+'</p>'
+        +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1rem">'+dimLine+'</p>'
+        +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0">These scores are worth your time and attention. Consider one honest conversation — one relationship where you stop managing and start showing up differently. That\'s enough for now.</p>'
+        +'</div></div>';
+    })()
+    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The picture isn\'t complete yet.</h3><p>The Relational Health Assessment shows how connected you are to the people in your life. But it doesn\'t show what\'s happening underneath — the condition of your heart. The Heart &amp; Soul Assessment goes there. Grief, shame, fear, desire, joy. These are the questions that explain why your relationships score the way they do.</p><a href="deepdive.html" class="deepdive-btn">Take the Heart &amp; Soul Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
     // 10. Discovery call
     +'<div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 15-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
