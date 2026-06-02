@@ -581,9 +581,7 @@ function renderGuide(guide){
       +'<div class="guide-section-body">'+paragraphs+'</div>'
       +'</div>';
   }).join('');
-  const closing = guide.closingNote
-    ? '<div class="guide-closing"><div class="guide-closing-label">A Note from Steve</div><div class="guide-closing-text">'+guide.closingNote+'</div></div>'
-    : '';
+  const closing = '';
   return '<div class="guide-title-block">'
     +'<div class="guide-main-title">'+(guide.title||'Your Spiritual Direction Guide')+'</div>'
     +'<div class="guide-subtitle">'+(guide.subtitle||'')+'</div>'
