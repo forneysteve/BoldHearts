@@ -847,8 +847,7 @@ function renderResults(scores){
     +'<div class="section-label">Connection dimensions</div><div class="dim-grid">'+dimHtml+'</div>'
     // 6. Engagement patterns
     +'<div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
-    // 7. Warning signs
-    +(warnings.length>0?'<div class="section-label">Warning signs in your results</div>'+warningHtml:'')
+
     // 8 & 9. Two step blocks
     +(()=>{
       const realmsSorted = REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
@@ -864,7 +863,7 @@ function renderResults(scores){
         +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0">These scores are worth your time and attention. Consider one honest conversation — one relationship where you stop managing and start showing up differently. That\'s enough for now.</p>'
         +'</div></div>';
     })()
-    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The picture isn\'t complete yet.</h3><p>The Relational Health Assessment shows how connected you are to the people in your life. But it doesn\'t show what\'s happening underneath — the condition of your heart. The Heart &amp; Soul Assessment goes there. Grief, shame, fear, desire, joy. These are the questions that explain why your relationships score the way they do.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
+    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The picture isn\'t complete yet.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
     // 10. Discovery call
     +'<div class="discovery-card"><h3>Let\'s talk about your results.</h3><p>A free 15-minute Discovery Call is the best next step. We\'ll look at what your scores are really telling you, explore what\'s underneath, and talk honestly about what a path forward could look like — no pressure, no agenda, just a good conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call Request — Heart Engagement Assessment&body=Hi Steve, I just completed the Heart Engagement Assessment and would love to schedule a Discovery Call. My overall score was '+overall+'%." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
