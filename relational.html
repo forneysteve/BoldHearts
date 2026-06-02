@@ -467,6 +467,23 @@ function scoreBar(pct,color){
   const filled=Math.round(pct/10);
   return '<span style="color:'+color+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(filled)+'&#9617;'.repeat(10-filled)+'</span> <strong style="color:'+color+'">'+pct+'%</strong>';
 }
+function getEngagementPatterns(scores){
+  const{realm}=scores;
+  const patterns=[];
+  REALMS.forEach(r=>{
+    const s=realm[r.id];
+    if(!s||s.answered===0)return;
+    const p=getPattern(s.outward,s.self,r.id);
+    if(p&&p.key&&p.key!=='open'&&p.key!=='developing'){
+      patterns.push({
+        title:r.label+' — '+p.name,
+        text:p.text
+      });
+    }
+  });
+  return patterns;
+}
+
 function buildHtmlEmail(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
