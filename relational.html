@@ -477,7 +477,7 @@ function getEngagementPatterns(scores){
     if(p&&p.key&&p.key!=='open'&&p.key!=='developing'){
       patterns.push({
         title:r.label+' — '+p.name,
-        text:p.text
+        text:p.desc||''
       });
     }
   });
@@ -858,7 +858,7 @@ function renderResults(scores){
       const dimScores2 = calcDimScores(realm);
       const lowestDim = dimScores2.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
       const realmLine = lowestRealm ? 'Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong> at '+realm[lowestRealm.id].overall+'%. This is not a verdict — it\'s a place to begin. Something in that context is worth a closer look.' : '';
-      const dimLine = lowestDim ? 'Across all your relationships, your lowest dimension is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong> at '+lowestDim.score+'%. '+lowestDim.desc(lowestDim.score) : '';
+      const dimLine = lowestDim ? 'Across all your relationships, your lowest dimension is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong> at '+lowestDim.score+'%.' : '';
       return '<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3>'
         +'<div style="text-align:left;max-width:520px;margin:0 auto 1.5rem">'
         +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1rem">'+realmLine+'</p>'
