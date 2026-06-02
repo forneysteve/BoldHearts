@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<title>Heart Engagement — Deep Dive | BoldHearts</title>
+<title>Heart & Soul Assessment | BoldHearts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -16,7 +16,6 @@ html{scroll-behavior:smooth;font-size:16px}
 body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#d4ccc4;background-color:#111111}
 a{color:#e8d7a0;text-decoration:none;transition:color .3s ease}
 a:hover{color:#f5e8c8}
-img{max-width:100%;display:block}
 ul{list-style:none}
 h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f0e8df;line-height:1.2}
 h1{font-size:clamp(2.2rem,5vw,3.5rem);letter-spacing:.02em}
@@ -106,6 +105,13 @@ nav .nav-links a:hover{color:#e8d7a0}
 .results-hero h2::after{margin:1rem auto 0;width:60px;height:2px;background:#c4a882;content:'';display:block}
 .results-hero p{font-size:.95rem;color:#6a6258;margin:0 auto;letter-spacing:.04em}
 .section-label{font-size:.7rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(196,168,130,.1)}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-bottom:2rem}
+.score-card{background:#1e1c1a;border:1px solid rgba(196,168,130,.12);border-radius:4px;padding:1.25rem 1.5rem}
+.score-card-lbl{font-size:.7rem;color:#6a6258;font-weight:400;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
+.score-card-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
+.score-card-tag{font-size:.75rem;color:#6a6258;margin-top:3px}
+.score-bar{height:2px;border-radius:2px;background:rgba(196,168,130,.1);margin-top:12px}
+.score-bar-fill{height:100%;border-radius:2px}
 .guide-title-block{text-align:center;padding:1rem 0 2rem;border-bottom:1px solid rgba(196,168,130,.12);margin-bottom:2rem}
 .guide-main-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;color:#f0e8df;margin-bottom:.5rem;line-height:1.3}
 .guide-subtitle{font-size:.95rem;color:#6a6258;font-style:italic;line-height:1.7}
@@ -119,7 +125,7 @@ nav .nav-links a:hover{color:#e8d7a0}
 .guide-closing{background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.5rem 1.75rem;margin-top:1.5rem}
 .guide-closing-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem}
 .guide-closing-text{font-size:.92rem;color:#c0b8b0;line-height:1.95;font-style:italic}
-.discovery-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
+.discovery-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem}
 .discovery-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
 .discovery-card p{font-size:.95rem;color:#a09890;line-height:1.9;margin:0 auto 2rem;max-width:500px}
 .discovery-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#c4a882;padding:1rem 2.5rem;border-radius:4px;border:2px solid #c4a882;transition:all .3s ease;text-decoration:none;margin-bottom:1rem}
@@ -149,6 +155,7 @@ footer a:hover{color:#c4a882}
   .sopt-circle{width:34px;height:34px}
   .sopt{padding:6px 1px}
   .scale-num{font-size:.6rem}
+  .score-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -168,13 +175,13 @@ footer a:hover{color:#c4a882}
 </nav>
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-tagline">Deep Dive Assessment</div>
-    <h1>The Foundation Layer</h1>
-    <p>The two most foundational relationships in your life — your relationship with God and your relationship with yourself. These are the layers that often explain everything else.</p>
+    <div class="hero-tagline">Heart & Soul Assessment</div>
+    <h1>The Interior Layer</h1>
+    <p>This is the deeper layer — an honest look at the condition of your heart. Grief, shame, fear, desire, joy. These are the questions most people have never been asked directly.</p>
     <div class="hero-meta">
-      <span><i class="ti ti-clock"></i> About 5 minutes</span>
+      <span><i class="ti ti-clock"></i> About 10 minutes</span>
       <span><i class="ti ti-lock"></i> Private &amp; confidential</span>
-      <span><i class="ti ti-checklist"></i> 16 questions</span>
+      <span><i class="ti ti-checklist"></i> 49 questions</span>
     </div>
   </div>
 </section>
@@ -182,72 +189,185 @@ footer a:hover{color:#c4a882}
 <div class="progress-wrap" id="progress-section">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-lbl">0 of 16 answered</div>
+    <div class="progress-label" id="progress-lbl">0 of 49 answered</div>
   </div>
 </div>
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a> &nbsp;|&nbsp; v3.1</p>
+  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a> &nbsp;|&nbsp; v1.0</p>
 </footer>
 <script>
 const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const SCALE = [{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
 
-const DEEP_REALMS = [
-  {id:'god', label:'Relationship with God', icon:'ti-star', color:'#c4a882',
-   desc:'Answer honestly — not how you think you should answer, but what is actually true right now.',
-   questions:[
-    {t:"I have a sense that God is personally watching the details of my life.", self:false},
-    {t:"God delights in who I am, not just the stuff I do for Him.", self:false},
-    {t:"When I pray, I believe God will answer and things will get better.", self:true},
-    {t:"There are moments in my day where I'm aware that I am God's — not performing for him, just his.", self:false},
-    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, and mentally.", self:true},
-    {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.", self:false},
-    {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.", self:false},
-    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.", self:true}
-  ]},
-  {id:'self', label:'Relationship with Self', icon:'ti-user', color:'#9aa8b0',
-   desc:'Answer based on what is actually true — not what you aspire to or what sounds healthy.',
-   questions:[
-    {t:"When something shifts in me — a new reaction, an unexpected emotion, a pattern I notice — I pay attention to it rather than push past it.", self:true},
-    {t:"I know what actually drives me — including the parts I'm not proud of.", self:true},
-    {t:"I am honest with myself about what's really going on in my life — I don't minimize or rationalize.", self:true},
-    {t:"I like who I am becoming — I feel comfortable in my own skin.", self:true},
-    {t:"I take care of myself the way I take care of the people I love.", self:true},
-    {t:"I can be alone and at rest — I don't need constant noise, screens, or activity to feel okay.", self:true},
-    {t:"The person I am in private is recognizably the same person I am in public.", self:true},
-    {t:"I have a clear sense of my unique contribution — and I'm building my life around it.", self:true}
-  ]}
+// Reverse-scored question indices per theme (agreeing = low score)
+const REVERSE_SCORED = {
+  grief: [1,3,4,6],       // q indices within grief that are reverse scored
+  shame: [1,3],
+  fear:  [1,2,4,5],
+  anger: [2,3,4],
+  desire:[3,6],
+  joy:   [3]
+};
+
+const THEMES = [
+  {
+    id:'self',
+    label:'Relationship with Yourself',
+    icon:'ti-user',
+    color:'#9aa8b0',
+    desc:'Answer based on what is actually true — not what you aspire to or what sounds healthy.',
+    questions:[
+      {t:"When something shifts in me — a new reaction, an unexpected emotion, a pattern I notice — I pay attention to it rather than push past it."},
+      {t:"I know what actually drives me — including the parts I'm not proud of."},
+      {t:"I am honest with myself about what's really going on in my life — I don't minimize or rationalize."},
+      {t:"I like who I am becoming — I feel comfortable in my own skin."},
+      {t:"I take care of myself the way I take care of the people I love."},
+      {t:"I can be alone and at rest — I don't need constant noise, screens, or activity to feel okay."},
+      {t:"The person I am in private is recognizably the same person I am in public."},
+      {t:"I have a clear sense of my unique contribution — and I'm building my life around it."}
+    ]
+  },
+  {
+    id:'grief',
+    label:'Grief & Loss',
+    icon:'ti-heart-broken',
+    color:'#a09890',
+    desc:'Think honestly about the losses, disappointments, and hard seasons of your life.',
+    questions:[
+      {t:"I have grieved the significant losses in my life — not just survived them."},
+      {t:"There are things that happened to me that I have never fully processed."},
+      {t:"I have made peace with the things in my life I cannot change."},
+      {t:"I carry disappointment about how certain areas of my life have turned out."},
+      {t:"I have allowed myself to feel the weight of what I've lost — not just moved on."},
+      {t:"I have found meaning in my suffering — it has shaped me rather than just scarred me."},
+      {t:"There are relationships in my past that still hurt when I think about them."}
+    ]
+  },
+  {
+    id:'shame',
+    label:'Shame & Guilt',
+    icon:'ti-eye-off',
+    color:'#8a7a8a',
+    desc:'Think honestly about how you relate to your failures, mistakes, and the parts of yourself you\'d rather hide.',
+    questions:[
+      {t:"I am not defined by my worst moments — I can separate what I've done from who I am."},
+      {t:"There are parts of me I hope no one ever fully sees."},
+      {t:"I receive grace from others without deflecting it or feeling unworthy of it."},
+      {t:"I live with a quiet sense that I am not enough — that I need to keep proving myself."},
+      {t:"I have been honest with at least one person about the parts of myself I'm most ashamed of."},
+      {t:"I forgive myself the way I would forgive someone I love."},
+      {t:"Guilt and shame are not regular companions in my interior life."}
+    ]
+  },
+  {
+    id:'fear',
+    label:'Fear & Anxiety',
+    icon:'ti-alert-triangle',
+    color:'#b09060',
+    desc:'Think honestly about what drives your decisions and what you protect yourself from.',
+    questions:[
+      {t:"I know what I am afraid of — and I don't let it run my life unexamined."},
+      {t:"Fear of what others think regularly shapes what I say and do."},
+      {t:"I make important decisions from a place of peace rather than anxiety."},
+      {t:"I am able to sit with uncertainty without needing to control the outcome."},
+      {t:"I don't avoid difficult conversations because of what they might cost me."},
+      {t:"There are areas of my life where I am playing it safe in ways I know aren't right."},
+      {t:"I trust that things will be okay — even when the evidence isn't clear."}
+    ]
+  },
+  {
+    id:'anger',
+    label:'Anger',
+    icon:'ti-flame',
+    color:'#c97a5a',
+    desc:'Think honestly about how you handle what\'s wrong — in your life and around you.',
+    questions:[
+      {t:"I know what I am angry about — and I can name it honestly."},
+      {t:"I express anger in ways that don't damage the people around me."},
+      {t:"I suppress or bury my anger rather than dealing with it honestly."},
+      {t:"I have unresolved anger toward God about things that have happened in my life."},
+      {t:"My anger has become bitterness in at least one area of my life."},
+      {t:"I use anger constructively — it moves me toward something rather than just burning."},
+      {t:"I am able to be angry and still act with integrity — I don't blow up or shut down."}
+    ]
+  },
+  {
+    id:'desire',
+    label:'Desire & Hope',
+    icon:'ti-star',
+    color:'#c4a882',
+    desc:'Think honestly about what your heart is still alive to — what you long for, hope for, want.',
+    questions:[
+      {t:"I know what I genuinely want — not just what I'm supposed to want."},
+      {t:"There is something I genuinely look forward to — my heart is still alive to anticipation."},
+      {t:"I allow myself to want things even when I'm not sure they'll happen."},
+      {t:"I have stopped dreaming in certain areas because I've been disappointed too many times."},
+      {t:"I believe the best is still ahead of me — not behind me."},
+      {t:"I can name something I deeply desire that has nothing to do with achievement or approval."},
+      {t:"Hope feels real to me — not naive, but grounded in something I actually trust."}
+    ]
+  },
+  {
+    id:'joy',
+    label:'Joy & Delight',
+    icon:'ti-sun',
+    color:'#b5c4a0',
+    desc:'Think honestly about your capacity to receive goodness, beauty, and pleasure.',
+    questions:[
+      {t:"I experience genuine joy — not just the absence of pain or the completion of tasks."},
+      {t:"I can be fully present in good moments without waiting for them to end or go wrong."},
+      {t:"There are simple things in my life that still bring me delight."},
+      {t:"I receive compliments, kindness, and good things without deflecting or minimizing them."},
+      {t:"I notice beauty — in nature, in people, in ordinary moments — and it moves me."},
+      {t:"I give myself permission to enjoy life without having to earn it first."},
+      {t:"The condition of my heart right now is one I would describe as open, not closed."}
+    ]
+  }
 ];
 
-let answers = {}, userName = '', userEmail = '';
+// Randomize theme order but keep Self first always
+function getRandomizedThemes(){
+  const self = THEMES.find(t => t.id === 'self');
+  const rest = THEMES.filter(t => t.id !== 'self');
+  // Fisher-Yates shuffle
+  for(let i = rest.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [rest[i], rest[j]] = [rest[j], rest[i]];
+  }
+  return [self, ...rest];
+}
 
-function totalQs(){ return DEEP_REALMS.reduce((a,r) => a + r.questions.length, 0); }
+let answers = {}, userName = '', userEmail = '';
+let randomizedThemes = getRandomizedThemes();
+
+function totalQs(){ return THEMES.reduce((a,t) => a + t.questions.length, 0); }
 function totalAns(){ return Object.keys(answers).length; }
 function dcolor(p){ return p>=70 ? '#b5c4a0' : p>=45 ? '#c4a882' : '#c97a5a'; }
 function dtag(p){ return p>=70 ? 'Healthy' : p>=45 ? 'Developing' : 'Needs attention'; }
 
 function calcScores(){
-  const realm = {}; let allT=0, allN=0;
-  DEEP_REALMS.forEach(r => {
-    let rt=0,rn=0,st=0,sn=0,ot=0,on_=0;
-    r.questions.forEach((q,i) => {
-      const v = answers[r.id+'_'+i];
+  const theme = {};
+  let allT = 0, allN = 0;
+  THEMES.forEach(t => {
+    let tt = 0, tn = 0;
+    const revIdx = REVERSE_SCORED[t.id] || [];
+    t.questions.forEach((q, i) => {
+      const v = answers[t.id+'_'+i];
       if(v !== undefined){
-        rt+=v; rn++; allT+=v; allN++;
-        if(q.self){st+=v;sn++;}else{ot+=v;on_++;}
+        const scored = revIdx.includes(i) ? (8 - v) : v;
+        tt += scored; tn++;
+        allT += scored; allN++;
       }
     });
-    realm[r.id] = {
-      overall: rn>0 ? Math.round((rt/(rn*7))*100) : 0,
-      outward: on_>0 ? Math.round((ot/(on_*7))*100) : 0,
-      self:    sn>0  ? Math.round((st/(sn*7))*100)  : 0,
-      answered: rn
+    theme[t.id] = {
+      overall: tn > 0 ? Math.round((tt/(tn*7))*100) : 0,
+      answered: tn
     };
   });
-  return { realm, overall: allN>0 ? Math.round((allT/(allN*7))*100) : 0 };
+  return { theme, overall: allN > 0 ? Math.round((allT/(allN*7))*100) : 0 };
 }
 
 function updateProgress(){
@@ -260,11 +380,11 @@ function updateProgress(){
 
 function renderSurvey(){
   let html = '<div class="main">'; let qNum = 0;
-  DEEP_REALMS.forEach(r => {
-    html += '<div class="realm-hdr"><div class="realm-icon"><i class="ti '+r.icon+'" style="color:'+r.color+'"></i></div><div class="realm-hdr-text"><h2>'+r.label+'</h2><p>'+r.desc+'</p></div></div>';
-    r.questions.forEach((q,i) => {
-      const k = r.id+'_'+i; const cur = answers[k];
-      const opts = SCALE.map((s,si) => {
+  randomizedThemes.forEach(t => {
+    html += '<div class="realm-hdr"><div class="realm-icon"><i class="ti '+t.icon+'" style="color:'+t.color+'"></i></div><div class="realm-hdr-text"><h2>'+t.label+'</h2><p>'+t.desc+'</p></div></div>';
+    t.questions.forEach((q, i) => {
+      const k = t.id+'_'+i; const cur = answers[k];
+      const opts = SCALE.map((s, si) => {
         const id = 'opt_'+k+'_'+si; const sel = cur===s.val;
         return '<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
       }).join('');
@@ -272,7 +392,7 @@ function renderSurvey(){
       qNum++;
     });
   });
-  html += '<div class="submit-section"><div class="submit-meta">Answer all 16 questions to see your complete results</div><button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  html += '<div class="submit-section"><div class="submit-meta">Answer all 49 questions honestly — there are no right answers</div><button class="sub-btn" onclick="trySubmit()">See My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
   document.getElementById('app').innerHTML = html;
   updateProgress();
 }
@@ -290,8 +410,8 @@ function setA(k, v){
 
 function trySubmit(){
   const unanswered = [];
-  DEEP_REALMS.forEach(r => {
-    r.questions.forEach((_,i) => { if(answers[r.id+'_'+i]===undefined) unanswered.push(r.id+'_'+i); });
+  THEMES.forEach(t => {
+    t.questions.forEach((_, i) => { if(answers[t.id+'_'+i]===undefined) unanswered.push(t.id+'_'+i); });
   });
   if(unanswered.length > 0){
     const em = document.getElementById('errmsg');
@@ -307,14 +427,14 @@ function trySubmit(){
 function renderGate(){
   document.getElementById('progress-section').style.display = 'none';
   document.getElementById('app').innerHTML = '<div class="gate-wrap"><div class="gate-card">'
-    +'<div class="gate-icon"><i class="ti ti-layers-linked"></i></div>'
+    +'<div class="gate-icon"><i class="ti ti-heart"></i></div>'
     +'<h2>Your results are ready.</h2>'
-    +'<p>Enter your name and the same email you used for the Heart Engagement Assessment — we\'ll combine your results and generate your personal Spiritual Direction Guide.</p>'
+    +'<p>Enter your name and the same email you used for the Relational Health Assessment — we\'ll combine everything into your complete picture and generate your personal Spiritual Direction Guide.</p>'
     +'<div class="gate-field"><label for="gname">First Name</label><input type="text" id="gname" placeholder="Your first name" autocomplete="given-name"></div>'
     +'<div class="gate-field"><label for="gemail">Email Address</label><input type="email" id="gemail" placeholder="Same email as Assessment 1" autocomplete="email"></div>'
     +'<button class="gate-btn" id="gate-btn" onclick="submitGate()">Generate My Guide &rarr;</button>'
     +'<div class="errmsg" id="gate-err"></div>'
-    +'<div class="gate-note">Use the same email from your Heart Engagement Assessment to combine your complete results.</div>'
+    +'<div class="gate-note">Use the same email from your Relational Health Assessment to combine your complete results.</div>'
     +'</div></div>';
 }
 
@@ -322,7 +442,7 @@ function showGenerating(){
   document.getElementById('app').innerHTML = '<div class="generating-wrap"><div class="generating-card">'
     +'<div class="generating-icon">✦</div>'
     +'<h2>Building your guide.</h2>'
-    +'<p>We\'re reading your complete results across all 70 questions and writing a personal Spiritual Direction Guide. This takes about 20-30 seconds.</p>'
+    +'<p>We\'re reading your complete results and writing a personal Spiritual Direction Guide. This takes about 20-30 seconds.</p>'
     +'<div class="generating-dots"><div class="generating-dot"></div><div class="generating-dot"></div><div class="generating-dot"></div></div>'
     +'</div></div>';
 }
@@ -337,16 +457,24 @@ async function submitGate(){
   userEmail = email;
   const btn = document.getElementById('gate-btn');
   if(btn){ btn.textContent = 'Working...'; btn.disabled = true; }
+
   const scores = calcScores();
 
-  // Save Deep Dive scores to Sheets
-  const ddParams = new URLSearchParams({
-    action: 'deepdive', name: userName, email: userEmail,
-    god:  scores.realm.god  ? scores.realm.god.overall+'%'  : '',
-    self: scores.realm.self ? scores.realm.self.overall+'%' : '',
-    deepdive_overall: scores.overall+'%'
+  // Save Heart & Soul scores to Sheets
+  const params = new URLSearchParams({
+    action: 'heartsoul',
+    name: userName,
+    email: userEmail,
+    self_score:    scores.theme.self    ? scores.theme.self.overall+'%'    : '',
+    grief_score:   scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
+    shame_score:   scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
+    fear_score:    scores.theme.fear    ? scores.theme.fear.overall+'%'     : '',
+    anger_score:   scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
+    desire_score:  scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
+    joy_score:     scores.theme.joy     ? scores.theme.joy.overall+'%'      : '',
+    hs_overall:    scores.overall+'%'
   });
-  new Image().src = SHEETS_URL + '?' + ddParams.toString();
+  new Image().src = SHEETS_URL + '?' + params.toString();
 
   // Fetch Assessment 1 scores via worker
   let prevRow = null;
@@ -357,12 +485,9 @@ async function submitGate(){
       body: JSON.stringify({ action: 'lookup', email: email })
     });
     const lookupData = await lookupRes.json();
-    console.log('Lookup result:', lookupData.status);
     if(lookupData.row) prevRow = lookupData.row;
   } catch(e){ console.log('Could not fetch A1 scores:', e); }
-  console.log('prevRow:', prevRow ? 'found ('+prevRow.length+' cols)' : 'null');
 
-  // Build assessment1 object
   function ps(val){
     if(!val && val!==0) return '—';
     const s = val.toString().trim();
@@ -379,25 +504,31 @@ async function submitGate(){
     family:    ps(prevRow[6]),
     friends:   ps(prevRow[7]),
     community: ps(prevRow[8]),
+    god:       ps(prevRow[19]),
     patterns:  prevRow[17] || '',
     warnings:  prevRow[18] || ''
   } : null;
 
-  const deepdive = {
-    god:     scores.realm.god  ? scores.realm.god.overall+'%'  : '',
-    self:    scores.realm.self ? scores.realm.self.overall+'%' : '',
+  const heartsoul = {
+    self:    scores.theme.self    ? scores.theme.self.overall+'%'    : '',
+    grief:   scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
+    shame:   scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
+    fear:    scores.theme.fear    ? scores.theme.fear.overall+'%'     : '',
+    anger:   scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
+    desire:  scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
+    joy:     scores.theme.joy     ? scores.theme.joy.overall+'%'      : '',
     overall: scores.overall+'%'
   };
 
   showGenerating();
 
-  // Call worker for guide
+  // Call worker
   let guide = null;
   try {
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: userName, email: userEmail, assessment1, deepdive, rawAnswers: answers })
+      body: JSON.stringify({ name: userName, email: userEmail, assessment1, heartsoul, rawAnswers: answers })
     });
     const data = await res.json();
     if(data.guide) guide = data.guide;
@@ -430,23 +561,7 @@ function renderGuide(guide){
 }
 
 function renderResults(scores, guide, a1, prevRow){
-  const { realm } = scores;
-
-  // God outward/self split
-  const godOutward = ['god_0','god_1','god_3','god_4'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const godOutwardN = ['god_0','god_1','god_3','god_4'].filter(k=>answers[k]!==undefined).length;
-  const godSelf_ = ['god_2','god_5','god_6','god_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const godSelfN = ['god_2','god_5','god_6','god_7'].filter(k=>answers[k]!==undefined).length;
-  const godToYou = godOutwardN>0?Math.round((godOutward/(godOutwardN*7))*100):0;
-  const youToGod = godSelfN>0?Math.round((godSelf_/(godSelfN*7))*100):0;
-
-  // Self awareness/care split
-  const selfAware = ['self_0','self_1','self_2','self_6'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const selfAwareN = ['self_0','self_1','self_2','self_6'].filter(k=>answers[k]!==undefined).length;
-  const selfCare_ = ['self_3','self_4','self_5','self_7'].reduce((a,k)=>{const v=answers[k];return v?a+v:a;},0);
-  const selfCareN = ['self_3','self_4','self_5','self_7'].filter(k=>answers[k]!==undefined).length;
-  const selfAwareness = selfAwareN>0?Math.round((selfAware/(selfAwareN*7))*100):0;
-  const selfCare = selfCareN>0?Math.round((selfCare_/(selfCareN*7))*100):0;
+  const { theme, overall } = scores;
 
   function ps(val){
     if(!val && val!==0) return '—';
@@ -456,161 +571,48 @@ function renderResults(scores, guide, a1, prevRow){
     if(n>0 && n<=1) return Math.round(n*100)+'%';
     return Math.round(n)+'%';
   }
-  function psn(val){
-    const s = ps(val); return s==='—'?0:parseInt(s);
-  }
-  function psColor(val){
-    const n = psn(val);
-    return n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
-  }
 
-  function getPattern(out, self_){
-    const hiOut=out>=65, loOut=out<50, hiSelf=self_>=65, loSelf=self_<50;
-    if(hiOut&&hiSelf) return {name:'All Systems Green', color:'#b5c4a0'};
-    if(loOut&&loSelf) return {name:'Engine Off', color:'#c97a5a'};
-    if(loOut&&hiSelf) return {name:'Running on Empty', color:'#c97a5a'};
-    if(hiOut&&loSelf) return {name:'Warning Light', color:'#e8d7a0'};
-    return {name:'Check Engine', color:'#e8d7a0'};
-  }
-
-  function realmRow(label, outVal, selfVal, outLabel, selfLabel){
-    const out = typeof outVal==='number'?outVal:psn(outVal);
-    const sv  = typeof selfVal==='number'?selfVal:psn(selfVal);
-    const pattern = getPattern(out, sv);
-    const outColor = out>=70?'#b5c4a0':out>=45?'#e8d7a0':'#c97a5a';
-    const selfColor = sv>=70?'#b5c4a0':sv>=45?'#9aa8b0':'#c97a5a';
-    return '<div style="margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(232,215,160,.07)">'
-      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">'
-      +'<div style="font-size:.85rem;color:#b0a898">'+label+'</div>'
-      +'<div style="font-size:.72rem;color:'+pattern.color+';background:rgba(255,255,255,.05);padding:2px 10px;border-radius:3px">'+pattern.name+'</div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">'
-      +'<div style="font-size:.68rem;color:#5a5550;width:140px;flex-shrink:0;text-align:right">'+outLabel+'</div>'
-      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+out+'%;height:100%;background:'+outColor+';border-radius:3px"></div></div>'
-      +'<div style="font-size:.72rem;color:'+outColor+';width:34px;text-align:right">'+out+'%</div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px">'
-      +'<div style="font-size:.68rem;color:#5a5550;width:140px;flex-shrink:0;text-align:right">'+selfLabel+'</div>'
-      +'<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+sv+'%;height:100%;background:'+selfColor+';border-radius:3px"></div></div>'
-      +'<div style="font-size:.72rem;color:'+selfColor+';width:34px;text-align:right">'+sv+'%</div>'
-      +'</div>'
-      +'</div>';
-  }
-
-  // Build realm section - God and Self first, then A1 realms
-  let realmHtml = '<div class="section-label">Scores by Realm</div>'
-    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
-    +'<div style="font-size:.65rem;color:#3a3530;margin-bottom:1rem;display:flex;gap:1.5rem;flex-wrap:wrap">'
-    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#e8d7a0;border-radius:2px"></span>How God/others engage you / Awareness</span>'
-    +'<span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#9aa8b0;border-radius:2px"></span>How you engage God/others / Care</span>'
-    +'</div>'
-    + realmRow('Relationship with God', godToYou, youToGod, 'How God engages you', 'How you engage God')
-    + realmRow('Relationship with Self', selfAwareness, selfCare, 'Awareness of Self', 'Care of Self');
-
-  if(prevRow){
-    const realmDefs = [
-      {label:'Work / School',     out:26, sv:27},
-      {label:'Significant Other', out:28, sv:29},
-      {label:'Family',            out:30, sv:31},
-      {label:'Friends',           out:32, sv:33},
-      {label:'Community',         out:34, sv:35},
-    ];
-    realmDefs.forEach(r => {
-      const ov = psn(prevRow[r.out]);
-      const sv = psn(prevRow[r.sv]);
-      realmHtml += realmRow(r.label, ov, sv, 'Others engage you', 'You engage others');
-    });
-  }
-  realmHtml += '</div>';
-
-  // Dimension matrix
-  const DIM_DEFS = [
-    {name:'Being Seen',       ddqi_god:0, ddqi_self:0},
-    {name:'Being Known',      ddqi_god:1, ddqi_self:1},
-    {name:'Having a Voice',   ddqi_god:2, ddqi_self:2},
-    {name:'Belonging',        ddqi_god:3, ddqi_self:3},
-    {name:'Receiving Support',ddqi_god:4, ddqi_self:4},
-    {name:'Trust & Safety',   ddqi_god:5, ddqi_self:5},
-    {name:'Freedom',          ddqi_god:6, ddqi_self:6},
-    {name:'Calling',          ddqi_god:7, ddqi_self:7},
-  ];
-  const REALM_OVERALL_COLS = [
-    {label:'Work',      col:4},
-    {label:'Partner',   col:5},
-    {label:'Family',    col:6},
-    {label:'Friends',   col:7},
-    {label:'Community', col:8},
-  ];
-
-  function ddPct(realmId, qi){
-    const v = answers[realmId+'_'+qi];
-    return v!==undefined ? Math.round((v/7)*100) : null;
-  }
-
-  function contextBar(label, pct, color){
-    if(pct===null||pct===undefined) return '';
-    const col = color || (pct>=70?'#b5c4a0':pct>=45?'#c4a882':'#c97a5a');
-    return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">'
-      +'<div style="font-size:.72rem;color:#6a6258;width:100px;flex-shrink:0;text-align:right">'+label+'</div>'
-      +'<div style="flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
-      +'<div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:3px"></div>'
-      +'</div>'
-      +'<span style="font-size:.72rem;color:'+col+';width:34px;text-align:right">'+pct+'%</span>'
-      +'</div>';
-  }
-
-  function realmContextBar(label, val){
-    const n = psn(val);
-    if(!n) return '';
-    const col = n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
-    return contextBar(label, n, col);
-  }
-
-  const dimBlocks = DIM_DEFS.map(d => {
-    const godPct  = ddPct('god',  d.ddqi_god);
-    const selfPct = ddPct('self', d.ddqi_self);
-
-    let bars = '';
-    bars += contextBar('God',  godPct,  godPct!==null?(godPct>=70?'#b5c4a0':godPct>=45?'#c4a882':'#c97a5a'):null);
-    bars += contextBar('Self', selfPct, selfPct!==null?(selfPct>=70?'#b5c4a0':selfPct>=45?'#9aa8b0':'#c97a5a'):null);
-
-    if(prevRow){
-      REALM_OVERALL_COLS.forEach(r => {
-        bars += realmContextBar(r.label, prevRow[r.col]);
-      });
-    }
-
-    return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.08);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.6rem">'
-      +'<div style="font-size:.78rem;font-weight:500;color:#f0e8df;margin-bottom:.75rem;letter-spacing:.02em">'+d.name+'</div>'
-      + bars
+  // Score cards for all 7 themes
+  const scoreCards = THEMES.map(t => {
+    const s = theme[t.id];
+    const pct = s ? s.overall : 0;
+    const col = dcolor(pct);
+    return '<div class="score-card">'
+      +'<div class="score-card-lbl">'+t.label+'</div>'
+      +'<div class="score-card-val" style="color:'+col+'">'+pct+'%</div>'
+      +'<div class="score-card-tag">'+dtag(pct)+'</div>'
+      +'<div class="score-bar"><div class="score-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'
       +'</div>';
   }).join('');
 
-  const dimMatrixHtml = '<div class="section-label">Connection Dimensions Across All Contexts</div>'
-    +'<div style="margin-bottom:1.5rem">'+dimBlocks+'</div>';
-
-  // Overall A1 score
-  const overallSection = a1
-    ? '<div style="text-align:center;padding:1.5rem;background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'
-      +'<div style="font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem">Overall Heart Engagement Score (Assessment 1)</div>'
-      +'<div style="font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:700;color:#e8d7a0">'+a1.overall+'</div>'
+  // A1 overall if available
+  const a1Section = a1
+    ? '<div style="background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between">'
+      +'<div><div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.3rem">Relational Health Score</div>'
+      +'<div style="font-size:.8rem;color:#6a6258">From your first assessment</div></div>'
+      +'<div style="font-family:Cormorant Garamond,serif;font-size:2rem;font-weight:700;color:#e8d7a0">'+ps(a1.overall)+'</div>'
       +'</div>'
     : '';
 
   document.getElementById('app').innerHTML = '<div class="main"><div class="results-page">'
-    +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Deep Dive Results</h2><p>The foundation layer — your relationship with God and with yourself.</p></div>'
-    + overallSection
-    + realmHtml
-    + dimMatrixHtml
+    +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Heart & Soul Results</h2>'
+    +'<p>The interior layer — an honest picture of the condition of your heart.</p></div>'
+    + a1Section
+    +'<div class="section-label">Heart & Soul Scores</div>'
+    +'<div class="score-grid">'+scoreCards+'</div>'
     +'<div class="section-label">Your Spiritual Direction Guide</div>'
     + renderGuide(guide)
-    +'<div class="discovery-card"><h3>Let\'s talk about your complete results.</h3><p>A free 15-minute Discovery Call is the best next step. Bring both assessments and we\'ll look at the full picture together — what your scores are really telling us about your heart, your relationships, and what a path forward could look like.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Complete Heart Assessment&body=Hi Steve, I just completed both the Heart Engagement Assessment and the Deep Dive. I\'d love to schedule a Discovery Call to discuss my complete results." class="discovery-btn">Request a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
-    +'<button class="retake-btn" onclick="retake()">&#8592; Retake Deep Dive</button>'
+    +'<div class="discovery-card"><h3>Let\'s talk about your complete results.</h3>'
+    +'<p>A free 15-minute Discovery Call is the best next step. Bring both assessments and we\'ll look at the full picture together — what your scores are really telling us about your heart and what a path forward could look like.</p>'
+    +'<a href="mailto:admin@boldhearts.org?subject=Discovery Call — Complete Assessment&body=Hi Steve, I just completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Request a Discovery Call</a>'
+    +'<div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
+    +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button>'
     +'</div></div>';
 }
 
 function retake(){
   answers = {}; userName = ''; userEmail = '';
+  randomizedThemes = getRandomizedThemes();
   document.getElementById('progress-section').style.display = '';
   renderSurvey();
   window.scrollTo({top:0, behavior:'smooth'});
@@ -621,16 +623,14 @@ document.getElementById('nav-toggle').addEventListener('click', function(){
   document.getElementById('nav-links').classList.toggle('open');
 });
 
+// Test mode
 function checkTestMode(){
   const params = new URLSearchParams(window.location.search);
   if(params.get('test') !== 'true') return false;
-  DEEP_REALMS.forEach(r => {
-    r.questions.forEach((_,i) => {
-      answers[r.id+'_'+i] = Math.floor(Math.random()*4)+3;
+  THEMES.forEach(t => {
+    t.questions.forEach((_, i) => {
+      answers[t.id+'_'+i] = Math.floor(Math.random()*4)+3;
     });
-  });
-  DEEP_REALMS.find(r=>r.id==='god').questions.forEach((_,i) => {
-    answers['god_'+i] = Math.floor(Math.random()*3)+1;
   });
   return false;
 }
