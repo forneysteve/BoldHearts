@@ -4,263 +4,430 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoldHearts Admin</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Admin | BoldHearts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px}
-body{font-family:'Inter',sans-serif;font-weight:300;background:#0d0d0d;color:#d4ccc4;min-height:100vh}
+html{font-size:15px}
+body{font-family:'Inter',sans-serif;font-weight:300;background:#0f0e0d;color:#d4ccc4;min-height:100vh}
+a{color:#e8d7a0;text-decoration:none}
 
-/* LOGIN */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
-.login-card{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:3rem;width:100%;max-width:420px;text-align:center}
+/* Login */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f0e0d}
+.login-card{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:3rem;width:100%;max-width:400px;text-align:center}
 .login-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.25rem}
 .login-logo span{color:#e8d7a0}
-.login-sub{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#5a5550;margin-bottom:2.5rem}
-.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;text-align:left}
-.login-field label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#6a6258}
-.login-field input{width:100%;padding:.9rem 1rem;background:#111;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:300}
-.login-field input:focus{outline:none;border-color:#e8d7a0}
-.login-btn{width:100%;padding:1rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.5rem}
+.login-sub{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:2rem}
+.login-input{width:100%;padding:.85rem 1rem;background:#111;border:1px solid rgba(232,215,160,.12);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.9rem;margin-bottom:1rem;outline:none;transition:border-color .2s}
+.login-input:focus{border-color:#e8d7a0}
+.login-btn{width:100%;padding:.9rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .login-btn:hover{background:#f5e8c8}
-.login-err{font-size:.82rem;color:#c97a5a;margin-top:.75rem;min-height:18px}
+.login-err{font-size:.8rem;color:#c97a5a;margin-top:.75rem;min-height:18px}
 
-/* DASHBOARD */
+/* Dashboard */
 .dashboard{display:none;min-height:100vh}
-.dash-header{background:#111;border-bottom:1px solid rgba(232,215,160,.1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.dash-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#f0e8df;letter-spacing:.12em;text-transform:uppercase}
-.dash-logo span{color:#e8d7a0}
-.dash-meta{font-size:.75rem;color:#5a5550;letter-spacing:.06em}
-.logout-btn{background:none;border:1px solid rgba(232,215,160,.2);color:#6a6258;font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem 1rem;border-radius:4px;cursor:pointer}
-.logout-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
-.dash-body{max-width:1200px;margin:0 auto;padding:2rem}
+.topbar{background:#1a1816;border-bottom:1px solid rgba(232,215,160,.1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#f0e8df;letter-spacing:.12em;text-transform:uppercase}
+.topbar-logo span{color:#e8d7a0}
+.topbar-right{display:flex;align-items:center;gap:1rem}
+.topbar-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550}
+.logout-btn{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;background:none;border:1px solid rgba(232,215,160,.12);border-radius:3px;padding:.35rem .75rem;cursor:pointer;transition:all .2s}
+.logout-btn:hover{color:#e8d7a0;border-color:rgba(232,215,160,.3)}
 
-/* STATS ROW */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
-.stat-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem}
-.stat-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.5rem}
-.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df}
-.stat-sub{font-size:.72rem;color:#6a6258;margin-top:.25rem}
+/* Stats */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(232,215,160,.08);border-bottom:1px solid rgba(232,215,160,.08)}
+.stat-card{background:#161412;padding:1.25rem 1.75rem}
+.stat-label{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df}
 
-/* SEARCH */
-.search-row{display:flex;gap:1rem;margin-bottom:1.25rem;align-items:center}
-.search-input{flex:1;padding:.75rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.875rem;font-weight:300}
-.search-input:focus{outline:none;border-color:#e8d7a0}
-.search-input::placeholder{color:#3a3530}
-.refresh-btn{padding:.75rem 1.25rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:4px;color:#6a6258;font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+/* Controls */
+.controls{padding:1rem 2rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid rgba(232,215,160,.06)}
+.search-input{flex:1;padding:.65rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:rgba(232,215,160,.3)}
+.search-input::placeholder{color:#4a4540}
+.refresh-btn{padding:.65rem 1.25rem;background:transparent;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#a09890;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
 .refresh-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
 
-/* TABLE */
-.table-wrap{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;overflow:hidden}
-.results-table{width:100%;border-collapse:collapse}
-.results-table th{padding:.75rem 1rem;text-align:left;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;font-weight:400;border-bottom:1px solid rgba(232,215,160,.1);background:#161412;white-space:nowrap}
-.results-table td{padding:.9rem 1rem;font-size:.82rem;color:#a09890;border-bottom:1px solid rgba(232,215,160,.06);vertical-align:middle}
-.results-table tr:last-child td{border-bottom:none}
-.results-table tr:hover td{background:rgba(232,215,160,.03);cursor:pointer}
-.score-pill{display:inline-block;padding:2px 8px;border-radius:3px;font-size:.72rem;font-weight:500;letter-spacing:.04em}
-.score-high{background:rgba(181,196,160,.12);color:#b5c4a0}
-.score-mid{background:rgba(232,215,160,.1);color:#e8d7a0}
-.score-low{background:rgba(201,122,90,.1);color:#c97a5a}
-.name-cell{color:#f0e8df;font-weight:400}
-.email-cell{color:#6a6258;font-size:.78rem}
-.date-cell{color:#5a5550;font-size:.75rem;white-space:nowrap}
-.empty-state{text-align:center;padding:4rem 2rem;color:#5a5550;font-size:.875rem}
-.guide-badge{display:inline-block;width:8px;height:8px;border-radius:50%;background:#c4a882;margin-left:6px;vertical-align:middle}
+/* Pipeline table */
+.table-wrap{overflow-x:auto;padding:0 2rem 2rem}
+.pipeline-table{width:100%;border-collapse:collapse;min-width:900px;margin-top:1rem}
+.pipeline-table th{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;padding:.6rem .75rem;text-align:left;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap}
+.pipeline-table td{padding:.75rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.pipeline-table tr:hover td{background:rgba(232,215,160,.02)}
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto}
-.modal-overlay.open{display:flex}
-.modal{background:#111;border:1px solid rgba(232,215,160,.15);border-radius:6px;width:100%;max-width:740px;position:relative;margin:auto}
-.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid rgba(232,215,160,.1)}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#f0e8df}
-.modal-close{background:none;border:none;color:#5a5550;font-size:1.25rem;cursor:pointer;padding:.25rem}
-.modal-close:hover{color:#e8d7a0}
-.modal-body{padding:1.5rem;max-height:80vh;overflow-y:auto}
+/* Person info */
+.person-name{font-size:.9rem;font-weight:500;color:#f0e8df}
+.person-email{font-size:.72rem;color:#5a5550;margin-top:1px}
 
-/* TABS */
-.tab-row{display:flex;gap:0;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem}
-.tab-btn{padding:.6rem 1.25rem;background:none;border:none;border-bottom:2px solid transparent;color:#5a5550;font-family:'Inter',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:-1px}
-.tab-btn.active{color:#e8d7a0;border-bottom-color:#e8d7a0}
-.tab-btn:hover{color:#a09890}
-.tab-panel{display:none}
-.tab-panel.active{display:block}
+/* Stage cells */
+.stage{display:flex;flex-direction:column;gap:2px}
+.stage-date{font-size:.75rem;color:#a09890}
+.stage-empty{font-size:.75rem;color:#3a3530}
 
-/* TWO-BAR REALM ROWS */
-.realm-block{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(232,215,160,.08)}
-.realm-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.realm-block-name{font-size:.82rem;color:#b0a898;margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.bar-label{font-size:.68rem;color:#5a5550;width:120px;flex-shrink:0;text-align:right}
-.bar-track{flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
-.bar-pct{font-size:.72rem;font-weight:500;width:34px;text-align:right;flex-shrink:0}
+/* Status badges */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.badge-done{background:rgba(181,196,160,.12);color:#b5c4a0;border:1px solid rgba(181,196,160,.2)}
+.badge-pending{background:rgba(196,168,130,.08);color:#c4a882;border:1px solid rgba(196,168,130,.15)}
+.badge-no{background:rgba(90,85,80,.1);color:#5a5550;border:1px solid rgba(90,85,80,.15)}
+.badge-yes{background:rgba(181,196,160,.12);color:#b5c4a0;border:1px solid rgba(181,196,160,.2)}
 
-/* GUIDE STYLES */
-.guide-title-block{text-align:center;padding:1rem 0 2rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem}
-.guide-main-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df;margin-bottom:.4rem;line-height:1.3}
-.guide-subtitle{font-size:.88rem;color:#6a6258;font-style:italic}
-.guide-section{margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:1px solid rgba(232,215,160,.07)}
-.guide-section:last-of-type{border-bottom:none}
-.guide-section-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:.9rem}
-.guide-section-icon{font-size:1rem;opacity:.7}
-.guide-section-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;font-weight:400}
-.guide-section-body{font-size:.88rem;color:#c0b8b0;line-height:1.95}
-.guide-section-body p{margin-bottom:.85rem}
-.guide-section-body p:last-child{margin-bottom:0}
-.guide-closing{background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-top:1.5rem}
-.guide-closing-label{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.6rem}
-.guide-closing-text{font-size:.88rem;color:#c0b8b0;line-height:1.9;font-style:italic}
-.practice-block{background:#1a1714;border:1px solid rgba(196,168,130,.15);border-left:3px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem}
-.practice-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#f0e8df;margin-bottom:.5rem}
-.practice-body{font-size:.88rem;color:#c0b8b0;line-height:1.95}
-.no-guide{text-align:center;padding:2.5rem 1rem;color:#5a5550;font-size:.85rem}
-.no-guide-icon{font-size:2rem;margin-bottom:.75rem;opacity:.3}
+/* Score pill */
+.score-pill{display:inline-block;font-size:.72rem;font-weight:500;padding:2px 8px;border-radius:3px;background:rgba(255,255,255,.05)}
+.score-high{color:#b5c4a0}
+.score-mid{color:#e8d7a0}
+.score-low{color:#c97a5a}
+
+/* Action buttons */
+.action-btn{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid rgba(232,215,160,.15);background:transparent;color:#a09890;transition:all .2s;white-space:nowrap;font-family:'Inter',sans-serif}
+.action-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
+.action-btn+.action-btn{margin-top:4px}
+.action-col{display:flex;flex-direction:column;gap:4px}
+
+/* Pipeline progress bar */
+.pipeline-bar{display:flex;gap:2px;align-items:center;margin-top:3px}
+.pip{width:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06)}
+.pip.done{background:#b5c4a0}
+.pip.active{background:#e8d7a0}
+
+/* Section divider */
+.stage-group-header{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#3a3530;padding:.4rem .75rem;background:#131110;border-bottom:1px solid rgba(232,215,160,.04)}
 
 /* Loading */
-.loading{text-align:center;padding:3rem;color:#5a5550;font-size:.875rem}
-.loading-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e8d7a0;margin:0 3px;animation:bounce .8s infinite}
-.loading-dot:nth-child(2){animation-delay:.15s}
-.loading-dot:nth-child(3){animation-delay:.3s}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.loading{text-align:center;padding:4rem;color:#5a5550;font-size:.85rem}
+.empty{text-align:center;padding:4rem;color:#5a5550;font-size:.85rem}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:2rem;max-width:560px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#f0e8df;margin-bottom:.25rem}
+.modal-sub{font-size:.75rem;color:#5a5550;margin-bottom:1.5rem}
+.modal-section{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:.75rem 0 .4rem;padding-bottom:.3rem;border-bottom:1px solid rgba(232,215,160,.08)}
+.modal-row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.modal-row-label{font-size:.75rem;color:#6a6258}
+.modal-row-val{font-size:.75rem;color:#d4ccc4;text-align:right}
+.modal-close{float:right;background:none;border:none;color:#6a6258;font-size:1.2rem;cursor:pointer;margin-top:-4px}
 
 @media(max-width:768px){
-  .stats-row{grid-template-columns:1fr 1fr}
-  .dash-body{padding:1rem}
-  .results-table th:nth-child(n+5){display:none}
-  .results-table td:nth-child(n+5){display:none}
-  .modal-overlay{padding:.5rem}
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .controls{padding:.75rem 1rem}
+  .table-wrap{padding:0 1rem 2rem}
+  .topbar{padding:.75rem 1rem}
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- Login -->
 <div class="login-wrap" id="login-wrap">
   <div class="login-card">
     <div class="login-logo">Bold<span>Hearts</span></div>
     <div class="login-sub">Admin Dashboard</div>
-    <div class="login-field">
-      <label for="pw">Password</label>
-      <input type="password" id="pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
+    <input type="password" class="login-input" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <div class="login-err" id="login-err"></div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- Dashboard -->
 <div class="dashboard" id="dashboard">
-  <div class="dash-header">
-    <div class="dash-logo">Bold<span>Hearts</span> <span style="font-size:.7rem;color:#5a5550;letter-spacing:.06em;font-family:'Inter',sans-serif;font-weight:300;margin-left:.5rem">Admin</span></div>
-    <div style="display:flex;align-items:center;gap:1.5rem">
-      <div class="dash-meta" id="dash-meta">Loading...</div>
+  <div class="topbar">
+    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span></div>
+    <div class="topbar-right">
+      <span class="topbar-label" id="last-updated"></span>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
     </div>
   </div>
 
-  <div class="dash-body">
-    <div class="stats-row" id="stats-row">
-      <div class="stat-card"><div class="stat-label">Total Submissions</div><div class="stat-val" id="stat-total">—</div></div>
-      <div class="stat-card"><div class="stat-label">Avg Overall Score</div><div class="stat-val" id="stat-avg">—</div></div>
-      <div class="stat-card"><div class="stat-label">This Month</div><div class="stat-val" id="stat-month">—</div></div>
-      <div class="stat-card"><div class="stat-label">Latest Submission</div><div class="stat-val" id="stat-latest" style="font-size:1.1rem">—</div></div>
-    </div>
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">Total People</div><div class="stat-val" id="stat-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">Relational Complete</div><div class="stat-val" id="stat-relational">—</div></div>
+    <div class="stat-card"><div class="stat-label">Interior Complete</div><div class="stat-val" id="stat-interior">—</div></div>
+    <div class="stat-card"><div class="stat-label">Follow-up Requested</div><div class="stat-val" id="stat-followup">—</div></div>
+  </div>
 
-    <div class="search-row">
-      <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
-      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
-    </div>
+  <div class="controls">
+    <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
+    <button class="refresh-btn" onclick="loadData()">↺ Refresh</button>
+  </div>
 
-    <div class="table-wrap">
-      <div class="loading" id="table-loading">
-        <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
-      </div>
-      <table class="results-table" id="results-table" style="display:none">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Assessment</th>
-            <th>Deep Dive</th>
-            <th>Guide</th>
-            <th>Overall</th>
-            <th>Work</th>
-            <th>Family</th>
-            <th>Friends</th>
-            <th>Community</th>
-            <th>God</th>
-            <th>Self</th>
-            <th>Warnings</th>
-          </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-      </table>
-      <div class="empty-state" id="empty-state" style="display:none">No submissions found.</div>
-    </div>
+  <div class="table-wrap">
+    <div class="loading" id="table-loading">Loading data...</div>
+    <div class="empty" id="empty-state" style="display:none">No submissions yet.</div>
+    <table class="pipeline-table" id="results-table" style="display:none">
+      <thead>
+        <tr>
+          <th style="min-width:160px">Person</th>
+          <th>Relational<br>Assessment</th>
+          <th>Relational<br>Email</th>
+          <th>Interior<br>Assessment</th>
+          <th>Interior<br>Email</th>
+          <th>Follow-up<br>Requested</th>
+          <th>Request<br>Date</th>
+          <th>Guide<br>Created</th>
+          <th>Guide<br>Sent</th>
+          <th>Scores</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- Detail Modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="modal-title">Results</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
   </div>
 </div>
 
 <script>
-const PASSWORD = 'boldhearts2026';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
-
+const PASSWORD = 'boldhearts2026';
 let allRows = [];
 
 function doLogin(){
-  const pw = document.getElementById('pw').value;
-  const err = document.getElementById('login-err');
+  const pw = document.getElementById('pw-input').value;
   if(pw === PASSWORD){
     document.getElementById('login-wrap').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     loadData();
   } else {
-    err.textContent = 'Incorrect password.';
-    document.getElementById('pw').value = '';
+    document.getElementById('login-err').textContent = 'Incorrect password.';
   }
 }
 
 function doLogout(){
-  document.getElementById('login-wrap').style.display = 'flex';
   document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('pw').value = '';
-  allRows = [];
+  document.getElementById('login-wrap').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
 }
 
-function parseScore(val){
-  if(!val || val === '') return null;
-  // Handle decimal (0.75) or percentage string (75%) or plain number (75)
+function fmtDate(val){
+  if(!val) return null;
   const s = val.toString().trim();
-  if(s.endsWith('%')) return parseInt(s);
-  const n = parseFloat(s);
-  if(n > 0 && n <= 1) return Math.round(n * 100);
-  return Math.round(n);
+  if(!s || s === '—') return null;
+  // Try parsing
+  const d = new Date(s);
+  if(!isNaN(d)) return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return s.split(' ')[0]; // fallback
 }
 
-function scoreClass(score){
-  const n = parseScore(score);
-  if(n === null) return '';
-  if(n >= 70) return 'score-high';
-  if(n >= 45) return 'score-mid';
+function scoreColor(val){
+  if(!val) return '';
+  const n = parseFloat(val);
+  if(isNaN(n)) return '';
+  if(n >= 75) return 'score-high';
+  if(n >= 50) return 'score-mid';
   return 'score-low';
 }
 
-function scorePill(val){
-  const n = parseScore(val);
-  if(n === null) return '<span style="color:#3a3530">—</span>';
-  return `<span class="score-pill ${scoreClass(val)}">${n}%</span>`;
+function pill(val){
+  if(!val || val === '—' || val === '') return '<span style="color:#3a3530;font-size:.72rem">—</span>';
+  const cls = scoreColor(val);
+  return '<span class="score-pill '+cls+'">'+val+'</span>';
+}
+
+function badge(text, type){
+  return '<span class="badge badge-'+type+'">'+text+'</span>';
+}
+
+function pipelineProgress(row){
+  // row indices: 0=timestamp,1=name,2=email,3=overall,4=work...
+  const hasRelational = !!fmtDate(row[0]);
+  const hasInterior = !!fmtDate(row[43]); // hs_date col 44 = index 43
+  const hasFollowup = row[51] && row[51].toString().toLowerCase() === 'yes';
+  const hasGuideCreated = !!fmtDate(row[52]);
+  const hasGuideSent = !!fmtDate(row[53]);
+  const steps = [hasRelational, hasInterior, hasFollowup, hasGuideCreated, hasGuideSent];
+  const done = steps.filter(Boolean).length;
+  const pips = steps.map((s,i) => '<div class="pip'+(s?' done':i===done?' active':'')+'"></div>').join('');
+  return '<div class="pipeline-bar">'+pips+'</div>';
+}
+
+function renderTable(rows){
+  document.getElementById('table-loading').style.display = 'none';
+  if(!rows || rows.length === 0){
+    document.getElementById('empty-state').style.display = 'block';
+    return;
+  }
+  document.getElementById('results-table').style.display = 'table';
+
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = rows.map((row, idx) => {
+    const name = row[1] || '—';
+    const email = row[2] || '—';
+
+    // Relational
+    const relDate = fmtDate(row[0]);
+    const relOverall = row[3] ? row[3].toString() : '';
+
+    // Interior
+    const intDate = fmtDate(row[43]);
+    const intOverall = row[42] ? row[42].toString() : '';
+
+    // Pipeline cols — stored in cols 51-54 (indices 50-53)
+    const relEmailSent = row[50] ? row[50].toString() : '';
+    const intEmailSent = row[51] ? row[51].toString() : '';
+    const followupReq  = row[52] ? row[52].toString() : '';
+    const followupDate = fmtDate(row[53]);
+    const guideCreated = fmtDate(row[54]);
+    const guideSent    = fmtDate(row[55]);
+
+    // Relational email badge
+    const relEmailHtml = relEmailSent && relEmailSent.toLowerCase()==='yes'
+      ? badge('✓ Sent','done')
+      : relDate ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+
+    // Interior email badge
+    const intEmailHtml = intEmailSent && intEmailSent.toLowerCase()==='yes'
+      ? badge('✓ Sent','done')
+      : intDate ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+
+    // Follow-up
+    const followupHtml = !followupReq || followupReq==='—'
+      ? '<span style="color:#3a3530;font-size:.72rem">—</span>'
+      : followupReq.toLowerCase()==='yes' ? badge('✓ Yes','yes') : badge('No','no');
+
+    // Guide created
+    const guideCreatedHtml = guideCreated
+      ? '<div class="stage-date">'+guideCreated+'</div>'
+      : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+
+    // Guide sent
+    const guideSentHtml = guideSent
+      ? badge('✓ Sent','done')
+      : guideCreated ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+
+    // Scores summary
+    const scoresHtml = '<div style="display:flex;flex-direction:column;gap:2px">'
+      +(relOverall ? '<div style="font-size:.68rem;color:#6a6258">R: '+pill(relOverall)+'</div>' : '')
+      +(intOverall ? '<div style="font-size:.68rem;color:#6a6258">I: '+pill(intOverall)+'</div>' : '')
+      +'</div>';
+
+    return '<tr data-idx="'+idx+'">'
+      // Person
+      +'<td><div class="person-name">'+name+'</div><div class="person-email">'+email+'</div>'
+      +pipelineProgress(row)+'</td>'
+      // Relational date
+      +'<td>'+(relDate ? '<div class="stage-date">'+relDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      // Relational email
+      +'<td>'+relEmailHtml+'</td>'
+      // Interior date
+      +'<td>'+(intDate ? '<div class="stage-date">'+intDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      // Interior email
+      +'<td>'+intEmailHtml+'</td>'
+      // Follow-up requested
+      +'<td>'+followupHtml+'</td>'
+      // Request date
+      +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      // Guide created
+      +'<td>'+guideCreatedHtml+'</td>'
+      // Guide sent
+      +'<td>'+guideSentHtml+'</td>'
+      // Scores
+      +'<td>'+scoresHtml+'</td>'
+      // Actions
+      +'<td><div class="action-col">'
+      +'<button class="action-btn" onclick="viewScores('+idx+')">View Scores</button>'
+      +'<button class="action-btn" onclick="markFollowup('+idx+')">Mark Follow-up</button>'
+      +'</div></td>'
+      +'</tr>';
+  }).join('');
+
+  updateStats(rows);
+  document.getElementById('last-updated').textContent = 'Updated '+new Date().toLocaleTimeString();
+}
+
+function updateStats(rows){
+  document.getElementById('stat-total').textContent = rows.length;
+  document.getElementById('stat-relational').textContent = rows.filter(r => r[0] && fmtDate(r[0])).length;
+  document.getElementById('stat-interior').textContent = rows.filter(r => r[43] && fmtDate(r[43])).length;
+  document.getElementById('stat-followup').textContent = rows.filter(r => r[52] && r[52].toString().toLowerCase()==='yes').length;
+}
+
+function filterTable(){
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allRows.filter(r =>
+    (r[1]||'').toLowerCase().includes(q) || (r[2]||'').toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+}
+
+function viewScores(idx){
+  const row = allRows[idx];
+  const name = row[1] || '—';
+  const email = row[2] || '—';
+
+  function fmt(val){ return val && val !== '—' && val !== '' ? val.toString() : '—'; }
+  function scoreRow(label, val){
+    if(!val || val==='—' || val==='') return '';
+    const cls = scoreColor(val);
+    return '<div class="modal-row"><span class="modal-row-label">'+label+'</span><span class="modal-row-val '+cls+'">'+val+'</span></div>';
+  }
+
+  document.getElementById('modal-body').innerHTML =
+    '<button class="modal-close" onclick="closeModal()">✕</button>'
+    +'<h3>'+name+'</h3>'
+    +'<div class="modal-sub">'+email+'</div>'
+    +'<div class="modal-section">Relational Health</div>'
+    +scoreRow('Overall', fmt(row[3]))
+    +scoreRow('Work', fmt(row[4]))
+    +scoreRow('Significant Other', fmt(row[5]))
+    +scoreRow('Family', fmt(row[6]))
+    +scoreRow('Friends', fmt(row[7]))
+    +scoreRow('Community', fmt(row[8]))
+    +scoreRow('God', fmt(row[44]))
+    +'<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem">Patterns: '+fmt(row[17])+'</div>'
+    +'<div class="modal-section">Interior Health — Themes</div>'
+    +scoreRow('Overall', fmt(row[42]))
+    +scoreRow('Grief & Loss', fmt(row[20]))
+    +scoreRow('Shame & Guilt', fmt(row[37]))
+    +scoreRow('Fear & Anxiety', fmt(row[38]))
+    +scoreRow('Anger', fmt(row[39]))
+    +scoreRow('Desire & Hope', fmt(row[40]))
+    +scoreRow('Joy & Delight', fmt(row[41]))
+    +'<div class="modal-section">Interior Health — Dimensions</div>'
+    +scoreRow('Awareness', fmt(row[44]))
+    +scoreRow('Honesty', fmt(row[45]))
+    +scoreRow('Movement', fmt(row[46]))
+    +scoreRow('Safety', fmt(row[47]))
+    +scoreRow('Direction', fmt(row[48]))
+    +scoreRow('Peace', fmt(row[49]));
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function markFollowup(idx){
+  // Toggle follow-up marker for this row
+  const row = allRows[idx];
+  const name = row[1] || '';
+  const email = row[2] || '';
+  const current = row[52] ? row[52].toString().toLowerCase() : '';
+  const newVal = current === 'yes' ? 'No' : 'Yes';
+  const newDate = newVal === 'Yes' ? new Date().toLocaleString() : '';
+
+  // Update via sheets
+  const params = new URLSearchParams({
+    action: 'updatepipeline',
+    email: email,
+    followup_requested: newVal,
+    followup_date: newDate
+  });
+  new Image().src = SHEETS_URL + '?' + params.toString();
+
+  // Update local data
+  allRows[idx][52] = newVal;
+  allRows[idx][53] = newDate;
+  renderTable(allRows);
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
 }
 
 async function loadData(){
@@ -288,299 +455,19 @@ async function loadData(){
     if(data.rows && data.rows.length > 0){
       allRows = data.rows;
       renderTable(allRows);
-      updateStats(allRows);
     } else {
       document.getElementById('table-loading').style.display = 'none';
       document.getElementById('empty-state').style.display = 'block';
     }
   } catch(e){
     document.getElementById('table-loading').style.display = 'none';
-    document.getElementById('empty-state').textContent = 'Error loading data. Make sure the Apps Script is deployed correctly.';
+    document.getElementById('empty-state').textContent = 'Error loading data.';
     document.getElementById('empty-state').style.display = 'block';
   }
 }
 
-function updateStats(rows){
-  document.getElementById('stat-total').textContent = rows.length;
-  const scores = rows.map(r => parseInt(r[3])).filter(n => !isNaN(n));
-  const avg = scores.length > 0 ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
-  document.getElementById('stat-avg').textContent = avg + '%';
-  const now = new Date();
-  const thisMonth = rows.filter(r => {
-    const d = new Date(r[0]);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  }).length;
-  document.getElementById('stat-month').textContent = thisMonth;
-  if(rows.length > 0){
-    const latest = new Date(rows[rows.length-1][0]);
-    document.getElementById('stat-latest').textContent = latest.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  }
-  document.getElementById('dash-meta').textContent = rows.length + ' total submissions';
-}
-
-function renderTable(rows){
-  document.getElementById('table-loading').style.display = 'none';
-  if(rows.length === 0){
-    document.getElementById('empty-state').style.display = 'block';
-    return;
-  }
-  const tbody = document.getElementById('table-body');
-  tbody.innerHTML = rows.slice().reverse().map((r, i) => {
-    const originalIdx = rows.length - 1 - i;
-    const date = new Date(r[0]);
-    const dateStr = date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    const warnings = r[18] || '—';
-    const shortWarnings = warnings.length > 30 ? warnings.substring(0,30)+'...' : warnings;
-    const hasGuide = !!(r[24]);
-    const hasDeepdive = !!(r[19] || r[20]);
-    const guideDot = hasGuide ? '<span class="guide-badge" title="Guide available"></span>' : '';
-    // Deep dive date — stored in col 25 (guide_date) when guide generated, or detect from version col
-    const ddDone = hasDeepdive;
-    const ddDateStr = ddDone ? '<span style="color:#c4a882;font-size:.72rem">✓ Done</span>' : '<span style="color:#3a3530;font-size:.72rem">—</span>';
-    // Guide date from col 26 (index 25 = guide_json, 26 = guide_date... wait col 26 is index 25)
-    // Cols are 1-indexed in sheet but 0-indexed in array: col26=index25=guide_json, col27=index26=guide_date
-    const guideDateRaw = r[25];
-    const guideDateStr = guideDateRaw ? new Date(guideDateRaw).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-    return `<tr onclick="showModal(${originalIdx})">
-      <td class="name-cell">${r[1]||'—'}${guideDot}</td>
-      <td class="email-cell">${r[2]||'—'}</td>
-      <td class="date-cell">${dateStr}</td>
-      <td class="date-cell">${ddDateStr}</td>
-      <td style="font-size:.72rem;color:${hasGuide?'#c4a882':'#3a3530'}">${hasGuide?guideDateStr:'—'}</td>
-      <td>${scorePill(r[3])}</td>
-      <td>${scorePill(r[4])}</td>
-      <td>${scorePill(r[6])}</td>
-      <td>${scorePill(r[7])}</td>
-      <td>${scorePill(r[8])}</td>
-      <td>${scorePill(r[19])}</td>
-      <td>${scorePill(r[20])}</td>
-      <td style="font-size:.72rem;color:#6a6258">${shortWarnings}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('results-table').style.display = 'table';
-}
-
-function filterTable(){
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const filtered = allRows.filter(r =>
-    (r[1]||'').toLowerCase().includes(q) ||
-    (r[2]||'').toLowerCase().includes(q)
-  );
-  renderTable(filtered);
-}
-
-function showTab(tabId){
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tabId));
-}
-
-// col indices (0-based): outward/self per realm
-// 26=work_outward, 27=work_self, 28=partner_outward, 29=partner_self
-// 30=family_outward, 31=family_self, 32=friends_outward, 33=friends_self
-// 34=community_outward, 35=community_self
-
-const REALM_DEFS = [
-  { label:'Work / School',      overall:4,  outward:26, self:27 },
-  { label:'Significant Other',  overall:5,  outward:28, self:29 },
-  { label:'Family',             overall:6,  outward:30, self:31 },
-  { label:'Friends',            overall:7,  outward:32, self:33 },
-  { label:'Community',          overall:8,  outward:34, self:35 },
-  { label:'Relationship with God',  overall:19, outward:null, self:null },
-  { label:'Relationship with Self', overall:20, outward:null, self:null },
-];
-
-function twoBar(outward, self_, label){
-  const ov = parseScore(outward) || 0;
-  const sv = parseScore(self_)   || 0;
-  const oc = ov>=70?'#b5c4a0':ov>=45?'#e8d7a0':'#c97a5a';
-  const sc = sv>=70?'#b5c4a0':sv>=45?'#9aa8b0':'#c97a5a';
-  return `<div class="realm-block-name">${label}</div>
-    <div class="bar-row">
-      <div class="bar-label">Others → You</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${ov}%;background:${oc}"></div></div>
-      <div class="bar-pct" style="color:${oc}">${ov}%</div>
-    </div>
-    <div class="bar-row">
-      <div class="bar-label">You → Others</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${sv}%;background:${sc}"></div></div>
-      <div class="bar-pct" style="color:${sc}">${sv}%</div>
-    </div>`;
-}
-
-function singleBar(val, label){
-  const n = parseScore(val) || 0;
-  const col = n>=70?'#b5c4a0':n>=45?'#c4a882':'#c97a5a';
-  return `<div class="realm-block-name">${label}</div>
-    <div class="bar-row">
-      <div class="bar-label">Overall</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${n}%;background:${col}"></div></div>
-      <div class="bar-pct" style="color:${col}">${n}%</div>
-    </div>`;
-}
-
-function renderGuidePanel(r){
-  const guideJson = r[24];
-  if(!guideJson){
-    return `<div class="no-guide">
-      <div class="no-guide-icon">📋</div>
-      <div>No spiritual direction guide generated yet.</div>
-      <div style="margin-top:.5rem;font-size:.75rem;color:#3a3530">Guide is created when ${r[1]||'this person'} completes the Deep Dive assessment.</div>
-    </div>`;
-  }
-  let guide;
-  try { guide = JSON.parse(guideJson); }
-  catch(e){ return `<div class="no-guide"><div>Guide data could not be parsed.</div></div>`; }
-
-  const sections = (guide.sections || []).map(s => {
-    const paragraphs = (s.content || '').split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
-    return `<div class="guide-section">
-      <div class="guide-section-hdr">
-        <span class="guide-section-icon">${s.icon||''}</span>
-        <span class="guide-section-label">${s.label||''}</span>
-      </div>
-      <div class="guide-section-body">${paragraphs}</div>
-    </div>`;
-  }).join('');
-
-  const closing = guide.closingNote
-    ? `<div class="guide-closing">
-        <div class="guide-closing-label">A Note from Steve</div>
-        <div class="guide-closing-text">${guide.closingNote}</div>
-       </div>`
-    : '';
-
-  const guideDate = r[25] ? `<div style="font-size:.68rem;color:#3a3530;margin-top:.5rem">Generated ${new Date(r[25]).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>` : '';
-
-  return `<div class="guide-title-block">
-    <div class="guide-main-title">${guide.title||'Spiritual Direction Guide'}</div>
-    <div class="guide-subtitle">${guide.subtitle||''}</div>
-    ${guideDate}
-  </div>
-  ${sections}
-  ${closing}`;
-}
-
-function buildDeepDiveGmailUrl(r){
-  var name    = r[1] || 'there';
-  var email   = r[2] || '';
-  var overall = parseScore(r[3]) || '—';
-  var subject = encodeURIComponent('Your BoldHearts Deep Dive Assessment');
-  var line1 = "Hi " + name + ", thank you for taking the Heart Engagement Assessment — it takes honesty to sit with questions like these. Your overall score was " + overall + "%. There is real connection in your life, and there are gaps worth exploring.";
-  var line2 = "The next step is the Deep Dive — 16 questions about your relationship with God and yourself. These are deeper questions, meant to be challenging. In my experience, they often reveal why our other relationships score the way they do.";
-  var line3 = "It only takes five minutes. Use the same email address.\nhttps://boldhearts.org/deepdive.html";
-  var line4 = "Looking forward to connecting over your scores soon.";
-  var line5 = "Steve\nBoldHearts | Spiritual Direction - Pastoral Counseling - Leadership Soul Care\nboldhearts.org";
-  var body = line1 + "\n\n" + line2 + "\n\n" + line3 + "\n\n" + line4 + "\n\n" + line5;
-  return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email) + '&su=' + subject + '&body=' + encodeURIComponent(body);
-}
-
-function showModal(idx){
-  const r = allRows[idx];
-  if(!r) return;
-
-  document.getElementById('modal-title').textContent = (r[1]||'Unknown') + "'s Results";
-
-  const dimCols = [
-    {label:'Being Seen',           idx:9},
-    {label:'Being Known',          idx:10},
-    {label:'Having a Voice',       idx:11},
-    {label:'Belonging',            idx:12},
-    {label:'Receiving Support',    idx:13},
-    {label:'Trust & Safety',       idx:14},
-    {label:'Calling',              idx:15},
-    {label:'Freedom to Be Myself', idx:16},
-  ];
-
-  function bar(pct){
-    const n = parseScore(pct)||0;
-    const col = n>=70?'#b5c4a0':n>=45?'#e8d7a0':'#c97a5a';
-    return `<div style="display:flex;align-items:center;gap:8px">
-      <div style="flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
-        <div style="width:${n}%;height:100%;background:${col};border-radius:3px"></div>
-      </div>
-      <span style="font-size:.75rem;color:${col};width:36px;text-align:right">${n}%</span>
-    </div>`;
-  }
-
-  const date = new Date(r[0]).toLocaleString('en-US',{month:'long',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-  const hasGuide = !!(r[24]);
-
-  // Build realm rows — two bars where outward/self data exists
-  const realmRowsHtml = REALM_DEFS.map(rd => {
-    const hasData = r[rd.overall] && r[rd.overall] !== '';
-    if(!hasData) return '';
-    let content;
-    if(rd.outward !== null && r[rd.outward] && r[rd.outward] !== ''){
-      content = twoBar(r[rd.outward], r[rd.self], rd.label);
-    } else {
-      content = singleBar(r[rd.overall], rd.label);
-    }
-    return `<div class="realm-block">${content}</div>`;
-  }).join('');
-
-  // ── SCORES TAB ──
-  const scoresHtml = `
-    <div style="text-align:center;padding:1rem 0 1.5rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:${parseScore(r[3])>=70?'#b5c4a0':parseScore(r[3])>=45?'#e8d7a0':'#c97a5a'}">${parseScore(r[3])||'—'}%</div>
-      <div style="font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-top:.25rem">Overall Score</div>
-      <div style="font-size:.78rem;color:#5a5550;margin-top:.5rem">${date}</div>
-      <div style="font-size:.78rem;color:#6a6258;margin-top:.25rem">${r[2]||''}</div>
-    </div>
-
-    <div style="margin-bottom:1.5rem">
-      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Scores by Realm</div>
-      <div style="font-size:.68rem;color:#3a3530;margin-bottom:.75rem;display:flex;gap:1.5rem">
-        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#e8d7a0;border-radius:2px"></span>Others → You</span>
-        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:3px;background:#9aa8b0;border-radius:2px"></span>You → Others</span>
-      </div>
-      ${realmRowsHtml}
-    </div>
-
-    <div style="margin-bottom:1.5rem">
-      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Connection Dimensions</div>
-      ${dimCols.map(c=>`
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:.6rem">
-          <div style="width:140px;font-size:.78rem;color:#6a6258;text-align:right;flex-shrink:0">${c.label}</div>
-          <div style="flex:1">${bar(r[c.idx])}</div>
-        </div>`).join('')}
-    </div>
-
-    <div style="margin-bottom:1.5rem">
-      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Engagement Patterns</div>
-      ${(r[17]||'—').split(' | ').map(p=>`<div style="font-size:.82rem;color:#a09890;margin-bottom:.4rem">• ${p}</div>`).join('')}
-    </div>
-
-    <div style="margin-bottom:1.5rem">
-      <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.08)">Warning Signs</div>
-      ${(r[18]||'None').split(' | ').map(w=>`<div style="font-size:.82rem;color:#c97a5a;margin-bottom:.4rem">• ${w}</div>`).join('')}
-    </div>
-
-    <div style="padding-top:1.5rem;border-top:1px solid rgba(196,168,130,.1);text-align:center">
-      <a href="${buildDeepDiveGmailUrl(r)}" target="_blank" style="display:inline-block;background:#c4a882;color:#111;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.75rem 1.75rem;border-radius:4px;text-decoration:none">Send Deep Dive Invitation</a>
-      <div style="font-size:.72rem;color:#5a5550;margin-top:.6rem">Opens a pre-filled email in Gmail — just hit Send</div>
-    </div>`;
-
-  document.getElementById('modal-body').innerHTML = `
-    <div class="tab-row">
-      <button class="tab-btn active" data-tab="scores" onclick="showTab('scores')">Scores &amp; Patterns</button>
-      <button class="tab-btn" data-tab="guide" onclick="showTab('guide')">
-        Spiritual Direction Guide${hasGuide?' <span style="color:#c4a882">✓</span>':''}
-      </button>
-    </div>
-    <div class="tab-panel active" id="tab-scores">${scoresHtml}</div>
-    <div class="tab-panel" id="tab-guide">${renderGuidePanel(r)}</div>
-  `;
-
-  document.getElementById('modal-overlay').classList.add('open');
-}
-
-function closeModal(){
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') closeModal();
-  if(e.key === 'Enter' && document.getElementById('login-wrap').style.display !== 'none') doLogin();
+document.getElementById('pw-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') doLogin();
 });
 </script>
 </body>
