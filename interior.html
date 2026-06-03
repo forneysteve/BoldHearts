@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;font-size:16px}
@@ -226,7 +227,6 @@ const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const SCALE = [{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
 
-// Dimensions in order for each theme
 const DIMS = ['awareness','honesty','movement','safety','direction','peace'];
 const DIM_LABELS = {
   awareness: 'Awareness',
@@ -237,10 +237,9 @@ const DIM_LABELS = {
   peace:     'Peace'
 };
 
-// Reverse scored: theme_dimIndex
 const REVERSE_SCORED = {
-  grief:  [2],  // Movement — same place as a year ago
-  desire: [2]   // Movement — don't see much movement
+  grief:  [2],
+  desire: [2]
 };
 
 const THEMES = [
@@ -336,7 +335,6 @@ const THEMES = [
   }
 ];
 
-// Randomize theme order
 function getRandomizedThemes(){
   const themes = [...THEMES];
   for(let i = themes.length - 1; i > 0; i--){
@@ -346,7 +344,7 @@ function getRandomizedThemes(){
   return themes;
 }
 
-let answers = {}, userName = '', userEmail = '';
+let answers = {}, userName = '', userEmail = '', isTestMode = false;
 let randomizedThemes = getRandomizedThemes();
 
 function totalQs(){ return THEMES.reduce((a,t) => a + t.questions.length, 0); }
@@ -361,25 +359,20 @@ function gapInsight(theme){
   const lowest = sorted[0];
   const highest = sorted[sorted.length-1];
   const gap = theme[highest].overall - theme[lowest].overall;
-  const labels = {grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'};
 
   const insights = [];
 
-  // Grief lower than Desire
   if(theme.grief && theme.desire && theme.desire.overall - theme.grief.overall >= 15)
     insights.push('Your Grief is significantly lower than your Desire — the wanting is still there, but something unprocessed may be blocking it from moving.');
 
-  // Fear and Shame both low
   if(theme.fear && theme.shame && theme.fear.overall < 50 && theme.shame.overall < 50)
     insights.push('Your Fear and Shame scores are both low — that combination usually means something is being both hidden and avoided at the same time.');
 
-  // Joy lowest of all
   const joyScore = theme.joy ? theme.joy.overall : 100;
   const avgOthers = ids.filter(id=>id!=='joy').reduce((a,id)=>a+theme[id].overall,0) / (ids.length-1);
   if(theme.joy && joyScore < 45 && joyScore < avgOthers - 10)
     insights.push('Your Joy is your lowest score — when joy drops this low, it\'s usually not about circumstances. It\'s about what has accumulated underneath.');
 
-  // Movement stalled (anger low — suppressed)
   if(theme.anger && theme.anger.overall < 40)
     insights.push('Your Anger score is very low — low anger rarely means nothing is wrong. It usually means something has gone underground rather than been processed.');
 
@@ -443,9 +436,8 @@ function renderSurvey(){
         const id = 'opt_'+k+'_'+si; const sel = cur===s.val;
         return '<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
       }).join('');
-      const dimLabel = '';
       html += '<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'">'
-        +'<div class="qnum">Question '+(qNum+1)+' '+dimLabel+'</div>'
+        +'<div class="qnum">Question '+(qNum+1)+'</div>'
         +'<div class="qlabel">'+q.t+'</div>'
         +'<div class="scale-opts"><div class="scale-endlabels"><span class="scale-endlabel">Disagree</span><span class="scale-endlabel">Agree</span></div>'
         +'<div class="scale-circles">'+opts+'</div></div></div>';
@@ -521,25 +513,27 @@ async function submitGate(){
   const scores = calcScores();
 
   // Save to Sheets
-  const params = new URLSearchParams({
-    action: 'heartsoul',
-    name: userName,
-    email: userEmail,
-    grief_score:   scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
-    shame_score:   scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
-    fear_score:    scores.theme.fear    ? scores.theme.fear.overall+'%'    : '',
-    anger_score:   scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
-    desire_score:  scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
-    joy_score:     scores.theme.joy     ? scores.theme.joy.overall+'%'     : '',
-    hs_overall:    scores.overall+'%',
-    awareness_score: scores.dimScores.awareness+'%',
-    honesty_score:   scores.dimScores.honesty+'%',
-    movement_score:  scores.dimScores.movement+'%',
-    safety_score:    scores.dimScores.safety+'%',
-    direction_score: scores.dimScores.direction+'%',
-    peace_score:     scores.dimScores.peace+'%'
-  });
-  if(!isTestMode) new Image().src = SHEETS_URL + '?' + params.toString();
+  if(!isTestMode){
+    const params = new URLSearchParams({
+      action: 'heartsoul',
+      name: userName,
+      email: userEmail,
+      grief_score:   scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
+      shame_score:   scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
+      fear_score:    scores.theme.fear    ? scores.theme.fear.overall+'%'    : '',
+      anger_score:   scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
+      desire_score:  scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
+      joy_score:     scores.theme.joy     ? scores.theme.joy.overall+'%'     : '',
+      hs_overall:    scores.overall+'%',
+      awareness_score: scores.dimScores.awareness+'%',
+      honesty_score:   scores.dimScores.honesty+'%',
+      movement_score:  scores.dimScores.movement+'%',
+      safety_score:    scores.dimScores.safety+'%',
+      direction_score: scores.dimScores.direction+'%',
+      peace_score:     scores.dimScores.peace+'%'
+    });
+    new Image().src = SHEETS_URL + '?' + params.toString();
+  }
 
   // Send scores email via EmailJS
   try {
@@ -592,20 +586,16 @@ async function submitGate(){
         +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
         +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
         +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
-        // Header
         +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
         +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#c4a882">Hearts</span></p>'
         +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Interior Health Assessment</p>'
         +'</td></tr>'
-        // Body
         +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
         +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+userName+', here are your Interior Health Assessment results.</p>'
-        // Overall label
         +'<div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
         +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 6px">Overall</p>'
         +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+(sc.overall>=70?'#7aad6a':sc.overall>=55?'#d4b96a':sc.overall>=40?'#c4a882':'#c97a5a')+';margin:0">'+engineTag(sc.overall)+'</p>'
         +'</div>'
-        // What you carry / what opens you
         +'<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px"><tr>'
         +'<td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+(intAvgE>=70?'#7aad6a':intAvgE>=40?'#c4a882':'#c97a5a')+';border-radius:4px;padding:14px 16px;vertical-align:top">'
         +'<p style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">What You Carry</p>'
@@ -615,15 +605,12 @@ async function submitGate(){
         +'<p style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">What Opens You</p>'
         +'<p style="font-size:12px;color:#c0b8b0;line-height:1.8;margin:0">'+extText+'</p>'
         +'</td></tr></table>'
-        // Theme scores
         +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Theme</p>'
         +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
         +'<tbody>'+themeRows+'</tbody></table>'
-        // Dimension scores
         +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">How You Navigate What You Carry</p>'
         +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px">'
         +'<tbody>'+dimRows+'</tbody></table>'
-        // CTA
         +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #3a3530;border-top:3px solid #c4a882;border-radius:4px;text-align:center;margin:0 0 24px"><tr><td style="padding:24px">'
         +'<p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f0e8df;margin:0 0 8px">Steve will put your complete guide together.</p>'
         +'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0 0 16px">Schedule a Discovery Call and Steve will bring both your Relational Health and Interior Health scores together into a personal guide.</p>'
@@ -648,7 +635,7 @@ async function submitGate(){
     }
   } catch(e){ console.error('Email error:', e); }
 
-    // Fetch Assessment 1 scores via worker
+  // Fetch Assessment 1 scores via worker
   let prevRow = null;
   try {
     const lookupRes = await fetch(WORKER_URL, {
@@ -669,7 +656,7 @@ async function submitGate(){
     return Math.round(n)+'%';
   }
 
-  const assessment1 = prevRow ? {
+  renderResults(scores, prevRow ? {
     overall:   ps(prevRow[3]),
     work:      ps(prevRow[4]),
     partner:   ps(prevRow[5]),
@@ -679,25 +666,7 @@ async function submitGate(){
     god:       ps(prevRow[44]),
     patterns:  prevRow[17] || '',
     warnings:  prevRow[18] || ''
-  } : null;
-
-  const heartsoul = {
-    grief:     scores.theme.grief   ? scores.theme.grief.overall+'%'   : '',
-    shame:     scores.theme.shame   ? scores.theme.shame.overall+'%'   : '',
-    fear:      scores.theme.fear    ? scores.theme.fear.overall+'%'    : '',
-    anger:     scores.theme.anger   ? scores.theme.anger.overall+'%'   : '',
-    desire:    scores.theme.desire  ? scores.theme.desire.overall+'%'  : '',
-    joy:       scores.theme.joy     ? scores.theme.joy.overall+'%'     : '',
-    overall:   scores.overall+'%',
-    awareness: scores.dimScores.awareness+'%',
-    honesty:   scores.dimScores.honesty+'%',
-    movement:  scores.dimScores.movement+'%',
-    safety:    scores.dimScores.safety+'%',
-    direction: scores.dimScores.direction+'%',
-    peace:     scores.dimScores.peace+'%'
-  };
-
-  renderResults(scores, assessment1, prevRow);
+  } : null, prevRow);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -710,12 +679,11 @@ function renderGuide(guide){
       +'<div class="guide-section-body">'+paragraphs+'</div>'
       +'</div>';
   }).join('');
-  const closing = '';
   return '<div class="guide-title-block">'
     +'<div class="guide-main-title">'+(guide.title||'Your Spiritual Direction Guide')+'</div>'
     +'<div class="guide-subtitle">'+(guide.subtitle||'')+'</div>'
     +'</div>'
-    + sections + closing;
+    + sections;
 }
 
 function renderResults(scores, a1, prevRow){
@@ -730,7 +698,6 @@ function renderResults(scores, a1, prevRow){
     return Math.round(n)+'%';
   }
 
-  // Overall ring
   const oc = dcolor(overall);
   const overallRing = '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:2rem">'
     +'<div style="position:relative;width:150px;height:150px">'
@@ -749,7 +716,6 @@ function renderResults(scores, a1, prevRow){
     +(overall>=70?'The heart is largely open and moving.':overall>=45?'The heart is present — and carrying more than it shows.':'The heart is working hard to keep it together.')
     +'</div></div>';
 
-  // Theme rings
   const themeRings = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem">'
     + THEMES.map(t => {
       const s = theme[t.id];
@@ -772,7 +738,6 @@ function renderResults(scores, a1, prevRow){
     }).join('')
     +'</div>';
 
-  // Interior / Exterior split
   const interiorIds = ["grief","shame","fear","anger"];
   const exteriorIds = ["desire","joy"];
   const intAvg = Math.round(interiorIds.reduce((a,id)=>a+(theme[id]?theme[id].overall:0),0)/interiorIds.length);
@@ -801,7 +766,6 @@ function renderResults(scores, a1, prevRow){
     +'<p style="font-size:.88rem;color:#c0b8b0;line-height:1.85;margin:0">'+extText+'</p>'
     +'</div></div>';
 
-  // Dimension bars
   const dimDescs = {
     awareness:"Can you name it specifically?",
     honesty:"Can you own it without minimizing?",
@@ -815,12 +779,12 @@ function renderResults(scores, a1, prevRow){
     + DIMS.map(d => {
       const pct = dimScores[d]||0;
       const col = dcolor(pct);
-      const dimTag = pct>=70?'Strong':pct>=55?'Present':pct>=40?'Developing':'Needs attention';
+      const dTag = pct>=70?'Strong':pct>=55?'Present':pct>=40?'Developing':'Needs attention';
       return '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(196,168,130,.05)">'
         +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
         +'<div><span style="font-size:.82rem;font-weight:500;color:#f0e8df">'+DIM_LABELS[d]+'</span>'
         +'<span style="font-size:.7rem;color:#4a4540;margin-left:.5rem">'+dimDescs[d]+'</span></div>'
-        +'<span style="font-size:.72rem;color:'+col+';background:rgba(255,255,255,.05);padding:2px 8px;border-radius:3px">'+dimTag+'</span>'
+        +'<span style="font-size:.72rem;color:'+col+';background:rgba(255,255,255,.05);padding:2px 8px;border-radius:3px">'+dTag+'</span>'
         +'</div>'
         +'<div style="height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden;margin-top:6px">'
         +'<div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:4px"></div>'
@@ -828,12 +792,9 @@ function renderResults(scores, a1, prevRow){
     }).join('')
     +'</div>';
 
-  const a1Section = '';
-
   document.getElementById('app').innerHTML = '<div class="main"><div class="results-page">'
     +'<div class="results-hero"><h2>'+(userName ? userName+"'s" : 'Your')+' Interior Results</h2>'
     +'<p>An honest picture of the condition of your heart.</p></div>'
-    + a1Section
     + overallRing
     +'<div class="section-label">Scores by Theme</div>'
     + themeRings
@@ -848,7 +809,6 @@ function renderResults(scores, a1, prevRow){
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button>'
     +'</div></div>';
 }
-
 
 function retake(){
   answers = {}; userName = ''; userEmail = '';
@@ -875,17 +835,15 @@ document.querySelectorAll('.nav-dropdown > a').forEach(function(a){
 function checkTestMode(){
   const params = new URLSearchParams(window.location.search);
   if(params.get('test') !== 'true') return false;
+  isTestMode = true;
 
-  // Simulate realistic pattern:
-  // Grief & Shame low (unprocessed interior), Fear moderate, Anger low
-  // Desire moderate (heart still alive), Joy low-moderate
   const ranges = {
-    grief:  [1,3],  // low — unprocessed
-    shame:  [1,3],  // low — carrying weight
-    fear:   [2,4],  // moderate — some awareness
-    anger:  [1,3],  // low — suppressed
-    desire: [3,5],  // moderate — still wanting
-    joy:    [2,4],  // low-moderate — diminished
+    grief:  [1,3],
+    shame:  [1,3],
+    fear:   [2,4],
+    anger:  [1,3],
+    desire: [3,5],
+    joy:    [2,4],
   };
 
   THEMES.forEach(t => {
