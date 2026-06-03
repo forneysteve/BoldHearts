@@ -423,7 +423,15 @@ function buildGuide(idx){
     community: ps(row[8]),
     god:       ps(row[56]),
     patterns:  row[17] || '',
-    warnings:  row[18] || ''
+    warnings:  row[18] || '',
+    dim_seen:      ps(row[9]),
+    dim_known:     ps(row[10]),
+    dim_voice:     ps(row[11]),
+    dim_belonging: ps(row[12]),
+    dim_support:   ps(row[13]),
+    dim_trust:     ps(row[14]),
+    dim_calling:   ps(row[15]),
+    dim_freedom:   ps(row[16])
   };
 
   const hs = {
