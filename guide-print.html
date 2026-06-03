@@ -58,6 +58,15 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .practice-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:#1a1410;margin-bottom:.4rem}
 .practice-body{font-size:.85rem;color:#4a3a2a;line-height:1.9}
 .practice-why{font-size:.82rem;color:#7a6a5a;margin-top:.6rem;font-style:italic;line-height:1.8;border-top:1px solid #e8d8c0;padding-top:.5rem}
+.practice-instruction{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500}
+.practices-tier-header{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin:1.5rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0;font-weight:500}
+.secondary-practice{background:#fff;border:1px solid #e8d8c0;border-radius:4px;padding:.9rem 1.25rem;margin-bottom:.5rem;break-inside:avoid}
+.secondary-practice-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#1a1410;margin-bottom:.2rem}
+.secondary-practice-body{font-size:.82rem;color:#4a3a2a;line-height:1.8}
+.aware-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.25rem}
+.aware-item{background:#faf6f0;border:1px solid #e8d8c0;border-radius:3px;padding:.65rem .9rem;break-inside:avoid}
+.aware-item-name{font-size:.78rem;font-weight:500;color:#1a1410;margin-bottom:.2rem}
+.aware-item-desc{font-size:.72rem;color:#7a6a5a;line-height:1.6}
 
 /* ── DIVIDER ── */
 .section-divider{border:none;border-top:1px solid #e8d8c0;margin:1.75rem 0;break-after:avoid}
@@ -202,9 +211,8 @@ function renderGuide(data) {
 
   const realmVals  = [a1?.work, a1?.partner, a1?.family, a1?.friends, a1?.community, a1?.god].map(numVal);
   const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
-  const relDimVals = [hs?.awareness||0, hs?.honesty||0, hs?.movement||0, hs?.safety||0, hs?.direction||0, hs?.peace||0].map(numVal);
-  // Use a1 relational dimensions if available, else placeholders
-  const intDimVals = relDimVals; // interior dims
+  const relDimVals = [a1?.dim_seen, a1?.dim_known, a1?.dim_voice, a1?.dim_belonging, a1?.dim_support, a1?.dim_trust, a1?.dim_calling, a1?.dim_freedom].map(numVal);
+  const intDimVals = [hs?.awareness, hs?.honesty, hs?.movement, hs?.safety, hs?.direction, hs?.peace].map(numVal);
 
   const dashHtml = '<div class="dashboard-wrap">'
     + '<div class="section-header">Your Assessment Scores</div>'
@@ -240,25 +248,59 @@ function renderGuide(data) {
     const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
 
     if(s.id === 'practices') {
-      const practiceBlocks = s.content.split(/\n\n+/).filter(p => p.trim()).map(p => {
+      const pc = typeof s.content === 'object' ? s.content : null;
+
+      if(pc) {
+        // PRIMARY cards
+        const primHtml = (pc.primary||[]).map(p => {
+          if(!p || !p.name) return '';
+          return '<div class="practice">'
+            +'<div class="practice-name">'+(p.name||'')+'</div>'
+            +(p.instruction ? '<div class="practice-instruction">'+(p.instruction||'')+'</div>' : '')
+            +'<div class="practice-body">'+(p.description||'')+'</div>'
+            +(p.why ? '<div class="practice-why">'+(p.why||'')+'</div>' : '')
+            +'</div>';
+        }).filter(Boolean).join('');
+
+        // SECONDARY list
+        const secHtml = (pc.secondary||[]).filter(p=>p&&p.name).length > 0
+          ? '<div class="practices-tier-header">These Would Also Help</div>'
+            + (pc.secondary||[]).filter(p=>p&&p.name).map(p =>
+                '<div class="secondary-practice"><div class="secondary-practice-name">'+p.name+'</div>'
+                +'<div class="secondary-practice-body">'+(p.description||'')+'</div></div>'
+              ).join('')
+          : '';
+
+        // AWARE grid
+        const awareHtml = (pc.aware||[]).filter(p=>p&&p.name).length > 0
+          ? '<div class="practices-tier-header">Worth Being Aware Of</div>'
+            + '<div class="aware-grid">'
+            + (pc.aware||[]).filter(p=>p&&p.name).map(p =>
+                '<div class="aware-item"><div class="aware-item-name">'+p.name+'</div>'
+                +'<div class="aware-item-desc">'+(p.description||'')+'</div></div>'
+              ).join('')
+            + '</div>'
+          : '';
+
+        return bigHeader
+          + '<div class="section"><div class="section-eyebrow"><span class="section-icon">'+s.icon+'</span>'+s.label+'</div>'
+          + '<div class="practices-wrap">'+primHtml+'</div>'
+          + secHtml + awareHtml + '</div>';
+      }
+
+      // Fallback: raw string content
+      const practiceBlocks = s.content.toString().split(/\n\n+/).filter(p => p.trim()).map(p => {
         const lines = p.trim().split('\n');
         const title = lines[0].replace(/^\*\*|\*\*$/g,'').replace(/^#+\s*/,'').replace(/^\d+\.\s*/,'');
         const body = lines.slice(1).join(' ').trim();
-        const whyMatch = body.match(/^(.*?)(Why it fits[^:]*:|Because[^:]*:)(.*)$/si);
-        if(whyMatch) {
-          return '<div class="practice"><div class="practice-name">' + title + '</div>'
-            + '<div class="practice-body">' + whyMatch[1].trim() + '</div>'
-            + '<div class="practice-why">' + whyMatch[2] + whyMatch[3].trim() + '</div></div>';
-        }
-        return '<div class="practice"><div class="practice-name">' + title + '</div>'
-          + '<div class="practice-body">' + body + '</div></div>';
+        return '<div class="practice"><div class="practice-name">'+title+'</div><div class="practice-body">'+body+'</div></div>';
       }).join('');
       return bigHeader
-        + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
-        + '<div class="practices-wrap">' + practiceBlocks + '</div></div>';
+        + '<div class="section"><div class="section-eyebrow"><span class="section-icon">'+s.icon+'</span>'+s.label+'</div>'
+        + '<div class="practices-wrap">'+practiceBlocks+'</div></div>';
     }
 
-    const paragraphs = s.content.split(/\n\n+/).filter(p=>p.trim()).map(p=>'<p>'+p.trim()+'</p>').join('');
+        const paragraphs = s.content.split(/\n\n+/).filter(p=>p.trim()).map(p=>'<p>'+p.trim()+'</p>').join('');
     return bigHeader
       + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
       + '<div class="section-body">' + paragraphs + '</div></div>';
@@ -283,9 +325,9 @@ function renderGuide(data) {
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
 
     + '<div class="cta-block">'
-    + '<p><strong>Ready to look at the full picture together?</strong></p>'
-    + '<p>Schedule a free 15-minute Discovery Call. Bring both assessments and we\'ll walk through what the scores reveal — and what comes next.</p>'
-    + '<p><a href="mailto:admin@boldhearts.org?subject=Discovery Call">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
+    + '<p><strong>This guide is a starting point — not a verdict.</strong></p>'
+    + '<p>What follows in this conversation is the real work. Use this as a reference as we look at the full picture together.</p>'
+    + '<p>Steve Forney &nbsp;·&nbsp; BoldHearts &nbsp;·&nbsp; <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>'
     + '<div class="doc-footer">'
     + '<p>&copy; 2026 The BoldHearts Group LLC &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; All Rights Reserved</p>'
@@ -314,10 +356,8 @@ function renderGuide(data) {
     if(document.getElementById('realmChart')) {
       new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['Work','Partner','Family','Friends','Community','God'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
       new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Joy'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
-      const relDimActual = [numVal(a1?.dim_seen),numVal(a1?.dim_known),numVal(a1?.dim_voice),numVal(a1?.dim_belonging),numVal(a1?.dim_support),numVal(a1?.dim_trust),numVal(a1?.dim_calling),numVal(a1?.dim_freedom)];
-      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], datasets:[{ data:relDimActual, backgroundColor:makeColors(relDimActual), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
-      const intDimActual = [numVal(hs?.awareness),numVal(hs?.honesty),numVal(hs?.movement),numVal(hs?.safety),numVal(hs?.direction),numVal(hs?.peace)];
-      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimActual, backgroundColor:makeColors(intDimActual), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts });
     }
   }, 100);
   setTimeout(() => window.print(), 1400);
