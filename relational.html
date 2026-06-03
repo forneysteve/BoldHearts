@@ -414,7 +414,7 @@ const WARNINGS=[
    trigger:(s)=>s.voice<45,
    text:"In more than one area of your life, you may be holding back what you actually think and feel. Maybe you've learned that speaking up costs more than staying quiet. Maybe you've been dismissed enough times that you've stopped trying. Whatever the reason, the result is the same: a real part of you is going unheard, and over time that part gets quieter and quieter. A voice that goes unused doesn't just get ignored — it starts to disappear. That matters. You were made to speak."}
 ];
-let answers={},userName='',userEmail='';
+let answers={},userName='',userEmail='',isTestMode=false;
 function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
 function totalAns(){return Object.keys(answers).length}
 function dcolor(p){return p>=70?'#b5c4a0':p>=45?'#e8d7a0':'#c97a5a'}
@@ -688,10 +688,10 @@ function submitGate(){
   if(!email||!email.includes('@')){err.textContent='Please enter a valid email address.';return;}
   userName=name;userEmail=email;
   const scores=calcScores();
-  saveToSheets(scores);
+  if(!isTestMode) saveToSheets(scores);
   const htmlEmail=buildHtmlEmail(scores);
   emailjs.init(EJSPUB);
-  emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).catch(e=>console.error('Email error:',e));
+  if(!isTestMode) emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).catch(e=>console.error('Email error:',e));
   renderResults(scores);
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -884,6 +884,7 @@ document.getElementById('nav-toggle').addEventListener('click',function(){
 function checkTestMode(){
   const params=new URLSearchParams(window.location.search);
   if(params.get('test')!=='true')return false;
+  isTestMode=true;
   REALMS.forEach(r=>{
     r.questions.forEach((_,i)=>{
       answers[r.id+'_'+i]=Math.floor(Math.random()*4)+3;
