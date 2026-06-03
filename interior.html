@@ -492,7 +492,7 @@ function renderGate(){
     +'<p>Enter your name and the same email you used for the Relational Health Assessment — we\'ll combine everything into your complete picture and generate your personal Spiritual Direction Guide.</p>'
     +'<div class="gate-field"><label for="gname">First Name</label><input type="text" id="gname" placeholder="Your first name" autocomplete="given-name"></div>'
     +'<div class="gate-field"><label for="gemail">Email Address</label><input type="email" id="gemail" placeholder="Same email as Assessment 1" autocomplete="email"></div>'
-    +'<button class="gate-btn" id="gate-btn" onclick="submitGate()">Generate My Guide &rarr;</button>'
+    +'<button class="gate-btn" id="gate-btn" onclick="submitGate()">See My Results &rarr;</button>'
     +'<div class="errmsg" id="gate-err"></div>'
     +'<div class="gate-note">Use the same email from your Relational Health Assessment to combine your complete results.</div>'
     +'</div></div>';
@@ -539,11 +539,11 @@ async function submitGate(){
     direction_score: scores.dimScores.direction+'%',
     peace_score:     scores.dimScores.peace+'%'
   });
-  new Image().src = SHEETS_URL + '?' + params.toString();
+  if(!isTestMode) new Image().src = SHEETS_URL + '?' + params.toString();
 
   // Send scores email via EmailJS
   try {
-    if(typeof emailjs !== 'undefined') {
+    if(!isTestMode && typeof emailjs !== 'undefined') {
       const sc = scores;
       const intIds = ['grief','shame','fear','anger'];
       const extIds = ['desire','joy'];
