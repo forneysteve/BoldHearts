@@ -74,42 +74,6 @@ nav .nav-links a:hover{color:#e8d7a0}
 .sopt input[type=radio]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
 .scale-num{font-size:.65rem;color:#4a4540;margin-top:5px;letter-spacing:.04em}
 .sopt.sel .scale-num{color:#e8d7a0}
-@media(max-width:768px){
-  .sopt-circle{width:36px;height:36px}
-  .sopt{padding:6px 2px}
-  /* Results page mobile */
-  .results-main{padding:2rem 1.25rem 4rem}
-  .results-hero h2{font-size:1.6rem}
-  .overall-ring-wrap{padding:1.5rem 0}
-  .realm-results-card{padding:1.25rem}
-  .bar-row-label{width:90px;font-size:.65rem}
-  .bar-pct{font-size:.65rem;width:26px}
-  .gap-note{margin-left:0;margin-top:6px}
-  .dim-grid{grid-template-columns:1fr 1fr}
-  .pattern-grid{grid-template-columns:1fr}
-  .dim-card{padding:.9rem 1rem}
-  .dim-card-name{font-size:.62rem}
-  .dim-card-score{font-size:1.4rem}
-  .pattern-card{padding:1rem 1.25rem}
-  .pattern-title{font-size:1rem}
-  .step-card{padding:1.5rem 1.25rem}
-  .step-card h3{font-size:1.4rem}
-  .action-item{gap:.75rem}
-  .action-num{width:26px;height:26px;font-size:.85rem;flex-shrink:0}
-  .deepdive-card{padding:2rem 1.5rem}
-  .deepdive-card h3{font-size:1.5rem}
-  .section-label{font-size:.62rem}
-  .realm-hdr{padding:1rem 1.25rem;gap:.75rem}
-  .realm-icon{width:36px;height:36px;font-size:16px}
-  .realm-hdr-text h2{font-size:1.2rem}
-}
-
-@media(max-width:480px){
-  .bar-row-label{width:70px;font-size:.6rem}
-  .bar-row{gap:4px}
-  .dim-grid{grid-template-columns:1fr 1fr}
-  .pattern-card-title{font-size:.9rem}
-}
 .submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px}
 .submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem;letter-spacing:.04em}
 .sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#e8d7a0;padding:1rem 2.5rem;border-radius:4px;border:2px solid #e8d7a0;transition:all .3s ease;cursor:pointer}
@@ -120,7 +84,7 @@ nav .nav-links a:hover{color:#e8d7a0}
 .gate-icon{width:64px;height:64px;background:rgba(232,215,160,.08);border:1px solid rgba(232,215,160,.2);border-radius:4px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:28px;color:#e8d7a0}
 .gate-card h2{font-size:2rem;margin-bottom:.5rem;color:#f0e8df}
 .gate-card h2::after{display:none}
-.gate-card > p{font-size:.95rem;color:#a09890;line-height:1.8;margin-bottom:2rem}
+.gate-card>p{font-size:.95rem;color:#a09890;line-height:1.8;margin-bottom:2rem}
 .gate-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;text-align:left}
 .gate-field label{font-size:.75rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#6a6258}
 .gate-field input{width:100%;padding:.9rem 1rem;background:#111111;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:300;transition:border-color .3s ease}
@@ -195,15 +159,6 @@ nav .nav-links a:hover{color:#e8d7a0}
 .warning-icon.amber{background:rgba(232,215,160,.08);color:#e8d7a0}
 .warning-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#f0e8df;margin-bottom:5px}
 .warning-text{font-size:.875rem;color:#a09890;line-height:1.8}
-.action-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px;padding:2rem;margin-bottom:.75rem}
-.action-card h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#f0e8df;margin-bottom:1.25rem}
-.action-step{display:flex;gap:1rem;margin-bottom:1.25rem;align-items:flex-start}
-.action-step:last-child{margin-bottom:0}
-.step-num{width:28px;height:28px;border-radius:50%;background:rgba(232,215,160,.12);border:1px solid rgba(232,215,160,.3);color:#e8d7a0;font-size:.8rem;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.step-text{font-size:.9rem;color:#a09890;line-height:1.8}
-.step-text strong{color:#e8d7a0;font-weight:500}
-
-/* ── DEEP DIVE CTA CARD ── */
 .deepdive-card{background:#1a1714;border:1px solid rgba(196,168,130,.3);border-top:3px solid #c4a882;border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
 .deepdive-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,168,130,.05) 0%,transparent 60%);pointer-events:none}
 .deepdive-card .dd-eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem}
@@ -212,7 +167,6 @@ nav .nav-links a:hover{color:#e8d7a0}
 .deepdive-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#c4a882;padding:1rem 2.5rem;border-radius:4px;border:2px solid #c4a882;transition:all .3s ease;cursor:pointer;margin-bottom:1rem;text-decoration:none}
 .deepdive-btn:hover{background-color:transparent;color:#c4a882}
 .deepdive-note{font-size:.78rem;color:#5a5550;letter-spacing:.04em}
-
 .discovery-card{background:#1a1714;border:1px solid rgba(232,215,160,.2);border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
 .discovery-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,215,160,.04) 0%,transparent 60%)}
 .discovery-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
@@ -254,7 +208,6 @@ footer a:hover{color:#e8d7a0}
   .gap-note{margin-left:0;margin-top:8px}
   .deepdive-card{padding:2rem 1.5rem}
 }
-
 .nav-dropdown{position:relative}
 .nav-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;z-index:1001;backdrop-filter:blur(12px)}
 .nav-dropdown>a{padding-bottom:12px;margin-bottom:-12px}
@@ -263,6 +216,11 @@ footer a:hover{color:#e8d7a0}
 .dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
 .dropdown-menu li+li{border-top:1px solid rgba(232,215,160,.08)}
 .nav-dropdown>a::after{content:' ▾';font-size:.6rem;opacity:.6}
+@media(max-width:480px){
+  .bar-row-label{width:70px;font-size:.6rem}
+  .bar-row{gap:4px}
+  .pattern-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -312,6 +270,7 @@ footer a:hover{color:#e8d7a0}
 </footer>
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const SCALE=[{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
 const REALMS=[
   {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
@@ -395,7 +354,7 @@ const REALMS=[
     {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
     {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
     {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true}
-  ]},
+  ]}
 ];
 const WARNINGS=[
   {id:'invisible',title:'Working in the Shadows',subtitle:"You're giving but not being seen",severity:'red',icon:'ti-eye-off',
@@ -404,7 +363,7 @@ const WARNINGS=[
   {id:'surface',title:'The Familiar Stranger',subtitle:'Present but not truly known',severity:'red',icon:'ti-ripple',
    trigger:(s,realm)=>Object.values(realm).filter(r=>r.overall<45&&r.answered>0).length>=2,
    text:"Across multiple areas of your life, you are present — but not really known. People know your name, your role, maybe your routine. But the deeper currents of who you are — your fears, your longings, your story — are mostly going unseen. Surface living feels safe, but over time it becomes its own kind of loneliness. You can be in a room full of people who know you and still feel completely alone. That experience has a name, and it doesn't have to be permanent."},
-  {id:'oneway',title:'Giving Without Return',subtitle:'Giving more than you\'re receiving',severity:'amber',icon:'ti-arrow-narrow-right',
+  {id:'oneway',title:'Giving Without Return',subtitle:"Giving more than you're receiving",severity:'amber',icon:'ti-arrow-narrow-right',
    trigger:(s)=>s.self>s.outward+15,
    text:"Your results suggest you are putting more into your relationships than you are receiving back. You initiate. You show up. You invest. But reciprocity is thin. This pattern is quietly exhausting, and over time it can lead to a kind of resigned withdrawal — where you stop reaching out because you've learned not to expect much back. What you're experiencing is real. It is also workable."},
   {id:'shallow',title:'Guarded and Distant',subtitle:'Keeping people at a careful distance',severity:'amber',icon:'ti-lock',
@@ -461,8 +420,6 @@ function getActionPlan(scores){
   steps.push({title:'Consider working with a guide',text:"These patterns didn't form overnight and they won't shift overnight either. But they do shift — with the right kind of accompaniment. A guide who understands these dynamics can help you move much faster than you could alone."});
   return steps.slice(0,4);
 }
-
-// ── HTML EMAIL ──────────────────────────────────────────────────────────────
 function scoreBar(pct,color){
   const filled=Math.round(pct/10);
   return '<span style="color:'+color+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(filled)+'&#9617;'.repeat(10-filled)+'</span> <strong style="color:'+color+'">'+pct+'%</strong>';
@@ -475,108 +432,26 @@ function getEngagementPatterns(scores){
     if(!s||s.answered===0)return;
     const p=getPattern(s.outward,s.self,r.id);
     if(p&&p.key&&p.key!=='open'&&p.key!=='developing'){
-      patterns.push({
-        title:r.label+' — '+p.name,
-        text:p.desc||''
-      });
+      patterns.push({title:r.label+' — '+p.name,text:p.desc||''});
     }
   });
   return patterns;
 }
-
 function buildHtmlEmail(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
   const rc=overall>=75?'#b5c4a0':overall>=50?'#e8d7a0':'#c97a5a';
   const rtag=overall>=75?'All Systems Green':overall>=55?'Check Engine':overall>=40?'Running on Fumes':'Engine Off';
-
-  function dcolor(p){return p>=75?'#b5c4a0':p>=50?'#e8d7a0':'#c97a5a';}
-  function dtag(p){return p>=75?'All Systems Green':p>=55?'Check Engine':p>=40?'Running on Fumes':'Engine Off';}
-  function bar(pct,col){
-    const n=Math.round(pct/10);
-    return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';
-  }
-
-  // Realm rows
-  const realmRowsHtml = ar.map(r=>{
-    const s=realm[r.id];
-    const col=dcolor(s.overall);
-    const tag=dtag(s.overall);
-    return '<tr>'
-      +'<td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td>'
-      +'<td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td>'
-      +'<td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+tag+'</td>'
-      +'</tr>';
-  }).join('');
-
-  // Dimension rows
+  function dc(p){return p>=75?'#b5c4a0':p>=50?'#e8d7a0':'#c97a5a';}
+  function dt(p){return p>=75?'All Systems Green':p>=55?'Check Engine':p>=40?'Running on Fumes':'Engine Off';}
+  function bar(pct,col){const n=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';}
+  const realmRowsHtml=ar.map(r=>{const s=realm[r.id];const col=dc(s.overall);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td><td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+dt(s.overall)+'</td></tr>';}).join('');
   const dimScores=calcDimScores(realm);
-  const dimRowsHtml = dimScores.map(d=>{
-    const col=dcolor(d.score);
-    const tag=dtag(d.score);
-    return '<tr>'
-      +'<td style="padding:6px 12px;font-size:12px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+d.name+'</td>'
-      +'<td style="padding:6px 12px;border-bottom:1px solid #2a2825">'+bar(d.score,col)+'</td>'
-      +'<td style="padding:6px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825">'+tag+'</td>'
-      +'</tr>';
-  }).join('');
-
-  // Pattern rows
+  const dimRowsHtml=dimScores.map(d=>{const col=dc(d.score);return '<tr><td style="padding:6px 12px;font-size:12px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+d.name+'</td><td style="padding:6px 12px;border-bottom:1px solid #2a2825">'+bar(d.score,col)+'</td><td style="padding:6px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825">'+dt(d.score)+'</td></tr>';}).join('');
   const patterns=getEngagementPatterns(scores);
-  const patternHtml = patterns.slice(0,2).map(p=>{
-    return '<tr><td colspan="3" style="padding:0 0 10px">'
-      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid #c4a882;border-radius:4px">'
-      +'<tr><td style="padding:14px 16px">'
-      +'<p style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#f0e8df;margin:0 0 4px">'+p.title+'</p>'
-      +'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+p.text+'</p>'
-      +'</td></tr></table></td></tr>';
-  }).join('');
-
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
-    +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
-    +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
-    // Header
-    +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
-    +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p>'
-    +'</td></tr>'
-    // Body
-    +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
-    +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">Here are your Relational Health Assessment results.</p>'
-    // Overall
-    +'<div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 4px">Overall</p>'
-    +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+rc+';margin:0 0 2px">'+overall+'%</p>'
-    +'<p style="font-size:12px;color:'+rc+';margin:0">'+rtag+'</p>'
-    +'</div>'
-    // Realm scores
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Realm</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
-    +'<tbody>'+realmRowsHtml+'</tbody></table>'
-    // Dimensions
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Dimension</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
-    +'<tbody>'+dimRowsHtml+'</tbody></table>'
-    // Patterns
-    +(patterns.length>0?'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 10px;border-bottom:1px solid #2a2825;padding-bottom:6px">Engagement Patterns</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px"><tbody>'+patternHtml+'</tbody></table>':'')
-    // Step 2 CTA
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #3a3530;border-top:3px solid #e8d7a0;border-radius:4px;text-align:center;margin:0 0 24px"><tr><td style="padding:24px">'
-    +'<p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin:0 0 8px">Next Step</p>'
-    +'<p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f0e8df;margin:0 0 8px">The picture isn\'t complete yet.</p>'
-    +'<p style="font-size:12px;color:#a09890;line-height:1.8;margin:0 0 16px">Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p>'
-    +'<a href="https://boldhearts.org/interior.html" style="display:inline-block;background:#e8d7a0;color:#111;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 24px;border-radius:4px;text-decoration:none">Take the Interior Health Assessment &rarr;</a>'
-    +'<p style="font-size:11px;color:#5a5550;margin:10px 0 0">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; Use the same email</p>'
-    +'</td></tr></table>'
-    +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
-    +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
-    +'</td></tr>'
-    +'<tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 BoldHearts &nbsp;&middot;&nbsp; Sedalia, Colorado</p></td></tr>'
-    +'</table></td></tr></table></body></html>';
+  const patternHtml=patterns.slice(0,2).map(p=>'<tr><td colspan="3" style="padding:0 0 10px"><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid #c4a882;border-radius:4px"><tr><td style="padding:14px 16px"><p style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#f0e8df;margin:0 0 4px">'+p.title+'</p><p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+p.text+'</p></td></tr></table></td></tr>').join('');
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%"><tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center"><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr><tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px"><p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">Here are your Relational Health Assessment results.</p><div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 4px">Overall</p><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+rc+';margin:0 0 2px">'+overall+'%</p><p style="font-size:12px;color:'+rc+';margin:0">'+rtag+'</p></div><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Realm</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRowsHtml+'</tbody></table><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Dimension</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+dimRowsHtml+'</tbody></table>'+(patterns.length>0?'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 10px;border-bottom:1px solid #2a2825;padding-bottom:6px">Engagement Patterns</p><table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px"><tbody>'+patternHtml+'</tbody></table>':'')+'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #3a3530;border-top:3px solid #e8d7a0;border-radius:4px;text-align:center;margin:0 0 24px"><tr><td style="padding:24px"><p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin:0 0 8px">Next Step</p><p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f0e8df;margin:0 0 8px">The picture isn\'t complete yet.</p><p style="font-size:12px;color:#a09890;line-height:1.8;margin:0 0 16px">Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="https://boldhearts.org/interior.html" style="display:inline-block;background:#e8d7a0;color:#111;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:12px 24px;border-radius:4px;text-decoration:none">Take the Interior Health Assessment &rarr;</a><p style="font-size:11px;color:#5a5550;margin:10px 0 0">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; Use the same email</p></td></tr></table><p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br><span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p></td></tr><tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 BoldHearts &nbsp;&middot;&nbsp; Sedalia, Colorado</p></td></tr></table></td></tr></table></body></html>';
 }
-
-
 function updateProgress(){
   const pct=Math.round((totalAns()/totalQs())*100);
   const pb=document.getElementById('progress-bar');
@@ -592,7 +467,7 @@ function renderSurvey(){
       const k=r.id+'_'+i;const cur=answers[k];
       const opts=SCALE.map((s,si)=>{
         const id='opt_'+k+'_'+si;const sel=cur===s.val;
-        return'<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
+        return '<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
       }).join('');
       html+='<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'"><div class="qnum">Question '+(qNum+1)+'</div><div class="qlabel">'+q.t+'</div><div class="scale-opts"><div class="scale-endlabels"><span class="scale-endlabel">Disagree</span><span class="scale-endlabel">Agree</span></div><div class="scale-circles">'+opts+'</div></div></div>';
       qNum++;
@@ -631,8 +506,6 @@ function renderGate(){
   document.getElementById('progress-section').style.display='none';
   document.getElementById('app').innerHTML='<div class="gate-wrap"><div class="gate-card"><div class="gate-icon"><i class="ti ti-mail-heart"></i></div><h2>Your results are ready.</h2><p>Enter your name and email to see your Heart Engagement score, personalized warning signs, and an action plan — plus we\'ll send you a copy to keep.</p><div class="gate-field"><label for="gname">First Name</label><input type="text" id="gname" placeholder="Your first name" autocomplete="given-name"></div><div class="gate-field"><label for="gemail">Email Address</label><input type="email" id="gemail" placeholder="you@example.com" autocomplete="email"></div><button class="gate-btn" onclick="submitGate()">Show Me My Results &rarr;</button><div class="errmsg" id="gate-err"></div><div class="gate-note">Your information is private. We don\'t share or sell your data.</div></div></div>';
 }
-const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
-
 function saveToSheets(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
@@ -641,44 +514,26 @@ function saveToSheets(scores){
   const patterns=ar.map(r=>{const p=getPattern(realm[r.id].outward,realm[r.id].self,r.id);return r.label+': '+p.name;}).join(' | ');
   const warningList=warnings.map(w=>w.title).join(' | ')||'None';
   const getDim=(id)=>{const d=dimScores.find(d=>d.id===id);return d?d.score+'%':'';};
-
   const params=new URLSearchParams({
-    action:'write',
-    name:userName,
-    email:userEmail,
-    overall:overall+'%',
+    action:'write',name:userName,email:userEmail,overall:overall+'%',
     work:realm.work?realm.work.overall+'%':'',
     significant_other:realm.significant_other?realm.significant_other.overall+'%':'',
     family:realm.family?realm.family.overall+'%':'',
     friends:realm.friends?realm.friends.overall+'%':'',
     community:realm.community?realm.community.overall+'%':'',
-    being_seen:getDim('seen'),
-    being_known:getDim('known'),
-    having_a_voice:getDim('voice'),
-    belonging:getDim('belonging'),
-    receiving_support:getDim('support'),
-    trust_safety:getDim('trust'),
-    calling:getDim('calling'),
-    freedom_to_be_myself:getDim('fullself'),
-    patterns:patterns,
-    warnings:warningList,
-    version:'v4.0',
-    work_outward:realm.work?realm.work.outward+'%':'',
-    work_self:realm.work?realm.work.self+'%':'',
+    being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
+    belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
+    calling:getDim('calling'),freedom_to_be_myself:getDim('fullself'),
+    patterns:patterns,warnings:warningList,version:'v4.0',
+    work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
-    family_outward:realm.family?realm.family.outward+'%':'',
-    family_self:realm.family?realm.family.self+'%':'',
-    friends_outward:realm.friends?realm.friends.outward+'%':'',
-    friends_self:realm.friends?realm.friends.self+'%':'',
-    community_outward:realm.community?realm.community.outward+'%':'',
-    community_self:realm.community?realm.community.self+'%':'',
-    god_overall:realm.god?realm.god.overall+'%':'',
-    god_outward:realm.god?realm.god.outward+'%':'',
-    god_self:realm.god?realm.god.self+'%':''
+    family_outward:realm.family?realm.family.outward+'%':'',family_self:realm.family?realm.family.self+'%':'',
+    friends_outward:realm.friends?realm.friends.outward+'%':'',friends_self:realm.friends?realm.friends.self+'%':'',
+    community_outward:realm.community?realm.community.outward+'%':'',community_self:realm.community?realm.community.self+'%':'',
+    god_overall:realm.god?realm.god.overall+'%':'',god_outward:realm.god?realm.god.outward+'%':'',god_self:realm.god?realm.god.self+'%':''
   });
-  const img=new Image();
-  img.src=SHEETS_URL+'?'+params.toString();
+  new Image().src=SHEETS_URL+'?'+params.toString();
 }
 function submitGate(){
   const name=document.getElementById('gname').value.trim();
@@ -691,7 +546,9 @@ function submitGate(){
   if(!isTestMode) saveToSheets(scores);
   const htmlEmail=buildHtmlEmail(scores);
   emailjs.init(EJSPUB);
-  if(!isTestMode) emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).catch(e=>console.error('Email error:',e));
+  if(!isTestMode) emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).then(()=>{
+    new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,rel_email_sent:'Yes'}).toString();
+  }).catch(e=>console.error('Email error:',e));
   renderResults(scores);
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -705,53 +562,11 @@ const REALM_PATTERNS={
 };
 function getPatternIcon(key){
   const icons={
-    open:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/>
-      <circle cx="28" cy="18" r="8" fill="#2a2825"/>
-      <circle cx="28" cy="33" r="8" fill="#2a2825"/>
-      <circle cx="28" cy="47" r="8" fill="#4a9e3f"/>
-      <circle cx="28" cy="47" r="5" fill="#6bc45e" opacity="0.9"/>
-    </svg>`,
-    giver:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <circle cx="28" cy="28" r="22" fill="#111" stroke="#2a2825" stroke-width="1"/>
-      <path d="M8 32 A22 22 0 0 1 48 32" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/>
-      <path d="M8 32 A22 22 0 0 1 16 14" fill="none" stroke="#c97a5a" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
-      <text x="10" y="38" font-family="Georgia,serif" font-size="9" fill="#c97a5a" font-weight="700">E</text>
-      <text x="42" y="38" font-family="Georgia,serif" font-size="9" fill="#5a5550" font-weight="700">F</text>
-      <line x1="28" y1="28" x2="14" y2="24" stroke="#f0e8df" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="28" cy="28" r="3" fill="#1a1816" stroke="#f0e8df" stroke-width="1.5"/>
-    </svg>`,
-    guarded:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/>
-      <circle cx="28" cy="18" r="8" fill="#2a2825"/>
-      <circle cx="28" cy="33" r="8" fill="#b8952a" opacity="0.95"/>
-      <circle cx="28" cy="33" r="5" fill="#d4b96a" opacity="0.9"/>
-      <circle cx="28" cy="47" r="8" fill="#2a2825"/>
-    </svg>`,
-    disconnected:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/>
-      <circle cx="28" cy="18" r="8" fill="#8a2a2a" opacity="0.9"/>
-      <circle cx="28" cy="18" r="5" fill="#c97a5a" opacity="0.85"/>
-      <circle cx="28" cy="33" r="8" fill="#2a2825"/>
-      <circle cx="28" cy="47" r="8" fill="#2a2825"/>
-    </svg>`,
-    developing:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0">
-      <rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/>
-      <rect x="6" y="10" width="44" height="36" rx="3" fill="#111" stroke="#2a2825" stroke-width="1"/>
-      <rect x="14" y="18" width="16" height="10" rx="2" fill="none" stroke="#d4b96a" stroke-width="2"/>
-      <line x1="14" y1="22" x2="10" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
-      <line x1="10" y1="19" x2="10" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
-      <line x1="30" y1="22" x2="34" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
-      <line x1="34" y1="19" x2="34" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
-      <line x1="20" y1="18" x2="20" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
-      <line x1="25" y1="18" x2="25" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/>
-      <rect x="12" y="16" width="20" height="14" rx="3" fill="#d4b96a" opacity="0.07"/>
-      <text x="28" y="38" font-family="Georgia,serif" font-size="6" fill="#d4b96a" text-anchor="middle" letter-spacing=".06em">CHECK ENGINE</text>
-    </svg>`
+    open:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/><circle cx="28" cy="18" r="8" fill="#2a2825"/><circle cx="28" cy="33" r="8" fill="#2a2825"/><circle cx="28" cy="47" r="8" fill="#4a9e3f"/><circle cx="28" cy="47" r="5" fill="#6bc45e" opacity="0.9"/></svg>`,
+    giver:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><circle cx="28" cy="28" r="22" fill="#111" stroke="#2a2825" stroke-width="1"/><path d="M8 32 A22 22 0 0 1 48 32" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/><path d="M8 32 A22 22 0 0 1 16 14" fill="none" stroke="#c97a5a" stroke-width="5" stroke-linecap="round" opacity="0.9"/><text x="10" y="38" font-family="Georgia,serif" font-size="9" fill="#c97a5a" font-weight="700">E</text><text x="42" y="38" font-family="Georgia,serif" font-size="9" fill="#5a5550" font-weight="700">F</text><line x1="28" y1="28" x2="14" y2="24" stroke="#f0e8df" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="28" r="3" fill="#1a1816" stroke="#f0e8df" stroke-width="1.5"/></svg>`,
+    guarded:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/><circle cx="28" cy="18" r="8" fill="#2a2825"/><circle cx="28" cy="33" r="8" fill="#b8952a" opacity="0.95"/><circle cx="28" cy="33" r="5" fill="#d4b96a" opacity="0.9"/><circle cx="28" cy="47" r="8" fill="#2a2825"/></svg>`,
+    disconnected:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/><circle cx="28" cy="18" r="8" fill="#8a2a2a" opacity="0.9"/><circle cx="28" cy="18" r="5" fill="#c97a5a" opacity="0.85"/><circle cx="28" cy="33" r="8" fill="#2a2825"/><circle cx="28" cy="47" r="8" fill="#2a2825"/></svg>`,
+    developing:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="6" y="10" width="44" height="36" rx="3" fill="#111" stroke="#2a2825" stroke-width="1"/><rect x="14" y="18" width="16" height="10" rx="2" fill="none" stroke="#d4b96a" stroke-width="2"/><line x1="14" y1="22" x2="10" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="19" x2="10" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="22" x2="34" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="34" y1="19" x2="34" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="20" y1="18" x2="20" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="25" y1="18" x2="25" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><rect x="12" y="16" width="20" height="14" rx="3" fill="#d4b96a" opacity="0.07"/><text x="28" y="38" font-family="Georgia,serif" font-size="6" fill="#d4b96a" text-anchor="middle" letter-spacing=".06em">CHECK ENGINE</text></svg>`
   };
   return icons[key]||icons.developing;
 }
@@ -767,33 +582,22 @@ function getPattern(outward,self_,realmId){
   return{key,name,cls,desc:rp[key]};
 }
 const DIMS=[
-  {id:'seen',name:'Being Seen',qi:0,
-   desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often feel like you blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
-  {id:'known',name:'Being Known',qi:2,
-   desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
-  {id:'voice',name:'Having a Voice',qi:3,
-   desc:(p)=>p>=70?'You feel free to speak up and your perspective is genuinely engaged.':p>=45?'Your voice is heard sometimes, but you may hold back more than you realize.':'You may have learned that speaking up costs more than staying quiet. Your voice is shrinking.'},
-  {id:'belonging',name:'Belonging',qi:5,
-   desc:(p)=>p>=70?'You feel genuinely wanted and at home in the key relationships of your life.':p>=45?'You have access to your relationships, but may not always feel truly inside them.':'You often feel like you\'re on the edges — present, but not really included. That gap is real.'},
-  {id:'support',name:'Receiving Support',qi:6,
-   desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not feel fully confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
-  {id:'trust',name:'Trust & Safety',qi:7,
-   desc:(p)=>p>=70?'You feel emotionally safe being imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
-  {id:'calling',name:'Calling',qi:8,
-   desc:(p)=>p>=70?'You know what you are built for and the people around you know it and engage it.':p>=45?'You have some sense of calling, but it may not be clearly named or actively supported by those around you.':'The connection between who you are and what you do feels thin or absent. That gap has a cost.'},
-  {id:'fullself',name:'Freedom to Be Myself',qi:9,
-   desc:(p)=>p>=70?'You feel free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You experience some freedom to be yourself, but in certain contexts you still feel pressure to perform or prove your worth.':'You may feel that your place in relationships is conditional on what you do or produce. The freedom to simply be yourself feels thin or absent.'}
+  {id:'seen',name:'Being Seen',qi:0,desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often feel like you blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
+  {id:'known',name:'Being Known',qi:2,desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
+  {id:'voice',name:'Having a Voice',qi:3,desc:(p)=>p>=70?'You feel free to speak up and your perspective is genuinely engaged.':p>=45?'Your voice is heard sometimes, but you may hold back more than you realize.':'You may have learned that speaking up costs more than staying quiet. Your voice is shrinking.'},
+  {id:'belonging',name:'Belonging',qi:5,desc:(p)=>p>=70?'You feel genuinely wanted and at home in the key relationships of your life.':p>=45?'You have access to your relationships, but may not always feel truly inside them.':'You often feel like you\'re on the edges — present, but not really included. That gap is real.'},
+  {id:'support',name:'Receiving Support',qi:6,desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not feel fully confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
+  {id:'trust',name:'Trust & Safety',qi:7,desc:(p)=>p>=70?'You feel emotionally safe being imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
+  {id:'calling',name:'Calling',qi:8,desc:(p)=>p>=70?'You know what you are built for and the people around you know it and engage it.':p>=45?'You have some sense of calling, but it may not be clearly named or actively supported by those around you.':'The connection between who you are and what you do feels thin or absent. That gap has a cost.'},
+  {id:'fullself',name:'Freedom to Be Myself',qi:9,desc:(p)=>p>=70?'You feel free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You experience some freedom to be yourself, but in certain contexts you still feel pressure to perform or prove your worth.':'You may feel that your place in relationships is conditional on what you do or produce. The freedom to simply be yourself feels thin or absent.'}
 ];
-// God realm uses different question indices — map qi to God question index
 const GOD_QI_MAP={0:0,2:1,3:2,5:3,6:4,7:5,9:6,8:7};
-
 function calcDimScores(realm){
   return DIMS.map(d=>{
     let t=0,n=0;const realmScores=[];
     REALMS.forEach(r=>{
       if(realm[r.id].answered===0)return;
-      // Use God-specific qi mapping if this is the god realm
-      const qi = r.id==='god' ? (GOD_QI_MAP[d.qi]!==undefined ? GOD_QI_MAP[d.qi] : -1) : d.qi;
+      const qi=r.id==='god'?(GOD_QI_MAP[d.qi]!==undefined?GOD_QI_MAP[d.qi]:-1):d.qi;
       if(qi===-1)return;
       const v=answers[r.id+'_'+qi];
       if(v!==undefined){t+=v;n++;realmScores.push({label:r.label,icon:r.icon,color:r.color,score:Math.round((v/7)*100)});}
@@ -840,31 +644,22 @@ function renderResults(scores){
   }).join('');
   const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);return'<div class="pattern-card '+p.cls+'" style="display:flex;gap:1rem;align-items:flex-start">'+getPatternIcon(p.key)+'<div><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div></div>';}).join('');
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div>'+(w.subtitle?'<div style="font-size:.75rem;color:#6a6258;letter-spacing:.04em;margin-bottom:6px;font-style:italic">'+w.subtitle+'</div>':'')+' <div class="warning-text">'+w.text+'</div></div></div>').join('');
-  const actionHtml=actionSteps.map((s,i)=>'<div class="action-step"><div class="step-num">'+(i+1)+'</div><div class="step-text"><strong>'+s.title+'.</strong> '+s.text+'</div></div>').join('');
 
   document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'
-    // 1. Header
     +'<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Heart Engagement Results</h2><p>'+headline+'</p></div>'
-    // 2. Overall score ring
     +'<div class="ring-wrap"><div class="ring-inner"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(232,215,160,.1)" stroke-width="10"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+rc+'" stroke-width="10" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/></svg><div class="ring-lbl"><div class="big">'+overall+'%</div><div class="sm">overall</div></div></div></div>'
     +'<div class="ring-summary">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life — depth is always worth pursuing.')+'</div>'
-    // 3. Score cards
     +'<div class="score-cards"><div class="score-card"><div class="score-card-lbl">How others engage you</div><div class="score-card-val" style="color:'+dcolor(outAvg)+'">'+outAvg+'%</div><div class="score-card-tag">'+dtag(outAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+outAvg+'%;background:'+dcolor(outAvg)+'"></div></div></div><div class="score-card"><div class="score-card-lbl">How you engage others</div><div class="score-card-val" style="color:'+dcolor(selfAvg)+'">'+selfAvg+'%</div><div class="score-card-tag">'+dtag(selfAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfAvg+'%;background:'+dcolor(selfAvg)+'"></div></div></div></div>'
-    // 4. Scores by realm
     +'<div class="section-label">Scores by realm</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How they engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage them</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div>'
-    // 5. Connection dimensions
     +'<div class="section-label">Connection dimensions</div><div class="dim-grid">'+dimHtml+'</div>'
-    // 6. Engagement patterns
     +'<div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
-
-    // 8 & 9. Two step blocks
     +(()=>{
-      const realmsSorted = REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
-      const lowestRealm = realmsSorted[0];
-      const dimScores2 = calcDimScores(realm);
-      const lowestDim = dimScores2.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
-      const realmLine = lowestRealm ? 'Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong> at '+realm[lowestRealm.id].overall+'%. This is not a verdict — it\'s a place to begin. Something in that context is worth a closer look.' : '';
-      const dimLine = lowestDim ? 'Across all your relationships, your lowest dimension is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong> at '+lowestDim.score+'%.' : '';
+      const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
+      const lowestRealm=realmsSorted[0];
+      const dimScores2=calcDimScores(realm);
+      const lowestDim=dimScores2.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
+      const realmLine=lowestRealm?'Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong> at '+realm[lowestRealm.id].overall+'%. This is not a verdict — it\'s a place to begin. Something in that context is worth a closer look.':'';
+      const dimLine=lowestDim?'Across all your relationships, your lowest dimension is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong> at '+lowestDim.score+'%.':'';
       return '<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3>'
         +'<div style="text-align:left;max-width:520px;margin:0 auto 1.5rem">'
         +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1rem">'+realmLine+'</p>'
@@ -873,7 +668,6 @@ function renderResults(scores){
         +'</div></div>';
     })()
     +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
-    // 10. Discovery call
     +'<div class="discovery-card"><h3>Once you\'ve completed both assessments.</h3><p>When you\'ve finished the Interior Health Assessment, set up a Discovery Call. Steve will bring both sets of scores together and walk through the complete picture with you — no pressure, no agenda, just an honest conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Assessments Complete&body=Hi Steve, I have completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Set Up a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
 }
@@ -886,24 +680,14 @@ document.getElementById('nav-toggle').addEventListener('click',function(){
   this.classList.toggle('open');
   document.getElementById('nav-links').classList.toggle('open');
 });
-
 function checkTestMode(){
   const params=new URLSearchParams(window.location.search);
   if(params.get('test')!=='true')return false;
   isTestMode=true;
-  REALMS.forEach(r=>{
-    r.questions.forEach((_,i)=>{
-      answers[r.id+'_'+i]=Math.floor(Math.random()*4)+3;
-    });
-  });
-  ['significant_other','family'].forEach(id=>{
-    REALMS.find(r=>r.id===id).questions.forEach((_,i)=>{
-      answers[id+'_'+i]=Math.floor(Math.random()*3)+1;
-    });
-  });
+  REALMS.forEach(r=>{r.questions.forEach((_,i)=>{answers[r.id+'_'+i]=Math.floor(Math.random()*4)+3;});});
+  ['significant_other','family'].forEach(id=>{REALMS.find(r=>r.id===id).questions.forEach((_,i)=>{answers[id+'_'+i]=Math.floor(Math.random()*3)+1;});});
   return false;
 }
-
 if(!checkTestMode())renderSurvey();
 else{renderSurvey();setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),300);}
 </script>
