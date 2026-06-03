@@ -13,8 +13,6 @@
 html{font-size:15px}
 body{font-family:'Inter',sans-serif;font-weight:300;background:#0f0e0d;color:#d4ccc4;min-height:100vh}
 a{color:#e8d7a0;text-decoration:none}
-
-/* Login */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f0e0d}
 .login-card{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:3rem;width:100%;max-width:400px;text-align:center}
 .login-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.25rem}
@@ -25,8 +23,6 @@ a{color:#e8d7a0;text-decoration:none}
 .login-btn{width:100%;padding:.9rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
 .login-btn:hover{background:#f5e8c8}
 .login-err{font-size:.8rem;color:#c97a5a;margin-top:.75rem;min-height:18px}
-
-/* Dashboard */
 .dashboard{display:none;min-height:100vh}
 .topbar{background:#1a1816;border-bottom:1px solid rgba(232,215,160,.1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .topbar-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#f0e8df;letter-spacing:.12em;text-transform:uppercase}
@@ -35,70 +31,43 @@ a{color:#e8d7a0;text-decoration:none}
 .topbar-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550}
 .logout-btn{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;background:none;border:1px solid rgba(232,215,160,.12);border-radius:3px;padding:.35rem .75rem;cursor:pointer;transition:all .2s}
 .logout-btn:hover{color:#e8d7a0;border-color:rgba(232,215,160,.3)}
-
-/* Stats */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(232,215,160,.08);border-bottom:1px solid rgba(232,215,160,.08)}
 .stat-card{background:#161412;padding:1.25rem 1.75rem}
 .stat-label{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df}
-
-/* Controls */
 .controls{padding:1rem 2rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid rgba(232,215,160,.06)}
 .search-input{flex:1;padding:.65rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s}
 .search-input:focus{border-color:rgba(232,215,160,.3)}
 .search-input::placeholder{color:#4a4540}
 .refresh-btn{padding:.65rem 1.25rem;background:transparent;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#a09890;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
 .refresh-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
-
-/* Pipeline table */
 .table-wrap{overflow-x:auto;padding:0 2rem 2rem}
 .pipeline-table{width:100%;border-collapse:collapse;min-width:900px;margin-top:1rem}
 .pipeline-table th{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;padding:.6rem .75rem;text-align:left;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap}
 .pipeline-table td{padding:.75rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
 .pipeline-table tr:hover td{background:rgba(232,215,160,.02)}
-
-/* Person info */
 .person-name{font-size:.9rem;font-weight:500;color:#f0e8df}
 .person-email{font-size:.72rem;color:#5a5550;margin-top:1px}
-
-/* Stage cells */
-.stage{display:flex;flex-direction:column;gap:2px}
 .stage-date{font-size:.75rem;color:#a09890}
-.stage-empty{font-size:.75rem;color:#3a3530}
-
-/* Status badges */
 .badge{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
 .badge-done{background:rgba(181,196,160,.12);color:#b5c4a0;border:1px solid rgba(181,196,160,.2)}
 .badge-pending{background:rgba(196,168,130,.08);color:#c4a882;border:1px solid rgba(196,168,130,.15)}
 .badge-no{background:rgba(90,85,80,.1);color:#5a5550;border:1px solid rgba(90,85,80,.15)}
 .badge-yes{background:rgba(181,196,160,.12);color:#b5c4a0;border:1px solid rgba(181,196,160,.2)}
-
-/* Score pill */
 .score-pill{display:inline-block;font-size:.72rem;font-weight:500;padding:2px 8px;border-radius:3px;background:rgba(255,255,255,.05)}
 .score-high{color:#b5c4a0}
 .score-mid{color:#e8d7a0}
 .score-low{color:#c97a5a}
-
-/* Action buttons */
 .action-btn{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid rgba(232,215,160,.15);background:transparent;color:#a09890;transition:all .2s;white-space:nowrap;font-family:'Inter',sans-serif}
 .action-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
 .action-btn+.action-btn{margin-top:4px}
 .action-col{display:flex;flex-direction:column;gap:4px}
-
-/* Pipeline progress bar */
 .pipeline-bar{display:flex;gap:2px;align-items:center;margin-top:3px}
 .pip{width:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06)}
 .pip.done{background:#b5c4a0}
 .pip.active{background:#e8d7a0}
-
-/* Section divider */
-.stage-group-header{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#3a3530;padding:.4rem .75rem;background:#131110;border-bottom:1px solid rgba(232,215,160,.04)}
-
-/* Loading */
 .loading{text-align:center;padding:4rem;color:#5a5550;font-size:.85rem}
 .empty{text-align:center;padding:4rem;color:#5a5550;font-size:.85rem}
-
-/* Modal */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:2rem;max-width:560px;width:90%;max-height:80vh;overflow-y:auto}
@@ -107,9 +76,8 @@ a{color:#e8d7a0;text-decoration:none}
 .modal-section{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:.75rem 0 .4rem;padding-bottom:.3rem;border-bottom:1px solid rgba(232,215,160,.08)}
 .modal-row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.03)}
 .modal-row-label{font-size:.75rem;color:#6a6258}
-.modal-row-val{font-size:.75rem;color:#d4ccc4;text-align:right}
+.modal-row-val{font-size:.75rem;color:#d4ccc4;text-align:right;font-weight:500}
 .modal-close{float:right;background:none;border:none;color:#6a6258;font-size:1.2rem;cursor:pointer;margin-top:-4px}
-
 @media(max-width:768px){
   .stats-bar{grid-template-columns:1fr 1fr}
   .controls{padding:.75rem 1rem}
@@ -120,7 +88,6 @@ a{color:#e8d7a0;text-decoration:none}
 </head>
 <body>
 
-<!-- Login -->
 <div class="login-wrap" id="login-wrap">
   <div class="login-card">
     <div class="login-logo">Bold<span>Hearts</span></div>
@@ -131,7 +98,6 @@ a{color:#e8d7a0;text-decoration:none}
   </div>
 </div>
 
-<!-- Dashboard -->
 <div class="dashboard" id="dashboard">
   <div class="topbar">
     <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span></div>
@@ -177,7 +143,6 @@ a{color:#e8d7a0;text-decoration:none}
   </div>
 </div>
 
-<!-- Detail Modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modal-content">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -211,25 +176,39 @@ function fmtDate(val){
   if(!val) return null;
   const s = val.toString().trim();
   if(!s || s === '—') return null;
-  // Try parsing
   const d = new Date(s);
   if(!isNaN(d)) return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  return s.split(' ')[0]; // fallback
+  return s.split(' ')[0];
+}
+
+// Convert raw value to percentage string
+function fmtScore(val){
+  if(val === null || val === undefined || val === '' || val === '—') return '—';
+  const s = val.toString().trim();
+  if(!s || s === '—') return '—';
+  if(s.endsWith('%')) return s; // already formatted
+  const n = parseFloat(s);
+  if(isNaN(n)) return s;
+  if(n > 0 && n <= 1) return Math.round(n * 100) + '%';
+  return Math.round(n) + '%';
 }
 
 function scoreColor(val){
-  if(!val) return '';
-  const n = parseFloat(val);
+  if(!val || val === '—') return '';
+  const s = val.toString().replace('%','');
+  const n = parseFloat(s);
   if(isNaN(n)) return '';
-  if(n >= 75) return 'score-high';
-  if(n >= 50) return 'score-mid';
+  const pct = n <= 1 ? n * 100 : n;
+  if(pct >= 70) return 'score-high';
+  if(pct >= 45) return 'score-mid';
   return 'score-low';
 }
 
 function pill(val){
   if(!val || val === '—' || val === '') return '<span style="color:#3a3530;font-size:.72rem">—</span>';
+  const formatted = fmtScore(val);
   const cls = scoreColor(val);
-  return '<span class="score-pill '+cls+'">'+val+'</span>';
+  return '<span class="score-pill '+cls+'">'+formatted+'</span>';
 }
 
 function badge(text, type){
@@ -237,12 +216,11 @@ function badge(text, type){
 }
 
 function pipelineProgress(row){
-  // row indices: 0=timestamp,1=name,2=email,3=overall,4=work...
   const hasRelational = !!fmtDate(row[0]);
-  const hasInterior = !!fmtDate(row[43]); // hs_date col 44 = index 43
-  const hasFollowup = row[51] && row[51].toString().toLowerCase() === 'yes';
-  const hasGuideCreated = !!fmtDate(row[52]);
-  const hasGuideSent = !!fmtDate(row[53]);
+  const hasInterior = !!fmtDate(row[43]);
+  const hasFollowup = row[52] && row[52].toString().toLowerCase() === 'yes';
+  const hasGuideCreated = !!fmtDate(row[54]);
+  const hasGuideSent = !!fmtDate(row[55]);
   const steps = [hasRelational, hasInterior, hasFollowup, hasGuideCreated, hasGuideSent];
   const done = steps.filter(Boolean).length;
   const pips = steps.map((s,i) => '<div class="pip'+(s?' done':i===done?' active':'')+'"></div>').join('');
@@ -261,16 +239,10 @@ function renderTable(rows){
   tbody.innerHTML = rows.map((row, idx) => {
     const name = row[1] || '—';
     const email = row[2] || '—';
-
-    // Relational
     const relDate = fmtDate(row[0]);
     const relOverall = row[3] ? row[3].toString() : '';
-
-    // Interior
     const intDate = fmtDate(row[43]);
     const intOverall = row[42] ? row[42].toString() : '';
-
-    // Pipeline cols — stored in cols 51-54 (indices 50-53)
     const relEmailSent = row[50] ? row[50].toString() : '';
     const intEmailSent = row[51] ? row[51].toString() : '';
     const followupReq  = row[52] ? row[52].toString() : '';
@@ -278,60 +250,42 @@ function renderTable(rows){
     const guideCreated = fmtDate(row[54]);
     const guideSent    = fmtDate(row[55]);
 
-    // Relational email badge
     const relEmailHtml = relEmailSent && relEmailSent.toLowerCase()==='yes'
       ? badge('✓ Sent','done')
       : relDate ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
 
-    // Interior email badge
     const intEmailHtml = intEmailSent && intEmailSent.toLowerCase()==='yes'
       ? badge('✓ Sent','done')
       : intDate ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
 
-    // Follow-up
     const followupHtml = !followupReq || followupReq==='—'
       ? '<span style="color:#3a3530;font-size:.72rem">—</span>'
       : followupReq.toLowerCase()==='yes' ? badge('✓ Yes','yes') : badge('No','no');
 
-    // Guide created
     const guideCreatedHtml = guideCreated
       ? '<div class="stage-date">'+guideCreated+'</div>'
       : '<span style="color:#3a3530;font-size:.72rem">—</span>';
 
-    // Guide sent
     const guideSentHtml = guideSent
       ? badge('✓ Sent','done')
       : guideCreated ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
 
-    // Scores summary
     const scoresHtml = '<div style="display:flex;flex-direction:column;gap:2px">'
       +(relOverall ? '<div style="font-size:.68rem;color:#6a6258">R: '+pill(relOverall)+'</div>' : '')
       +(intOverall ? '<div style="font-size:.68rem;color:#6a6258">I: '+pill(intOverall)+'</div>' : '')
       +'</div>';
 
     return '<tr data-idx="'+idx+'">'
-      // Person
-      +'<td><div class="person-name">'+name+'</div><div class="person-email">'+email+'</div>'
-      +pipelineProgress(row)+'</td>'
-      // Relational date
+      +'<td><div class="person-name">'+name+'</div><div class="person-email">'+email+'</div>'+pipelineProgress(row)+'</td>'
       +'<td>'+(relDate ? '<div class="stage-date">'+relDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      // Relational email
       +'<td>'+relEmailHtml+'</td>'
-      // Interior date
       +'<td>'+(intDate ? '<div class="stage-date">'+intDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      // Interior email
       +'<td>'+intEmailHtml+'</td>'
-      // Follow-up requested
       +'<td>'+followupHtml+'</td>'
-      // Request date
       +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      // Guide created
       +'<td>'+guideCreatedHtml+'</td>'
-      // Guide sent
       +'<td>'+guideSentHtml+'</td>'
-      // Scores
       +'<td>'+scoresHtml+'</td>'
-      // Actions
       +'<td><div class="action-col">'
       +'<button class="action-btn" onclick="viewScores('+idx+')">View Scores</button>'
       +'<button class="action-btn" onclick="markFollowup('+idx+')">Mark Follow-up</button>'
@@ -363,55 +317,65 @@ function viewScores(idx){
   const name = row[1] || '—';
   const email = row[2] || '—';
 
-  function fmt(val){ return val && val !== '—' && val !== '' ? val.toString() : '—'; }
   function scoreRow(label, val){
-    if(!val || val==='—' || val==='') return '';
+    const formatted = fmtScore(val);
+    if(formatted === '—') return '';
     const cls = scoreColor(val);
-    return '<div class="modal-row"><span class="modal-row-label">'+label+'</span><span class="modal-row-val '+cls+'">'+val+'</span></div>';
+    return '<div class="modal-row"><span class="modal-row-label">'+label+'</span><span class="modal-row-val '+cls+'">'+formatted+'</span></div>';
   }
 
   document.getElementById('modal-body').innerHTML =
     '<button class="modal-close" onclick="closeModal()">✕</button>'
     +'<h3>'+name+'</h3>'
     +'<div class="modal-sub">'+email+'</div>'
+
     +'<div class="modal-section">Relational Health</div>'
-    +scoreRow('Overall', fmt(row[3]))
-    +scoreRow('Work', fmt(row[4]))
-    +scoreRow('Significant Other', fmt(row[5]))
-    +scoreRow('Family', fmt(row[6]))
-    +scoreRow('Friends', fmt(row[7]))
-    +scoreRow('Community', fmt(row[8]))
-    +scoreRow('God', fmt(row[56]))
-    +'<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem">Patterns: '+fmt(row[17])+'</div>'
+    +scoreRow('Overall', row[3])
+    +scoreRow('Work', row[4])
+    +scoreRow('Significant Other', row[5])
+    +scoreRow('Family', row[6])
+    +scoreRow('Friends', row[7])
+    +scoreRow('Community', row[8])
+    +scoreRow('God', row[56])
+    +(row[17] ? '<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem;padding:.35rem 0">Patterns: '+row[17]+'</div>' : '')
+
+    +'<div class="modal-section">Relational — Dimensions</div>'
+    +scoreRow('Being Seen', row[9])
+    +scoreRow('Being Known', row[10])
+    +scoreRow('Having a Voice', row[11])
+    +scoreRow('Belonging', row[12])
+    +scoreRow('Receiving Support', row[13])
+    +scoreRow('Trust & Safety', row[14])
+    +scoreRow('Calling', row[15])
+    +scoreRow('Freedom to Be Myself', row[16])
+
     +'<div class="modal-section">Interior Health — Themes</div>'
-    +scoreRow('Overall', fmt(row[42]))
-    +scoreRow('Grief & Loss', fmt(row[20]))
-    +scoreRow('Shame & Guilt', fmt(row[37]))
-    +scoreRow('Fear & Anxiety', fmt(row[38]))
-    +scoreRow('Anger', fmt(row[39]))
-    +scoreRow('Desire & Hope', fmt(row[40]))
-    +scoreRow('Joy & Delight', fmt(row[41]))
+    +scoreRow('Overall', row[42])
+    +scoreRow('Grief & Loss', row[20])
+    +scoreRow('Shame & Guilt', row[37])
+    +scoreRow('Fear & Anxiety', row[38])
+    +scoreRow('Anger', row[39])
+    +scoreRow('Desire & Hope', row[40])
+    +scoreRow('Joy & Delight', row[41])
+
     +'<div class="modal-section">Interior Health — Dimensions</div>'
-    +scoreRow('Awareness', fmt(row[44]))
-    +scoreRow('Honesty', fmt(row[45]))
-    +scoreRow('Movement', fmt(row[46]))
-    +scoreRow('Safety', fmt(row[47]))
-    +scoreRow('Direction', fmt(row[48]))
-    +scoreRow('Peace', fmt(row[49]));
+    +scoreRow('Awareness', row[44])
+    +scoreRow('Honesty', row[45])
+    +scoreRow('Movement', row[46])
+    +scoreRow('Safety', row[47])
+    +scoreRow('Direction', row[48])
+    +scoreRow('Peace', row[49]);
 
   document.getElementById('modal-overlay').classList.add('open');
 }
 
 function markFollowup(idx){
-  // Toggle follow-up marker for this row
   const row = allRows[idx];
-  const name = row[1] || '';
   const email = row[2] || '';
   const current = row[52] ? row[52].toString().toLowerCase() : '';
   const newVal = current === 'yes' ? 'No' : 'Yes';
   const newDate = newVal === 'Yes' ? new Date().toLocaleString() : '';
 
-  // Update via sheets
   const params = new URLSearchParams({
     action: 'updatepipeline',
     email: email,
@@ -420,7 +384,6 @@ function markFollowup(idx){
   });
   new Image().src = SHEETS_URL + '?' + params.toString();
 
-  // Update local data
   allRows[idx][52] = newVal;
   allRows[idx][53] = newDate;
   renderTable(allRows);
