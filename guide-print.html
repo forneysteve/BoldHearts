@@ -12,7 +12,7 @@
 html{font-size:11pt}
 body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2218;background:#fff;max-width:720px;margin:0 auto;padding:2.5rem 2rem 4rem}
 
-/* Header */
+/* ── HEADER ── */
 .doc-header{text-align:center;padding-bottom:2rem;margin-bottom:2rem;border-bottom:2px solid #c4a882}
 .bh-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#4a3a2a;margin-bottom:.3rem}
 .bh-logo span{color:#c4a882}
@@ -21,73 +21,111 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .doc-subtitle{font-size:.95rem;color:#6a5a4a;font-style:italic;margin-bottom:1.25rem}
 .doc-meta{display:flex;justify-content:center;gap:2rem;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#9a8a7a}
 
-/* Purpose block */
-.purpose-block{background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:2rem}
+/* ── PURPOSE BLOCK ── */
+.purpose-block{background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:0}
 .purpose-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500}
 .purpose-block p{font-size:.88rem;color:#4a3a2a;line-height:1.9;margin-bottom:.75rem;font-style:italic;max-width:none}
 .purpose-block p:last-child{margin-bottom:0}
 
-/* Score summary */
-.scores-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:2rem}
-.score-block{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;text-align:center}
+/* ── PAGE BREAK after intro ── */
+.page-break{page-break-after:always;break-after:page;height:0;display:block}
+
+/* ── SECTION HEADERS (big) ── */
+.section-header{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#1a1410;margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0;break-after:avoid}
+
+/* ── SCORE SUMMARY ── */
+.scores-wrap{margin-bottom:2rem;break-inside:avoid}
+.scores-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+.score-block{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;text-align:center;break-inside:avoid}
 .score-block-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#9a8a7a;margin-bottom:.4rem}
 .score-block-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
 .score-high{color:#5a9a50}
 .score-mid{color:#c4a882}
 .score-low{color:#c97a5a}
 
-/* Sections */
+/* ── SECTIONS ── */
 .section{margin-bottom:1.75rem;break-inside:avoid}
-.section-eyebrow{display:flex;align-items:center;gap:.5rem;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem}
-.section-icon{font-size:.9rem;line-height:1}
+.section-eyebrow{display:flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;font-weight:500}
+.section-icon{font-size:1rem;line-height:1}
 .section-body{font-size:.88rem;color:#2a2218;line-height:1.95}
 .section-body p{margin-bottom:.9rem;max-width:none}
 .section-body p:last-child{margin-bottom:0}
 
-/* Practice cards */
+/* ── PRACTICE CARDS ── */
+.practices-wrap{break-inside:avoid}
 .practice{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem;break-inside:avoid}
-.practice-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#1a1410;margin-bottom:.4rem}
+.practice:last-child{margin-bottom:0}
+.practice-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:#1a1410;margin-bottom:.4rem}
 .practice-body{font-size:.85rem;color:#4a3a2a;line-height:1.9}
-.practice-why{font-size:.82rem;color:#7a6a5a;margin-top:.5rem;font-style:italic;line-height:1.8}
+.practice-why{font-size:.82rem;color:#7a6a5a;margin-top:.6rem;font-style:italic;line-height:1.8;border-top:1px solid #e8d8c0;padding-top:.5rem}
 
-/* Divider */
-.section-divider{border:none;border-top:1px solid #e8d8c0;margin:1.75rem 0}
+/* ── DIVIDER ── */
+.section-divider{border:none;border-top:1px solid #e8d8c0;margin:1.75rem 0;break-after:avoid}
 
-/* Closing */
+/* ── CLOSING ── */
 .closing-block{background:#1a1410;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid}
 .closing-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem}
 .closing-text{font-size:.88rem;color:#c8b8a8;line-height:1.95;font-style:italic}
 
-/* CTA */
+/* ── CTA ── */
 .cta-block{border:1px solid #e8d8c0;border-top:3px solid #c4a882;border-radius:4px;padding:1.5rem 2rem;text-align:center;margin-top:1.75rem;break-inside:avoid}
 .cta-block p{font-size:.85rem;color:#4a3a2a;line-height:1.8;margin-bottom:.5rem;max-width:none}
 .cta-block a{color:#c4a882;font-weight:500}
 
-/* Footer */
-.doc-footer{text-align:center;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e8d8c0}
+/* ── FOOTER ── */
+.doc-footer{text-align:center;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e8d8c0;break-inside:avoid}
 .doc-footer p{font-size:.72rem;color:#9a8a7a;letter-spacing:.04em}
 
-/* Loading state */
+/* ── LOADING / ERROR ── */
 .loading{text-align:center;padding:6rem 2rem;color:#9a8a7a;font-size:.9rem}
 .loading-dots{display:inline-flex;gap:6px;margin-top:1rem}
 .loading-dot{width:7px;height:7px;border-radius:50%;background:#c4a882;animation:pulse 1.2s infinite}
 .loading-dot:nth-child(2){animation-delay:.2s}
 .loading-dot:nth-child(3){animation-delay:.4s}
 @keyframes pulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
-
-/* Error */
 .error{text-align:center;padding:4rem 2rem;color:#c97a5a;font-size:.9rem}
 
-/* Print */
+/* ── PRINT ── */
+/* Charts */
+.dashboard-wrap{margin-bottom:2rem;break-inside:avoid}
+.dash-scores{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.dash-score{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;text-align:center;break-inside:avoid}
+.dash-score-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#9a8a7a;margin-bottom:.3rem}
+.dash-score-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
+.dash-score-tag{font-size:.7rem;color:#9a8a7a;margin-top:2px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.chart-card{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;break-inside:avoid}
+.chart-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0}
+.chart-wrap{position:relative}
+
 @media print{
-  body{padding:1rem;max-width:none}
+  body{padding:.5rem;max-width:none}
   .no-print{display:none}
+
+  /* Force page break after intro */
+  .purpose-block{break-after:page}
+
+  /* Keep together */
+  .doc-header{break-inside:avoid}
+  .scores-wrap{break-inside:avoid}
+  .score-block{break-inside:avoid}
   .section{break-inside:avoid}
   .practice{break-inside:avoid}
+  .practices-wrap{break-inside:avoid}
+  .closing-block{break-inside:avoid}
   .cta-block{break-inside:avoid}
+  .doc-footer{break-inside:avoid}
+
+  /* Section headers stay with their content */
+  .section-header{break-after:avoid;break-before:auto}
+  .section-eyebrow{break-after:avoid}
+
+  /* Dividers don't break */
+  .section-divider{break-after:avoid;break-before:avoid}
 }
-@page{margin:1.5cm 2cm}
+@page{margin:1.8cm 2cm}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
 
@@ -139,25 +177,73 @@ function renderGuide(data) {
 
   const purposeHtml = PURPOSE_TEXT.map(p => '<p>' + p + '</p>').join('');
 
-  // Score summary
+  // Score summary with header
   const a1Score = fmtScore(a1?.overall);
   const hsScore = fmtScore(hs?.overall);
   const godScore = fmtScore(a1?.god);
-  const scoresHtml = '<div class="scores-grid">'
-    + '<div class="score-block"><div class="score-block-label">Relational Health</div><div class="score-block-val ' + scoreColor(a1Score) + '">' + a1Score + '</div></div>'
-    + '<div class="score-block"><div class="score-block-label">Interior Health</div><div class="score-block-val ' + scoreColor(hsScore) + '">' + hsScore + '</div></div>'
-    + '<div class="score-block"><div class="score-block-label">With God</div><div class="score-block-val ' + scoreColor(godScore) + '">' + godScore + '</div></div>'
-    + '</div>';
+
+  // Dashboard with charts
+  function scoreTag(p) {
+    const n = parseFloat(p);
+    if(isNaN(n)) return '';
+    const v = n <= 1 ? n * 100 : n;
+    return v >= 70 ? 'All Systems Green' : v >= 55 ? 'Check Engine' : v >= 40 ? 'Running on Fumes' : 'Engine Off';
+  }
+  function barColor(v) { return v >= 70 ? '#3B6D11' : v >= 45 ? '#BA7517' : '#D85A30'; }
+  function makeColors(arr) { return arr.map(barColor); }
+
+  function numVal(s) {
+    if(!s) return 0;
+    const str = s.toString().replace('%','').trim();
+    const n = parseFloat(str);
+    if(isNaN(n)) return 0;
+    return n <= 1 ? Math.round(n * 100) : Math.round(n);
+  }
+
+  const realmVals  = [a1?.work, a1?.partner, a1?.family, a1?.friends, a1?.community, a1?.god].map(numVal);
+  const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
+  const relDimVals = [hs?.awareness||0, hs?.honesty||0, hs?.movement||0, hs?.safety||0, hs?.direction||0, hs?.peace||0].map(numVal);
+  // Use a1 relational dimensions if available, else placeholders
+  const intDimVals = relDimVals; // interior dims
+
+  const dashHtml = '<div class="dashboard-wrap">'
+    + '<div class="section-header">Your Assessment Scores</div>'
+    + '<div class="dash-scores">'
+    + '<div class="dash-score"><div class="dash-score-label">Relational Health</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + scoreTag(a1Score) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Interior Health</div><div class="dash-score-val" style="color:' + barColor(numVal(hsScore)) + '">' + hsScore + '</div><div class="dash-score-tag">' + scoreTag(hsScore) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">With God</div><div class="dash-score-val" style="color:' + barColor(numVal(godScore)) + '">' + godScore + '</div><div class="dash-score-tag">' + scoreTag(godScore) + '</div></div>'
+    + '</div>'
+    + '<div class="charts-grid">'
+    + '<div class="chart-card"><div class="chart-label">Relational — by realm</div><div class="chart-wrap" style="height:180px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">Interior — by theme</div><div class="chart-wrap" style="height:180px"><canvas id="themeChart" role="img" aria-label="Interior scores by theme"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">Relational — dimensions</div><div class="chart-wrap" style="height:220px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">Interior — dimensions</div><div class="chart-wrap" style="height:220px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
+    + '</div></div>';
+
+  const scoresHtml = '<div class="scores-wrap">'
+    + '<div class="section-header">Your Assessment Scores</div>'
+    + '<div class="scores-grid">'
+    + '</div></div>';
+
+  // Map section ids to big header labels
+  const sectionHeaders = {
+    picture:    'What Your Scores Are Saying',
+    interior:   "What's Happening Underneath",
+    invitation: 'Where God Seems to Be Moving',
+    soulcare:   'What Soul Care Offers You',
+    nextstep:   'Your Next Honest Step',
+    practices:  'Practices for This Season'
+  };
 
   // Sections
-  const sectionsHtml = (guide.sections || []).map(s => {
+  const sectionsHtml = (guide.sections || []).map((s, idx) => {
+    const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
+
     if(s.id === 'practices') {
-      // Render each practice as a card — split on double newline or numbered list
       const practiceBlocks = s.content.split(/\n\n+/).filter(p => p.trim()).map(p => {
         const lines = p.trim().split('\n');
-        const title = lines[0].replace(/^\*\*|\*\*$/g,'').replace(/^#+\s*/,'');
+        const title = lines[0].replace(/^\*\*|\*\*$/g,'').replace(/^#+\s*/,'').replace(/^\d+\.\s*/,'');
         const body = lines.slice(1).join(' ').trim();
-        // Split why from body if "Why it fits" pattern exists
         const whyMatch = body.match(/^(.*?)(Why it fits[^:]*:|Because[^:]*:)(.*)$/si);
         if(whyMatch) {
           return '<div class="practice"><div class="practice-name">' + title + '</div>'
@@ -167,17 +253,19 @@ function renderGuide(data) {
         return '<div class="practice"><div class="practice-name">' + title + '</div>'
           + '<div class="practice-body">' + body + '</div></div>';
       }).join('');
-      return '<div class="section">'
-        + '<div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
-        + practiceBlocks + '</div>';
+      return bigHeader
+        + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
+        + '<div class="practices-wrap">' + practiceBlocks + '</div></div>';
     }
+
     const paragraphs = s.content.split(/\n\n+/).filter(p=>p.trim()).map(p=>'<p>'+p.trim()+'</p>').join('');
-    return '<div class="section">'
-      + '<div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
+    return bigHeader
+      + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
       + '<div class="section-body">' + paragraphs + '</div></div>';
   }).join('<hr class="section-divider">');
 
   document.getElementById('content').innerHTML =
+    // Page 1: Cover + intro
     '<div class="doc-header">'
     + '<div class="bh-logo">Bold<span>Hearts</span></div>'
     + '<div class="doc-eyebrow">Spiritual Direction Guide</div>'
@@ -185,11 +273,11 @@ function renderGuide(data) {
     + (guide.subtitle ? '<div class="doc-subtitle">' + guide.subtitle + '</div>' : '')
     + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
     + '</div>'
-
+    // Intro block — forces page break after in print
     + '<div class="purpose-block"><div class="purpose-label">Purpose of the Assessments</div>' + purposeHtml + '</div>'
 
-    + scoresHtml
-
+    // Page 2+: Scores then guide sections
+    + dashHtml
     + sectionsHtml
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
@@ -199,31 +287,51 @@ function renderGuide(data) {
     + '<p>Schedule a free 15-minute Discovery Call. Bring both assessments and we\'ll walk through what the scores reveal — and what comes next.</p>'
     + '<p><a href="mailto:admin@boldhearts.org?subject=Discovery Call">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>'
-
     + '<div class="doc-footer"><p>&copy; 2026 BoldHearts &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; Spiritual Direction · Pastoral Counseling · Leadership Soul Care</p></div>';
 
-  // Auto-trigger print after a short delay for fonts to load
-  setTimeout(() => window.print(), 800);
+  // Build charts after DOM is set
+  setTimeout(() => {
+    const baseOpts = {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw + '%' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#7a6a5a' } },
+        y: { min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 }, color: '#7a6a5a', callback: v => v + '%' } }
+      }
+    };
+    const horizOpts = {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw + '%' } } },
+      scales: {
+        x: { min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 }, color: '#7a6a5a', callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#7a6a5a' } }
+      }
+    };
+    if(document.getElementById('realmChart')) {
+      new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['Work','Partner','Family','Friends','Community','God'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
+      new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Joy'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
+      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:[numVal(hs?.awareness),numVal(hs?.honesty),numVal(hs?.movement),numVal(hs?.safety),numVal(hs?.direction),numVal(hs?.peace)], backgroundColor:makeColors([numVal(hs?.awareness),numVal(hs?.honesty),numVal(hs?.movement),numVal(hs?.safety),numVal(hs?.direction),numVal(hs?.peace)]), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+    }
+  }, 100);
+  setTimeout(() => window.print(), 1400);
 }
 
 function showError(msg) {
   document.getElementById('content').innerHTML = '<div class="error"><p>' + msg + '</p></div>';
 }
 
-// Read data passed via sessionStorage from admin
 window.addEventListener('load', async () => {
   try {
     const raw = sessionStorage.getItem('boldhearts_guide_data');
     if(!raw) { showError('No guide data found. Please use the Build Guide button in the admin dashboard.'); return; }
     const data = JSON.parse(raw);
 
-    // If guide is already generated (cached), render immediately
     if(data.guide && data.guide.sections && data.guide.sections.length > 0) {
       renderGuide(data);
       return;
     }
 
-    // Otherwise call the worker to generate
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
