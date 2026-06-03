@@ -74,7 +74,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 
 /* ── FOOTER ── */
 .doc-footer{text-align:center;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e8d8c0;break-inside:avoid}
-.doc-footer p{font-size:.72rem;color:#9a8a7a;letter-spacing:.04em}
+.doc-footer p{font-size:.68rem;color:#9a8a7a;letter-spacing:.03em;max-width:none;line-height:1.6}
 
 /* ── LOADING / ERROR ── */
 .loading{text-align:center;padding:6rem 2rem;color:#9a8a7a;font-size:.9rem}
@@ -287,7 +287,11 @@ function renderGuide(data) {
     + '<p>Schedule a free 15-minute Discovery Call. Bring both assessments and we\'ll walk through what the scores reveal — and what comes next.</p>'
     + '<p><a href="mailto:admin@boldhearts.org?subject=Discovery Call">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>'
-    + '<div class="doc-footer"><p>&copy; 2026 BoldHearts &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; Spiritual Direction · Pastoral Counseling · Leadership Soul Care</p></div>';
+    + '<div class="doc-footer">'
+    + '<p>&copy; 2026 The BoldHearts Group LLC &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; All Rights Reserved</p>'
+    + '<p style="margin-top:.4rem">This document is the exclusive intellectual property of The BoldHearts Group LLC. It is prepared solely for the individual named herein and may not be reproduced, distributed, shared, or used in any form without the express written authorization of The BoldHearts Group LLC. Unauthorized use is strictly prohibited.</p>'
+    + '<p style="margin-top:.4rem">Spiritual Direction &nbsp;·&nbsp; Pastoral Counseling &nbsp;·&nbsp; Leadership Soul Care &nbsp;·&nbsp; boldhearts.org</p>'
+    + '</div>';
 
   // Build charts after DOM is set
   setTimeout(() => {
@@ -310,8 +314,10 @@ function renderGuide(data) {
     if(document.getElementById('realmChart')) {
       new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['Work','Partner','Family','Friends','Community','God'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
       new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Joy'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
-      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
-      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:[numVal(hs?.awareness),numVal(hs?.honesty),numVal(hs?.movement),numVal(hs?.safety),numVal(hs?.direction),numVal(hs?.peace)], backgroundColor:makeColors([numVal(hs?.awareness),numVal(hs?.honesty),numVal(hs?.movement),numVal(hs?.safety),numVal(hs?.direction),numVal(hs?.peace)]), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      const relDimActual = [numVal(a1?.dim_seen),numVal(a1?.dim_known),numVal(a1?.dim_voice),numVal(a1?.dim_belonging),numVal(a1?.dim_support),numVal(a1?.dim_trust),numVal(a1?.dim_calling),numVal(a1?.dim_freedom)];
+      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], datasets:[{ data:relDimActual, backgroundColor:makeColors(relDimActual), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      const intDimActual = [numVal(hs?.awareness),numVal(hs?.honesty),numVal(hs?.movement),numVal(hs?.safety),numVal(hs?.direction),numVal(hs?.peace)];
+      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimActual, backgroundColor:makeColors(intDimActual), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
     }
   }, 100);
   setTimeout(() => window.print(), 1400);
