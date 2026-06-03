@@ -424,6 +424,8 @@ async function submitGate(){
         subject:userName+', your Interior Health Assessment results',
         results_body:htmlEmail,from_name:'Steve Forney — BoldHearts',
         overall_score:scores.overall+'%'
+      }).then(()=>{
+        new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,interior_email_sent:'Yes'}).toString();
       }).catch(e=>console.error('Email error:',e));
     }
   } catch(e){console.error('Email error:',e);}
