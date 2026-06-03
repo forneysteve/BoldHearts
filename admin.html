@@ -61,6 +61,8 @@ a{color:#e8d7a0;text-decoration:none}
 .action-btn{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid rgba(232,215,160,.15);background:transparent;color:#a09890;transition:all .2s;white-space:nowrap;font-family:'Inter',sans-serif}
 .action-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
 .action-btn+.action-btn{margin-top:4px}
+.action-btn-gold{border-color:rgba(196,168,130,.4);color:#c4a882}
+.action-btn-gold:hover{border-color:#c4a882;color:#f0e8df;background:rgba(196,168,130,.1)}
 .action-col{display:flex;flex-direction:column;gap:4px}
 .pipeline-bar{display:flex;gap:2px;align-items:center;margin-top:3px}
 .pip{width:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06)}
@@ -289,6 +291,7 @@ function renderTable(rows){
       +'<td><div class="action-col">'
       +'<button class="action-btn" onclick="viewScores('+idx+')">View Scores</button>'
       +'<button class="action-btn" onclick="markFollowup('+idx+')">Mark Follow-up</button>'
+      +'<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+')">Build Guide</button>'
       +'</div></td>'
       +'</tr>';
   }).join('');
@@ -387,6 +390,68 @@ function markFollowup(idx){
   allRows[idx][52] = newVal;
   allRows[idx][53] = newDate;
   renderTable(allRows);
+}
+
+function buildGuide(idx){
+  const row = allRows[idx];
+  const name = row[1] || '';
+  const email = row[2] || '';
+
+  // Check they have at least interior scores
+  if(!row[43] || !fmtDate(row[43])){
+    alert(name + ' has not completed the Interior Health Assessment yet.');
+    return;
+  }
+
+  function ps(val){
+    if(!val && val!==0) return null;
+    const s = val.toString().trim();
+    if(!s || s==='—') return null;
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(isNaN(n)) return null;
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+
+  const a1 = {
+    overall:   ps(row[3]),
+    work:      ps(row[4]),
+    partner:   ps(row[5]),
+    family:    ps(row[6]),
+    friends:   ps(row[7]),
+    community: ps(row[8]),
+    god:       ps(row[56]),
+    patterns:  row[17] || '',
+    warnings:  row[18] || ''
+  };
+
+  const hs = {
+    overall:   ps(row[42]),
+    grief:     ps(row[20]),
+    shame:     ps(row[37]),
+    fear:      ps(row[38]),
+    anger:     ps(row[39]),
+    desire:    ps(row[40]),
+    joy:       ps(row[41]),
+    awareness: ps(row[44]),
+    honesty:   ps(row[45]),
+    movement:  ps(row[46]),
+    safety:    ps(row[47]),
+    direction: ps(row[48]),
+    peace:     ps(row[49])
+  };
+
+  const guideData = {
+    name: name,
+    email: email,
+    a1: a1,
+    hs: hs,
+    date: new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})
+  };
+
+  sessionStorage.setItem('boldhearts_guide_data', JSON.stringify(guideData));
+  window.open('guide-print.html', '_blank');
 }
 
 function closeModal(){
