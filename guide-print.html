@@ -266,12 +266,12 @@ function renderGuide(data) {
 
   // Realm cards
   const realmDefs = [
-    {label:'Work / School',     overall:a1?.work,      out:a1?.work_outward,      self:a1?.work_self},
-    {label:'Significant Other', overall:a1?.partner,   out:a1?.partner_outward,   self:a1?.partner_self},
-    {label:'Family',            overall:a1?.family,    out:a1?.family_outward,    self:a1?.family_self},
-    {label:'Friends',           overall:a1?.friends,   out:a1?.friends_outward,   self:a1?.friends_self},
-    {label:'Community',         overall:a1?.community, out:a1?.community_outward, self:a1?.community_self},
-    {label:'With God',          overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self},
+    {label:'Work / School',     overall:a1?.work,      out:a1?.work_outward,      self:a1?.work_self,      outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Significant Other', overall:a1?.partner,   out:a1?.partner_outward,   self:a1?.partner_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Family',            overall:a1?.family,    out:a1?.family_outward,    self:a1?.family_self,    outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Friends',           overall:a1?.friends,   out:a1?.friends_outward,   self:a1?.friends_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Community',         overall:a1?.community, out:a1?.community_outward, self:a1?.community_self, outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'With God',          overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self,       outLabel:'How God engages you',  selfLabel:'How you engage God'},
   ].filter(r => numVal(r.overall) > 0);
 
   const realmCardsHtml = realmDefs.map(r => {
@@ -284,11 +284,12 @@ function renderGuide(data) {
       else if(outN < 50 && selfN < 50) pattern = ' — Disconnected on both sides';
       else if(outN >= 65 && selfN >= 65 && gap < 15) pattern = ' — Genuine mutuality';
       else if(gap >= 15) pattern = ' — ' + gap + '% gap worth exploring';
+      else pattern = ' — Genuine mutuality';
     }
     return detailCard(r.label + pattern,
       detailRow('Overall', r.overall, false) +
-      detailRow('How they engage you', r.out, false) +
-      detailRow('How you engage them', r.self, true)
+      detailRow(r.outLabel, r.out, false) +
+      detailRow(r.selfLabel, r.self, true)
     );
   }).join('');
 
