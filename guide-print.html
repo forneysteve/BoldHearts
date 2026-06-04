@@ -274,13 +274,23 @@ function renderGuide(data) {
     {label:'With God',          overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self},
   ].filter(r => numVal(r.overall) > 0);
 
-  const realmCardsHtml = realmDefs.map(r =>
-    detailCard(r.label,
+  const realmCardsHtml = realmDefs.map(r => {
+    const outN = numVal(r.out), selfN = numVal(r.self);
+    const gap = Math.abs(outN - selfN);
+    let pattern = '';
+    if(outN > 0 && selfN > 0) {
+      if(outN < 50 && selfN >= 65) pattern = ' — Giving more than receiving';
+      else if(outN >= 65 && selfN < 50) pattern = ' — Others reaching in, holding back';
+      else if(outN < 50 && selfN < 50) pattern = ' — Disconnected on both sides';
+      else if(outN >= 65 && selfN >= 65 && gap < 15) pattern = ' — Genuine mutuality';
+      else if(gap >= 15) pattern = ' — ' + gap + '% gap worth exploring';
+    }
+    return detailCard(r.label + pattern,
       detailRow('Overall', r.overall, false) +
       detailRow('How they engage you', r.out, false) +
       detailRow('How you engage them', r.self, true)
-    )
-  ).join('');
+    );
+  }).join('');
 
   // Relational dimensions card
   const relDimItems = [
