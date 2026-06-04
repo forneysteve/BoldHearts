@@ -369,7 +369,14 @@ function renderGuide(data) {
   // Sections
   const sectionsHtml = (guide.sections || []).map((s, idx) => {
     const sectionImages = {
-      invitation: 'assets/images/waterfall.jpg'
+      picture:          'assets/images/aatlas-peak-299014_1920.jpg',
+      scored_well:      'assets/images/stocksnap-people-2597845_1920.jpg',
+      could_be_stronger:'assets/images/bluesnap-plant-234493_1920.jpg',
+      interior:         'assets/images/blackpowder75-saxon-switzerland-539418_1920.jpg',
+      invitation:       'assets/images/emphyrio-waterfall-4610084_1920.jpg',
+      soulcare:         'assets/images/couple_walking.jpg',
+      nextstep:         'assets/images/luisambros-mountain-7704819_1920.jpg',
+      practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
     };
 
     const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
@@ -447,7 +454,7 @@ function renderGuide(data) {
     + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
     + '</div>'
     // Intro block — forces page break after in print
-    + '<div class="purpose-block"><div class="purpose-label">Purpose of the Assessments</div>' + purposeHtml + '</div>'
+    + '<div class="purpose-block"><div class="purpose-label">Purpose of the Assessments</div><img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:180px;height:180px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.75">' + purposeHtml + '</div>'
 
     // Page 2+: Scores then guide sections
     + dashHtml
