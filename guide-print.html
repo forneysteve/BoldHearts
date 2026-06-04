@@ -212,7 +212,19 @@ function renderGuide(data) {
   const realmVals  = [a1?.work, a1?.partner, a1?.family, a1?.friends, a1?.community, a1?.god].map(numVal);
   const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
   const relDimVals = [a1?.dim_seen, a1?.dim_known, a1?.dim_voice, a1?.dim_belonging, a1?.dim_support, a1?.dim_trust, a1?.dim_calling, a1?.dim_freedom].map(numVal);
-  const intDimVals = [hs?.awareness, hs?.honesty, hs?.movement, hs?.safety, hs?.direction, hs?.peace].map(numVal);
+  // Debug: log hs dim values to console
+  console.log('hs dims:', {
+    awareness: hs?.awareness, honesty: hs?.honesty, movement: hs?.movement,
+    safety: hs?.safety, direction: hs?.direction, peace: hs?.peace
+  });
+  const intDimVals = [hs?.awareness, hs?.honesty, hs?.movement, hs?.safety, hs?.direction, hs?.peace].map(v => {
+    if(v === null || v === undefined || v === '' || v === '—') return 0;
+    const s = v.toString().trim().replace('%','');
+    const n = parseFloat(s);
+    if(isNaN(n)) return 0;
+    return n <= 1 ? Math.round(n * 100) : Math.round(n);
+  });
+  console.log('intDimVals:', intDimVals);
 
   const dashHtml = '<div class="dashboard-wrap">'
     + '<div class="section-header">Your Assessment Scores</div>'
@@ -228,6 +240,99 @@ function renderGuide(data) {
     + '<div class="chart-card"><div class="chart-label">Interior — dimensions</div><div class="chart-wrap" style="height:220px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
     + '</div></div>';
 
+  // ── DETAILED SCORE BREAKDOWN ─────────────────────────────────────────────
+
+  function detailRow(label, val, isLast) {
+    const n = numVal(val);
+    if(n === 0) return '';
+    const col = barColor(n);
+    const border = isLast ? '' : 'border-bottom:1px solid #ede8e0;';
+    return '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0;'+border+'">'
+      +'<div style="width:160px;font-size:.7rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3">'+label+'</div>'
+      +'<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden">'
+      +'<div style="width:'+n+'%;height:100%;background:'+col+';border-radius:4px"></div>'
+      +'</div>'
+      +'<div style="width:34px;font-size:.7rem;font-weight:500;color:'+col+';text-align:right">'+n+'%</div>'
+      +'</div>';
+  }
+
+  function detailCard(title, rows) {
+    if(!rows) return '';
+    return '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem 1.25rem;break-inside:avoid;margin-bottom:0">'
+      +'<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid #e8d8c0;font-weight:500">'+title+'</div>'
+      +rows
+      +'</div>';
+  }
+
+  // Realm cards
+  const realmDefs = [
+    {label:'Work / School',     overall:a1?.work,      out:a1?.work_outward,      self:a1?.work_self},
+    {label:'Significant Other', overall:a1?.partner,   out:a1?.partner_outward,   self:a1?.partner_self},
+    {label:'Family',            overall:a1?.family,    out:a1?.family_outward,    self:a1?.family_self},
+    {label:'Friends',           overall:a1?.friends,   out:a1?.friends_outward,   self:a1?.friends_self},
+    {label:'Community',         overall:a1?.community, out:a1?.community_outward, self:a1?.community_self},
+    {label:'With God',          overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self},
+  ].filter(r => numVal(r.overall) > 0);
+
+  const realmCardsHtml = realmDefs.map(r =>
+    detailCard(r.label,
+      detailRow('Overall', r.overall, false) +
+      detailRow('How they engage you', r.out, false) +
+      detailRow('How you engage them', r.self, true)
+    )
+  ).join('');
+
+  // Relational dimensions card
+  const relDimItems = [
+    {label:'Being Seen',           val:a1?.dim_seen},
+    {label:'Being Known',          val:a1?.dim_known},
+    {label:'Having a Voice',       val:a1?.dim_voice},
+    {label:'Belonging',            val:a1?.dim_belonging},
+    {label:'Receiving Support',    val:a1?.dim_support},
+    {label:'Trust & Safety',       val:a1?.dim_trust},
+    {label:'Calling',              val:a1?.dim_calling},
+    {label:'Freedom to Be Myself', val:a1?.dim_freedom},
+  ].filter(d => numVal(d.val) > 0);
+  const relDimCardHtml = relDimItems.length > 0
+    ? detailCard('Relational Dimensions', relDimItems.map((d,i)=>detailRow(d.label,d.val,i===relDimItems.length-1)).join(''))
+    : '';
+
+  // Interior themes card
+  const themeItems = [
+    {label:'Grief & Loss',   val:hs?.grief},
+    {label:'Shame & Guilt',  val:hs?.shame},
+    {label:'Fear & Anxiety', val:hs?.fear},
+    {label:'Anger',          val:hs?.anger},
+    {label:'Desire & Hope',  val:hs?.desire},
+    {label:'Joy & Delight',  val:hs?.joy},
+  ].filter(t => numVal(t.val) > 0);
+  const themeCardHtml = themeItems.length > 0
+    ? detailCard('Interior Themes', themeItems.map((t,i)=>detailRow(t.label,t.val,i===themeItems.length-1)).join(''))
+    : '';
+
+  // Interior postures card
+  const postureItems = [
+    {label:'Awareness — Can you name it?',           val:hs?.awareness},
+    {label:'Honesty — Can you own it?',              val:hs?.honesty},
+    {label:'Movement — Are you moving through?',     val:hs?.movement},
+    {label:'Safety — Is it safe to exist in you?',   val:hs?.safety},
+    {label:'Direction — Can you see where it points?',val:hs?.direction},
+    {label:'Peace — Is there settledness?',          val:hs?.peace},
+  ].filter(p => numVal(p.val) > 0);
+  const postureCardHtml = postureItems.length > 0
+    ? detailCard('Interior Postures', postureItems.map((p,i)=>detailRow(p.label,p.val,i===postureItems.length-1)).join(''))
+    : '';
+
+  const detailBreakdownHtml = (realmCardsHtml||relDimCardHtml||themeCardHtml||postureCardHtml)
+    ? '<div class="section-header">Complete Score Breakdown</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem">'
+      +realmCardsHtml
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:2rem">'
+      +relDimCardHtml+themeCardHtml+postureCardHtml
+      +'</div>'
+    : '';
+
   const scoresHtml = '<div class="scores-wrap">'
     + '<div class="section-header">Your Assessment Scores</div>'
     + '<div class="scores-grid">'
@@ -235,12 +340,14 @@ function renderGuide(data) {
 
   // Map section ids to big header labels
   const sectionHeaders = {
-    picture:    'What Your Scores Are Saying',
-    interior:   "What's Happening Underneath",
-    invitation: 'Where God Seems to Be Moving',
-    soulcare:   'What Soul Care Offers You',
-    nextstep:   'Your Next Honest Step',
-    practices:  'Practices for This Season'
+    picture:          'What Your Scores Are Saying',
+    scored_well:      'What Is Working',
+    could_be_stronger:'Where There Is Room to Grow',
+    interior:         "What's Happening Underneath",
+    invitation:       'Where God Seems to Be Moving',
+    soulcare:         'What Soul Care Offers You',
+    nextstep:         'Using This Guide',
+    practices:        'Practices for This Season'
   };
 
   // Sections
@@ -320,6 +427,7 @@ function renderGuide(data) {
 
     // Page 2+: Scores then guide sections
     + dashHtml
+    + detailBreakdownHtml
     + sectionsHtml
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
