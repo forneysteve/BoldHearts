@@ -10,7 +10,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{font-size:11pt}
-body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2218;background:#fff;max-width:720px;margin:0 auto;padding:2.5rem 2rem 4rem}
+body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2218;background:#f5f0e8;margin:0;padding:2rem 1rem 4rem}
+.guide-wrap{background:#fff;max-width:780px;margin:0 auto;padding:3rem 3.5rem 4rem;box-shadow:0 2px 40px rgba(0,0,0,0.08);border-radius:4px}
 
 /* ── HEADER ── */
 .doc-header{text-align:center;padding-bottom:2rem;margin-bottom:2rem;border-bottom:2px solid #c4a882}
@@ -107,9 +108,31 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .chart-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0}
 .chart-wrap{position:relative}
 
+.print-btn{position:fixed;bottom:2rem;right:2rem;background:#c4a882;color:#fff;border:none;border-radius:4px;padding:.85rem 1.5rem;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 12px rgba(196,168,130,.4);transition:all .2s;z-index:100}
+.print-btn:hover{background:#b09060;box-shadow:0 4px 20px rgba(196,168,130,.5)}
+@media(max-width:600px){
+  .guide-wrap{padding:1.5rem 1.25rem;border-radius:0;box-shadow:none}
+  body{padding:.5rem 0 4rem;background:#fff}
+  .doc-title{font-size:1.8rem}
+  .doc-meta{flex-direction:column;gap:.4rem;align-items:center}
+  .scores-grid,.charts-grid{grid-template-columns:1fr !important}
+  .dash-scores{grid-template-columns:1fr 1fr !important}
+  .chart-card{break-inside:avoid}
+  .chart-wrap{height:160px !important}
+  .aware-grid{grid-template-columns:1fr !important}
+  .print-btn{bottom:1rem;right:1rem;padding:.7rem 1.1rem;font-size:.72rem}
+  .section-header{font-size:1.3rem}
+  .practice{padding:1rem}
+  .doc-header{padding-bottom:1.5rem}
+}
+@media(max-width:400px){
+  .dash-scores{grid-template-columns:1fr !important}
+  .doc-title{font-size:1.5rem}
+}
 @media print{
   body{padding:.5rem;max-width:none}
   .no-print{display:none}
+  .print-btn{display:none}
 
   /* Force page break after intro */
   .purpose-block{break-after:page}
@@ -138,7 +161,8 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 </head>
 <body>
 
-<div id="content">
+<button class="print-btn" onclick="window.print()">⬇ Save as PDF</button>
+<div class="guide-wrap"><div id="content">
   <div class="loading">
     <div>Building your guide...</div>
     <div class="loading-dots">
@@ -151,6 +175,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 
 <script>
 const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const PURPOSE_TEXT = [
   "Thank you for taking the time to complete both assessments. What you've done here is not small — you've given an honest look at the core of who you are.",
   "Much of what defines us can be observed from the outside — what we produce, how we lead, the roles we fill. These assessments aren't interested in any of that. They go deeper. They are an honest look at your heart.",
@@ -436,13 +461,24 @@ function renderGuide(data) {
     }
 
         const paragraphs = s.content.split(/\n\n+/).filter(p=>p.trim()).map(p=>'<p>'+p.trim()+'</p>').join('');
+    const sectionQuotes = {
+      'picture': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; A.W. Tozer</div></div>',
+      'scored_well': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“We need never shout across the spaces to an absent God. God is nearer than our own soul, closer than our most secret thoughts.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; A.W. Tozer</div></div>',
+      'interior': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Dallas Willard</div></div>',
+      'invitation': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Henri Nouwen</div></div>',
+      'soulcare': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Henri Nouwen</div></div>',
+      'practices': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Dallas Willard</div></div>',
+    };
     const sectionImg = sectionImages[s.id]
-      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:200px;object-fit:cover;border-radius:4px;margin-bottom:1rem;display:block;break-inside:avoid;opacity:0.85">'
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:200px;height:auto;object-fit:cover;border-radius:4px;margin-bottom:1rem;display:block;break-inside:avoid;opacity:0.85">'
       : '';
+    const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
       + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
       + sectionImg
-      + '<div class="section-body">' + paragraphs + '</div></div>';
+      + '<div class="section-body">' + paragraphs + '</div>'
+      + sectionQuote
+      + '</div>';
   }).join('<hr class="section-divider">');
 
   document.getElementById('content').innerHTML =
@@ -501,7 +537,7 @@ function renderGuide(data) {
       new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts });
     }
   }, 100);
-  setTimeout(() => window.print(), 1400);
+  // Auto-print removed — guide displays as HTML
 }
 
 function showError(msg) {
@@ -510,6 +546,26 @@ function showError(msg) {
 
 window.addEventListener('load', async () => {
   try {
+    // Check for ?id= in URL first
+    const urlParams = new URLSearchParams(window.location.search);
+    const guideId = urlParams.get('id');
+
+    if(guideId) {
+      // Fetch guide data from Sheets by ID
+      document.getElementById('content').innerHTML = '<div class="loading"><div>Loading your guide...</div><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>';
+      const res = await fetch(SHEETS_URL + '?action=getguide&id=' + encodeURIComponent(guideId));
+      const text = await res.text();
+      try {
+        const data = JSON.parse(text);
+        if(data.error || !data.guide) { showError('Guide not found. The link may be invalid or expired.'); return; }
+        renderGuide(data);
+      } catch(e) {
+        showError('Could not load guide data.');
+      }
+      return;
+    }
+
+    // Fall back to sessionStorage (admin preview)
     const raw = sessionStorage.getItem('boldhearts_guide_data');
     if(!raw) { showError('No guide data found. Please use the Build Guide button in the admin dashboard.'); return; }
     const data = JSON.parse(raw);
@@ -541,5 +597,5 @@ window.addEventListener('load', async () => {
   }
 });
 </script>
-</body>
+</div></body>
 </html>
