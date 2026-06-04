@@ -197,7 +197,7 @@ function renderGuide(data) {
     const n = parseFloat(p);
     if(isNaN(n)) return '';
     const v = n <= 1 ? n * 100 : n;
-    return v >= 70 ? 'All Systems Green' : v >= 55 ? 'Check Engine' : v >= 40 ? 'Running on Fumes' : 'Engine Off';
+    return v >= 70 ? 'Flowing Freely' : v >= 55 ? 'Meeting Resistance' : v >= 40 ? 'Running Low' : 'Dammed Up';
   }
   function barColor(v) { return v >= 70 ? '#3B6D11' : v >= 45 ? '#BA7517' : '#D85A30'; }
   function makeColors(arr) { return arr.map(barColor); }
@@ -368,6 +368,10 @@ function renderGuide(data) {
 
   // Sections
   const sectionsHtml = (guide.sections || []).map((s, idx) => {
+    const sectionImages = {
+      invitation: 'assets/images/waterfall.jpg'
+    };
+
     const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
 
     if(s.id === 'practices') {
@@ -424,8 +428,12 @@ function renderGuide(data) {
     }
 
         const paragraphs = s.content.split(/\n\n+/).filter(p=>p.trim()).map(p=>'<p>'+p.trim()+'</p>').join('');
+    const sectionImg = sectionImages[s.id]
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:200px;object-fit:cover;border-radius:4px;margin-bottom:1rem;display:block;break-inside:avoid;opacity:0.85">'
+      : '';
     return bigHeader
       + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
+      + sectionImg
       + '<div class="section-body">' + paragraphs + '</div></div>';
   }).join('<hr class="section-divider">');
 
@@ -434,8 +442,8 @@ function renderGuide(data) {
     '<div class="doc-header">'
     + '<div class="bh-logo">Bold<span>Hearts</span></div>'
     + '<div class="doc-eyebrow">Spiritual Direction Guide</div>'
-    + '<div class="doc-title">' + (guide.title || name + "'s Guide") + '</div>'
-    + (guide.subtitle ? '<div class="doc-subtitle">' + guide.subtitle + '</div>' : '')
+    + '<div class="doc-title">Your Full Heart Report</div>'
+    + '<div class="doc-subtitle">A Compilation of the Interior and Relational Assessments</div>'
     + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
     + '</div>'
     // Intro block — forces page break after in print
