@@ -97,6 +97,7 @@ a{color:#e8d7a0;text-decoration:none}
   <div class="login-card">
     <div class="login-logo">Bold<span>Hearts</span></div>
     <div class="login-sub">Admin Dashboard</div>
+    <div style="font-size:.65rem;color:#3a3530;letter-spacing:.06em;margin-top:-.5rem;margin-bottom:1.5rem">v1.5</div>
     <input type="password" class="login-input" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <div class="login-err" id="login-err"></div>
@@ -283,20 +284,17 @@ function renderTable(rows){
     return '<tr data-idx="'+idx+'">'
       +'<td><div class="person-name">'+name+'</div><div class="person-email">'+email+'</div>'+pipelineProgress(row)+'</td>'
       +'<td>'+(relDate ? '<div class="stage-date">'+relDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      +'<td>'+relEmailHtml+'</td>'
+      +'<td>'+(relDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'relational\')">View Relational</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
       +'<td>'+(intDate ? '<div class="stage-date">'+intDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      +'<td>'+intEmailHtml+'</td>'
+      +'<td>'+(intDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
       +'<td>'+followupHtml+'</td>'
       +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      +'<td>'+guideCreatedHtml+'</td>'
+      +'<td>'+(row[43]&&fmtDate(row[43]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+')">Build Guide</button>' : guideCreatedHtml)+'</td>'
       +'<td>'+guideSentHtml+'</td>'
       +'<td>'+scoresHtml+'</td>'
       +'<td><div class="action-col">'
       +'<button class="action-btn" onclick="viewScores('+idx+')">View Scores</button>'
       +'<button class="action-btn" onclick="markFollowup('+idx+')">Mark Follow-up</button>'
-      +(row[0]&&fmtDate(row[0]) ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'relational\')">View Relational</button>' : '')
-      +(row[43]&&fmtDate(row[43]) ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '')
-      +'<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+')">Build Guide</button>'
       +'</div></td>'
       +'</tr>';
   }).join('');
