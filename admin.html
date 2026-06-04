@@ -289,7 +289,7 @@ function renderTable(rows){
       +'<td>'+(intDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
       +'<td>'+followupHtml+'</td>'
       +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      +'<td>'+(row[43]&&fmtDate(row[43]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+')">Build Guide</button>' : guideCreatedHtml)+'</td>'
+      +'<td>'+(row[43]&&fmtDate(row[43]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+', event)">Build Guide</button>' : guideCreatedHtml)+'</td>'
       +'<td>'+guideSentHtml+'</td>'
       +'<td>'+scoresHtml+'</td>'
       +'<td><div class="action-col">'
@@ -537,10 +537,9 @@ function viewReport(idx, type) {
   const win = window.open('', '_blank');
   win.document.write(html);
   win.document.close();
-  setTimeout(() => win.print(), 800);
 }
 
-async function buildGuide(idx){
+async function buildGuide(idx, event){
   const row = allRows[idx];
   const name = row[1] || '';
   const email = row[2] || '';
@@ -655,10 +654,8 @@ async function buildGuide(idx){
     });
     new Image().src = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec?' + params.toString();
 
-    window.open(guideUrl, '_blank');
-
-    // Refresh table
-    setTimeout(() => loadData(), 2000);
+    // Open in same tab to avoid popup blocker
+    window.location.href = guideUrl;
 
   } catch(e) {
     alert('Error building guide: ' + e.message);
