@@ -63,6 +63,9 @@ a{color:#e8d7a0;text-decoration:none}
 .action-btn+.action-btn{margin-top:4px}
 .action-btn-gold{border-color:rgba(196,168,130,.4);color:#c4a882}
 .action-btn-gold:hover{border-color:#c4a882;color:#f0e8df;background:rgba(196,168,130,.1)}
+.action-btn-blue{border-color:rgba(100,160,200,.3);color:#7aaac8}
+.action-btn-blue:hover{border-color:#7aaac8;color:#b0d4e8;background:rgba(100,160,200,.08)}
+.action-btn-gold:hover{border-color:#c4a882;color:#f0e8df;background:rgba(196,168,130,.1)}
 .action-col{display:flex;flex-direction:column;gap:4px}
 .pipeline-bar{display:flex;gap:2px;align-items:center;margin-top:3px}
 .pip{width:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06)}
@@ -291,6 +294,8 @@ function renderTable(rows){
       +'<td><div class="action-col">'
       +'<button class="action-btn" onclick="viewScores('+idx+')">View Scores</button>'
       +'<button class="action-btn" onclick="markFollowup('+idx+')">Mark Follow-up</button>'
+      +(row[0]&&fmtDate(row[0]) ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'relational\')">View Relational</button>' : '')
+      +(row[43]&&fmtDate(row[43]) ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '')
       +'<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+')">Build Guide</button>'
       +'</div></td>'
       +'</tr>';
@@ -392,6 +397,151 @@ function markFollowup(idx){
   renderTable(allRows);
 }
 
+
+function viewReport(idx, type) {
+  const row = allRows[idx];
+  const name = row[1] || '—';
+  const email = row[2] || '—';
+
+  function ps(val){
+    if(!val && val!==0) return '—';
+    const s = val.toString().trim();
+    if(!s || s==='—') return '—';
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(isNaN(n)) return s;
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+
+  function dc(p){
+    const n = parseFloat(p);
+    if(isNaN(n)) return '#c4a882';
+    const v = n<=1 ? n*100 : n;
+    return v>=70 ? '#7aad6a' : v>=55 ? '#d4b96a' : v>=40 ? '#c4a882' : '#c97a5a';
+  }
+
+  function dtag(p){
+    const n = parseFloat(p);
+    if(isNaN(n)) return '—';
+    const v = n<=1 ? n*100 : n;
+    return v>=75 ? 'All Systems Green' : v>=55 ? 'Check Engine' : v>=40 ? 'Running on Fumes' : 'Engine Off';
+  }
+
+  function bar(pct){
+    const n = parseFloat(pct);
+    const v = isNaN(n) ? 0 : (n<=1 ? Math.round(n*100) : Math.round(n));
+    const col = dc(v);
+    const filled = Math.round(v/10);
+    return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'█'.repeat(filled)+'░'.repeat(10-filled)+'</span>';
+  }
+
+  function row2(label, val){
+    const formatted = ps(val);
+    if(formatted==='—') return '';
+    const col = dc(formatted);
+    return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+label+'</td>'
+      +'<td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(formatted)+'</td>'
+      +'<td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+dtag(formatted)+'</td></tr>';
+  }
+
+  let html = '';
+
+  if(type === 'relational') {
+    const overall = ps(row[3]);
+    const rc = dc(overall);
+    const realmRows = [
+      row2('Work / School', row[4]),
+      row2('Significant Other', row[5]),
+      row2('Family', row[6]),
+      row2('Friends', row[7]),
+      row2('Community', row[8]),
+      row2('Relationship with God', row[56])
+    ].join('');
+    const dimRows = [
+      row2('Being Seen', row[9]),
+      row2('Being Known', row[10]),
+      row2('Having a Voice', row[11]),
+      row2('Belonging', row[12]),
+      row2('Receiving Support', row[13]),
+      row2('Trust & Safety', row[14]),
+      row2('Calling', row[15]),
+      row2('Freedom to Be Myself', row[16])
+    ].join('');
+
+    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Relational Health — '+name+'</title></head>'
+      +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
+      +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
+      +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
+      +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
+      +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr>'
+      +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
+      +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+name+', here are your Relational Health Assessment results.</p>'
+      +'<div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 4px">Overall</p>'
+      +'<p style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:'+rc+';margin:0">'+overall+'</p>'
+      +'<p style="font-size:12px;color:'+rc+';margin:4px 0 0">'+dtag(overall)+'</p></div>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Realm</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Dimension</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+'</tbody></table>'
+      +(row[17] ? '<p style="font-size:12px;color:#6a6258;margin:0 0 20px">Patterns: '+row[17]+'</p>' : '')
+      +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I'm for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
+      +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
+      +'</td></tr></table></td></tr></table></body></html>';
+  }
+
+  if(type === 'interior') {
+    const overall = ps(row[42]);
+    const oc = dc(overall);
+    const themeRows = [
+      row2('Grief & Loss', row[20]),
+      row2('Shame & Guilt', row[37]),
+      row2('Fear & Anxiety', row[38]),
+      row2('Anger', row[39]),
+      row2('Desire & Hope', row[40]),
+      row2('Joy & Delight', row[41])
+    ].join('');
+    const dimRows = [
+      row2('Awareness', row[44]),
+      row2('Honesty', row[45]),
+      row2('Movement', row[46]),
+      row2('Safety', row[47]),
+      row2('Direction', row[48]),
+      row2('Peace', row[49])
+    ].join('');
+
+    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Interior Health — '+name+'</title></head>'
+      +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
+      +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
+      +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
+      +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
+      +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#c4a882">Hearts</span></p>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Interior Health Assessment</p></td></tr>'
+      +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
+      +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+name+', here are your Interior Health Assessment results.</p>'
+      +'<div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 4px">Overall</p>'
+      +'<p style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:'+oc+';margin:0">'+overall+'</p>'
+      +'<p style="font-size:12px;color:'+oc+';margin:4px 0 0">'+dtag(overall)+'</p></div>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Theme</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+themeRows+'</tbody></table>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">How You Navigate What You Carry</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+'</tbody></table>'
+      +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I'm for you,<br><br><strong style="color:#c4a882">Steve Forney</strong><br>'
+      +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
+      +'</td></tr></table></td></tr></table></body></html>';
+  }
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => win.print(), 800);
+}
+
 function buildGuide(idx){
   const row = allRows[idx];
   const name = row[1] || '';
@@ -431,7 +581,19 @@ function buildGuide(idx){
     dim_support:   ps(row[13]),
     dim_trust:     ps(row[14]),
     dim_calling:   ps(row[15]),
-    dim_freedom:   ps(row[16])
+    dim_freedom:   ps(row[16]),
+    work_outward:      ps(row[26]),
+    work_self:         ps(row[27]),
+    partner_outward:   ps(row[28]),
+    partner_self:      ps(row[29]),
+    family_outward:    ps(row[30]),
+    family_self:       ps(row[31]),
+    friends_outward:   ps(row[32]),
+    friends_self:      ps(row[33]),
+    community_outward: ps(row[34]),
+    community_self:    ps(row[35]),
+    god_outward:       ps(row[57]),
+    god_self:          ps(row[58])
   };
 
   const hs = {
