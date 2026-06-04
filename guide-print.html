@@ -152,11 +152,12 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 <script>
 const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
 const PURPOSE_TEXT = [
-  "Before you read what follows, take a moment to understand what you're actually looking at.",
-  "Your heart is not a metaphor. It is the organizing center of your interior life — the place where what you believe, what you fear, what you long for, and what you've never quite named all live together. The Interior Health Assessment is asking about the condition of that center. Not your behavior, not your output, not how you present. The actual interior — what is alive in there, what has gone quiet, what weights are carried and where there is freedom.",
-  "The heart was made to move blood — and blood was made to carry life. The Relational Health Assessment is measuring the relationships you move in and out of like blood through the heart — the people, communities, and contexts that either carry life into you or draw it out. When the interior is tended — when grief has been named, when shame has lost its grip, when desire is still alive — that life moves freely. It leads to deeper community, richer engagement with God, and the kind of trust that makes real relationship possible.",
-  "But the interior world where things are never shared — where the hard things stay unnamed and the weight gets managed rather than moved through — keeps the heart from moving forward in relationship. Not all at once. Slowly. Quietly. Until the distance between who you are inside and who you appear to be becomes its own kind of isolation.",
-  "The two assessments you have just taken are pictures of the same heart — the interior realm and the relational. What follows is a culmination of those assessments, combined with years of counseling and heart work, brought together in a guide to help in healing and restoration."
+  "Thank you for taking the time to complete both assessments. What you've done here is not small — you've given an honest look at the core of who you are.",
+  "Much of what defines us can be observed from the outside — what we produce, how we lead, the roles we fill. These assessments aren't interested in any of that. They go deeper. They are an honest look at your heart.",
+  "And the heart, like any living thing, has substance. It has muscle and fiber and tissue. It has weight and history and the marks of everything it has been through. The Interior Health Assessment reflects that substance — the hurt and pain you've carried, the joys and desires that have shaped you, the life you've actually lived beneath the surface of what anyone else sees.",
+  "But the heart was also made for something. It was made to pump blood — to create movement, to sustain life, to keep everything connected. That is what the Relational Health Assessment measures. Not just who you know, but how life actually moves between you and the people around you. Whether it flows freely or something is restricting it.",
+  "These two pictures cannot be separated. The substance of the heart determines the quality of the flow. What you carry inside shapes everything about how you show up with the people in your life. You cannot tend one without tending the other.",
+  "What follows is an honest reading of both."
 ];
 
 function scoreColor(val) {
@@ -209,8 +210,12 @@ function renderGuide(data) {
     return n <= 1 ? Math.round(n * 100) : Math.round(n);
   }
 
+  console.log('RAW hs:', JSON.stringify(hs));
+  console.log('RAW a1:', JSON.stringify(a1));
   const realmVals  = [a1?.work, a1?.partner, a1?.family, a1?.friends, a1?.community, a1?.god].map(numVal);
   const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
+  console.log('realmVals:', realmVals);
+  console.log('themeVals:', themeVals);
   const relDimVals = [a1?.dim_seen, a1?.dim_known, a1?.dim_voice, a1?.dim_belonging, a1?.dim_support, a1?.dim_trust, a1?.dim_calling, a1?.dim_freedom].map(numVal);
   // Debug: log hs dim values to console
   console.log('hs dims:', {
