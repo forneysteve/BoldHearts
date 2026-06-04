@@ -617,6 +617,10 @@ async function buildGuide(idx, event){
     date: new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})
   };
 
+  // Open blank window NOW (before async) to avoid popup blocker
+  const guideWin = window.open('', '_blank');
+  guideWin.document.write('<html><body style="background:#f5f0e8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;color:#6a5a4a"><p>Building guide, please wait...</p></body></html>');
+
   // Show loading state
   const btn = event?.target;
   if(btn) { btn.textContent = 'Building...'; btn.disabled = true; }
@@ -654,10 +658,11 @@ async function buildGuide(idx, event){
     });
     new Image().src = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec?' + params.toString();
 
-    // Open in same tab to avoid popup blocker
-    window.location.href = guideUrl;
+    // Navigate the pre-opened window to the guide
+    guideWin.location.href = guideUrl;
 
   } catch(e) {
+    guideWin.close();
     alert('Error building guide: ' + e.message);
   } finally {
     if(btn) { btn.textContent = 'Build Guide'; btn.disabled = false; }
