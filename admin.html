@@ -540,7 +540,7 @@ function viewReport(idx, type) {
   setTimeout(() => win.print(), 800);
 }
 
-function buildGuide(idx){
+async function buildGuide(idx){
   const row = allRows[idx];
   const name = row[1] || '';
   const email = row[2] || '';
@@ -618,8 +618,53 @@ function buildGuide(idx){
     date: new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})
   };
 
-  sessionStorage.setItem('boldhearts_guide_data', JSON.stringify(guideData));
-  window.open('guide-print.html', '_blank');
+  // Show loading state
+  const btn = event?.target;
+  if(btn) { btn.textContent = 'Building...'; btn.disabled = true; }
+
+  try {
+    const res = await fetch('https://snowy-queen-d35d.forney-steve.workers.dev', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        assessment1: a1,
+        heartsoul: hs
+      })
+    });
+    const result = await res.json();
+    if(result.error) { alert('Guide generation failed: ' + result.error); return; }
+
+    // Store in sessionStorage as fallback
+    guideData.guide = result.guide;
+    sessionStorage.setItem('boldhearts_guide_data', JSON.stringify(guideData));
+
+    // Open with shareable ID if available
+    const guideId = result.guideId;
+    const guideUrl = guideId
+      ? 'https://boldhearts.org/guide-print.html?id=' + guideId
+      : 'guide-print.html';
+
+    // Update sheet to mark guide created
+    const params = new URLSearchParams({
+      action: 'updatepipeline',
+      email: email,
+      guide_created: new Date().toLocaleString(),
+      guide_id: guideId || ''
+    });
+    new Image().src = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec?' + params.toString();
+
+    window.open(guideUrl, '_blank');
+
+    // Refresh table
+    setTimeout(() => loadData(), 2000);
+
+  } catch(e) {
+    alert('Error building guide: ' + e.message);
+  } finally {
+    if(btn) { btn.textContent = 'Build Guide'; btn.disabled = false; }
+  }
 }
 
 function closeModal(){
