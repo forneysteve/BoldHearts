@@ -278,7 +278,7 @@ function renderGuide(data) {
     const col = barColor(n);
     const border = isLast ? '' : 'border-bottom:1px solid #ede8e0;';
     return '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0;'+border+'">'
-      +'<div style="width:160px;font-size:.7rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3">'+label+'</div>'
+      +'<div style="width:130px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3">'+label+'</div>'
       +'<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden">'
       +'<div style="width:'+n+'%;height:100%;background:'+col+';border-radius:4px"></div>'
       +'</div>'
@@ -288,7 +288,7 @@ function renderGuide(data) {
 
   function detailCard(title, rows) {
     if(!rows) return '';
-    return '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem 1.25rem;break-inside:avoid;margin-bottom:0">'
+    return '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:.75rem 1rem;break-inside:avoid;margin-bottom:0">'
       +'<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid #e8d8c0;font-weight:500">'+title+'</div>'
       +rows
       +'</div>';
@@ -367,10 +367,10 @@ function renderGuide(data) {
 
   const detailBreakdownHtml = (realmCardsHtml||relDimCardHtml||themeCardHtml||postureCardHtml)
     ? '<div class="section-header" style="break-before:page">Complete Score Breakdown</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem">'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.75rem;width:100%">'
       +realmCardsHtml
       +'</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:2rem;break-before:page">'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem;break-before:page;width:100%">'
       +relDimCardHtml+themeCardHtml+postureCardHtml
       +'</div>'
     : '';
