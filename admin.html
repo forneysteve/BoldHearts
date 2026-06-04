@@ -423,7 +423,7 @@ function viewReport(idx, type) {
     const n = parseFloat(p);
     if(isNaN(n)) return '—';
     const v = n<=1 ? n*100 : n;
-    return v>=75 ? 'All Systems Green' : v>=55 ? 'Check Engine' : v>=40 ? 'Running on Fumes' : 'Engine Off';
+    return v>=75 ? 'Flowing Freely' : v>=55 ? 'Meeting Resistance' : v>=40 ? 'Running Low' : 'Dammed Up';
   }
 
   function bar(pct){
