@@ -279,7 +279,7 @@ function renderGuide(data) {
     {label:'With God',          overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self,       outLabel:'How God engages you',  selfLabel:'How you engage God'},
   ].filter(r => numVal(r.overall) > 0);
 
-  const realmCardsHtml = realmDefs.map(r => {
+  const realmCardsHtml = realmDefs.map((r, ridx) => {
     const outN = numVal(r.out), selfN = numVal(r.self);
     const gap = Math.abs(outN - selfN);
     let pattern = '';
@@ -291,11 +291,12 @@ function renderGuide(data) {
       else if(gap >= 15) pattern = ' — ' + gap + '% gap worth exploring';
       else pattern = ' — Genuine mutuality';
     }
-    return detailCard(r.label + pattern,
+    const card = detailCard(r.label + pattern,
       detailRow('Overall', r.overall, false) +
       detailRow(r.outLabel, r.out, false) +
       detailRow(r.selfLabel, r.self, true)
     );
+    return card;
   }).join('');
 
   // Relational dimensions card
@@ -340,11 +341,11 @@ function renderGuide(data) {
     : '';
 
   const detailBreakdownHtml = (realmCardsHtml||relDimCardHtml||themeCardHtml||postureCardHtml)
-    ? '<div class="section-header">Complete Score Breakdown</div>'
+    ? '<div class="section-header" style="break-before:page">Complete Score Breakdown</div>'
       +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem">'
       +realmCardsHtml
       +'</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:2rem">'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:2rem;break-before:page">'
       +relDimCardHtml+themeCardHtml+postureCardHtml
       +'</div>'
     : '';
@@ -379,7 +380,7 @@ function renderGuide(data) {
       practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
     };
 
-    const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
+    const bigHeader = '<div class="section-header" style="break-before:page">' + (sectionHeaders[s.id] || s.label) + '</div>';
 
     if(s.id === 'practices') {
       const pc = typeof s.content === 'object' ? s.content : null;
@@ -463,6 +464,7 @@ function renderGuide(data) {
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
 
+    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 1.25rem">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — if you want to go deeper or have questions about what you\'re reading — reach out. That conversation is what this is really for.</p>'    + '<div style="border-top:1px solid #e8d8c0;padding-top:1.25rem;text-align:center">'    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .4rem">&ldquo;Emotional health and spiritual maturity are inseparable.&rdquo;</p>'    + '<p style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">— Peter Scazzero</p>'    + '</div>'    + '</div>'
     + '<div class="cta-block">'
     + '<p><strong>This guide is a starting point — not a verdict.</strong></p>'
     + '<p>What follows in this conversation is the real work. Use this as a reference as we look at the full picture together.</p>'
