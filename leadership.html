@@ -82,7 +82,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(13,12,11,.95);backdrop-fil
 .axis-work{color:#c4a882;background:rgba(196,168,130,.04)}
 
 /* QUESTION BLOCKS */
-.qblock{background:#1a1816;border:1px solid rgba(232,215,160,.06);border-top:none;padding:1.25rem 1.75rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.qblock{background:#1a1816;border:1px solid rgba(232,215,160,.06);border-top:none;padding:1.25rem 1.75rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;min-width:0}
 .qblock:last-child{border-radius:0 0 6px 6px}
 .q-cell{display:flex;flex-direction:column;gap:.75rem}
 .q-text{font-size:.86rem;color:#c8c0b8;line-height:1.75;min-height:48px}
@@ -162,7 +162,7 @@ footer p{color:#3a3530;font-size:.78rem;letter-spacing:.04em;margin-bottom:.3rem
 footer a{color:#4a4540}
 footer a:hover{color:#e8d7a0}
 
-@media(max-width:768px){
+@media(max-width:600px){
   .nav-toggle{display:flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(13,12,11,.98);border-top:1px solid rgba(232,215,160,.08);flex-direction:column;gap:0;padding:.5rem 0}
   .nav-links.open{display:flex}
@@ -480,6 +480,14 @@ let answers = {};
 let userName = '', userEmail = '', userOrg = '';
 let totalQ = 0;
 
+// Test mode — ?test=true auto-fills all answers
+const isTestMode = new URLSearchParams(window.location.search).get('test') === 'true';
+if(isTestMode) {
+  userName = 'Test User';
+  userEmail = 'test@boldhearts.org';
+  userOrg = 'Test Organization';
+}
+
 function startAssessment() {
   const n = document.getElementById('gate-name').value.trim();
   const e = document.getElementById('gate-email').value.trim();
@@ -491,6 +499,18 @@ function startAssessment() {
   document.getElementById('progress-section').style.display='block';
   document.getElementById('app').style.display='block';
   renderApp();
+  if(isTestMode) autoFillAnswers();
+}
+
+function autoFillAnswers() {
+  DIMS.forEach(dim => {
+    ['team_main','team_self','work_main','work_self'].forEach(suffix => {
+      const qid = dim.id + '_' + suffix;
+      const val = Math.floor(Math.random() * 4) + 4; // 4-7 range
+      const axis = suffix.startsWith('team') ? 'team' : 'work';
+      setAnswer(qid, val, axis);
+    });
+  });
 }
 
 function renderApp() {
@@ -830,6 +850,15 @@ document.querySelectorAll('.nav-dropdown > a').forEach(a => {
     }
   });
 });
+
+// Auto-start in test mode
+if(isTestMode) {
+  document.getElementById('gate-section').style.display='none';
+  document.getElementById('progress-section').style.display='block';
+  document.getElementById('app').style.display='block';
+  renderApp();
+  autoFillAnswers();
+}
 </script>
 </body>
 </html>
