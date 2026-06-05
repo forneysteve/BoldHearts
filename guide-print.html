@@ -424,14 +424,29 @@ function renderGuide(data) {
       const pc = typeof s.content === 'object' ? s.content : null;
 
       if(pc) {
-        // PRIMARY cards
-        const primHtml = (pc.primary||[]).map(p => {
+        // PRIMARY cards — alternating images
+        const practiceImages = [
+          'assets/images/horse_girl-hiker-1264930_1920.jpg',
+          'assets/images/bichnguyenvo-soil-3118326_1920.jpg',
+          'assets/images/gangcunseong-road-5767221_1920.jpg',
+          'assets/images/wonderlandwoo-plant-5381649_1920.jpg',
+          'assets/images/stocksnap-tree-2598164_1920.jpg',
+          'assets/images/pexels-gizem-gokce-1072613075-31439700.jpg',
+        ];
+        const primHtml = (pc.primary||[]).map((p, pi) => {
           if(!p || !p.name) return '';
-          return '<div class="practice">'
+          const imgSrc = practiceImages[pi % practiceImages.length];
+          const isRight = pi % 2 === 0;
+          const imgStyle = isRight
+            ? 'float:right;width:140px;height:140px;object-fit:cover;border-radius:4px;margin:0 0 .75rem 1.25rem;opacity:0.85'
+            : 'float:left;width:140px;height:140px;object-fit:cover;border-radius:4px;margin:0 1.25rem .75rem 0;opacity:0.85';
+          return '<div class="practice" style="overflow:hidden">'
+            +'<img src="'+imgSrc+'" alt="" style="'+imgStyle+'">'
             +'<div class="practice-name">'+(p.name||'')+'</div>'
             +(p.instruction ? '<div class="practice-instruction">'+(p.instruction||'')+'</div>' : '')
             +'<div class="practice-body">'+(p.description||'')+'</div>'
             +(p.why ? '<div class="practice-why">'+(p.why||'')+'</div>' : '')
+            +'<div style="clear:both"></div>'
             +'</div>';
         }).filter(Boolean).join('');
 
@@ -457,6 +472,7 @@ function renderGuide(data) {
 
         return bigHeader
           + '<div class="section">'
+          + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;font-style:italic;margin-bottom:1.25rem;border-left:3px solid #c4a882;padding-left:1rem">Look at these three practices and choose one that appeals to you — or try them on a day or two at a time. You don\'t need to do all of them. One practiced with intention is worth more than three attempted at once.</p>'
           + '<div class="practices-wrap">'+primHtml+'</div>'
           + secHtml + awareHtml + '</div>';
       }
@@ -502,7 +518,7 @@ function renderGuide(data) {
     }).filter(Boolean).join('');
     const sectionQuotes = {
       'picture': '<div class="pull-quote-right"><p>“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><cite>— A.W. Tozer</cite></div>',
-      'scored_well': '<div class="pull-quote-left"><p>“We need never shout across the spaces to an absent God. God is nearer than our own soul, closer than our most secret thoughts.”</p><cite>— A.W. Tozer</cite></div>',
+      'scored_well': '',
       'interior': '<div class="pull-quote-right"><p>“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><cite>— Dallas Willard</cite></div>',
       'invitation': '<div class="pull-quote-left"><p>“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><cite>— Henri Nouwen</cite></div>',
       'soulcare': '<div class="pull-quote-right"><p>“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><cite>— Henri Nouwen</cite></div>',
@@ -523,11 +539,11 @@ function renderGuide(data) {
             .trim();
           return text ? '<p>' + text + '</p>' : '';
         }).filter(Boolean);
-        // Insert pull quote after first paragraph
-        if(sectionQuote && paraList.length > 1) {
-          paraList.splice(1, 0, sectionQuote);
-        } else if(sectionQuote) {
-          paraList.push(sectionQuote);
+        // Image goes first (already rendered above section-body)
+        // Quote floats in after second paragraph for natural mid-text flow
+        const insertAfter = Math.min(1, paraList.length - 1);
+        if(sectionQuote && paraList.length > 0) {
+          paraList.splice(insertAfter + 1, 0, sectionQuote);
         }
         return '<div class="section-body">' + paraList.join('') + '</div>';
       })()
@@ -537,7 +553,7 @@ function renderGuide(data) {
   document.getElementById('content').innerHTML =
     // Page 1: Cover + intro
     '<div class="doc-header">'
-    + '<div class="bh-logo">Bold<span>Hearts</span></div>'
+    + '<div class="bh-logo"><img src="favicon.ico" alt="BoldHearts" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:.5rem;opacity:0.85">Bold<span>Hearts</span></div>'
     + '<div class="doc-title">Your Full Heart Report</div>'
     + '<div class="doc-subtitle">A Compilation of the Interior and Relational Assessments</div>'
     + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>Prepared on: ' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
