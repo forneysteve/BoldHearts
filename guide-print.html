@@ -543,17 +543,24 @@ function renderGuide(data) {
     + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>Prepared on: ' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
     + '</div>'
     // Intro block — forces page break after in print
-    + '<div class="purpose-block"><div class="purpose-label">Purpose of the Assessments</div>'
-    + '<img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:180px;height:180px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.75">'
-    + '<div class="pull-quote-left" style="margin-top:0"><p>&ldquo;Above all else, guard your heart, for everything you do flows from it.&rdquo;</p><cite>&mdash; Proverbs 4:23</cite></div>'
-    + purposeHtml
-    + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
-    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are. It is not a muscle &mdash; it is the seat of everything that matters.&rdquo;</p>'
-    + '<p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; John Eldredge</p>'
+    + '<div class="purpose-block">'
+    + '<div class="purpose-label">Purpose of the Assessments</div>'
+    // Proverbs centered at top — clean, no float
+    + '<div style="text-align:center;padding:.5rem 0 1.25rem;border-bottom:1px solid #e8d8c0;margin-bottom:1.25rem">'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .3rem">&ldquo;Above all else, guard your heart, for everything you do flows from it.&rdquo;</p>'
+    + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882">&mdash; Proverbs 4:23</p>'
     + '</div>'
+    // First two paragraphs (thank you + much of what defines us)
+    + '<p>' + PURPOSE_TEXT[0] + '</p>'
+    + '<p>' + PURPOSE_TEXT[1] + '</p>'
+    // Heart image floated right alongside the blood/movement paragraph
+    + '<img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:160px;height:160px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.8">'
+    + '<p>' + PURPOSE_TEXT[2] + '</p>'
+    + '<p>' + PURPOSE_TEXT[3] + '</p>'
+    + '<p>' + PURPOSE_TEXT[4] + '</p>'
     + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
-    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The widest thing in the universe is not space &mdash; it is the potential capacity of the human heart.&rdquo;</p>'
-    + '<p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; A.W. Tozer</p>'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are. It is not a muscle &mdash; it is the seat of everything that matters.&rdquo;</p>'
+    + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; John Eldredge</p>'
     + '</div>'
     + '</div>'
 
