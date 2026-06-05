@@ -499,7 +499,7 @@ function startAssessment() {
   document.getElementById('progress-section').style.display='block';
   document.getElementById('app').style.display='block';
   renderApp();
-  if(isTestMode) autoFillAnswers();
+  if(isTestMode) setTimeout(autoFillAnswers, 100);
 }
 
 function autoFillAnswers() {
@@ -857,7 +857,7 @@ if(isTestMode) {
   document.getElementById('progress-section').style.display='block';
   document.getElementById('app').style.display='block';
   renderApp();
-  autoFillAnswers();
+  setTimeout(autoFillAnswers, 100);
 }
 </script>
 </body>
