@@ -492,7 +492,7 @@ function setA(k,v){
 function trySubmit(){
   const unanswered=[];
   REALMS.forEach(r=>{
-    if(r.id==='significant_other'||r.id==='god')return;
+    if(r.id==='significant_other')return;
     r.questions.forEach((_,i)=>{if(answers[r.id+'_'+i]===undefined)unanswered.push(r.id+'_'+i);});
   });
   if(unanswered.length>0){
@@ -535,7 +535,7 @@ function saveToSheets(scores){
     community_outward:realm.community?realm.community.outward+'%':'',community_self:realm.community?realm.community.self+'%':'',
     god_overall:realm.god?realm.god.overall+'%':'',god_outward:realm.god?realm.god.outward+'%':'',god_self:realm.god?realm.god.self+'%':''
   });
-  new Image().src=SHEETS_URL+'?'+params.toString();
+  fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
 }
 function submitGate(){
   const name=document.getElementById('gname').value.trim();
