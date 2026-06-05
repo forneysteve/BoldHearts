@@ -3,6 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BoldHearts Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +53,8 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .section-body{font-size:.88rem;color:#2a2218;line-height:1.95}
 .section-body p{margin-bottom:.9rem;max-width:none}
 .section-body p:last-child{margin-bottom:0}
+.section-body p:first-of-type{font-size:.98rem;line-height:2;color:#1a1410}
+.section-body p:first-of-type::first-letter{float:left;font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:700;line-height:.75;margin:.05em .1em 0 0;color:#c4a882}
 
 /* ── PRACTICE CARDS ── */
 .practices-wrap{break-inside:avoid}
@@ -108,6 +112,11 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .chart-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0}
 .chart-wrap{position:relative}
 
+.pull-quote-left{float:left;width:42%;margin:0 1.5rem 1rem -1rem;padding:1.25rem 1.5rem;border-top:2px solid #c4a882;border-bottom:2px solid #c4a882;background:#faf6f0;break-inside:avoid}
+.pull-quote-right{float:right;width:42%;margin:0 -1rem 1rem 1.5rem;padding:1.25rem 1.5rem;border-top:2px solid #c4a882;border-bottom:2px solid #c4a882;background:#faf6f0;break-inside:avoid}
+.pull-quote-left p,.pull-quote-right p{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.65;margin:0 0 .5rem}
+.pull-quote-left cite,.pull-quote-right cite{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;font-style:normal}
+@media(max-width:600px){.pull-quote-left,.pull-quote-right{float:none;width:100%;margin:1rem 0}}
 .print-btn{position:fixed;bottom:2rem;right:2rem;background:#c4a882;color:#fff;border:none;border-radius:4px;padding:.85rem 1.5rem;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 12px rgba(196,168,130,.4);transition:all .2s;z-index:100}
 .print-btn:hover{background:#b09060;box-shadow:0 4px 20px rgba(196,168,130,.5)}
 @media(max-width:600px){
@@ -208,7 +217,11 @@ function fmtScore(val) {
 
 function renderGuide(data) {
   const { name, guide, a1, hs, date } = data;
-  const today = date || new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
+  const today = (function() {
+    const d = date ? new Date(date) : new Date();
+    if(isNaN(d.getTime())) return new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+    return d.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  })();
 
   const purposeHtml = PURPOSE_TEXT.map(p => '<p>' + p + '</p>').join('');
 
@@ -443,7 +456,7 @@ function renderGuide(data) {
           : '';
 
         return bigHeader
-          + '<div class="section"><div class="section-eyebrow"><span class="section-icon">'+s.icon+'</span>'+s.label+'</div>'
+          + '<div class="section">'
           + '<div class="practices-wrap">'+primHtml+'</div>'
           + secHtml + awareHtml + '</div>';
       }
@@ -456,42 +469,93 @@ function renderGuide(data) {
         return '<div class="practice"><div class="practice-name">'+title+'</div><div class="practice-body">'+body+'</div></div>';
       }).join('');
       return bigHeader
-        + '<div class="section"><div class="section-eyebrow"><span class="section-icon">'+s.icon+'</span>'+s.label+'</div>'
+        + '<div class="section">'
         + '<div class="practices-wrap">'+practiceBlocks+'</div></div>';
     }
 
-        const paragraphs = s.content.split(/\n\n+/).filter(p=>p.trim()).map(p=>'<p>'+p.trim()+'</p>').join('');
+        // Strip any paragraph that is just the section title or label repeated
+    const headerText = (sectionHeaders[s.id] || s.label || '').toLowerCase().replace(/[^a-z]/g,'');
+    const altLabel = (s.label || '').toLowerCase().replace(/[^a-z]/g,'');
+    const rawParas = s.content.split(/\n\n+/).filter(p=>p.trim());
+    const filteredParas = rawParas.filter(p => {
+      // Remove paragraph if its entire content is just a heading/title
+      const stripped = p.trim()
+        .replace(/^#{1,4}\s*/,'')           // remove markdown headers
+        .replace(/^\*\*[^*]+\*\*:?\s*$/,'') // remove standalone bold lines
+        .trim();
+      if(!stripped) return false;
+      // Remove if it's just a short line that matches any known section title
+      const allTitles = ['what your scores are saying','what is working','where there is room to grow',
+        "what's happening underneath",'where god seems to be moving','what soul care offers you',
+        'using this guide','practices for this season'];
+      const pClean = p.trim().toLowerCase().replace(/[^a-z]/g,'');
+      if(p.trim().length < 80 && allTitles.some(t => pClean === t.replace(/[^a-z]/g,''))) return false;
+      return true;
+    });
+    const paragraphs = filteredParas.map(p => {
+      // Strip any leading bold/heading line within a paragraph
+      let text = p.trim()
+        .replace(/^#{1,4}[^\n]+\n?/,'')
+        .replace(/^\*\*[^*]+\*\*:?\s*\n/,'')
+        .trim();
+      return text ? '<p>' + text + '</p>' : '';
+    }).filter(Boolean).join('');
     const sectionQuotes = {
-      'picture': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; A.W. Tozer</div></div>',
-      'scored_well': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“We need never shout across the spaces to an absent God. God is nearer than our own soul, closer than our most secret thoughts.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; A.W. Tozer</div></div>',
-      'interior': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Dallas Willard</div></div>',
-      'invitation': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Henri Nouwen</div></div>',
-      'soulcare': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Henri Nouwen</div></div>',
-      'practices': '<div style="border-left:3px solid #c4a882;padding:.75rem 1.25rem;margin:1.25rem 0;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.05rem;font-style:italic;color:#4a3a2a;line-height:1.7;margin:0 0 .4rem">“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; Dallas Willard</div></div>',
+      'picture': '<div class="pull-quote-right"><p>“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><cite>— A.W. Tozer</cite></div>',
+      'scored_well': '<div class="pull-quote-left"><p>“We need never shout across the spaces to an absent God. God is nearer than our own soul, closer than our most secret thoughts.”</p><cite>— A.W. Tozer</cite></div>',
+      'interior': '<div class="pull-quote-right"><p>“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><cite>— Dallas Willard</cite></div>',
+      'invitation': '<div class="pull-quote-left"><p>“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><cite>— Henri Nouwen</cite></div>',
+      'soulcare': '<div class="pull-quote-right"><p>“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><cite>— Henri Nouwen</cite></div>',
+      'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
     const sectionImg = sectionImages[s.id]
-      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:200px;height:auto;object-fit:cover;border-radius:4px;margin-bottom:1rem;display:block;break-inside:avoid;opacity:0.85">'
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:280px;height:auto;object-fit:cover;border-radius:4px;margin-bottom:1.5rem;display:block;break-inside:avoid;opacity:0.9">'
       : '';
     const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
-      + '<div class="section"><div class="section-eyebrow"><span class="section-icon">' + s.icon + '</span>' + s.label + '</div>'
+      + '<div class="section">'
       + sectionImg
-      + '<div class="section-body">' + paragraphs + '</div>'
-      + sectionQuote
+      + (function() {
+        const paraList = filteredParas.map(p => {
+          let text = p.trim()
+            .replace(/^#{1,4}[^\n]+\n?/,'')
+            .replace(/^\*\*[^*]+\*\*:?\s*\n/,'')
+            .trim();
+          return text ? '<p>' + text + '</p>' : '';
+        }).filter(Boolean);
+        // Insert pull quote after first paragraph
+        if(sectionQuote && paraList.length > 1) {
+          paraList.splice(1, 0, sectionQuote);
+        } else if(sectionQuote) {
+          paraList.push(sectionQuote);
+        }
+        return '<div class="section-body">' + paraList.join('') + '</div>';
+      })()
       + '</div>';
-  }).join('<hr class="section-divider">');
+  }).join('');
 
   document.getElementById('content').innerHTML =
     // Page 1: Cover + intro
     '<div class="doc-header">'
     + '<div class="bh-logo">Bold<span>Hearts</span></div>'
-    + '<div class="doc-eyebrow">Spiritual Direction Guide</div>'
     + '<div class="doc-title">Your Full Heart Report</div>'
     + '<div class="doc-subtitle">A Compilation of the Interior and Relational Assessments</div>'
-    + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
+    + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>Prepared on: ' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
     + '</div>'
     // Intro block — forces page break after in print
-    + '<div class="purpose-block"><div class="purpose-label">Purpose of the Assessments</div><img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:180px;height:180px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.75">' + purposeHtml + '</div>'
+    + '<div class="purpose-block"><div class="purpose-label">Purpose of the Assessments</div>'
+    + '<img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:180px;height:180px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.75">'
+    + '<div class="pull-quote-left" style="margin-top:0"><p>&ldquo;Above all else, guard your heart, for everything you do flows from it.&rdquo;</p><cite>&mdash; Proverbs 4:23</cite></div>'
+    + purposeHtml
+    + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are. It is not a muscle &mdash; it is the seat of everything that matters.&rdquo;</p>'
+    + '<p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; John Eldredge</p>'
+    + '</div>'
+    + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The widest thing in the universe is not space &mdash; it is the potential capacity of the human heart.&rdquo;</p>'
+    + '<p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; A.W. Tozer</p>'
+    + '</div>'
+    + '</div>'
 
     // Page 2+: Scores then guide sections
     + dashHtml
@@ -500,7 +564,8 @@ function renderGuide(data) {
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
 
-    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 1.25rem">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — if you want to go deeper or have questions about what you\'re reading — reach out. That conversation is what this is really for.</p>'    + '<div style="border-top:1px solid #e8d8c0;padding-top:1.25rem;text-align:center">'    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .4rem">&ldquo;Emotional health and spiritual maturity are inseparable.&rdquo;</p>'    + '<p style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">— Peter Scazzero</p>'    + '</div>'    + '</div>'
+    + '<div style="text-align:center;padding:1.25rem 2rem;margin-top:2rem;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.15rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .4rem">&ldquo;The Lord does not look at the things people look at. People look at the outward appearance, but the Lord looks at the heart.&rdquo;</p><p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; 1 Samuel 16:7</p></div>'
+    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 1.25rem">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — if you want to go deeper or have questions about what you\'re reading — reach out. That conversation is what this is really for.</p>'    + '<div style="border-top:1px solid #e8d8c0;padding-top:1.25rem;text-align:center">'    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .4rem">&ldquo;Emotional health and spiritual maturity are inseparable.&rdquo;</p>'    + '<p style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem">— Peter Scazzero</p>'    + '<p style="font-family:Cormorant Garamond,serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem">&ldquo;For God has not given us a spirit of fear, but of power and of love and of a sound mind.&rdquo;</p>'    + '<p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">— 2 Timothy 1:7</p>'    + '</div>'    + '</div>'
     + '<div class="cta-block">'
     + '<p><strong>This guide is a starting point — not a verdict.</strong></p>'
     + '<p>What follows in this conversation is the real work. Use this as a reference as we look at the full picture together.</p>'
