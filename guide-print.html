@@ -474,7 +474,7 @@ function renderGuide(data) {
           + '<div class="section">'
           + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;font-style:italic;margin-bottom:1.25rem;border-left:3px solid #c4a882;padding-left:1rem">Look at these three practices and choose one that appeals to you — or try them on a day or two at a time. You don\'t need to do all of them. One practiced with intention is worth more than three attempted at once.</p>'
           + '<div class="practices-wrap">'+primHtml+'</div>'
-          + secHtml + awareHtml + '</div>';
+          + '</div>';
       }
 
       // Fallback: raw string content
@@ -525,12 +525,11 @@ function renderGuide(data) {
       'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
     const sectionImg = sectionImages[s.id]
-      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:280px;height:auto;object-fit:cover;border-radius:4px;margin-bottom:1.5rem;display:block;break-inside:avoid;opacity:0.9">'
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:280px;height:auto;object-fit:cover;border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
       : '';
     const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
       + '<div class="section">'
-      + sectionImg
       + (function() {
         const paraList = filteredParas.map(p => {
           let text = p.trim()
@@ -539,13 +538,12 @@ function renderGuide(data) {
             .trim();
           return text ? '<p>' + text + '</p>' : '';
         }).filter(Boolean);
-        // Image goes first (already rendered above section-body)
-        // Quote floats in after second paragraph for natural mid-text flow
+        // Image full width at top, then quote floats mid-text after second paragraph
         const insertAfter = Math.min(1, paraList.length - 1);
         if(sectionQuote && paraList.length > 0) {
           paraList.splice(insertAfter + 1, 0, sectionQuote);
         }
-        return '<div class="section-body">' + paraList.join('') + '</div>';
+        return '<div class="section-body">' + sectionImg + paraList.join('') + '</div>';
       })()
       + '</div>';
   }).join('');
