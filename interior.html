@@ -390,7 +390,7 @@ async function submitGate(){
       direction_score:scores.dimScores.direction+'%',
       peace_score:scores.dimScores.peace+'%'
     });
-    new Image().src=SHEETS_URL+'?'+params.toString();
+    fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
   }
 
   try {
