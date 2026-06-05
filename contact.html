@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,146 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        .contact-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 5rem;
+            align-items: start;
+        }
+        .contact-info h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-heading, #f0e8df);
+            margin-bottom: 1rem;
+        }
+        .contact-info p {
+            font-size: .95rem;
+            line-height: 1.9;
+            color: var(--color-body, #a09890);
+            margin-bottom: 1.25rem;
+        }
+        .contact-details {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid rgba(232,215,160,.12);
+            border-left: 3px solid rgba(232,215,160,.3);
+            border-radius: 4px;
+            background: rgba(232,215,160,.03);
+        }
+        .contact-details p {
+            margin-bottom: .5rem;
+            font-size: .88rem;
+        }
+        .contact-details strong {
+            color: #e8d7a0;
+            font-weight: 500;
+        }
+        .contact-note {
+            font-size: .85rem !important;
+            font-style: italic;
+            opacity: .7;
+        }
+
+        /* Form */
+        .contact-form-wrap {
+            background: rgba(232,215,160,.03);
+            border: 1px solid rgba(232,215,160,.1);
+            border-radius: 6px;
+            padding: 2.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: .72rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #6a6258;
+            margin-bottom: .5rem;
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: .85rem 1rem;
+            background: rgba(0,0,0,.2);
+            border: 1px solid rgba(232,215,160,.12);
+            border-radius: 4px;
+            color: #d4ccc4;
+            font-family: 'Inter', sans-serif;
+            font-size: .9rem;
+            font-weight: 300;
+            outline: none;
+            transition: border-color .2s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: rgba(232,215,160,.35);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-group select option {
+            background: #1a1816;
+            color: #d4ccc4;
+        }
+        .form-submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #e8d7a0;
+            color: #111;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: .8rem;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .2s;
+            margin-top: .5rem;
+        }
+        .form-submit-btn:hover { background: #f5e8c8; }
+        .form-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #b5c4a0;
+            font-size: .95rem;
+            line-height: 1.8;
+        }
+        .form-success .check {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .form-error {
+            display: none;
+            color: #c97a5a;
+            font-size: .82rem;
+            margin-top: .75rem;
+            text-align: center;
+        }
+
+        @media(max-width: 768px) {
+            .contact-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding: 3rem 1.25rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -16,9 +157,7 @@
     <nav>
         <a href="index.html" class="logo">Bold<span>Hearts</span></a>
         <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </button>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
@@ -39,71 +178,130 @@
     </header>
 
     <!-- Contact Section -->
-    <section class="contact">
-        <div class="contact-grid">
-            <!-- Left Column: Info -->
-            <div>
+    <section>
+        <div class="contact-section">
+
+            <!-- Left: Info -->
+            <div class="contact-info">
                 <h2>Reach Out</h2>
-                <p>If you&rsquo;re curious about spiritual direction or soul care, you can use the form to share a bit of what brings you here. I&rsquo;ll respond with a few possible times for an initial conversation.</p>
-                <h3>Contact Details</h3>
-                <p><strong>Email:</strong> steve@boldhearts.org</p>
-                <p><strong>Location:</strong> Sedalia, Colorado (virtual sessions available)</p>
-                <p>Your first session is a gentle, no-pressure space to explore what you&rsquo;re seeking and how I might support you.</p>
+                <p>If you&rsquo;re curious about spiritual direction or soul care, use the form to share a bit of what brings you here. I&rsquo;ll respond with a few possible times for an initial conversation.</p>
+
+                <div class="contact-details">
+                    <p><strong>Email:</strong> steve@boldhearts.org</p>
+                    <p><strong>Location:</strong> Sedalia, Colorado</p>
+                    <p style="margin-bottom:0"><strong>Virtual sessions available</strong></p>
+                </div>
+
+                <p class="contact-note">Your first session is a gentle, no-pressure space to explore what you&rsquo;re seeking and whether this kind of accompaniment is a fit.</p>
             </div>
-            <!-- Right Column: Form -->
-            <form class="contact-form" action="#" method="POST">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
+
+            <!-- Right: Form -->
+            <div class="contact-form-wrap">
+                <div id="form-fields">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">What brings you here?</label>
+                        <textarea id="message" rows="4" placeholder="Share as much or as little as you&rsquo;d like..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="format">Preferred session format</label>
+                        <select id="format">
+                            <option value="">Select an option</option>
+                            <option value="Virtual">Virtual</option>
+                            <option value="In-person">In-person (Sedalia, CO)</option>
+                            <option value="Either">Either is fine</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Anything else you&rsquo;d like to share?</label>
+                        <textarea id="notes" rows="3" placeholder="Optional..."></textarea>
+                    </div>
+                    <button class="form-submit-btn" id="submit-btn" onclick="sendMessage()">Send Message</button>
+                    <div class="form-error" id="form-error">Something went wrong. Please try emailing steve@boldhearts.org directly.</div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+
+                <div class="form-success" id="form-success">
+                    <div class="check">✓</div>
+                    <p><strong style="color:#e8d7a0">Message received.</strong></p>
+                    <p>Thank you for reaching out. I&rsquo;ll be in touch within a day or two with some available times.</p>
                 </div>
-                <div class="form-group">
-                    <label for="message">What brings you here?</label>
-                    <textarea id="message" name="message" rows="4"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="format">Preferred session format</label>
-                    <select id="format" name="format">
-                        <option value="">Select an option</option>
-                        <option value="virtual">Virtual</option>
-                        <option value="in-person">In-person (Sedalia, CO)</option>
-                        <option value="either">Either is fine</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Anything else you'd like to share?</label>
-                    <textarea id="notes" name="notes" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn-primary">Send Message</button>
-            </form>
+            </div>
+
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado</p>
+        <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;&middot;&nbsp; All Rights Reserved</p>
+        <p style="font-size:.72rem;margin-top:.3rem;opacity:.5">This site and its contents are the intellectual property of The BoldHearts Group LLC. Unauthorized use is strictly prohibited.</p>
     </footer>
 
     <script>
+        // Nav toggle
         const navToggle = document.querySelector('.nav-toggle');
         const navLinks  = document.querySelector('.nav-links');
-
-        navToggle.addEventListener('click', function () {
+        navToggle.addEventListener('click', function() {
             const isOpen = navLinks.classList.toggle('open');
             navToggle.classList.toggle('open', isOpen);
             navToggle.setAttribute('aria-expanded', isOpen);
         });
-
-        navLinks.querySelectorAll('a').forEach(function (link) {
-            link.addEventListener('click', function () {
+        navLinks.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
                 navLinks.classList.remove('open');
                 navToggle.classList.remove('open');
                 navToggle.setAttribute('aria-expanded', 'false');
             });
         });
+
+        // EmailJS
+        emailjs.init('h2oygZLNRmpwcz4wP');
+
+        function sendMessage() {
+            const name    = document.getElementById('name').value.trim();
+            const email   = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const format  = document.getElementById('format').value;
+            const notes   = document.getElementById('notes').value.trim();
+
+            if(!name || !email) {
+                document.getElementById('form-error').textContent = 'Please enter your name and email.';
+                document.getElementById('form-error').style.display = 'block';
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+            document.getElementById('form-error').style.display = 'none';
+
+            emailjs.send('service_0pg53bv', 'template_m43lmbf', {
+                to_name:   'Steve Forney',
+                to_email:  'steve@boldhearts.org',
+                from_name:  name,
+                reply_to:   email,
+                subject:    'Contact Form — ' + name,
+                results_body: '<p><strong>From:</strong> ' + name + ' (' + email + ')</p>'
+                    + '<p><strong>What brings them here:</strong> ' + (message || '—') + '</p>'
+                    + '<p><strong>Session format:</strong> ' + (format || '—') + '</p>'
+                    + '<p><strong>Additional notes:</strong> ' + (notes || '—') + '</p>',
+            }).then(function() {
+                document.getElementById('form-fields').style.display = 'none';
+                document.getElementById('form-success').style.display = 'block';
+            }, function(error) {
+                btn.textContent = 'Send Message';
+                btn.disabled = false;
+                document.getElementById('form-error').textContent = 'Something went wrong. Please email steve@boldhearts.org directly.';
+                document.getElementById('form-error').style.display = 'block';
+                console.error('EmailJS error:', error);
+            });
+        }
     </script>
 
 </body>
