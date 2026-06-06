@@ -34,6 +34,17 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .page-break{page-break-after:always;break-after:page;height:0;display:block}
 
 /* ── SECTION HEADERS (big) ── */
+.heat-grid{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.72rem}
+.heat-grid th{padding:.4rem .5rem;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:1px solid #e8d8c0}
+.heat-grid th:first-child{text-align:left}
+.heat-grid td{padding:.35rem .5rem;text-align:center;border:1px solid #f0e8e0}
+.heat-grid td:first-child{text-align:left;font-size:.7rem;color:#4a3a2a;font-weight:500;white-space:nowrap;padding-right:.75rem}
+.heat-grid td.cell-g{background:#d4e8c8;color:#2a5a2a}
+.heat-grid td.cell-y{background:#f5e8c0;color:#6a4a10}
+.heat-grid td.cell-r{background:#f5d0c0;color:#6a2a10}
+.heat-grid td.cell-e{background:#f8f4f0;color:#a09080}
+.heat-section{margin-bottom:2rem}
+.heat-title{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem}
 .section-header{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#1a1410;margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0;break-after:avoid}
 
 /* ── SCORE SUMMARY ── */
@@ -378,6 +389,105 @@ function renderGuide(data) {
     ? detailCard('Interior Postures', postureItems.map((p,i)=>detailRow(p.label,p.val,i===postureItems.length-1)).join(''))
     : '';
 
+  // ── CROSS-TAB GRID ────────────────────────────────────────
+  function cellClass(score) {
+    if(!score || score === 0) return 'cell-e';
+    if(score >= 70) return 'cell-g';
+    if(score >= 50) return 'cell-y';
+    return 'cell-r';
+  }
+  function cellVal(score) {
+    if(!score || score === 0) return '—';
+    return score + '%';
+  }
+
+  // Relational grid: realms × dimensions
+  // Calculate per-cell from raw answers
+  const REL_DIM_MAP = {
+    seen:      [0, 1],
+    known:     [2, 7],
+    voice:     [3],
+    belonging: [5],
+    support:   [4, 6],
+    calling:   [8],
+    freedom:   [9]
+  };
+  const relRealms = [
+    {id:'work',      label:'Work / School'},
+    {id:'family',    label:'Family'},
+    {id:'friends',   label:'Friends'},
+    {id:'community', label:'Community'},
+    {id:'god',       label:'With God'}
+  ];
+  const relDims = [
+    {id:'seen',      label:'Seen'},
+    {id:'known',     label:'Known'},
+    {id:'voice',     label:'Voice'},
+    {id:'belonging', label:'Belonging'},
+    {id:'support',   label:'Support'},
+    {id:'calling',   label:'Calling'},
+    {id:'freedom',   label:'Freedom'}
+  ];
+
+  function calcCellScore(rawArr, qIndices) {
+    if(!rawArr || !rawArr.length) return 0;
+    const vals = qIndices.map(i => {
+      const v = parseFloat(rawArr[i]);
+      return isNaN(v) ? 0 : v;
+    }).filter(v => v > 0);
+    if(!vals.length) return 0;
+    return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) / 7 * 100);
+  }
+
+  let relGridHtml = '';
+  if(a1?.raw) {
+    let thead = '<tr><th></th>' + relDims.map(d => '<th>'+d.label+'</th>').join('') + '</tr>';
+    let tbody = relRealms.map(r => {
+      const raw = a1.raw[r.id];
+      const cells = relDims.map(d => {
+        const score = calcCellScore(raw, REL_DIM_MAP[d.id] || []);
+        return '<td class="'+cellClass(score)+'">'+cellVal(score)+'</td>';
+      }).join('');
+      return '<tr><td>'+r.label+'</td>'+cells+'</tr>';
+    }).join('');
+    relGridHtml = '<div class="heat-section"><div class="heat-title">Relational Health — Realm × Dimension</div>'
+      + '<table class="heat-grid"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
+  }
+
+  // Interior grid: themes × postures
+  // Each theme has 6 questions mapping 1:1 to postures (awareness, honesty, movement, safety, direction, peace)
+  const intThemes = [
+    {id:'grief',  label:'Grief & Loss'},
+    {id:'shame',  label:'Shame & Guilt'},
+    {id:'fear',   label:'Fear & Anxiety'},
+    {id:'anger',  label:'Anger'},
+    {id:'desire', label:'Desire & Hope'},
+    {id:'joy',    label:'Joy & Delight'}
+  ];
+  const intPostures = ['Awareness','Honesty','Movement','Safety','Direction','Peace'];
+
+  let intGridHtml = '';
+  if(hs?.raw) {
+    let thead = '<tr><th></th>' + intPostures.map(p => '<th>'+p+'</th>').join('') + '</tr>';
+    let tbody = intThemes.map(t => {
+      const raw = hs.raw[t.id];
+      const cells = intPostures.map((p, pi) => {
+        const v = raw ? parseFloat(raw[pi]) : 0;
+        const score = isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
+        return '<td class="'+cellClass(score)+'">'+cellVal(score)+'</td>';
+      }).join('');
+      return '<tr><td>'+t.label+'</td>'+cells+'</tr>';
+    }).join('');
+    intGridHtml = '<div class="heat-section"><div class="heat-title">Interior Health — Theme × Posture</div>'
+      + '<table class="heat-grid"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
+  }
+
+  const crossTabHtml = (relGridHtml || intGridHtml)
+    ? '<div class="section-header" style="break-before:page">Heart at a Glance</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1.5rem;font-style:italic">Each cell shows how that specific relationship is flowing through that particular dimension of the heart. Green is healthy, gold is developing, red is worth attention.</div>'
+      + relGridHtml + intGridHtml
+    : '';
+
   const detailBreakdownHtml = (realmCardsHtml||relDimCardHtml||themeCardHtml||postureCardHtml)
     ? '<div class="section-header" style="break-before:page">Complete Score Breakdown</div>'
       +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.75rem;width:100%">'
@@ -582,6 +692,7 @@ function renderGuide(data) {
     // Page 2+: Scores then guide sections
     + dashHtml
     + detailBreakdownHtml
+    + crossTabHtml
     + sectionsHtml
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
