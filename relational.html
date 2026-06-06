@@ -649,7 +649,14 @@ function submitGate(){
   const scores=calcScores();
   if(!isTestMode) saveToSheets(scores);
   const htmlEmail=buildHtmlEmail(scores);
+ try {
   emailjs.init(EJSPUB);
+  if(!isTestMode) emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).then(()=>{
+    new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,rel_email_sent:'Yes'}).toString();
+  }).catch(e=>console.error('Email error:',e));
+} catch(ejsErr) { console.warn('EmailJS blocked:', ejsErr); }
+renderResults(scores);
+window.scrollTo({top:0,behavior:'smooth'});
   if(!isTestMode) emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).then(()=>{
     new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,rel_email_sent:'Yes'}).toString();
   }).catch(e=>console.error('Email error:',e));
