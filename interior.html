@@ -388,7 +388,13 @@ async function submitGate(){
       movement_score:scores.dimScores.movement+'%',
       safety_score:scores.dimScores.safety+'%',
       direction_score:scores.dimScores.direction+'%',
-      peace_score:scores.dimScores.peace+'%'
+      peace_score:scores.dimScores.peace+'%',
+      int_grief_q1:answers['grief_0']||'',int_grief_q2:answers['grief_1']||'',int_grief_q3:answers['grief_2']||'',int_grief_q4:answers['grief_3']||'',int_grief_q5:answers['grief_4']||'',int_grief_q6:answers['grief_5']||'',
+      int_shame_q1:answers['shame_0']||'',int_shame_q2:answers['shame_1']||'',int_shame_q3:answers['shame_2']||'',int_shame_q4:answers['shame_3']||'',int_shame_q5:answers['shame_4']||'',int_shame_q6:answers['shame_5']||'',
+      int_fear_q1:answers['fear_0']||'',int_fear_q2:answers['fear_1']||'',int_fear_q3:answers['fear_2']||'',int_fear_q4:answers['fear_3']||'',int_fear_q5:answers['fear_4']||'',int_fear_q6:answers['fear_5']||'',
+      int_anger_q1:answers['anger_0']||'',int_anger_q2:answers['anger_1']||'',int_anger_q3:answers['anger_2']||'',int_anger_q4:answers['anger_3']||'',int_anger_q5:answers['anger_4']||'',int_anger_q6:answers['anger_5']||'',
+      int_desire_q1:answers['desire_0']||'',int_desire_q2:answers['desire_1']||'',int_desire_q3:answers['desire_2']||'',int_desire_q4:answers['desire_3']||'',int_desire_q5:answers['desire_4']||'',int_desire_q6:answers['desire_5']||'',
+      int_joy_q1:answers['joy_0']||'',int_joy_q2:answers['joy_1']||'',int_joy_q3:answers['joy_2']||'',int_joy_q4:answers['joy_3']||'',int_joy_q5:answers['joy_4']||'',int_joy_q6:answers['joy_5']||''
     });
     fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
   }
