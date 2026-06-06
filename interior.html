@@ -515,6 +515,8 @@ async function submitGate(){
   } catch(e){console.log('Could not fetch A1 scores:',e);}
 
   renderResults(scores,prevRow);
+  const hero=document.querySelector('.hero');if(hero)hero.style.display='none';
+  const divider=document.querySelector('.divider');if(divider)divider.style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -685,6 +687,8 @@ function retake(){
   answers={}; userName=''; userEmail='';
   randomizedThemes=getRandomizedThemes();
   document.getElementById('progress-section').style.display='';
+  const hero=document.querySelector('.hero');if(hero)hero.style.display='';
+  const divider=document.querySelector('.divider');if(divider)divider.style.display='';
   renderSurvey();
   window.scrollTo({top:0,behavior:'smooth'});
 }
