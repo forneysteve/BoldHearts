@@ -384,7 +384,7 @@ let answers={},userName='',userEmail='',isTestMode=false;
 function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
 function totalAns(){return Object.keys(answers).length}
 function dcolor(p){return p>=80?'#6bc45e':p>=60?'#d4b96a':p>=40?'#d4b96a':p>=20?'#c97a5a':'#8a2a2a'}
-function dtag(p){return p>=80?'Running Clean':p>=60?'Warning Light':p>=40?'Check Engine':p>=20?'Running Out of Fuel':'Engine Off'}
+function dtag(p){return p>=80?'Running Clean':p>=60?'Warning Light':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off'}
 function calcScores(){
   const realm={};let allT=0,allN=0;
   REALMS.forEach(r=>{
@@ -448,9 +448,9 @@ function buildHtmlEmail(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
   const rc=overall>=80?'#6bc45e':overall>=60?'#d4b96a':overall>=40?'#d4b96a':overall>=20?'#c97a5a':'#8a2a2a';
-  const rtag=overall>=80?'Running Clean':overall>=60?'Maint Reqd':overall>=40?'Check Engine':overall>=20?'Running Out of Fuel':'Engine Off';
+  const rtag=overall>=80?'Running Clean':overall>=60?'Needs Maintenance':overall>=40?'Needs Attention':overall>=20?'Running Low':'Engine Off';
   function dc(p){return p>=80?'#6bc45e':p>=60?'#d4b96a':p>=40?'#d4b96a':p>=20?'#c97a5a':'#8a2a2a';}
-  function dt(p){return p>=80?'Running Clean':p>=60?'Maint Reqd':p>=40?'Check Engine':p>=20?'Running Out of Fuel':'Engine Off';}
+  function dt(p){return p>=80?'Running Clean':p>=60?'Needs Maintenance':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off';}
   function bar(pct,col){const n=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';}
   const realmRowsHtml=ar.map(r=>{const s=realm[r.id];const col=dc(s.overall);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td><td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+dt(s.overall)+'</td></tr>';}).join('');
   const dimScores=calcDimScores(realm);
@@ -620,7 +620,7 @@ function saveToSheets(scores){
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
     calling:getDim('calling'),freedom:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v5.8',
+    patterns:patterns,warnings:warningList,version:'v5.9',
     work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
@@ -698,7 +698,7 @@ function tierIcon(p) {
   if(isNaN(pct)) return '';
   const wrap = (inner) => `<div style="width:52px;height:52px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px">${inner}</div>`;
   if(pct >= 80) return wrap(`<svg viewBox="0 0 60 80" width="36" height="48"><rect x="8" y="2" width="44" height="76" rx="7" fill="none" stroke="#6bc45e" stroke-width="2.5"/><circle cx="30" cy="20" r="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/><circle cx="30" cy="40" r="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/><circle cx="30" cy="60" r="9" fill="#6bc45e"/><circle cx="27" cy="57" r="3" fill="#9de08a" opacity=".5"/></svg>`);
-  if(pct >= 60) return wrap(`<div style="background:#1a1500;border:1px solid #d4b96a;border-radius:4px;padding:2px 5px;text-align:center"><div style="font-family:Inter,sans-serif;font-size:9px;font-weight:600;color:#d4b96a;letter-spacing:.05em;line-height:1.3">MAINT<br>REQD</div></div>`);
+  if(pct >= 60) return wrap(`<div style="background:#1a1500;border:1px solid #d4b96a;border-radius:4px;padding:2px 5px;text-align:center"><div style="font-family:Inter,sans-serif;font-size:9px;font-weight:600;color:#d4b96a;letter-spacing:.05em;line-height:1.3">NEEDS<br>MAINT</div></div>`);
   if(pct >= 40) return wrap(`<img src="assets/images/enginelight.jpg" style="width:48px;height:48px;object-fit:contain;border-radius:4px">`);
   if(pct >= 20) return wrap(`<img src="assets/images/lowfuel.jpg" style="width:48px;height:48px;object-fit:contain;border-radius:4px">`);
   return wrap(`<img src="assets/images/batterydead.jpg" style="width:48px;height:48px;object-fit:contain;border-radius:4px">`);
@@ -717,6 +717,17 @@ function calcDimScores(realm){
     return{...d,score:n>0?Math.round((t/(n*7))*100):0,realmScores};
   });
 }
+
+function barRow(label, pct, tag, col) {
+  const fillW = Math.round(pct);
+  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(196,168,130,.06)">'
+    + '<div style="width:160px;flex-shrink:0;font-size:.82rem;color:#c0b8b0">'+label+'</div>'
+    + '<div style="flex:1;position:relative;height:14px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+    + '<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px;transition:width .8s ease"></div>'
+    + '</div>'
+    + '<div style="width:140px;text-align:right;font-size:.78rem;font-weight:500;color:'+col+'">'+tag+'</div>'
+    + '</div>';
+}
 function renderResults(scores){
   const{realm,overall}=scores;
   const r=60,cx=75,cy=75,circ=2*Math.PI*r;
@@ -732,14 +743,13 @@ function renderResults(scores){
     const s=realm[r.id];if(s.answered===0)return'';
     const col=dcolor(s.overall);
     const tag=dtag(s.overall);
-    return'<div class="realm-result-row"><div class="realm-result-name" style="display:flex;justify-content:space-between;align-items:center"><span><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:14px;margin-right:6px"></i>'+r.label+'</span><span style="font-size:.78rem;color:'+col+';font-weight:500">'+s.overall+'% &nbsp;·&nbsp; '+tag+'</span></div></div>';
+    return barRow('<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px;margin-right:6px"></i>'+r.label, s.overall, tag, col);
   }).join('');;
   const dimScores=calcDimScores(realm);
   const dimHtml=dimScores.map(d=>{
-    const col=d.score>=75?'#b5c4a0':d.score>=50?'#e8d7a0':'#c97a5a';
-    const cls=d.score>=75?'high':d.score<50?'low':'';
-    return'<div class="dim-card '+cls+'"><div class="dim-header"><div class="dim-name">'+d.name+'</div><div class="dim-overall" style="color:'+col+'">'+d.score+'%</div></div><div class="dim-desc">'+d.desc(d.score)+'</div></div>';
-  }).join('');
+    const col=dcolor(d.score);
+    return barRow(d.name, d.score, dtag(d.score), col);
+  }).join('');;
   const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);const icon=tierIcon(s.overall);return'<div class="pattern-card '+p.cls+'" style="display:flex;gap:1rem;align-items:flex-start"><div style="flex-shrink:0;width:64px;text-align:center">'+icon+'</div><div><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div></div>';}).join('');
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div>'+(w.subtitle?'<div style="font-size:.75rem;color:#6a6258;letter-spacing:.04em;margin-bottom:6px;font-style:italic">'+w.subtitle+'</div>':'')+' <div class="warning-text">'+w.text+'</div></div></div>').join('');
 
@@ -748,8 +758,8 @@ function renderResults(scores){
     +'<div class="ring-wrap"><div class="ring-inner"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(232,215,160,.1)" stroke-width="10"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+rc+'" stroke-width="10" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/></svg><div class="ring-lbl"><div class="big">'+overall+'%</div><div class="sm">overall</div></div></div></div>'
     +'<div class="ring-summary">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life — depth is always worth pursuing.')+'</div>'
     +'<div class="score-cards"><div class="score-card"><div class="score-card-lbl">How others engage you</div><div class="score-card-val" style="color:'+dcolor(outAvg)+'">'+outAvg+'%</div><div class="score-card-tag">'+dtag(outAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+outAvg+'%;background:'+dcolor(outAvg)+'"></div></div></div><div class="score-card"><div class="score-card-lbl">How you engage others</div><div class="score-card-val" style="color:'+dcolor(selfAvg)+'">'+selfAvg+'%</div><div class="score-card-tag">'+dtag(selfAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfAvg+'%;background:'+dcolor(selfAvg)+'"></div></div></div></div>'
-    +'<div class="section-label">Relationships</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How they engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage them</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div>'
-    +'<div class="section-label">Needs</div><div class="dim-grid">'+dimHtml+'</div>'
+    +'<div class="section-label">Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
+    +'<div class="section-label">Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
     +'<div class="section-label">Engagement Pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
     +(()=>{
       const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
