@@ -604,23 +604,38 @@ function saveToSheets(scores){
   const warningList=warnings.map(w=>w.title).join(' | ')||'None';
   const getDim=(id)=>{const d=dimScores.find(d=>d.id===id);return d?d.score+'%':'';};
   const params=new URLSearchParams({
-    action:'write',name:userName,email:userEmail,overall:overall+'%',
-    work:realm.work?realm.work.overall+'%':'',
-    significant_other:realm.significant_other?realm.significant_other.overall+'%':'',
-    family:realm.family?realm.family.overall+'%':'',
-    friends:realm.friends?realm.friends.overall+'%':'',
-    community:realm.community?realm.community.overall+'%':'',
+    action:'write',name:userName,email:userEmail,
+    rel_overall:overall+'%',
+    work_overall:realm.work?realm.work.overall+'%':'',
+    partner_overall:realm.significant_other?realm.significant_other.overall+'%':'',
+    family_overall:realm.family?realm.family.overall+'%':'',
+    friends_overall:realm.friends?realm.friends.overall+'%':'',
+    community_overall:realm.community?realm.community.overall+'%':'',
+    god_overall:realm.god?realm.god.overall+'%':'',
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
-    calling:getDim('calling'),freedom_to_be_myself:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v4.0',
+    calling:getDim('calling'),freedom:getDim('fullself'),
+    patterns:patterns,warnings:warningList,version:'v5.0',
     work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
     family_outward:realm.family?realm.family.outward+'%':'',family_self:realm.family?realm.family.self+'%':'',
     friends_outward:realm.friends?realm.friends.outward+'%':'',friends_self:realm.friends?realm.friends.self+'%':'',
     community_outward:realm.community?realm.community.outward+'%':'',community_self:realm.community?realm.community.self+'%':'',
-    god_overall:realm.god?realm.god.overall+'%':'',god_outward:realm.god?realm.god.outward+'%':'',god_self:realm.god?realm.god.self+'%':''
+    god_outward:realm.god?realm.god.outward+'%':'',god_self:realm.god?realm.god.self+'%':'',
+    work_q1:answers['work_0']||'',work_q2:answers['work_1']||'',work_q3:answers['work_2']||'',work_q4:answers['work_3']||'',work_q5:answers['work_4']||'',
+    work_q6:answers['work_5']||'',work_q7:answers['work_6']||'',work_q8:answers['work_7']||'',work_q9:answers['work_8']||'',work_q10:answers['work_9']||'',
+    partner_q1:answers['significant_other_0']||'',partner_q2:answers['significant_other_1']||'',partner_q3:answers['significant_other_2']||'',partner_q4:answers['significant_other_3']||'',partner_q5:answers['significant_other_4']||'',
+    partner_q6:answers['significant_other_5']||'',partner_q7:answers['significant_other_6']||'',partner_q8:answers['significant_other_7']||'',partner_q9:answers['significant_other_8']||'',partner_q10:answers['significant_other_9']||'',
+    family_q1:answers['family_0']||'',family_q2:answers['family_1']||'',family_q3:answers['family_2']||'',family_q4:answers['family_3']||'',family_q5:answers['family_4']||'',
+    family_q6:answers['family_5']||'',family_q7:answers['family_6']||'',family_q8:answers['family_7']||'',family_q9:answers['family_8']||'',family_q10:answers['family_9']||'',
+    friends_q1:answers['friends_0']||'',friends_q2:answers['friends_1']||'',friends_q3:answers['friends_2']||'',friends_q4:answers['friends_3']||'',friends_q5:answers['friends_4']||'',
+    friends_q6:answers['friends_5']||'',friends_q7:answers['friends_6']||'',friends_q8:answers['friends_7']||'',friends_q9:answers['friends_8']||'',friends_q10:answers['friends_9']||'',
+    community_q1:answers['community_0']||'',community_q2:answers['community_1']||'',community_q3:answers['community_2']||'',community_q4:answers['community_3']||'',community_q5:answers['community_4']||'',
+    community_q6:answers['community_5']||'',community_q7:answers['community_6']||'',community_q8:answers['community_7']||'',community_q9:answers['community_8']||'',community_q10:answers['community_9']||'',
+    god_q1:answers['god_0']||'',god_q2:answers['god_1']||'',god_q3:answers['god_2']||'',god_q4:answers['god_3']||'',
+    god_q5:answers['god_4']||'',god_q6:answers['god_5']||'',god_q7:answers['god_6']||'',god_q8:answers['god_7']||'',
+    god_q9:answers['god_8']||'',god_q10:answers['god_9']||''
   });
   fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
 }
