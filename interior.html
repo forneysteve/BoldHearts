@@ -174,7 +174,6 @@ footer a:hover{color:#c4a882}
   <p style="margin-top:.4rem"><a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a></p>
 </footer>
 <script>
-// v2.1 — engine tier scoring, high-level display only
 const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const SCALE = [{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
@@ -188,7 +187,9 @@ const THEMES = [
     {t:"When I think about my significant losses, I am in the same place I was a year ago — nothing has shifted.",dim:'movement',reverse:true},
     {t:"When grief surfaces, I can let it be there without immediately trying to fix it, suppress it, or explain it away.",dim:'safety'},
     {t:"When I sit with my losses, I can see what they've pointed me toward — a clarity or compassion I didn't have before.",dim:'direction'},
-    {t:"When the hard things I've been through come to mind, there's a settledness in me — not because they're resolved, but because I'm no longer at war with them.",dim:'peace'}
+    {t:"When the hard things I've been through come to mind, there's a settledness in me — not because they're resolved, but because I'm no longer at war with them.",dim:'peace'},
+    {t:"Others who know me well would say I am someone who carries grief or unresolved loss.",dim:'identity_other',reverse:false},
+    {t:"I consider myself someone who carries grief or unresolved loss.",dim:'identity_self',reverse:false}
   ]},
   {id:'shame',label:'Shame & Guilt',icon:'ti-eye-off',color:'#8a7a8a',desc:"Think honestly about how you relate to your failures, mistakes, and the parts of yourself you'd rather hide.",questions:[
     {t:"When shame surfaces, I can name what it's actually about — it has a specific source, not just a vague weight.",dim:'awareness'},
@@ -196,7 +197,9 @@ const THEMES = [
     {t:"When I think about something I'm ashamed of, it doesn't carry the same weight it did — something has shifted in me.",dim:'movement'},
     {t:"When shame surfaces, I don't have to immediately hide it or perform around it — I can let it be there long enough to look at it.",dim:'safety'},
     {t:"When I look at my failures honestly, I can see what they've made me — more honest, more compassionate, more real.",dim:'direction'},
-    {t:"When I think about my history, I'm not bracing — I can look at what I've done without it rewriting how I see myself today.",dim:'peace'}
+    {t:"When I think about my history, I'm not bracing — I can look at what I've done without it rewriting how I see myself today.",dim:'peace'},
+    {t:"Others who know me well would say I struggle with shame or guilt.",dim:'identity_other',reverse:false},
+    {t:"I consider myself someone who struggles with shame or guilt.",dim:'identity_self',reverse:false}
   ]},
   {id:'fear',label:'Fear & Anxiety',icon:'ti-alert-triangle',color:'#b09060',desc:'Think honestly about what drives your decisions and what you protect yourself from.',questions:[
     {t:"When anxiety shows up, I can usually name what's actually driving it — it's not just a vague unease.",dim:'awareness'},
@@ -204,7 +207,9 @@ const THEMES = [
     {t:"When something important needs to be said or done, fear doesn't regularly keep me from it.",dim:'movement'},
     {t:"When fear shows up, I don't have to immediately resolve it or push past it — I can sit with it long enough to understand it.",dim:'safety'},
     {t:"When I pay attention to what I'm afraid of, I can usually see what it's telling me about what I actually care about.",dim:'direction'},
-    {t:"When things are uncertain, there's a steadiness underneath — not certainty, but something that holds.",dim:'peace'}
+    {t:"When things are uncertain, there's a steadiness underneath — not certainty, but something that holds.",dim:'peace'},
+    {t:"Others who know me well would say I am someone who tends toward fear or anxiety.",dim:'identity_other',reverse:false},
+    {t:"I consider myself someone who tends toward fear or anxiety.",dim:'identity_self',reverse:false}
   ]},
   {id:'anger',label:'Anger',icon:'ti-flame',color:'#c97a5a',desc:"Think honestly about how you handle what's wrong — in your life and around you.",questions:[
     {t:"When I'm honest with myself, I can name what I'm actually angry about — including what I haven't said out loud.",dim:'awareness'},
@@ -212,7 +217,9 @@ const THEMES = [
     {t:"When I trace anger from a year ago, something has changed — it hasn't just hardened into the same resentment.",dim:'movement'},
     {t:"When I'm angry, I don't have to immediately convert it into something more acceptable — I can let it be what it is.",dim:'safety'},
     {t:"When I trace my anger back, I can usually see what wrong it's pointing toward — it's a signal, not just a reaction.",dim:'direction'},
-    {t:"When I think about the people or situations I've been most hurt by, I'm not still white-knuckling it — there's been some release.",dim:'peace'}
+    {t:"When I think about the people or situations I've been most hurt by, I'm not still white-knuckling it — there's been some release.",dim:'peace'},
+    {t:"Others who know me well would say I am someone who carries unresolved anger.",dim:'identity_other',reverse:false},
+    {t:"I consider myself someone who carries anger or has an anger problem.",dim:'identity_self',reverse:false}
   ]},
   {id:'desire',label:'Desire & Hope',icon:'ti-star',color:'#c4a882',desc:'Think honestly about what your heart is still alive to — what you long for, hope for, want.',questions:[
     {t:"When I get quiet, I can name what I actually want — not the safe version, the real one underneath.",dim:'awareness'},
@@ -220,7 +227,9 @@ const THEMES = [
     {t:"When I compare my hopes and desires to where I was a year ago, I don't see much movement.",dim:'movement',reverse:true},
     {t:"When I want something deeply, I don't have to immediately talk myself out of it — I can let the wanting be there.",dim:'safety'},
     {t:"When I pay attention to my deepest desires, they point me somewhere — toward a calling or contribution that is more fully mine.",dim:'direction'},
-    {t:"When what I want doesn't come through, I can hold that disappointment without it shutting down my capacity to hope again.",dim:'peace'}
+    {t:"When what I want doesn't come through, I can hold that disappointment without it shutting down my capacity to hope again.",dim:'peace'},
+    {t:"Others who know me well would say I am someone who lives with hope and desire.",dim:'identity_other',reverse:true},
+    {t:"I consider myself a hopeful person who pursues what I long for.",dim:'identity_self',reverse:true}
   ]},
   {id:'joy',label:'Joy & Delight',icon:'ti-sun',color:'#b5c4a0',desc:'Think honestly about your capacity to receive goodness, beauty, and pleasure.',questions:[
     {t:"When I look at my life right now, I can point to specific things that genuinely bring me delight — not vague contentment, actual delight.",dim:'awareness'},
@@ -228,7 +237,9 @@ const THEMES = [
     {t:"When I compare now to a year ago, my capacity for joy and delight has not shrunk — if anything it has grown.",dim:'movement'},
     {t:"When something delights me, I don't have to immediately minimize it or brace for it to end — I can just receive it.",dim:'safety'},
     {t:"When I pay attention to what delights me, it tells me something true about how I'm wired — I take it seriously as a signal.",dim:'direction'},
-    {t:"When life is hard, there's still something underneath that holds — a quiet that doesn't depend on circumstances being right.",dim:'peace'}
+    {t:"When life is hard, there's still something underneath that holds — a quiet that doesn't depend on circumstances being right.",dim:'peace'},
+    {t:"Others who know me well would say I am a joyful person.",dim:'identity_other',reverse:true},
+    {t:"I consider myself a joyful person.",dim:'identity_self',reverse:true}
   ]}
 ];
 
@@ -396,7 +407,13 @@ async function submitGate(){
       int_fear_q1:answers['fear_0']||'',int_fear_q2:answers['fear_1']||'',int_fear_q3:answers['fear_2']||'',int_fear_q4:answers['fear_3']||'',int_fear_q5:answers['fear_4']||'',int_fear_q6:answers['fear_5']||'',
       int_anger_q1:answers['anger_0']||'',int_anger_q2:answers['anger_1']||'',int_anger_q3:answers['anger_2']||'',int_anger_q4:answers['anger_3']||'',int_anger_q5:answers['anger_4']||'',int_anger_q6:answers['anger_5']||'',
       int_desire_q1:answers['desire_0']||'',int_desire_q2:answers['desire_1']||'',int_desire_q3:answers['desire_2']||'',int_desire_q4:answers['desire_3']||'',int_desire_q5:answers['desire_4']||'',int_desire_q6:answers['desire_5']||'',
-      int_joy_q1:answers['joy_0']||'',int_joy_q2:answers['joy_1']||'',int_joy_q3:answers['joy_2']||'',int_joy_q4:answers['joy_3']||'',int_joy_q5:answers['joy_4']||'',int_joy_q6:answers['joy_5']||''
+      int_joy_q1:answers['joy_0']||'',int_joy_q2:answers['joy_1']||'',int_joy_q3:answers['joy_2']||'',int_joy_q4:answers['joy_3']||'',int_joy_q5:answers['joy_4']||'',int_joy_q6:answers['joy_5']||'',
+      int_grief_q7:answers['grief_6']||'',int_grief_q8:answers['grief_7']||'',
+      int_shame_q7:answers['shame_6']||'',int_shame_q8:answers['shame_7']||'',
+      int_fear_q7:answers['fear_6']||'',int_fear_q8:answers['fear_7']||'',
+      int_anger_q7:answers['anger_6']||'',int_anger_q8:answers['anger_7']||'',
+      int_desire_q7:answers['desire_6']||'',int_desire_q8:answers['desire_7']||'',
+      int_joy_q7:answers['joy_6']||'',int_joy_q8:answers['joy_7']||''
     });
     fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
   }
@@ -510,18 +527,10 @@ function renderResults(scores,prevRow){
     +THEMES.map(t=>{
       const s=theme[t.id]; const pct=s?s.overall:0; const col=dcolor(pct);
       const dimBars='';
-      return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem .75rem">'
-        +'<div style="position:relative;width:64px;height:64px;margin:0 auto .6rem">'
-        +'<svg width="64" height="64" viewBox="0 0 64 64">'
-        +'<circle cx="32" cy="32" r="26" fill="none" stroke="rgba(196,168,130,.08)" stroke-width="5"/>'
-        +'<circle cx="32" cy="32" r="26" fill="none" stroke="'+col+'" stroke-width="5" stroke-dasharray="'+(2*Math.PI*26).toFixed(1)+'" stroke-dashoffset="'+(2*Math.PI*26*(1-pct/100)).toFixed(1)+'" stroke-linecap="round" transform="rotate(-90 32 32)"/>'
-        +'</svg>'
-        +'<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">'
-        +'<i class="ti '+t.icon+'" style="font-size:.95rem;color:'+col+'"></i>'
-        +'</div></div>'
+      return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem .75rem;text-align:center">'
+        +'<div style="margin:0 auto .75rem">'+tierIcon(pct)+'</div>'
         +'<div style="font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:#6a6258;text-align:center;margin-bottom:.3rem;line-height:1.3">'+t.label+'</div>'
-        +'<div style="font-size:.65rem;color:'+col+';text-align:center;margin-bottom:.65rem;letter-spacing:.04em">'+dtag(pct)+'</div>'
-        
+        +'<div style="font-size:.75rem;font-weight:500;color:'+col+';text-align:center;letter-spacing:.04em">'+pct+'% &nbsp;·&nbsp; '+dtag(pct)+'</div>'
         +'</div>';
     }).join('')
     +'</div>';
