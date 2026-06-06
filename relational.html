@@ -383,7 +383,7 @@ const WARNINGS=[
 let answers={},userName='',userEmail='',isTestMode=false;
 function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
 function totalAns(){return Object.keys(answers).length}
-function dcolor(p){return p>=80?'#6bc45e':p>=60?'#d4b96a':p>=40?'#d4b96a':p>=20?'#c97a5a':'#8a2a2a'}
+function dcolor(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a'}
 function dtag(p){return p>=80?'Running Clean':p>=60?'Warning Light':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off'}
 function calcScores(){
   const realm={};let allT=0,allN=0;
@@ -449,7 +449,7 @@ function buildHtmlEmail(scores){
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
   const rc=overall>=80?'#6bc45e':overall>=60?'#d4b96a':overall>=40?'#d4b96a':overall>=20?'#c97a5a':'#8a2a2a';
   const rtag=overall>=80?'Running Clean':overall>=60?'Needs Maintenance':overall>=40?'Needs Attention':overall>=20?'Running Low':'Engine Off';
-  function dc(p){return p>=80?'#6bc45e':p>=60?'#d4b96a':p>=40?'#d4b96a':p>=20?'#c97a5a':'#8a2a2a';}
+  function dc(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a';}
   function dt(p){return p>=80?'Running Clean':p>=60?'Needs Maintenance':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off';}
   function bar(pct,col){const n=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';}
   const realmRowsHtml=ar.map(r=>{const s=realm[r.id];const col=dc(s.overall);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td><td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+dt(s.overall)+'</td></tr>';}).join('');
