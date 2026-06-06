@@ -620,7 +620,7 @@ function saveToSheets(scores){
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
     calling:getDim('calling'),freedom:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v5.7',
+    patterns:patterns,warnings:warningList,version:'v5.8',
     work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
@@ -671,25 +671,15 @@ const REALM_PATTERNS={
   community:{open:"You are genuinely present in your community and your community is genuinely present with you. You are known here — not just recognized — and that kind of belonging is worth protecting.",giver:"You may be investing more in your community than your community is investing in you. You show up, you serve, you engage — but you may be more contributor than member who is truly known.",guarded:"Your community may be more open to you than you're allowing yourself to receive. You may be participating without truly belonging.",disconnected:"There is significant distance between you and your community right now. You may be an attendee rather than a member. Something needs to shift here.",developing:"There is some real connection in your community, but it hasn't taken root yet. Belonging in community takes time — but there is more available here than you may be experiencing."},
   god:{open:"There is real, mutual engagement in your relationship with God. You are bringing your honest self and experiencing genuine connection in return. That kind of spiritual intimacy is something many people long for and never quite find.",giver:"You may be showing up in your faith — praying, seeking, engaging — but not experiencing much sense of God's presence or response in return. That can be a profoundly isolating place to be.",guarded:"There may be more available to you in your relationship with God than you're currently allowing yourself to receive. Something is keeping you at a careful distance.",disconnected:"There is significant distance in your relationship with God right now — felt on both sides. You may be going through the motions of faith without much lived experience of connection.",developing:"There is something real in your relationship with God, but it hasn't reached the depth it could. You may be in a season of seeking — present, but not yet fully known or knowing."}
 };
-function getPatternIcon(key){
-  const icons={
-    open:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/><circle cx="28" cy="18" r="8" fill="#2a2825"/><circle cx="28" cy="33" r="8" fill="#2a2825"/><circle cx="28" cy="47" r="8" fill="#4a9e3f"/><circle cx="28" cy="47" r="5" fill="#6bc45e" opacity="0.9"/></svg>`,
-    giver:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><circle cx="28" cy="28" r="22" fill="#111" stroke="#2a2825" stroke-width="1"/><path d="M8 32 A22 22 0 0 1 48 32" fill="none" stroke="#2a2825" stroke-width="5" stroke-linecap="round"/><path d="M8 32 A22 22 0 0 1 16 14" fill="none" stroke="#c97a5a" stroke-width="5" stroke-linecap="round" opacity="0.9"/><text x="10" y="38" font-family="Georgia,serif" font-size="9" fill="#c97a5a" font-weight="700">E</text><text x="42" y="38" font-family="Georgia,serif" font-size="9" fill="#5a5550" font-weight="700">F</text><line x1="28" y1="28" x2="14" y2="24" stroke="#f0e8df" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="28" r="3" fill="#1a1816" stroke="#f0e8df" stroke-width="1.5"/></svg>`,
-    guarded:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/><circle cx="28" cy="18" r="8" fill="#2a2825"/><circle cx="28" cy="33" r="8" fill="#b8952a" opacity="0.95"/><circle cx="28" cy="33" r="5" fill="#d4b96a" opacity="0.9"/><circle cx="28" cy="47" r="8" fill="#2a2825"/></svg>`,
-    disconnected:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="16" y="5" width="24" height="46" rx="4" fill="#111" stroke="#2a2825" stroke-width="1"/><circle cx="28" cy="18" r="8" fill="#8a2a2a" opacity="0.9"/><circle cx="28" cy="18" r="5" fill="#c97a5a" opacity="0.85"/><circle cx="28" cy="33" r="8" fill="#2a2825"/><circle cx="28" cy="47" r="8" fill="#2a2825"/></svg>`,
-    developing:`<svg width="56" height="56" viewBox="0 0 56 56" style="display:block;flex-shrink:0"><rect x="1" y="1" width="54" height="54" rx="5" fill="#1a1816" stroke="#3a3530" stroke-width="1"/><rect x="6" y="10" width="44" height="36" rx="3" fill="#111" stroke="#2a2825" stroke-width="1"/><rect x="14" y="18" width="16" height="10" rx="2" fill="none" stroke="#d4b96a" stroke-width="2"/><line x1="14" y1="22" x2="10" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="19" x2="10" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="30" y1="22" x2="34" y2="22" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="34" y1="19" x2="34" y2="25" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="20" y1="18" x2="20" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><line x1="25" y1="18" x2="25" y2="14" stroke="#d4b96a" stroke-width="2" stroke-linecap="round"/><rect x="12" y="16" width="20" height="14" rx="3" fill="#d4b96a" opacity="0.07"/><text x="28" y="38" font-family="Georgia,serif" font-size="6" fill="#d4b96a" text-anchor="middle" letter-spacing=".06em">CHECK ENGINE</text></svg>`
-  };
-  return icons[key]||icons.developing;
-}
 function getPattern(outward,self_,realmId){
-  const hiOut=outward>=80,loOut=outward<60,hiSelf=self_>=80,loSelf=self_<60;
+  const hiOut=outward>=65,loOut=outward<50,hiSelf=self_>=65,loSelf=self_<50;
   const rp=REALM_PATTERNS[realmId]||REALM_PATTERNS.friends;
   let key,name,cls;
-  if(hiOut&&hiSelf){key='open';name='Running Clean';cls='open';}
-  else if(loOut&&loSelf){key='disconnected';name='Engine Off';cls='disconnected';}
-  else if(loOut&&hiSelf){key='giver';name='Running Out of Fuel';cls='giver';}
-  else if(hiOut&&loSelf){key='guarded';name='Warning Light';cls='guarded';}
-  else{key='developing';name='Warning Light';cls='guarded';}
+  if(hiOut&&hiSelf){key='open';name='Mutual';cls='open';}
+  else if(loOut&&loSelf){key='disconnected';name='Disconnected';cls='disconnected';}
+  else if(loOut&&hiSelf){key='giver';name='Giving More Than Receiving';cls='giver';}
+  else if(hiOut&&loSelf){key='guarded';name='Holding Back';cls='guarded';}
+  else{key='developing';name='Still Developing';cls='guarded';}
   return{key,name,cls,desc:rp[key]};
 }
 const DIMS=[
@@ -707,7 +697,7 @@ function tierIcon(p) {
   const pct = parseFloat(p);
   if(isNaN(pct)) return '';
   if(pct >= 80) return `<svg viewBox="0 0 60 80" width="40" height="53" style="display:block;margin:0 auto 4px"><rect x="8" y="2" width="44" height="76" rx="7" fill="none" stroke="#6bc45e" stroke-width="2.5"/><circle cx="30" cy="20" r="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/><circle cx="30" cy="40" r="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/><circle cx="30" cy="60" r="9" fill="#6bc45e"/><circle cx="27" cy="57" r="3" fill="#9de08a" opacity=".5"/></svg>`;
-  if(pct >= 60) return `<div style="background:#1a1500;border:2px solid #d4b96a;border-radius:5px;padding:4px 8px;text-align:center;display:inline-block"><div style="font-family:Inter,sans-serif;font-size:13px;font-weight:700;color:#d4b96a;letter-spacing:.06em;line-height:1.2">MAINT<br>REQD</div></div>`;
+  if(pct >= 60) return `<div style="background:#1a1500;border:1px solid #d4b96a;border-radius:4px;padding:2px 5px;text-align:center;display:inline-block"><div style="font-family:Inter,sans-serif;font-size:9px;font-weight:600;color:#d4b96a;letter-spacing:.05em;line-height:1.3">MAINT<br>REQD</div></div>`;
   if(pct >= 40) return `<img src="assets/images/enginelight.jpg" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 4px;border-radius:4px">`;
   if(pct >= 20) return `<img src="assets/images/lowfuel.jpg" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 4px;border-radius:4px">`;
   return `<img src="assets/images/batterydead.jpg" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 4px;border-radius:4px">`;
@@ -757,9 +747,9 @@ function renderResults(scores){
     +'<div class="ring-wrap"><div class="ring-inner"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(232,215,160,.1)" stroke-width="10"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+rc+'" stroke-width="10" stroke-dasharray="'+circ.toFixed(1)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/></svg><div class="ring-lbl"><div class="big">'+overall+'%</div><div class="sm">overall</div></div></div></div>'
     +'<div class="ring-summary">'+(overall<40?'Significant disconnection across multiple areas of your life.':overall<60?'Real connection in some areas — real gaps in others.':overall<75?'A meaningful foundation — with room to go deeper.':'Strong engagement across your life — depth is always worth pursuing.')+'</div>'
     +'<div class="score-cards"><div class="score-card"><div class="score-card-lbl">How others engage you</div><div class="score-card-val" style="color:'+dcolor(outAvg)+'">'+outAvg+'%</div><div class="score-card-tag">'+dtag(outAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+outAvg+'%;background:'+dcolor(outAvg)+'"></div></div></div><div class="score-card"><div class="score-card-lbl">How you engage others</div><div class="score-card-val" style="color:'+dcolor(selfAvg)+'">'+selfAvg+'%</div><div class="score-card-tag">'+dtag(selfAvg)+'</div><div class="score-bar"><div class="score-bar-fill" style="width:'+selfAvg+'%;background:'+dcolor(selfAvg)+'"></div></div></div></div>'
-    +'<div class="section-label">Scores by realm</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How they engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage them</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div>'
-    +'<div class="section-label">Connection dimensions</div><div class="dim-grid">'+dimHtml+'</div>'
-    +'<div class="section-label">Your engagement pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
+    +'<div class="section-label">Relationships</div><div class="realm-rows-card"><div class="chart-legend"><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#e8d7a0"></div>How they engage you</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:#9aa8b0"></div>How you engage them</div><div class="chart-legend-item"><div class="chart-legend-dot" style="background:rgba(201,122,90,.2);border:1px dashed rgba(201,122,90,.4)"></div>Disconnect gap</div></div>'+realmRows+'</div>'
+    +'<div class="section-label">Needs</div><div class="dim-grid">'+dimHtml+'</div>'
+    +'<div class="section-label">Engagement Pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
     +(()=>{
       const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
       const lowestRealm=realmsSorted[0];
