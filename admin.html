@@ -225,10 +225,10 @@ function badge(text, type){
 
 function pipelineProgress(row){
   const hasRelational = !!fmtDate(row[0]);
-  const hasInterior = !!fmtDate(row[43]);
-  const hasFollowup = row[52] && row[52].toString().toLowerCase() === 'yes';
-  const hasGuideCreated = !!fmtDate(row[54]);
-  const hasGuideSent = !!fmtDate(row[55]);
+  const hasInterior = !!fmtDate(row[100]);
+  const hasFollowup = row[145] && row[145].toString().toLowerCase() === 'yes';
+  const hasGuideCreated = !!fmtDate(row[147]);
+  const hasGuideSent = !!fmtDate(row[148]);
   const steps = [hasRelational, hasInterior, hasFollowup, hasGuideCreated, hasGuideSent];
   const done = steps.filter(Boolean).length;
   const pips = steps.map((s,i) => '<div class="pip'+(s?' done':i===done?' active':'')+'"></div>').join('');
@@ -249,14 +249,14 @@ function renderTable(rows){
     const email = row[2] || '—';
     const relDate = fmtDate(row[0]);
     const relOverall = row[3] ? row[3].toString() : '';
-    const intDate = fmtDate(row[43]);
-    const intOverall = row[42] ? row[42].toString() : '';
-    const relEmailSent = row[50] ? row[50].toString() : '';
-    const intEmailSent = row[51] ? row[51].toString() : '';
-    const followupReq  = row[52] ? row[52].toString() : '';
-    const followupDate = fmtDate(row[53]);
-    const guideCreated = fmtDate(row[54]);
-    const guideSent    = fmtDate(row[55]);
+    const intDate = fmtDate(row[100]);
+    const intOverall = row[99] ? row[99].toString() : '';
+    const relEmailSent = row[143] ? row[143].toString() : '';
+    const intEmailSent = row[144] ? row[144].toString() : '';
+    const followupReq  = row[145] ? row[145].toString() : '';
+    const followupDate = fmtDate(row[146]);
+    const guideCreated = fmtDate(row[147]);
+    const guideSent    = fmtDate(row[148]);
 
     const relEmailHtml = relEmailSent && relEmailSent.toLowerCase()==='yes'
       ? badge('✓ Sent','done')
@@ -291,7 +291,7 @@ function renderTable(rows){
       +'<td>'+(intDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
       +'<td>'+followupHtml+'</td>'
       +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      +'<td>'+(row[43]&&fmtDate(row[43]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+', event)">Build Guide</button>' : guideCreatedHtml)+'</td>'
+      +'<td>'+(row[100]&&fmtDate(row[100]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+', event)">Build Guide</button>' : guideCreatedHtml)+'</td>'
       +'<td>'+guideSentHtml+'</td>'
       +'<td>'+scoresHtml+'</td>'
       +'<td><div class="action-col">'
@@ -344,7 +344,7 @@ function viewScores(idx){
     +scoreRow('Family', row[6])
     +scoreRow('Friends', row[7])
     +scoreRow('Community', row[8])
-    +scoreRow('God', row[56])
+    +scoreRow('God', row[9])
     +(row[17] ? '<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem;padding:.35rem 0">Patterns: '+row[17]+'</div>' : '')
 
     +'<div class="modal-section">Relational — Dimensions</div>'
@@ -358,21 +358,21 @@ function viewScores(idx){
     +scoreRow('Freedom to Be Myself', row[16])
 
     +'<div class="modal-section">Interior Health — Themes</div>'
-    +scoreRow('Overall', row[42])
+    +scoreRow('Overall', row[99])
     +scoreRow('Grief & Loss', row[20])
-    +scoreRow('Shame & Guilt', row[37])
-    +scoreRow('Fear & Anxiety', row[38])
-    +scoreRow('Anger', row[39])
-    +scoreRow('Desire & Hope', row[40])
-    +scoreRow('Joy & Delight', row[41])
+    +scoreRow('Shame & Guilt', row[93])
+    +scoreRow('Fear & Anxiety', row[94])
+    +scoreRow('Anger', row[96])
+    +scoreRow('Desire & Hope', row[97])
+    +scoreRow('Joy & Delight', row[98])
 
     +'<div class="modal-section">Interior Health — Dimensions</div>'
-    +scoreRow('Awareness', row[44])
-    +scoreRow('Honesty', row[45])
-    +scoreRow('Movement', row[46])
-    +scoreRow('Safety', row[47])
-    +scoreRow('Direction', row[48])
-    +scoreRow('Peace', row[49]);
+    +scoreRow('Awareness', row[101])
+    +scoreRow('Honesty', row[102])
+    +scoreRow('Movement', row[103])
+    +scoreRow('Safety', row[104])
+    +scoreRow('Direction', row[105])
+    +scoreRow('Peace', row[106]);
 
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -380,7 +380,7 @@ function viewScores(idx){
 function markFollowup(idx){
   const row = allRows[idx];
   const email = row[2] || '';
-  const current = row[52] ? row[52].toString().toLowerCase() : '';
+  const current = row[145] ? row[145].toString().toLowerCase() : '';
   const newVal = current === 'yes' ? 'No' : 'Yes';
   const newDate = newVal === 'Yes' ? new Date().toLocaleString() : '';
 
@@ -456,7 +456,7 @@ function viewReport(idx, type) {
       row2('Family', row[6]),
       row2('Friends', row[7]),
       row2('Community', row[8]),
-      row2('Relationship with God', row[56])
+      row2('Relationship with God', row[9])
     ].join('');
     const dimRows = [
       row2('Being Seen', row[9]),
@@ -494,23 +494,23 @@ function viewReport(idx, type) {
   }
 
   if(type === 'interior') {
-    const overall = ps(row[42]);
+    const overall = ps(row[99]);
     const oc = dc(overall);
     const themeRows = [
       row2('Grief & Loss', row[20]),
-      row2('Shame & Guilt', row[37]),
-      row2('Fear & Anxiety', row[38]),
-      row2('Anger', row[39]),
-      row2('Desire & Hope', row[40]),
-      row2('Joy & Delight', row[41])
+      row2('Shame & Guilt', row[93]),
+      row2('Fear & Anxiety', row[94]),
+      row2('Anger', row[96]),
+      row2('Desire & Hope', row[97]),
+      row2('Joy & Delight', row[98])
     ].join('');
     const dimRows = [
-      row2('Awareness', row[44]),
-      row2('Honesty', row[45]),
-      row2('Movement', row[46]),
-      row2('Safety', row[47]),
-      row2('Direction', row[48]),
-      row2('Peace', row[49])
+      row2('Awareness', row[101]),
+      row2('Honesty', row[102]),
+      row2('Movement', row[103]),
+      row2('Safety', row[104]),
+      row2('Direction', row[105]),
+      row2('Peace', row[106])
     ].join('');
 
     html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Interior Health — '+name+'</title></head>'
@@ -547,7 +547,7 @@ async function buildGuide(idx, event){
   const email = row[2] || '';
 
   // Check they have at least interior scores
-  if(!row[43] || !fmtDate(row[43])){
+  if(!row[100] || !fmtDate(row[100])){
     alert(name + ' has not completed the Interior Health Assessment yet.');
     return;
   }
@@ -570,7 +570,7 @@ async function buildGuide(idx, event){
     family:    ps(row[6]),
     friends:   ps(row[7]),
     community: ps(row[8]),
-    god:       ps(row[56]),
+    god:       ps(row[9]),
     patterns:  row[17] || '',
     warnings:  row[18] || '',
     dim_seen:      ps(row[9]),
@@ -581,34 +581,34 @@ async function buildGuide(idx, event){
     dim_trust:     ps(row[14]),
     dim_calling:   ps(row[15]),
     dim_freedom:   ps(row[16]),
-    work_outward:      ps(row[26]),
-    work_self:         ps(row[27]),
-    partner_outward:   ps(row[28]),
-    partner_self:      ps(row[29]),
-    family_outward:    ps(row[30]),
-    family_self:       ps(row[31]),
-    friends_outward:   ps(row[32]),
-    friends_self:      ps(row[33]),
-    community_outward: ps(row[34]),
-    community_self:    ps(row[35]),
-    god_outward:       ps(row[57]),
-    god_self:          ps(row[58])
+    work_outward:      ps(row[21]),
+    work_self:         ps(row[22]),
+    partner_outward:   ps(row[23]),
+    partner_self:      ps(row[24]),
+    family_outward:    ps(row[25]),
+    family_self:       ps(row[26]),
+    friends_outward:   ps(row[27]),
+    friends_self:      ps(row[28]),
+    community_outward: ps(row[29]),
+    community_self:    ps(row[30]),
+    god_outward:       ps(row[31]),
+    god_self:          ps(row[32])
   };
 
   const hs = {
-    overall:   ps(row[42]),
+    overall:   ps(row[99]),
     grief:     ps(row[20]),
-    shame:     ps(row[37]),
-    fear:      ps(row[38]),
-    anger:     ps(row[39]),
-    desire:    ps(row[40]),
-    joy:       ps(row[41]),
-    awareness: ps(row[44]),
-    honesty:   ps(row[45]),
-    movement:  ps(row[46]),
-    safety:    ps(row[47]),
-    direction: ps(row[48]),
-    peace:     ps(row[49])
+    shame:     ps(row[93]),
+    fear:      ps(row[94]),
+    anger:     ps(row[96]),
+    desire:    ps(row[97]),
+    joy:       ps(row[98]),
+    awareness: ps(row[101]),
+    honesty:   ps(row[102]),
+    movement:  ps(row[103]),
+    safety:    ps(row[104]),
+    direction: ps(row[105]),
+    peace:     ps(row[106])
   };
 
   const guideData = {
