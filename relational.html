@@ -754,8 +754,6 @@ function renderResults(scores){
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div>'+(w.subtitle?'<div style="font-size:.75rem;color:#6a6258;letter-spacing:.04em;margin-bottom:6px;font-style:italic">'+w.subtitle+'</div>':'')+' <div class="warning-text">'+w.text+'</div></div></div>').join('');
 
   document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'
-    +'<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Heart Engagement Results</h2><p>'+headline+'</p></div>'
-
     +'<div class="section-label">Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
     +'<div class="section-label">Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
     +'<div class="section-label">Engagement Pattern</div><div class="pattern-grid">'+patternHtml+'</div>'
