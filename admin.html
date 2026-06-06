@@ -571,16 +571,16 @@ async function buildGuide(idx, event){
     friends:   ps(row[7]),
     community: ps(row[8]),
     god:       ps(row[9]),
-    patterns:  row[17] || '',
-    warnings:  row[18] || '',
-    dim_seen:      ps(row[9]),
-    dim_known:     ps(row[10]),
-    dim_voice:     ps(row[11]),
-    dim_belonging: ps(row[12]),
-    dim_support:   ps(row[13]),
-    dim_trust:     ps(row[14]),
-    dim_calling:   ps(row[15]),
-    dim_freedom:   ps(row[16]),
+    patterns:  row[18] || '',
+    warnings:  row[19] || '',
+    dim_seen:      ps(row[10]),
+    dim_known:     ps(row[11]),
+    dim_voice:     ps(row[12]),
+    dim_belonging: ps(row[13]),
+    dim_support:   ps(row[14]),
+    dim_trust:     ps(row[15]),
+    dim_calling:   ps(row[16]),
+    dim_freedom:   ps(row[17]),
     work_outward:      ps(row[21]),
     work_self:         ps(row[22]),
     partner_outward:   ps(row[23]),
@@ -592,14 +592,23 @@ async function buildGuide(idx, event){
     community_outward: ps(row[29]),
     community_self:    ps(row[30]),
     god_outward:       ps(row[31]),
-    god_self:          ps(row[32])
+    god_self:          ps(row[32]),
+    // Raw answers for cross-tab grid (columns AH-BQ, indices 33-92)
+    raw: {
+      work:      row.slice(33, 43),
+      partner:   row.slice(43, 53),
+      family:    row.slice(53, 63),
+      friends:   row.slice(63, 73),
+      community: row.slice(73, 83),
+      god:       row.slice(83, 93)
+    }
   };
 
   const hs = {
     overall:   ps(row[99]),
-    grief:     ps(row[20]),
-    shame:     ps(row[93]),
-    fear:      ps(row[94]),
+    grief:     ps(row[93]),
+    shame:     ps(row[94]),
+    fear:      ps(row[95]),
     anger:     ps(row[96]),
     desire:    ps(row[97]),
     joy:       ps(row[98]),
@@ -608,7 +617,16 @@ async function buildGuide(idx, event){
     movement:  ps(row[103]),
     safety:    ps(row[104]),
     direction: ps(row[105]),
-    peace:     ps(row[106])
+    peace:     ps(row[106]),
+    // Raw answers for cross-tab grid (columns CF-DF, indices 107-142)
+    raw: {
+      grief:   row.slice(107, 113),
+      shame:   row.slice(113, 119),
+      fear:    row.slice(119, 125),
+      anger:   row.slice(125, 131),
+      desire:  row.slice(131, 137),
+      joy:     row.slice(137, 143)
+    }
   };
 
   const guideData = {
