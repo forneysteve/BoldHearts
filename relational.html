@@ -743,15 +743,8 @@ function renderResults(scores){
   const headline=overall<40?'You may be carrying more invisibility than you realize':overall<60?'Real connections exist — and real gaps do too':overall<75?'You have a solid foundation with room to go deeper':'You\'re well-connected — and depth is always worth pursuing';
   const realmRows=REALMS.map(r=>{
     const s=realm[r.id];if(s.answered===0)return'';
-    const outCol=dcolor(s.outward); const selfCol=dcolor(s.self);
-    const outLabel=r.id==='god'?'How I engage God':r.id==='significant_other'?'How I engage my partner':'How I engage them';
-    const inLabel=r.id==='god'?'How God engages me':r.id==='significant_other'?'How my partner engages me':'How they engage me';
-    return '<div style="padding:.75rem;border-bottom:1px solid rgba(196,168,130,.06)">'
-      +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px">'
-      +'<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div>'
-      +barRow(outLabel, s.self, dtag(s.self), selfCol)
-      +barRow(inLabel, s.outward, dtag(s.outward), outCol)
-      +'</div>';
+    const col=dcolor(s.overall);
+    return barRow('<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px;margin-right:6px"></i>'+r.label, s.overall, dtag(s.overall), col);
   }).join('');;
   const dimScores=calcDimScores(realm);
   const dimHtml=dimScores.map(d=>{
@@ -761,10 +754,23 @@ function renderResults(scores){
   const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);const icon=tierIcon(s.overall);return'<div class="pattern-card '+p.cls+'" style="display:flex;gap:1rem;align-items:flex-start"><div style="flex-shrink:0;width:64px;text-align:center">'+icon+'</div><div><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div></div>';}).join('');
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div>'+(w.subtitle?'<div style="font-size:.75rem;color:#6a6258;letter-spacing:.04em;margin-bottom:6px;font-style:italic">'+w.subtitle+'</div>':'')+' <div class="warning-text">'+w.text+'</div></div></div>').join('');
 
+    const engagementRows=REALMS.map(r=>{
+    const s=realm[r.id];if(s.answered===0)return'';
+    const outCol=dcolor(s.outward); const selfCol=dcolor(s.self);
+    const outLabel=r.id==='god'?'How I engage God':r.id==='significant_other'?'How I engage my partner':'How I engage them';
+    const inLabel=r.id==='god'?'How God engages me':r.id==='significant_other'?'How my partner engages me':'How they engage me';
+    return '<div style="padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(196,168,130,.06)">'
+      +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px">'
+      +'<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div>'
+      +barRow(outLabel, s.self, dtag(s.self), selfCol)
+      +barRow(inLabel, s.outward, dtag(s.outward), outCol)
+      +'</div>';
+  }).join('');
   var _intro='<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>';
   var _hero='<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>';
   document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'+_intro+_hero+'<div class="section-label">Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
     +'<div class="section-label">Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
+    +'<div class="section-label">Engagement</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
     
     +(()=>{
       const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
