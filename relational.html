@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -254,7 +255,7 @@ footer a:hover{color:#e8d7a0}
     <div class="hero-meta">
       <span><i class="ti ti-clock"></i> About 10 minutes</span>
       <span><i class="ti ti-lock"></i> Private &amp; confidential</span>
-      <span><i class="ti ti-checklist"></i> 58 questions</span>
+      <span><i class="ti ti-checklist"></i> 60 questions</span>
     </div>
   </div>
 </section>
@@ -357,7 +358,9 @@ const REALMS=[
     {t:"I am always looking to God to provide for me emotionally, spiritually, physically, mentally, relationally, and financially.",self:true},
     {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
     {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
-    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true}
+    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true},
+    {t:"When I think about the last several weeks, I have been actively pursuing God in my spiritual walk.",self:true},
+    {t:"I feel directionless in my walk with God currently — I'm not sure where it's headed.",self:true,reverse:true}
   ]}
 ];
 const WARNINGS=[
@@ -388,8 +391,8 @@ function calcScores(){
     let rt=0,rn=0,st=0,sn=0,ot=0,on_=0;
     r.questions.forEach((q,i)=>{
       const v=answers[r.id+'_'+i];
-      if(v!==undefined){rt+=v;rn++;allT+=v;allN++;
-        if(q.self){st+=v;sn++;}else{ot+=v;on_++;}}
+      if(v!==undefined){const rv=q.reverse?(8-v):v;rt+=rv;rn++;allT+=rv;allN++;
+        if(q.self){st+=rv;sn++;}else{ot+=rv;on_++;}}
     });
     realm[r.id]={overall:rn>0?Math.round((rt/(rn*7))*100):0,
       outward:on_>0?Math.round((ot/(on_*7))*100):0,
@@ -617,7 +620,7 @@ function saveToSheets(scores){
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
     calling:getDim('calling'),freedom:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v5.2',
+    patterns:patterns,warnings:warningList,version:'v5.3',
     work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
@@ -709,7 +712,7 @@ function tierIcon(p) {
   if(pct >= 20) return `<img src="assets/images/lowfuel.jpg" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 4px;border-radius:4px">`;
   return `<img src="assets/images/batterydead.jpg" style="width:48px;height:48px;object-fit:contain;display:block;margin:0 auto 4px;border-radius:4px">`;
 }
-const GOD_QI_MAP={0:0,2:1,3:2,5:3,6:4,7:5,9:6,8:7};
+const GOD_QI_MAP={0:0,2:1,3:2,5:3,6:4,7:5,8:7,9:8};
 function calcDimScores(realm){
   return DIMS.map(d=>{
     let t=0,n=0;const realmScores=[];
