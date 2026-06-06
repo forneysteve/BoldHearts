@@ -16,7 +16,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;font-size:16px}
 body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#d4ccc4;background-color:#111111}
-a{color:#e8d7a0;text-decoration:none;transition:color .3s ease}
+a{color:#d4b96a;text-decoration:none;transition:color .3s ease}
 a:hover{color:#f5e8c8}
 ul{list-style:none}
 h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f0e8df;line-height:1.2}
@@ -25,13 +25,13 @@ h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:1.5rem}
 p{margin-bottom:1rem;max-width:720px}
 nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(17,17,17,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.1)}
 nav .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase}
-nav .logo span{color:#e8d7a0}
+nav .logo span{color:#d4b96a}
 nav .nav-links{display:flex;gap:2rem;list-style:none}
 nav .nav-links a{font-size:.85rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#a09890}
-nav .nav-links a:hover{color:#e8d7a0}
-.cta-nav{background-color:#e8d7a0;color:#111111 !important;padding:.5rem 1.25rem;border-radius:4px;font-weight:500 !important}
+nav .nav-links a:hover{color:#d4b96a}
+.cta-nav{background-color:#d4b96a;color:#111111 !important;padding:.5rem 1.25rem;border-radius:4px;font-weight:500 !important}
 .nav-toggle{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;z-index:1001;padding:4px}
-.nav-toggle span{display:block;width:24px;height:2px;background-color:#e8d7a0;border-radius:2px;transition:all .3s ease;transform-origin:center}
+.nav-toggle span{display:block;width:24px;height:2px;background-color:#d4b96a;border-radius:2px;transition:all .3s ease;transform-origin:center}
 .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
@@ -41,7 +41,7 @@ nav .nav-links a:hover{color:#e8d7a0}
 .nav-dropdown:hover .dropdown-menu,.nav-dropdown.open .dropdown-menu{display:block}
 .dropdown-menu li{list-style:none}
 .dropdown-menu li a{display:block;padding:.65rem 1.25rem;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a09890;white-space:nowrap;transition:color .2s,background .2s}
-.dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
+.dropdown-menu li a:hover{color:#d4b96a;background:rgba(232,215,160,.05)}
 .dropdown-menu li+li{border-top:1px solid rgba(232,215,160,.08)}
 .nav-dropdown>a::after{content:' ▾';font-size:.6rem;opacity:.6}
 .hero{position:relative;width:100%;min-height:35vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 3rem;background-color:#1a1714;overflow:hidden}
@@ -231,7 +231,7 @@ const THEMES = [
     {t:"Others who know me well would say I don't reach for much anymore — that hope has gone quiet in me.",dim:'identity_other',reverse:true},
     {t:"I don't consider myself a very hopeful person — wanting things feels risky or pointless.",dim:'identity_self',reverse:true}
   ]},
-  {id:'joy',label:'Joy & Delight',icon:'ti-sun',color:'#b5c4a0',desc:'Think honestly about your capacity to receive goodness, beauty, and pleasure.',questions:[
+  {id:'joy',label:'Joy & Delight',icon:'ti-sun',color:'#6bc45e',desc:'Think honestly about your capacity to receive goodness, beauty, and pleasure.',questions:[
     {t:"When I look at my life right now, I can point to specific things that genuinely bring me delight — not vague contentment, actual delight.",dim:'awareness'},
     {t:"When something good happens, I let it land — I don't immediately brace for it to end or find a reason it doesn't count.",dim:'honesty'},
     {t:"When I compare now to a year ago, my capacity for joy and delight has not shrunk — if anything it has grown.",dim:'movement'},
@@ -452,14 +452,14 @@ async function submitGate(){
       const extText=extAvgE<40?'The heart has gone quiet in these areas. Desire and joy have dimmed — worth noticing, not judging.':extAvgE<55?'There is still some life here — desire and joy that haven\'t been fully extinguished.':'The heart is still alive and receiving. That is not nothing — it is where movement begins.';
       const themeRows=THEMES.map(t=>{
         const pct=sc.theme[t.id]?sc.theme[t.id].overall:0;
-        const col=pct>=80?'#6bc45e':pct>=60?'#d4b96a':pct>=40?'#d4b96a':pct>=20?'#c97a5a':'#8a2a2a';
+        const col=pct>=80?'#6bc45e':pct>=60?'#c4a882':pct>=40?'#d4884a':pct>=20?'#c97a5a':'#8a2a2a';
         const bar=Math.round(pct/10);
         const barHtml='<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(bar)+'&#9617;'.repeat(10-bar)+'</span>';
         return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+t.label+'</td><td style="padding:8px 12px;font-size:12px;border-bottom:1px solid #2a2825">'+barHtml+'</td><td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+engineTag(pct)+'</td></tr>';
       }).join('');
       const dimRows=DIMS.map(d=>{
         const pct=sc.dimScores[d]||0;
-        const col=pct>=80?'#6bc45e':pct>=60?'#d4b96a':pct>=40?'#d4b96a':pct>=20?'#c97a5a':'#8a2a2a';
+        const col=pct>=80?'#6bc45e':pct>=60?'#c4a882':pct>=40?'#d4884a':pct>=20?'#c97a5a':'#8a2a2a';
         const bar=Math.round(pct/10);
         const barHtml='<span style="color:'+col+';font-family:monospace;font-size:11px;letter-spacing:1px">'+'&#9608;'.repeat(bar)+'&#9617;'.repeat(10-bar)+'</span>';
         const desc={awareness:'Awareness — can you name what you\'re carrying specifically?',honesty:'Honesty — can you look without minimizing?',movement:'Movement — are you moving through or still stuck?',safety:'Safety — is this safe to exist in you?',direction:'Direction — can you see where this is pointing?',peace:'Peace — is there settledness even amid what is unresolved?'}[d];
@@ -664,7 +664,7 @@ function renderResults(scores,prevRow){
     + identityRows
     + '</div>' : '';
 
-  let html = '<div class="main"><div class="results-page">';
+  let html = '<div class="main"><div class="results-page">' + '<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you for taking the assessment. These are your results at this point in time.</p></div>';
   html += '<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Interior Results</h2><p>An honest picture of the condition of your heart.</p></div>';
   html += '<div class="section-label">Emotions</div>';
   html += themeRings;
