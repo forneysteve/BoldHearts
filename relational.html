@@ -661,6 +661,8 @@ function submitGate(){
   }).catch(e=>console.error('Email error:',e));
 } catch(ejsErr) { console.warn('EmailJS blocked:', ejsErr); }
   renderResults(scores);
+  const hero=document.querySelector('.hero');if(hero)hero.style.display='none';
+  const divider=document.querySelector('.divider');if(divider)divider.style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 const REALM_PATTERNS={
@@ -778,6 +780,8 @@ function renderResults(scores){
 function retake(){
   answers={};userName='';userEmail='';
   document.getElementById('progress-section').style.display='';
+  const hero2=document.querySelector('.hero');if(hero2)hero2.style.display='';
+  const divider2=document.querySelector('.divider');if(divider2)divider2.style.display='';
   renderSurvey();window.scrollTo({top:0,behavior:'smooth'});
 }
 document.getElementById('nav-toggle').addEventListener('click',function(){
