@@ -270,26 +270,7 @@ function totalAns(){ return Object.keys(answers).length; }
 function dcolor(p){ return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a'; }
 function dtag(p){ return p>=80?'Running Clean':p>=60?'Needs Maintenance':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off'; }
 
-function gapInsight(theme){
-  const ids = Object.keys(theme).filter(id=>theme[id]&&theme[id].overall>0);
-  if(ids.length<2) return '';
-  const insights = [];
-  if(theme.grief&&theme.desire&&theme.desire.overall-theme.grief.overall>=15)
-    insights.push('Your Grief is significantly lower than your Desire — the wanting is still there, but something unprocessed may be blocking it from moving.');
-  if(theme.fear&&theme.shame&&theme.fear.overall<50&&theme.shame.overall<50)
-    insights.push('Your Fear and Shame scores are both low — that combination usually means something is being both hidden and avoided at the same time.');
-  const joyScore = theme.joy?theme.joy.overall:100;
-  const avgOthers = ids.filter(id=>id!=='joy').reduce((a,id)=>a+theme[id].overall,0)/(ids.length-1);
-  if(theme.joy&&joyScore<45&&joyScore<avgOthers-10)
-    insights.push("Your Joy is your lowest score — when joy drops this low, it's usually not about circumstances. It's about what has accumulated underneath.");
-  if(theme.anger&&theme.anger.overall<40)
-    insights.push('Your Anger score is very low — low anger rarely means nothing is wrong. It usually means something has gone underground rather than been processed.');
-  if(insights.length===0) return '';
-  return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-left:3px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
-    +'<div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem">What the Pattern Is Telling You</div>'
-    +insights.map(i=>'<p style="font-size:.88rem;color:#c0b8b0;line-height:1.9;margin-bottom:.6rem">'+i+'</p>').join('')
-    +'</div>';
-}
+
 
 function calcScores(){
   const theme={};
