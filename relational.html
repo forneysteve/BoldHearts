@@ -447,10 +447,10 @@ function getEngagementPatterns(scores){
 function buildHtmlEmail(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
-  const rc=overall>=70?'#b5c4a0':overall>=50?'#e8d7a0':'#c97a5a';
-  const rtag=overall>=70?'Running Clean':overall>=50?'Warning Light':overall>=35?'Running Out of Fuel':'Engine Off';
-  function dc(p){return p>=70?'#b5c4a0':p>=50?'#e8d7a0':'#c97a5a';}
-  function dt(p){return p>=70?'Running Clean':p>=50?'Warning Light':p>=35?'Running Out of Fuel':'Engine Off';}
+  const rc=overall>=80?'#6bc45e':overall>=60?'#d4b96a':overall>=40?'#d4b96a':overall>=20?'#c97a5a':'#8a2a2a';
+  const rtag=overall>=80?'Running Clean':overall>=60?'Maint Reqd':overall>=40?'Check Engine':overall>=20?'Running Out of Fuel':'Engine Off';
+  function dc(p){return p>=80?'#6bc45e':p>=60?'#d4b96a':p>=40?'#d4b96a':p>=20?'#c97a5a':'#8a2a2a';}
+  function dt(p){return p>=80?'Running Clean':p>=60?'Maint Reqd':p>=40?'Check Engine':p>=20?'Running Out of Fuel':'Engine Off';}
   function bar(pct,col){const n=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';}
   const realmRowsHtml=ar.map(r=>{const s=realm[r.id];const col=dc(s.overall);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td><td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+dt(s.overall)+'</td></tr>';}).join('');
   const dimScores=calcDimScores(realm);
@@ -620,7 +620,7 @@ function saveToSheets(scores){
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
     calling:getDim('calling'),freedom:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v5.3',
+    patterns:patterns,warnings:warningList,version:'v5.4',
     work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
