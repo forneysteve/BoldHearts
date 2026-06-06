@@ -511,7 +511,7 @@ const lowRealms = REALMS.filter(r=>r.id!=='significant_other'&&(scores.realm[r.i
       };
 
       // Find standout realms (highest and lowest)
-      const realmScores = REALMS.filter(r=>r.id!=='significant_other').map(r=>({id:r.id, score: scores.realms[r.id]?.overall||0}));
+      const realmScores = REALMS.filter(r=>r.id!=='significant_other').map(r=>({id:r.id, score: scores.realm[r.id]?.overall||0}));
       const sortedRealms = realmScores.sort((a,b)=>b.score-a.score);
       const topRealm = sortedRealms[0];
       const bottomRealm = sortedRealms[sortedRealms.length-1];
