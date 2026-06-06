@@ -163,7 +163,7 @@ footer a:hover{color:#c4a882}
 <div class="progress-wrap" id="progress-section">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-lbl">0 of 36 answered</div>
+    <div class="progress-label" id="progress-lbl">0 of 48 answered</div>
   </div>
 </div>
 <div id="app"></div>
@@ -352,7 +352,7 @@ function renderSurvey(){
       qNum++;
     });
   });
-  html += '<div class="submit-section"><div class="submit-meta">Answer all 36 questions honestly — there are no right answers</div><button class="sub-btn" onclick="trySubmit()">See My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  html += '<div class="submit-section"><div class="submit-meta">Answer all 48 questions honestly — there are no right answers</div><button class="sub-btn" onclick="trySubmit()">See My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
   document.getElementById('app').innerHTML = html;
   updateProgress();
 }
@@ -595,15 +595,89 @@ function renderResults(scores,prevRow){
     }).join('')
     +'</div>';
 
+  // ── INITIAL REVIEW ──────────────────────────────────────────
+  const themeEntries = THEMES.map(t=>({label:t.label,score:theme[t.id]?theme[t.id].overall:0})).filter(t=>t.score>0);
+  const dimEntries = DIMS.map(d=>({label:DIM_LABELS[d],score:dimScores[d]||0})).filter(d=>d.score>0);
+
+  const highThemes = [...themeEntries].sort((a,b)=>b.score-a.score).slice(0,2).filter(t=>t.score>=60);
+  const lowThemes  = [...themeEntries].sort((a,b)=>a.score-b.score).slice(0,2).filter(t=>t.score<60);
+  const highDims   = [...dimEntries].sort((a,b)=>b.score-a.score).slice(0,2).filter(d=>d.score>=60);
+  const lowDims    = [...dimEntries].sort((a,b)=>a.score-b.score).slice(0,2).filter(d=>d.score<60);
+
+  const highThemeText = highThemes.length > 0
+    ? 'Your highest scores in the Emotions are <strong style="color:#6bc45e">' + highThemes.map(t=>t.label).join(' and ') + '</strong> — these areas have some openness and movement.'
+    : 'No standout high points in the Emotions — the heart is carrying weight across the board.';
+
+  const lowThemeText = lowThemes.length > 0
+    ? 'The areas carrying the most weight are <strong style="color:#c97a5a">' + lowThemes.map(t=>t.label).join(' and ') + '</strong> — these deserve real attention.'
+    : '';
+
+  const highDimText = highDims.length > 0
+    ? 'Within the Postures, <strong style="color:#6bc45e">' + highDims.map(d=>d.label).join(' and ') + '</strong> show the most capacity — the heart can work with what\'s there.'
+    : '';
+
+  const lowDimText = lowDims.length > 0
+    ? 'The postures showing the most restriction are <strong style="color:#c97a5a">' + lowDims.map(d=>d.label).join(' and ') + '</strong> — these are worth exploring carefully.'
+    : '';
+
+  const initialReview = '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.15);border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:1.5rem">'
+    + '<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:500">Initial Review</div>'
+    + '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">' + highThemeText + '</p>'
+    + (lowThemeText ? '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">' + lowThemeText + '</p>' : '')
+    + (highDimText  ? '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">' + highDimText  + '</p>' : '')
+    + (lowDimText   ? '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">' + lowDimText   + '</p>' : '')
+    + '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:1.25rem">There is a lot to uncover here. What the scores show is only the beginning — the real conversation happens when we sit down together and look at the whole picture.</p>'
+    + '<a href="mailto:admin@boldhearts.org?subject=Discovery Call — Interior Health Assessment&body=Hi Steve, I just completed the Interior Health Assessment and would love to schedule a Discovery Call." style="display:inline-block;font-family:Inter,sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#111111;background:#c4a882;padding:.75rem 1.75rem;border-radius:4px;text-decoration:none">Schedule Time with Steve &rarr;</a>'
+    + '</div>';
+
+  // ── IDENTITY CHART ───────────────────────────────────────────
+  const identityRows = THEMES.map(t => {
+    const othersScore = Math.round(((answers[t.id+'_6']!==undefined ? (t.questions[6].reverse?(8-answers[t.id+'_6']):answers[t.id+'_6']) : 0) / 7) * 100);
+    const selfScore   = Math.round(((answers[t.id+'_7']!==undefined ? (t.questions[7].reverse?(8-answers[t.id+'_7']):answers[t.id+'_7']) : 0) / 7) * 100);
+    if(!othersScore && !selfScore) return '';
+    const gap = othersScore - selfScore;
+    const absGap = Math.abs(gap);
+    const gapCol = absGap < 10 ? '#6a6258' : gap > 0 ? '#c97a5a' : '#6bc45e';
+    const gapBg  = absGap < 10 ? 'rgba(106,98,88,.1)' : gap > 0 ? 'rgba(201,122,90,.1)' : 'rgba(107,196,94,.08)';
+    const gapTxt = absGap < 10 ? 'aligned' : (gap > 0 ? '+' : '') + gap + '%';
+    const othCol = dcolor(othersScore);
+    const selCol = '#7a6a9a';
+    return '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(196,168,130,.06)">'
+      + '<div style="font-size:.72rem;color:#a09890;margin-bottom:6px;letter-spacing:.03em">'+t.label+'</div>'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">'
+      + '<div style="font-size:.68rem;color:#6a6258;width:72px;flex-shrink:0;text-align:right">Others see</div>'
+      + '<div style="flex:1;height:10px;border-radius:3px;overflow:hidden;position:relative;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+      + '<div style="position:absolute;left:0;top:0;height:100%;width:'+othersScore+'%;background:'+othCol+';border-radius:3px 0 0 3px"></div></div>'
+      + '<span style="font-size:.68rem;color:'+gapCol+';background:'+gapBg+';padding:1px 6px;border-radius:3px;font-weight:500;min-width:44px;text-align:center">'+gapTxt+'</span>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<div style="font-size:.68rem;color:#6a6258;width:72px;flex-shrink:0;text-align:right">You see</div>'
+      + '<div style="flex:1;height:10px;border-radius:3px;overflow:hidden;position:relative;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+      + '<div style="position:absolute;left:0;top:0;height:100%;width:'+selfScore+'%;background:'+selCol+';border-radius:3px 0 0 3px"></div></div>'
+      + '<span style="min-width:44px"></span>'
+      + '</div>'
+      + '</div>';
+  }).filter(Boolean).join('');
+
+  const identityChart = identityRows ? '<div class="section-label">Identity</div>'
+    + '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.15);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
+    + '<div style="display:flex;gap:1.5rem;margin-bottom:1rem;font-size:.72rem;color:#6a6258">'
+    + '<span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d4b96a;flex-shrink:0"></span>How others see you</span>'
+    + '<span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#7a6a9a;flex-shrink:0"></span>How you see yourself</span>'
+    + '</div>'
+    + identityRows
+    + '</div>' : '';
+
   let html = '<div class="main"><div class="results-page">';
   html += '<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Interior Results</h2><p>An honest picture of the condition of your heart.</p></div>';
-  html += overallRing;
   html += '<div class="section-label">Emotions</div>';
   html += themeRings;
-  html += splitCards;
-  html += gapInsight(theme);
   html += '<div class="section-label">Postures</div>';
   html += dimBarsHtml;
+  html += identityChart;
+  html += initialReview;
+  html += splitCards;
+  html += gapInsight(theme);
   html += '<div class="discovery-card"><div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem">Next Step</div><h3>Steve will put your complete guide together.</h3>';
   html += '<p>These scores give us a real picture of what\'s happening in your interior life. Schedule a Discovery Call and Steve will bring both your Relational Health and Interior Health scores together into a personal guide \u2014 written specifically for you, not generated by an algorithm.</p>';
   html += '<a href="mailto:admin@boldhearts.org?subject=Discovery Call — Interior Health Assessment&body=Hi Steve, I just completed the Interior Health Assessment and would love to schedule a Discovery Call." class="discovery-btn">Schedule a Discovery Call</a>';
