@@ -177,8 +177,8 @@ footer a:hover{color:#c4a882}
 const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const SCALE = [{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
-const DIMS = ['awareness','honesty','movement','safety','direction','peace'];
-const DIM_LABELS = {awareness:'Awareness',honesty:'Honesty',movement:'Movement',safety:'Safety',direction:'Direction',peace:'Peace'};
+const DIMS = ['awareness','honesty','movement','safety','direction','peace','identity_other','identity_self'];
+const DIM_LABELS = {awareness:'Awareness',honesty:'Honesty',movement:'Movement',safety:'Safety',direction:'Direction',peace:'Peace',identity_other:'Identifying',identity_self:'Identified'};
 
 const THEMES = [
   {id:'grief',label:'Grief & Loss',icon:'ti-heart-broken',color:'#a09890',desc:'Think honestly about the losses, disappointments, and hard seasons of your life.',questions:[
@@ -280,8 +280,8 @@ function gapInsight(theme){
 
 function calcScores(){
   const theme={};
-  const dim={awareness:0,honesty:0,movement:0,safety:0,direction:0,peace:0};
-  const dimN={awareness:0,honesty:0,movement:0,safety:0,direction:0,peace:0};
+  const dim={awareness:0,honesty:0,movement:0,safety:0,direction:0,peace:0,identity_other:0,identity_self:0};
+  const dimN={awareness:0,honesty:0,movement:0,safety:0,direction:0,peace:0,identity_other:0,identity_self:0};
   let allT=0,allN=0;
   THEMES.forEach(t=>{
     let tt=0,tn=0;
@@ -290,7 +290,14 @@ function calcScores(){
       if(v!==undefined){
         const scored=q.reverse?(8-v):v;
         tt+=scored;tn++;allT+=scored;allN++;
-        if(q.dim){dim[q.dim]=(dim[q.dim]||0)+scored;dimN[q.dim]=(dimN[q.dim]||0)+1;}
+        if(q.dim){
+          const negThemes=['grief','shame','fear','anger'];
+          let dimScored=scored;
+          if((q.dim==='identity_other'||q.dim==='identity_self')&&negThemes.indexOf(t.id)>=0){
+            dimScored=8-v; // reverse for negative themes
+          }
+          dim[q.dim]=(dim[q.dim]||0)+dimScored;dimN[q.dim]=(dimN[q.dim]||0)+1;
+        }
       }
     });
     theme[t.id]={overall:tn>0?Math.round((tt/(tn*7))*100):0,answered:tn};
@@ -444,7 +451,7 @@ async function submitGate(){
         const desc={awareness:'Awareness — can you name what you\'re carrying specifically?',honesty:'Honesty — can you look without minimizing?',movement:'Movement — are you moving through or still stuck?',safety:'Safety — is this safe to exist in you?',direction:'Direction — can you see where this is pointing?',peace:'Peace — is there settledness even amid what is unresolved?'}[d];
         return '<tr><td style="padding:6px 12px;font-size:12px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+desc+'</td><td style="padding:6px 12px;font-size:11px;border-bottom:1px solid #2a2825">'+barHtml+'</td><td style="padding:6px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825">'+dimTag(pct)+'</td></tr>';
       }).join('');
-      const htmlEmail='<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%"><tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center"><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#c4a882">Hearts</span></p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Interior Health Assessment</p></td></tr><tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px"><p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 8px">'+userName+', here are your Interior Health Assessment results.</p><p style="font-size:13px;color:#a09890;line-height:1.9;margin:0 0 20px">What you\'ll find below is an honest look at what you carry — grief, shame, fear, anger, desire, joy — and how you navigate it. These are not diagnoses. They are an invitation to look honestly at the interior life that shapes everything else.</p><div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 6px">Overall</p><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+(sc.overall>=80?'#6bc45e':sc.overall>=60?'#d4b96a':sc.overall>=40?'#d4b96a':sc.overall>=20?'#c97a5a':'#8a2a2a')+';margin:0">'+scores.overall+'% — '+engineTag(sc.overall)+'</p></div><table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px"><tr><td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+(intAvgE>=80?'#6bc45e':intAvgE>=60?'#d4b96a':intAvgE>=40?'#d4b96a':'#c97a5a')+';border-radius:4px;padding:14px 16px;vertical-align:top"><p style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">What You Carry</p><p style="font-size:12px;color:#c0b8b0;line-height:1.8;margin:0">'+intText+'</p></td><td width="4%"></td><td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+(extAvgE>=80?'#6bc45e':extAvgE>=60?'#d4b96a':extAvgE>=40?'#d4b96a':'#c97a5a')+';border-radius:4px;padding:14px 16px;vertical-align:top"><p style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">What Opens You</p><p style="font-size:12px;color:#c0b8b0;line-height:1.8;margin:0">'+extText+'</p></td></tr></table><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Scores by Theme</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+themeRows+'</tbody></table><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">How You Navigate What You Carry</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+(function(){
+      const htmlEmail='<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%"><tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center"><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#c4a882">Hearts</span></p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Interior Health Assessment</p></td></tr><tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px"><p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 8px">'+userName+', here are your Interior Health Assessment results.</p><p style="font-size:13px;color:#a09890;line-height:1.9;margin:0 0 20px">What you\'ll find below is an honest look at what you carry — grief, shame, fear, anger, desire, joy — and how you navigate it. These are not diagnoses. They are an invitation to look honestly at the interior life that shapes everything else.</p><div style="text-align:center;padding:16px;background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 6px">Overall</p><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:'+(sc.overall>=80?'#6bc45e':sc.overall>=60?'#d4b96a':sc.overall>=40?'#d4b96a':sc.overall>=20?'#c97a5a':'#8a2a2a')+';margin:0">'+scores.overall+'% — '+engineTag(sc.overall)+'</p></div><table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px"><tr><td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+(intAvgE>=80?'#6bc45e':intAvgE>=60?'#d4b96a':intAvgE>=40?'#d4b96a':'#c97a5a')+';border-radius:4px;padding:14px 16px;vertical-align:top"><p style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">What You Carry</p><p style="font-size:12px;color:#c0b8b0;line-height:1.8;margin:0">'+intText+'</p></td><td width="4%"></td><td width="48%" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+(extAvgE>=80?'#6bc45e':extAvgE>=60?'#d4b96a':extAvgE>=40?'#d4b96a':'#c97a5a')+';border-radius:4px;padding:14px 16px;vertical-align:top"><p style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px">What Opens You</p><p style="font-size:12px;color:#c0b8b0;line-height:1.8;margin:0">'+extText+'</p></td></tr></table><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Emotions</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+themeRows+'</tbody></table><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Postures</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+(function(){
         const themeComments = {
           grief: { high: "Your grief score reflects real access — you can name loss and let it move through you rather than around you. That is not weakness; it is one of the harder forms of strength.", low: "Grief is scoring low. Unprocessed loss has a way of going quiet rather than going away — it shows up sideways in anger, numbness, or disconnection." },
           shame: { high: "Shame is at a healthy level — you can hold imperfection without it defining you. That kind of self-compassion is harder to build than most people realize.", low: "Shame is one of your higher scores. Shame at this level tends to run quietly beneath everything — shaping how safe it feels to be known, to fail, to need." },
@@ -553,12 +560,12 @@ function renderResults(scores,prevRow){
     +'<p style="font-size:.88rem;color:#c0b8b0;line-height:1.85;margin:0">'+extText+'</p>'
     +'</div></div>';
 
-  const dimDescs={awareness:"Awareness — can you name what you're carrying specifically?",honesty:"Honesty — can you look without minimizing?",movement:"Movement — are you moving through or still stuck?",safety:"Safety — is this safe to exist in you?",direction:"Direction — can you see where this is pointing?",peace:"Peace — is there settledness even amid what is unresolved?"};
+  const dimDescs={awareness:"Awareness — can you name what you're carrying specifically?",honesty:"Honesty — can you look without minimizing?",movement:"Movement — are you moving through or still stuck?",safety:"Safety — is this safe to exist in you?",direction:"Direction — can you see where this is pointing?",peace:"Peace — is there settledness even amid what is unresolved?",identity_other:"Identifying — do others see these patterns in you?",identity_self:"Identified — do you see these patterns in yourself?"};
   const dimBarsHtml='<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.5rem;margin-bottom:1.5rem">'
-    +'<div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:1.25rem">How You Navigate What You Carry</div>'
+    +'<div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:1.25rem">Postures</div>'
     +DIMS.map(d=>{
       const pct=dimScores[d]||0; const col=dcolor(pct);
-      const dTag=pct>=70?'Strong':pct>=55?'Present':pct>=40?'Developing':'Needs attention';
+      const dTag=dtag(pct);
       return '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(196,168,130,.05)">'
         +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">'
         +'<div><span style="font-size:.82rem;font-weight:500;color:#f0e8df">'+DIM_LABELS[d]+'</span>'
@@ -574,11 +581,11 @@ function renderResults(scores,prevRow){
   let html = '<div class="main"><div class="results-page">';
   html += '<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Interior Results</h2><p>An honest picture of the condition of your heart.</p></div>';
   html += overallRing;
-  html += '<div class="section-label">Scores by Theme</div>';
+  html += '<div class="section-label">Emotions</div>';
   html += themeRings;
   html += splitCards;
   html += gapInsight(theme);
-  html += '<div class="section-label">Scores by Dimension</div>';
+  html += '<div class="section-label">Postures</div>';
   html += dimBarsHtml;
   html += '<div class="discovery-card"><div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem">Next Step</div><h3>Steve will put your complete guide together.</h3>';
   html += '<p>These scores give us a real picture of what\'s happening in your interior life. Schedule a Discovery Call and Steve will bring both your Relational Health and Interior Health scores together into a personal guide \u2014 written specifically for you, not generated by an algorithm.</p>';
