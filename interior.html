@@ -516,6 +516,11 @@ function barRowIndent(label, pct, tag, col) {
 
 function emotionTag(p){ return p>=80?'Healthy Engagement':p>=60?'Room for Growth':p>=40?'Guarded':p>=20?'Suppressed':'Shut Down'; }
 
+
+function postureTag(p, label){ 
+  const deg = p>=80?'Strong':p>=60?'Moderate':p>=40?'Mild':p>=20?'Faint':'No';
+  return deg+' '+label;
+}
 function identityTag(p){ return p>=80?'Strongly Identified':p>=60?'Moderately Identified':p>=40?'Mildly Identified':p>=20?'Faintly Identified':'Not Identified'; }
 function barRow(label, pct, tag, col) {
   const fillW = Math.round(pct);
@@ -577,7 +582,7 @@ function renderResults(scores,prevRow){
     +''
     +DIMS.filter(d=>d!=='identity_other'&&d!=='identity_self').map(d=>{
       const pct=dimScores[d]||0; const col=dcolor(pct);
-      return barRow(DIM_LABELS[d], pct, dtag(pct), col);
+      return barRow(DIM_LABELS[d], pct, postureTag(pct, DIM_LABELS[d]), col);
     }).join('')
     +'</div>';
 
