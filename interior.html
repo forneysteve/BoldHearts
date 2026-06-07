@@ -618,44 +618,30 @@ function renderResults(scores,prevRow){
     const othersScore = Math.round(((answers[t.id+'_6']!==undefined ? (t.questions[6].reverse?(8-answers[t.id+'_6']):answers[t.id+'_6']) : 0) / 7) * 100);
     const selfScore   = Math.round(((answers[t.id+'_7']!==undefined ? (t.questions[7].reverse?(8-answers[t.id+'_7']):answers[t.id+'_7']) : 0) / 7) * 100);
     if(!othersScore && !selfScore) return '';
-    const gap = othersScore - selfScore;
-    const absGap = Math.abs(gap);
-    const gapCol = absGap < 10 ? '#6a6258' : gap > 0 ? '#c97a5a' : '#6bc45e';
-    const gapBg  = absGap < 10 ? 'rgba(106,98,88,.1)' : gap > 0 ? 'rgba(201,122,90,.1)' : 'rgba(107,196,94,.08)';
-    const gapTxt = absGap < 10 ? 'aligned' : (gap > 0 ? '+' : '') + gap + '%';
+    const gap = Math.abs(othersScore - selfScore);
+    const gapBadge = gap >= 15
+      ? '<span style="font-size:.65rem;color:#c97a5a;background:rgba(201,122,90,.12);padding:1px 7px;border-radius:3px;margin-left:8px">gap</span>'
+      : '';
     const othCol = dcolor(othersScore);
     const selCol = '#7a6a9a';
-    return '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(196,168,130,.06)">'
-      + '<div style="font-size:.72rem;color:#a09890;margin-bottom:6px;letter-spacing:.03em">'+t.label+'</div>'
-      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">'
-      + '<div style="font-size:.68rem;color:#6a6258;width:72px;flex-shrink:0;text-align:right">Others see</div>'
-      + '<div style="flex:1;height:10px;border-radius:3px;overflow:hidden;position:relative;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
-      + '<div style="position:absolute;left:0;top:0;height:100%;width:'+othersScore+'%;background:'+othCol+';border-radius:3px 0 0 3px"></div></div>'
-      + '<span style="font-size:.68rem;color:'+gapCol+';background:'+gapBg+';padding:1px 6px;border-radius:3px;font-weight:500;min-width:44px;text-align:center">'+gapTxt+'</span>'
-      + '</div>'
-      + '<div style="display:flex;align-items:center;gap:8px">'
-      + '<div style="font-size:.68rem;color:#6a6258;width:72px;flex-shrink:0;text-align:right">You see</div>'
-      + '<div style="flex:1;height:10px;border-radius:3px;overflow:hidden;position:relative;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
-      + '<div style="position:absolute;left:0;top:0;height:100%;width:'+selfScore+'%;background:'+selCol+';border-radius:3px 0 0 3px"></div></div>'
-      + '<span style="min-width:44px"></span>'
-      + '</div>'
-      + '</div>';
+    return '<div style="padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(196,168,130,.06)">'
+      +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px">'
+      +'<i class="ti '+t.icon+'" style="color:'+t.color+';font-size:12px"></i>'+t.label+gapBadge+'</div>'
+      +barRowIndent('How others see me', othersScore, '', othCol)
+      +barRowIndent('How I see myself', selfScore, '', selCol)
+      +'</div>';
   }).filter(Boolean).join('');
 
-  const identityChart = identityRows ? '<div class="section-label">Identity</div>'
-    + '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.15);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem">'
-    + '<div style="display:flex;gap:1.5rem;margin-bottom:1rem;font-size:.72rem;color:#6a6258">'
-    + '<span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d4b96a;flex-shrink:0"></span>How others see you</span>'
-    + '<span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#7a6a9a;flex-shrink:0"></span>How you see yourself</span>'
-    + '</div>'
-    + identityRows
-    + '</div>' : '';
+  const identityChart = identityRows
+    ? '<div class="section-label">Heart Health Scores Across the Following Identity Dimensions</div>'
+    + '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1.5rem">'+identityRows+'</div>'
+    : '';
 
   let html = '<div class="main"><div class="results-page">' + '<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+userName+'. These are your results at this point in time.</p></div>';
   html += '<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Interior Results</h2><p>An honest picture of the condition of your heart.</p></div>';
-  html += '<div class="section-label">Emotions</div>';
+  html += '<div class="section-label">Heart Health Scores Across the Following Emotions</div>';
   html += themeRings;
-  html += '<div class="section-label">Postures</div>';
+  html += '<div class="section-label">Heart Health Scores Across the Following Postures</div>';
   html += dimBarsHtml;
   html += identityChart;
 
