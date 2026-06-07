@@ -693,7 +693,7 @@ const DIMS=[
   {id:'belonging',name:'Belonging',qi:5,desc:(p)=>p>=70?'You are genuinely wanted and at home in the key relationships of your life.':p>=45?'You have access to your relationships, but may not always be truly inside them.':'You are often on the edges — present, but not really included. That gap is real.'},
   {id:'support',name:'Receiving Support',qi:6,desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not be confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
   {id:'trust',name:'Trust & Safety',qi:7,desc:(p)=>p>=70?'There is emotional safety to be imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
-  {id:'calling',name:'Calling',qi:8,desc:(p)=>p>=70?'You know what you are built for and the people around you know it and engage it.':p>=45?'You have some sense of calling, but it may not be clearly named or actively supported by those around you.':'The connection between who you are and what you do is thin or absent. That gap has a cost.'},
+  {id:'calling',name:'Calling / Purpose',qi:8,desc:(p)=>p>=70?'You know what you are built for and the people around you know it and engage it.':p>=45?'You have some sense of calling, but it may not be clearly named or actively supported by those around you.':'The connection between who you are and what you do is thin or absent. That gap has a cost.'},
   {id:'fullself',name:'Freedom to Be Myself',qi:9,desc:(p)=>p>=70?'You are free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You have some freedom to be yourself, but in certain contexts there is still pressure to perform or prove your worth.':'Your place in relationships may be conditional on what you do or produce. The freedom to simply be yourself is thin or absent.'}
 ];
 
@@ -768,15 +768,15 @@ function renderResults(scores){
     return '<div style="padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(196,168,130,.06)">'
       +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px">'
       +'<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div>'
-      +barRow(outLabel, s.self, dtag(s.self), selfCol)
-      +barRow(inLabel, s.outward, dtag(s.outward), outCol)
+      +barRow(outLabel, s.self, relTag(s.self), selfCol)
+      +barRow(inLabel, s.outward, relTag(s.outward), outCol)
       +'</div>';
   }).join('');
   var _intro='<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>';
   var _hero='<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>';
   document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'+_intro+_hero+'<div class="section-label">Heart Engagement Scores Across the Following Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
-    +'<div class="section-label">Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
-    +'<div class="section-label">Engagement</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
+    +'<div class="section-label">Heart Engagement Scores Across the Following Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
+    +'<div class="section-label">Heart Engagement Interaction</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
     
     +(()=>{
       const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
