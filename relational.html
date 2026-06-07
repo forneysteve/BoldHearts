@@ -722,6 +722,21 @@ function calcDimScores(realm){
   });
 }
 
+
+function barRowIndent(label, pct, tag, col) {
+  const fillW = Math.round(pct);
+  const ticks = [20,40,60,80].map(t =>
+    '<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(196,168,130,.25);z-index:2"></div>'
+  ).join('');
+  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.4rem .75rem .4rem 1.5rem;border-bottom:1px solid rgba(196,168,130,.04)">'
+    + '<div style="width:150px;flex-shrink:0;font-size:.75rem;color:#8a8078">'+label+'</div>'
+    + '<div style="flex:1;position:relative;height:10px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+    + ticks
+    + '<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px"></div>'
+    + '</div>'
+    + '<div style="width:100px;text-align:right;font-size:.72rem;font-weight:500;color:'+col+'">'+tag+'</div>'
+    + '</div>';
+}
 function barRow(label, pct, tag, col) {
   const fillW = Math.round(pct);
   const ticks = [20,40,60,80].map(t =>
@@ -765,11 +780,15 @@ function renderResults(scores){
     const outCol=dcolor(s.outward); const selfCol=dcolor(s.self);
     const outLabel=r.id==='god'?'How I engage God':r.id==='significant_other'?'How I engage my partner':'How I engage them';
     const inLabel=r.id==='god'?'How God engages me':r.id==='significant_other'?'How my partner engages me':'How they engage me';
+    const gap = Math.abs(s.self - s.outward);
+    const gapBadge = gap >= 15
+      ? '<span style="font-size:.65rem;color:#c97a5a;background:rgba(201,122,90,.12);padding:1px 7px;border-radius:3px;margin-left:8px">'+gap+'% gap</span>'
+      : '';
     return '<div style="padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(196,168,130,.06)">'
       +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px">'
-      +'<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div>'
-      +barRow(outLabel, s.self, relTag(s.self), selfCol)
-      +barRow(inLabel, s.outward, relTag(s.outward), outCol)
+      +'<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+gapBadge+'</div>'
+      +barRowIndent(outLabel, s.self, relTag(s.self), selfCol)
+      +barRowIndent(inLabel, s.outward, relTag(s.outward), outCol)
       +'</div>';
   }).join('');
   var _intro='<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>';
