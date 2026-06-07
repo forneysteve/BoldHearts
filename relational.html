@@ -384,6 +384,8 @@ let answers={},userName='',userEmail='',isTestMode=false;
 function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
 function totalAns(){return Object.keys(answers).length}
 
+
+function needsTag(p){ return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Struggling':p>=20?'Weak':'Critical'; }
 function relTag(p){ return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead'; }
 function dcolor(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a'}
 function dtag(p){return p>=80?'Running Clean':p>=60?'Warning Light':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off'}
@@ -770,7 +772,7 @@ function renderResults(scores){
   const dimScores=calcDimScores(realm);
   const dimHtml=dimScores.map(d=>{
     const col=dcolor(d.score);
-    return barRow(d.name, d.score, dtag(d.score), col);
+    return barRow(d.name, d.score, needsTag(d.score), col);
   }).join('');;
   const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);const icon=tierIcon(s.overall);return'<div class="pattern-card '+p.cls+'" style="display:flex;gap:1rem;align-items:flex-start"><div style="flex-shrink:0;width:64px;text-align:center">'+icon+'</div><div><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div></div>';}).join('');
   const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div>'+(w.subtitle?'<div style="font-size:.75rem;color:#6a6258;letter-spacing:.04em;margin-bottom:6px;font-style:italic">'+w.subtitle+'</div>':'')+' <div class="warning-text">'+w.text+'</div></div></div>').join('');
