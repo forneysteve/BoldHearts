@@ -795,21 +795,25 @@ function renderResults(scores){
   var _hero='<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>';
   document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'+_intro+_hero+'<div class="section-label">Heart Engagement Scores Across the Following Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
     +'<div class="section-label">Heart Engagement Scores Across the Following Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
-    +'<div class="section-label">Heart Engagement Interaction</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
+    +'<div class="section-label">Heart Engagement Equity</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
     
     +(()=>{
       const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
       const lowestRealm=realmsSorted[0];
       const dimScores2=calcDimScores(realm);
       const lowestDim=dimScores2.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
-      const realmLine=lowestRealm?'Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong> at '+realm[lowestRealm.id].overall+'%. This is not a verdict — it\'s a place to begin. Something in that context is worth a closer look.':'';
-      const dimLine=lowestDim?'Across all your relationships, your lowest dimension is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong> at '+lowestDim.score+'%.':'';
+      // Find greatest gap in engagement
+      const gapRealm=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0)
+        .map(r=>({label:r.label,gap:Math.abs(realm[r.id].self-realm[r.id].outward)}))
+        .sort((a,b)=>b.gap-a.gap)[0];
+      const bullets=[];
+      if(lowestRealm) bullets.push('Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong>.');
+      if(lowestDim) bullets.push('Across all your relationship needs, your lowest need is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong>.');
+      if(gapRealm&&gapRealm.gap>=10) bullets.push('For your relationship engagement, <strong style="color:#e8d7a0">'+gapRealm.label+'</strong> has the greatest gap between how you engage and how they engage you.');
+      const bulletHtml=bullets.map(b=>'<li style="font-size:.92rem;color:#a09890;line-height:1.9;margin-bottom:.5rem">'+b+'</li>').join('');
       return '<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3>'
-        +'<div style="text-align:left;max-width:520px;margin:0 auto 1.5rem">'
-        +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1rem">'+realmLine+'</p>'
-        +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin-bottom:1rem">'+dimLine+'</p>'
-        +'<p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0">These scores are worth your time and attention. Consider one honest conversation — one relationship where you stop managing and start showing up differently. That\'s enough for now.</p>'
-        +'</div></div>';
+        +'<ul style="text-align:left;max-width:520px;margin:0 auto 1.5rem;padding-left:1.25rem">'+bulletHtml+'</ul>'
+        +'</div>';
     })()
     +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
     +'<div class="discovery-card"><h3>Once you\'ve completed both assessments.</h3><p>When you\'ve finished the Interior Health Assessment, set up a Discovery Call. Steve will bring both sets of scores together and walk through the complete picture with you — no pressure, no agenda, just an honest conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Assessments Complete&body=Hi Steve, I have completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Set Up a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div></div>'
