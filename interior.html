@@ -503,6 +503,21 @@ async function submitGate(){
 
 
 
+
+function barRowIndent(label, pct, tag, col) {
+  const fillW = Math.round(pct);
+  const ticks = [20,40,60,80].map(t =>
+    '<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(196,168,130,.25);z-index:2"></div>'
+  ).join('');
+  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.4rem .75rem .4rem 1.5rem;border-bottom:1px solid rgba(196,168,130,.04)">'
+    + '<div style="width:150px;flex-shrink:0;font-size:.75rem;color:#8a8078">'+label+'</div>'
+    + '<div style="flex:1;position:relative;height:10px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+    + ticks
+    + '<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px"></div>'
+    + '</div>'
+    + (tag ? '<div style="width:100px;text-align:right;font-size:.72rem;font-weight:500;color:'+col+'">'+tag+'</div>' : '<div style="width:100px"></div>')
+    + '</div>';
+}
 function barRow(label, pct, tag, col) {
   const fillW = Math.round(pct);
   const ticks = [20,40,60,80].map(t =>
