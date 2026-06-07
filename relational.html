@@ -278,19 +278,19 @@ const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lm
 const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 const SCALE=[{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
 const REALMS=[
-  {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
-   desc:'Think about the people you work or study alongside day to day.',
+  {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',bar:'#c4a882',
+   desc:'Think honestly about your relationship with God — answer based on what is actually true right now, not what you think it should be.',
    questions:[
-    {t:"My colleagues track how I'm actually doing — beyond what I produce.",self:false},
-    {t:"I make genuine effort to connect with the people I work with, beyond getting through the day.",self:true},
-    {t:"The people I work with know what drives me, what I care about, what I'm made of.",self:false},
-    {t:"I can push back or raise concerns at work without bracing for consequences.",self:false},
-    {t:"I show up for my colleagues when things are hard for them, even when it costs me something.",self:true},
-    {t:"At the end of the day, I genuinely belong in this place — I'm more than a body in a seat.",self:false},
-    {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
-    {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
-    {t:"The work I do connects to something I'm actually built for — it's more than a job I'm good at.",self:false},
-    {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
+    {t:"I have a sense that God is personally watching the details of my life — like a good friend watching things unfold with great interest.",self:false},
+    {t:"God delights in who I am, beyond what I do or produce.",self:false},
+    {t:"When I pray, I believe God will answer and things will get better.",self:true},
+    {t:"There are moments in my day where I'm aware that I am God's — not performing for Him, just His.",self:false},
+    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, mentally, relationally, and financially.",self:true},
+    {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
+    {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
+    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true},
+    {t:"When I think about the last several weeks, I have been actively pursuing God in my spiritual walk.",self:true},
+    {t:"I feel directionless in my walk with God currently — I'm not sure where it's headed.",self:true,reverse:true}
   ]},
   {id:'significant_other',label:'Significant Other',icon:'ti-heart',color:'#c97a5a',bar:'#c97a5a',
    desc:'Think about your spouse or significant other. Skip this section if not currently applicable.',
@@ -334,6 +334,20 @@ const REALMS=[
     {t:"I show up in my friendships with intention — I have a sense of what I'm called to be for the people I care about.",self:false},
     {t:"My friends are there for me as a person — for who I am, beyond what I bring to the group.",self:true}
   ]},
+  {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
+   desc:'Think about the people you work or study alongside day to day.',
+   questions:[
+    {t:"My colleagues track how I'm actually doing — beyond what I produce.",self:false},
+    {t:"I make genuine effort to connect with the people I work with, beyond getting through the day.",self:true},
+    {t:"The people I work with know what drives me, what I care about, what I'm made of.",self:false},
+    {t:"I can push back or raise concerns at work without bracing for consequences.",self:false},
+    {t:"I show up for my colleagues when things are hard for them, even when it costs me something.",self:true},
+    {t:"At the end of the day, I genuinely belong in this place — I'm more than a body in a seat.",self:false},
+    {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
+    {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
+    {t:"The work I do connects to something I'm actually built for — it's more than a job I'm good at.",self:false},
+    {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
+  ]},
   {id:'community',label:'Community',icon:'ti-building-community',color:'#c4a882',bar:'#c4a882',
    desc:'Think about your church, neighborhood, or broader community.',
    questions:[
@@ -347,20 +361,6 @@ const REALMS=[
     {t:"I could be vulnerable in this community — share something real — and be received with grace.",self:false},
     {t:"I have a contribution in this community that fits who I actually am — I'm here on purpose.",self:false},
     {t:"In this community, I don't have to perform to belong — I'm valued for who I am, not what I do.",self:true}
-  ]},
-  {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',bar:'#c4a882',
-   desc:'Think honestly about your relationship with God — answer based on what is actually true right now, not what you think it should be.',
-   questions:[
-    {t:"I have a sense that God is personally watching the details of my life — like a good friend watching things unfold with great interest.",self:false},
-    {t:"God delights in who I am, beyond what I do or produce.",self:false},
-    {t:"When I pray, I believe God will answer and things will get better.",self:true},
-    {t:"There are moments in my day where I'm aware that I am God's — not performing for Him, just His.",self:false},
-    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, mentally, relationally, and financially.",self:true},
-    {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
-    {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
-    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true},
-    {t:"When I think about the last several weeks, I have been actively pursuing God in my spiritual walk.",self:true},
-    {t:"I feel directionless in my walk with God currently — I'm not sure where it's headed.",self:true,reverse:true}
   ]}
 ];
 const WARNINGS=[
@@ -768,7 +768,7 @@ function renderResults(scores){
   }).join('');
   var _intro='<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>';
   var _hero='<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>';
-  document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'+_intro+_hero+'<div class="section-label">Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
+  document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'+_intro+_hero+'<div class="section-label">Heart Engagement Scores Across the Following Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
     +'<div class="section-label">Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
     +'<div class="section-label">Engagement</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
     
