@@ -383,6 +383,8 @@ const WARNINGS=[
 let answers={},userName='',userEmail='',isTestMode=false;
 function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
 function totalAns(){return Object.keys(answers).length}
+
+function relTag(p){ return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead'; }
 function dcolor(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a'}
 function dtag(p){return p>=80?'Running Clean':p>=60?'Warning Light':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off'}
 function calcScores(){
@@ -450,7 +452,7 @@ function buildHtmlEmail(scores){
   const rc=overall>=80?'#6bc45e':overall>=60?'#c4a882':overall>=40?'#d4884a':overall>=20?'#c97a5a':'#8a2a2a';
   const rtag=overall>=80?'Running Clean':overall>=60?'Needs Maintenance':overall>=40?'Needs Attention':overall>=20?'Running Low':'Engine Off';
   function dc(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a';}
-  function dt(p){return p>=80?'Running Clean':p>=60?'Needs Maintenance':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off';}
+  function dt(p){return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead';}
   function bar(pct,col){const n=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(n)+'&#9617;'.repeat(10-n)+'</span>';}
   const realmRowsHtml=ar.map(r=>{const s=realm[r.id];const col=dc(s.overall);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+r.label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(s.overall,col)+'</td><td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+dt(s.overall)+'</td></tr>';}).join('');
   const dimScores=calcDimScores(realm);
@@ -722,9 +724,13 @@ function calcDimScores(realm){
 
 function barRow(label, pct, tag, col) {
   const fillW = Math.round(pct);
+  const ticks = [20,40,60,80].map(t =>
+    '<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(196,168,130,.25);z-index:2"></div>'
+  ).join('');
   return '<div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(196,168,130,.06)">'
     + '<div style="width:160px;flex-shrink:0;font-size:.82rem;color:#c0b8b0">'+label+'</div>'
     + '<div style="flex:1;position:relative;height:14px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+    + ticks
     + '<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px;transition:width .8s ease"></div>'
     + '</div>'
     + '<div style="width:140px;text-align:right;font-size:.78rem;font-weight:500;color:'+col+'">'+tag+'</div>'
@@ -744,7 +750,7 @@ function renderResults(scores){
   const realmRows=REALMS.map(r=>{
     const s=realm[r.id];if(s.answered===0)return'';
     const col=dcolor(s.overall);
-    return barRow('<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px;margin-right:6px"></i>'+r.label, s.overall, dtag(s.overall), col);
+    return barRow('<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px;margin-right:6px"></i>'+r.label, s.overall, relTag(s.overall), col);
   }).join('');;
   const dimScores=calcDimScores(realm);
   const dimHtml=dimScores.map(d=>{
