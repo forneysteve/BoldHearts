@@ -806,7 +806,7 @@ function renderGuide(data) {
     + '<p>' + PURPOSE_TEXT[3] + '</p>'
     + '<p>' + PURPOSE_TEXT[4] + '</p>'
     + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
-    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are. It is not a muscle &mdash; it is the seat of everything that matters.&rdquo;</p>'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are &mdash; it is the seat of everything that matters.&rdquo;</p>'
     + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; John Eldredge</p>'
     + '</div>'
     + '</div>'
@@ -874,17 +874,18 @@ window.addEventListener('load', async () => {
 
     // ── PREVIEW MODE (?preview=true) ──────────────────────────
     if(urlParams.get('preview') === 'true') {
+      sessionStorage.clear();
       const previewData = {
-        name: 'Preview User',
-        date: new Date().toISOString(),
+        name: 'Steve',
+        date: '2026-06-07T06:22:00',
         guide: {
           sections: [
-            { id:'picture',           label:'What Your Scores Are Saying',     content:'This is a preview of the picture section. Your scores tell a story about where your heart is right now — what is open, what is carrying weight, and where there may be room to move. This section would be written specifically for you based on your actual assessment results.' },
+            { id:'picture',           label:'What Your Scores Are Saying',     content:'This is a preview of the picture section. Your scores tell a story about where your heart is right now — what is open, what is carrying weight, and where there may be room to move.' },
             { id:'scored_well',       label:'What Is Working',                 content:'This is a preview of what is working. There are real strengths in your relational and interior health. This section highlights the areas where genuine health and connection are showing up.' },
             { id:'could_be_stronger', label:'Where There Is Room to Grow',     content:'This is a preview of the growth section. Every heart has areas that need more attention. This section names those honestly and without judgment.' },
-            { id:'interior',          label:"What's Happening Underneath",     content:'This is a preview of the interior section. What you carry inside shapes everything about how you show up with others. This section looks at the emotional themes that are most active in your interior life.' },
-            { id:'invitation',        label:'Where God Seems to Be Moving',    content:'This is a preview of the invitation section. Even in the areas of struggle, there is often a sense of where God is at work. This section reflects on that movement.' },
-            { id:'soulcare',          label:'What Soul Care Offers You',       content:'This is a preview of the soul care section. Soul care is not a quick fix — it is a sustained practice of paying attention to what is happening inside. This section describes what that could look like for you.' },
+            { id:'interior',          label:"What's Happening Underneath",     content:'This is a preview of the interior section. What you carry inside shapes everything about how you show up with others.' },
+            { id:'invitation',        label:'Where God Seems to Be Moving',    content:'This is a preview of the invitation section. Even in the areas of struggle, there is often a sense of where God is at work.' },
+            { id:'soulcare',          label:'What Soul Care Offers You',       content:'This is a preview of the soul care section. Soul care is not a quick fix — it is a sustained practice of paying attention to what is happening inside.' },
             { id:'nextstep',          label:'Using This Guide',                content:'This is a preview of the next step section. This guide is a starting point. Here is how to use it well.' },
             { id:'practices',         label:'Practices for This Season',       content:'', practicesContent: {
               primary: [
@@ -902,7 +903,7 @@ window.addEventListener('load', async () => {
               ]
             }}
           ],
-          closingNote: "This is a preview of Steve's closing note. It would be written personally for you after our Discovery Call, reflecting on what stood out most from your assessment results and our conversation."
+          closingNote: "Steve, thank you for going first. What you have built here is not small — and what you carry is worth the attention you are giving it."
         },
         a1: {
           overall:'72%', work:'59%', partner:'83%', family:'84%', friends:'89%',
@@ -913,29 +914,29 @@ window.addEventListener('load', async () => {
           friends_outward:'84%', friends_self:'100%',
           community_outward:'45%', community_self:'48%',
           god_outward:'83%', god_self:'63%',
-          dim_seen:'68%', dim_known:'74%', dim_voice:'79%', dim_belonging:'71%',
-          dim_support:'65%', dim_trust:'63%', dim_calling:'77%', dim_freedom:'58%',
+          dim_seen:'69%', dim_known:'83%', dim_voice:'69%', dim_belonging:'74%',
+          dim_support:'67%', dim_trust:'76%', dim_calling:'62%', dim_freedom:'74%',
           raw: {
-            god:      [5,5,6,5,5,6,4,5,5,6],
-            partner:  [6,7,6,6,6,6,5,6,6,5],
-            family:   [6,6,7,6,6,6,6,5,6,7],
-            friends:  [6,7,7,6,7,6,6,6,7,7],
-            work:     [4,4,5,4,4,5,4,4,4,5],
-            community:[3,3,4,3,3,4,3,3,3,4],
+            god:      [7,7,5,5,6,7,3,2,6,5],
+            partner:  [6,6,7,5,5,6,7,6,5,5],
+            family:   [5,7,6,5,5,6,3,2,6,5],
+            friends:  [5,7,6,5,7,5,2,6,5,4],
+            work:     [3,6,6,3,6,4,3,2,5,3],
+            community:[2,3,3,5,3,3,2,3,3,4],
           }
         },
         hs: {
-          overall:'68%', grief:'67%', shame:'45%', fear:'71%', anger:'60%',
-          desire:'65%', joy:'80%',
-          awareness:'88%', honesty:'84%', movement:'83%', safety:'82%',
-          direction:'80%', peace:'76%',
+          overall:'75%', grief:'73%', shame:'50%', fear:'86%', anger:'71%',
+          desire:'86%', joy:'86%',
+          awareness:'86%', honesty:'81%', movement:'79%', safety:'83%',
+          direction:'81%', peace:'71%',
           raw: {
-            grief:  [5,5,4,5,5,5],
-            shame:  [3,3,4,3,3,4],
-            fear:   [5,5,5,5,5,5],
-            anger:  [4,4,5,4,4,4],
-            desire: [5,5,4,5,5,5],
-            joy:    [6,6,5,6,6,6],
+            grief:  [6,5,2,7,6,2],
+            shame:  [3,5,3,5,5,3],
+            fear:   [6,6,5,6,6,7],
+            anger:  [7,7,6,5,5,6],
+            desire: [7,5,2,6,6,6],
+            joy:    [7,6,7,6,6,6],
           }
         }
       };
