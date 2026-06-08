@@ -428,9 +428,9 @@ function renderGuide(data) {
   }
   function cellDot(score) {
     if(!score || score === 0) return '<span style="color:#ccc">—</span>';
-    const bg = cellBg(score);
     const tx = cellTx(score);
-    return '<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:'+tx+';opacity:.85"></span>';
+    const bg = cellBg(score);
+    return '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid '+tx+';box-shadow:0 0 0 1px '+bg+'"></span>';
   }
 
   // Relational grid: realms × dimensions
@@ -563,7 +563,7 @@ function renderGuide(data) {
     const thead = '<tr style="background:#faf6f0">'
       + '<th style="padding:.4rem .5rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:left;border-bottom:2px solid #c4a882;white-space:nowrap;min-width:120px">Emotion</th>'
       + '<th style="padding:.4rem .3rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882">Overall</th>'
-      + postureLabels.map(p => '<th style="padding:.4rem .3rem;height:80px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:4px">'+p+'</div></th>').join('')
+      + postureLabels.map(p => '<th style="padding:.4rem .3rem;height:90px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:6px;margin:0 auto">'+p+'</div></th>').join('')
       + '</tr>';
 
     const tbody = intThemeRows.map(t => {
@@ -578,7 +578,7 @@ function renderGuide(data) {
       return '<tr>'
         + '<td style="padding:.4rem .6rem;font-size:.7rem;font-weight:500;color:#4a3a2a;border-bottom:1px solid #ede8e0;white-space:nowrap">'+t.label+'</td>'
         + '<td style="padding:.4rem .3rem;text-align:center;font-size:.7rem;font-weight:600;background:'+overallBg+';color:'+overallTx+';border-bottom:1px solid #ede8e0">'+(overall||'—')+'%</td>'
-        + posScores.map(s => '<td style="padding:.4rem .6rem;text-align:center;background:'+cellBg(s)+';border-bottom:1px solid #ede8e0">'+cellDot(s)+'</td>').join('')
+        + posScores.map(s => '<td style="padding:.5rem;text-align:center;vertical-align:middle;background:'+cellBg(s)+';border-bottom:1px solid #ede8e0">'+cellDot(s)+'</td>').join('')
         + '</tr>';
     }).join('');
 
@@ -594,7 +594,7 @@ function renderGuide(data) {
     const thead = '<tr style="background:#faf6f0">'
       + '<th style="padding:.4rem .5rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:left;border-bottom:2px solid #c4a882;white-space:nowrap;min-width:120px">Relationship</th>'
       + '<th style="padding:.4rem .3rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882">Overall</th>'
-      + needLabels.map(n => '<th style="padding:.4rem .3rem;height:80px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:4px">'+n+'</div></th>').join('')
+      + needLabels.map(n => '<th style="padding:.4rem .3rem;height:90px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:6px;margin:0 auto">'+n+'</div></th>').join('')
       + '</tr>';
 
     const tbody = matrixRealms.map(r => {
@@ -609,7 +609,7 @@ function renderGuide(data) {
       return '<tr>'
         + '<td style="padding:.4rem .6rem;font-size:.7rem;font-weight:500;color:#4a3a2a;border-bottom:1px solid #ede8e0;white-space:nowrap">'+r.label+'</td>'
         + '<td style="padding:.4rem .3rem;text-align:center;font-size:.7rem;font-weight:600;background:'+overallBg+';color:'+overallTx+';border-bottom:1px solid #ede8e0">'+(overall||'—')+'%</td>'
-        + needScores.map(s => '<td style="padding:.4rem .6rem;text-align:center;background:'+cellBg(s)+';border-bottom:1px solid #ede8e0">'+cellDot(s)+'</td>').join('')
+        + needScores.map(s => '<td style="padding:.5rem;text-align:center;vertical-align:middle;background:'+cellBg(s)+';border-bottom:1px solid #ede8e0">'+cellDot(s)+'</td>').join('')
         + '</tr>';
     }).join('');
 
@@ -701,6 +701,98 @@ function renderGuide(data) {
   };
 
   // Sections
+  // ── THEME INSIGHTS ────────────────────────────────────────
+  const themeComments = {
+    grief:  { high: "Your grief score reflects real access — you can name loss and let it move through you rather than around you. That is not weakness; it is one of the harder forms of strength.", low: "Grief is scoring low. Unprocessed loss has a way of going quiet rather than going away — it shows up sideways in anger, numbness, or disconnection." },
+    shame:  { high: "Shame is at a healthy level — you can hold imperfection without it defining you. That kind of self-compassion is harder to build than most people realize.", low: "Shame is one of your higher scores. Shame at this level tends to run quietly beneath everything — shaping how safe it feels to be known, to fail, to need." },
+    fear:   { high: "Fear and anxiety are well-integrated for you — present but not in charge. You can act in the presence of uncertainty without being paralyzed by it.", low: "Fear is elevated. That kind of anxiety tends to narrow the world — making risk feel more costly and safety feel more necessary than it actually is." },
+    anger:  { high: "Anger is healthy and accessible — you can name it, work with it, and let it point toward what matters. Anger at this level is often clarity.", low: "Anger is low. Sometimes that means peace — and sometimes it means something has been buried. Worth sitting with which one it is." },
+    desire: { high: "Desire and hope are alive in you. That matters more than it might seem — desire is what keeps a person reaching rather than just maintaining.", low: "Desire is low. When hope quiets down it often means something has been disappointed enough times that wanting has started to feel too costly." },
+    joy:    { high: "Joy is strong. There is still something in you that can receive what is good — that capacity is worth protecting.", low: "Joy is scoring low. Not absent — but muted. Something is keeping the good from landing fully." }
+  };
+  const themeLabels = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Joy & Delight'};
+  const themeKeys = ['grief','shame','fear','anger','desire','joy'];
+  const themeScoresSorted = themeKeys
+    .map(k => ({id:k, score: numVal(hs?.[k])}))
+    .filter(t => t.score > 0)
+    .sort((a,b) => b.score - a.score);
+
+  const insightRows = themeScoresSorted.map(t => {
+    const isHigh = t.score >= 70;
+    const isLow = t.score < 55;
+    if(!isHigh && !isLow) return '';
+    const comment = isHigh ? themeComments[t.id]?.high : themeComments[t.id]?.low;
+    if(!comment) return '';
+    const col = isHigh ? '#5a9a50' : '#c97a5a';
+    return '<div style="padding:1rem 1.25rem;border-bottom:1px solid #ede8e0;break-inside:avoid">'
+      + '<div style="display:flex;align-items:baseline;gap:.5rem;margin-bottom:.35rem">'
+      + '<span style="font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:'+col+'">'+themeLabels[t.id]+'</span>'
+      + '<span style="font-size:.65rem;color:#9a8a7a">'+t.score+'%</span>'
+      + '</div>'
+      + '<p style="font-size:.82rem;color:#4a3a2a;line-height:1.85;margin:0">'+comment+'</p>'
+      + '</div>';
+  }).filter(Boolean).join('');
+
+  const themeInsightsHtml = insightRows
+    ? '<div class="section-header" style="break-before:page">What the Interior Scores Are Saying</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Themes that scored notably high or low — and what that typically means.</div>'
+      + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;margin-bottom:2rem;overflow:hidden">'
+      + insightRows
+      + '</div>'
+    : '';
+
+  // ── IDENTITY INSIGHTS ────────────────────────────────────
+  const identityData = hs?.identity || {};
+  const themeIconMap = {
+    grief:'ti-heart-broken', shame:'ti-eye-off', fear:'ti-alert-triangle',
+    anger:'ti-flame', desire:'ti-star', joy:'ti-sun'
+  };
+  const themeColorMap = {
+    grief:'#a09890', shame:'#8a7a8a', fear:'#b09060',
+    anger:'#c97a5a', desire:'#c4a882', joy:'#6bc45e'
+  };
+  const idThemeKeys = ['grief','shame','fear','anger','desire','joy'];
+  const idThemeLabels = {grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'};
+
+  function idBar(pct) {
+    const filled = Math.round(pct/10);
+    const empty = 10 - filled;
+    return '<span style="font-family:monospace;letter-spacing:1px;font-size:10px;color:#c4a882">'
+      + '&#9608;'.repeat(filled)
+      + '<span style="opacity:.2">&#9608;</span>'.repeat(empty)
+      + '</span>';
+  }
+
+  const identityRows2 = idThemeKeys.map(t => {
+    const id = identityData[t];
+    if(!id) return '';
+    const gap = id.gap || 0;
+    const gapFlag = gap >= 15
+      ? '<span style="margin-left:8px;font-size:.6rem;color:#c97a5a;background:#fff0eb;padding:1px 6px;border-radius:3px;font-weight:500">'+gap+'% gap</span>'
+      : '';
+    return '<div style="padding:.75rem 1rem;border-bottom:1px solid #ede8e0;break-inside:avoid">'
+      + '<div style="font-size:.72rem;font-weight:500;color:#4a3a2a;margin-bottom:.4rem">'+idThemeLabels[t]+gapFlag+'</div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.3rem">'
+      + '<div style="width:120px;font-size:.62rem;color:#9a8a7a;flex-shrink:0;text-align:right">Others see me this way</div>'
+      + '<div>'+idBar(id.others)+'</div>'
+      + '<div style="font-size:.65rem;color:#6a5a4a;margin-left:4px">'+id.others+'%</div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem">'
+      + '<div style="width:120px;font-size:.62rem;color:#9a8a7a;flex-shrink:0;text-align:right">I see myself this way</div>'
+      + '<div>'+idBar(id.self)+'</div>'
+      + '<div style="font-size:.65rem;color:#6a5a4a;margin-left:4px">'+id.self+'%</div>'
+      + '</div>'
+      + '</div>';
+  }).filter(Boolean).join('');
+
+  const identityInsightsHtml = identityRows2
+    ? '<div class="section-header">How You Identify With Each Emotion</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each emotion shown as two bars — how others see you carrying it, and how you see yourself. A significant gap between the two is worth exploring.</div>'
+      + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;margin-bottom:2rem;overflow:hidden">'
+      + identityRows2
+      + '</div>'
+    : '';
+
   const sectionsHtml = (guide.sections || []).map((s, idx) => {
     const sectionImages = {
       picture:          'assets/images/aatlas-peak-299014_1920.jpg',
@@ -878,11 +970,11 @@ function renderGuide(data) {
     + summaryHtml
     + relChartsHtml
     + relMatrixHtml
-    + energyChartHtml
     + realmCardsSection
     + intChartsHtml
     + intMatrixHtml
-    + detailBreakdownHtml
+    + themeInsightsHtml
+    + identityInsightsHtml
     + sectionsHtml
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
@@ -1001,6 +1093,14 @@ window.addEventListener('load', async () => {
             anger:  [7,7,6,5,5,6],
             desire: [7,5,2,6,6,6],
             joy:    [7,6,7,6,6,6],
+          },
+          identity: {
+            grief:  {others:86, self:86, gap:0},
+            shame:  {others:29, self:29, gap:0},
+            fear:   {others:86, self:86, gap:0},
+            anger:  {others:86, self:86, gap:0},
+            desire: {others:57, self:86, gap:29},
+            joy:    {others:86, self:86, gap:0}
           }
         }
       };
