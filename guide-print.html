@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,10 +119,10 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .dash-score-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#9a8a7a;margin-bottom:.3rem}
 .dash-score-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
 .dash-score-tag{font-size:.7rem;color:#9a8a7a;margin-top:2px}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
-.chart-card{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;break-inside:avoid}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;max-width:100%;overflow:hidden}
+.chart-card{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;break-inside:avoid;overflow:hidden;min-width:0}
 .chart-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0}
-.chart-wrap{position:relative}
+.chart-wrap{position:relative;overflow:hidden;width:100%}
 
 .pull-quote-left{float:left;width:42%;margin:0 1.5rem 1rem -1rem;padding:1.25rem 1.5rem;border-top:2px solid #c4a882;border-bottom:2px solid #c4a882;background:#faf6f0;break-inside:avoid}
 .pull-quote-right{float:right;width:42%;margin:0 -1rem 1rem 1.5rem;padding:1.25rem 1.5rem;border-top:2px solid #c4a882;border-bottom:2px solid #c4a882;background:#faf6f0;break-inside:avoid}
@@ -205,6 +206,9 @@ const PURPOSE_TEXT = [
   "What follows is an honest reading of both."
 ];
 
+  function emotionTag(p) { return p>=80?'Healthy Engagement':p>=60?'Room for Growth':p>=40?'Guarded':p>=20?'Suppressed':'Shut Down'; }
+  function needsTag(p) { return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Struggling':p>=20?'Weak':'Critical'; }
+  function relTag(p) { return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead'; }
 function scoreColor(val) {
   if(!val) return 'score-mid';
   const s = val.toString().replace('%','');
@@ -246,9 +250,9 @@ function renderGuide(data) {
     const n = parseFloat(p);
     if(isNaN(n)) return '';
     const v = n <= 1 ? n * 100 : n;
-    return v >= 70 ? 'Flowing Freely' : v >= 55 ? 'Meeting Resistance' : v >= 40 ? 'Running Low' : 'Dammed Up';
+    return v >= 80 ? 'Strong' : v >= 60 ? 'Functioning' : v >= 40 ? 'Weak' : v >= 20 ? 'Dormant' : 'Dead';
   }
-  function barColor(v) { return v >= 70 ? '#3B6D11' : v >= 45 ? '#BA7517' : '#D85A30'; }
+  function barColor(v) { return v >= 80 ? '#6bc45e' : v >= 60 ? '#c4a882' : v >= 40 ? '#d4884a' : v >= 20 ? '#c97a5a' : '#8a2a2a'; }
   function makeColors(arr) { return arr.map(barColor); }
 
   function numVal(s) {
@@ -261,7 +265,7 @@ function renderGuide(data) {
 
   console.log('RAW hs:', JSON.stringify(hs));
   console.log('RAW a1:', JSON.stringify(a1));
-  const realmVals  = [a1?.work, a1?.partner, a1?.family, a1?.friends, a1?.community, a1?.god].map(numVal);
+  const realmVals  = [a1?.god, a1?.partner, a1?.family, a1?.friends, a1?.work, a1?.community].map(numVal);
   const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
   console.log('realmVals:', realmVals);
   console.log('themeVals:', themeVals);
@@ -280,19 +284,30 @@ function renderGuide(data) {
   });
   console.log('intDimVals:', intDimVals);
 
-  const dashHtml = '<div class="dashboard-wrap">'
+  // ── SUMMARY SCORES ──────────────────────────────────────
+  const summaryHtml = '<div class="dashboard-wrap">'
     + '<div class="section-header">Your Assessment Scores</div>'
     + '<div class="dash-scores">'
-    + '<div class="dash-score"><div class="dash-score-label">Relational Health</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + scoreTag(a1Score) + '</div></div>'
-    + '<div class="dash-score"><div class="dash-score-label">Interior Health</div><div class="dash-score-val" style="color:' + barColor(numVal(hsScore)) + '">' + hsScore + '</div><div class="dash-score-tag">' + scoreTag(hsScore) + '</div></div>'
-    + '<div class="dash-score"><div class="dash-score-label">With God</div><div class="dash-score-val" style="color:' + barColor(numVal(godScore)) + '">' + godScore + '</div><div class="dash-score-tag">' + scoreTag(godScore) + '</div></div>'
-    + '</div>'
-    + '<div class="charts-grid">'
-    + '<div class="chart-card"><div class="chart-label">Relational — by realm</div><div class="chart-wrap" style="height:180px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
-    + '<div class="chart-card"><div class="chart-label">Interior — by theme</div><div class="chart-wrap" style="height:180px"><canvas id="themeChart" role="img" aria-label="Interior scores by theme"></canvas></div></div>'
-    + '<div class="chart-card"><div class="chart-label">Relational — dimensions</div><div class="chart-wrap" style="height:220px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
-    + '<div class="chart-card"><div class="chart-label">Interior — dimensions</div><div class="chart-wrap" style="height:220px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Relational Health</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + relTag(numVal(a1Score)) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Interior Health</div><div class="dash-score-val" style="color:' + barColor(numVal(hsScore)) + '">' + hsScore + '</div><div class="dash-score-tag">' + emotionTag(numVal(hsScore)) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Relationship with God</div><div class="dash-score-val" style="color:' + barColor(numVal(godScore)) + '">' + godScore + '</div><div class="dash-score-tag">' + relTag(numVal(godScore)) + '</div></div>'
     + '</div></div>';
+
+  // ── RELATIONAL CHARTS ─────────────────────────────────────
+  const relChartsHtml = '<div class="section-header" style="break-before:page">Relational Health</div>'
+    + '<div class="charts-grid">'
+    + '<div class="chart-card"><div class="chart-label">By Relationship</div><div class="chart-wrap" style="height:160px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">By Need</div><div class="chart-wrap" style="height:160px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
+    + '</div>';
+
+  // ── INTERIOR CHARTS ───────────────────────────────────────
+  const intChartsHtml = '<div class="section-header" style="break-before:page">Interior Health</div>'
+    + '<div class="charts-grid">'
+    + '<div class="chart-card"><div class="chart-label">By Emotion</div><div class="chart-wrap" style="height:160px"><canvas id="themeChart" role="img" aria-label="Interior scores by theme"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">By Posture</div><div class="chart-wrap" style="height:160px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
+    + '</div>';
+
+  const dashHtml = summaryHtml;
 
   // ── DETAILED SCORE BREAKDOWN ─────────────────────────────────────────────
 
@@ -320,12 +335,12 @@ function renderGuide(data) {
 
   // Realm cards
   const realmDefs = [
-    {label:'Work / School',     overall:a1?.work,      out:a1?.work_outward,      self:a1?.work_self,      outLabel:'How they engage you',  selfLabel:'How you engage them'},
-    {label:'Significant Other', overall:a1?.partner,   out:a1?.partner_outward,   self:a1?.partner_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
-    {label:'Family',            overall:a1?.family,    out:a1?.family_outward,    self:a1?.family_self,    outLabel:'How they engage you',  selfLabel:'How you engage them'},
-    {label:'Friends',           overall:a1?.friends,   out:a1?.friends_outward,   self:a1?.friends_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
-    {label:'Community',         overall:a1?.community, out:a1?.community_outward, self:a1?.community_self, outLabel:'How they engage you',  selfLabel:'How you engage them'},
-    {label:'With God',          overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self,       outLabel:'How God engages you',  selfLabel:'How you engage God'},
+    {label:'Relationship with God', overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self,       outLabel:'How God engages you',  selfLabel:'How you engage God'},
+    {label:'Significant Other',     overall:a1?.partner,   out:a1?.partner_outward,   self:a1?.partner_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Family',                overall:a1?.family,    out:a1?.family_outward,    self:a1?.family_self,    outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Friends',               overall:a1?.friends,   out:a1?.friends_outward,   self:a1?.friends_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Work / School',         overall:a1?.work,      out:a1?.work_outward,      self:a1?.work_self,      outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Community',             overall:a1?.community, out:a1?.community_outward, self:a1?.community_self, outLabel:'How they engage you',  selfLabel:'How you engage them'},
   ].filter(r => numVal(r.overall) > 0);
 
   const realmCardsHtml = realmDefs.map((r, ridx) => {
@@ -356,7 +371,7 @@ function renderGuide(data) {
     {label:'Belonging',            val:a1?.dim_belonging},
     {label:'Receiving Support',    val:a1?.dim_support},
     {label:'Trust & Safety',       val:a1?.dim_trust},
-    {label:'Calling',              val:a1?.dim_calling},
+    {label:'Calling / Purpose',              val:a1?.dim_calling},
     {label:'Freedom to Be Myself', val:a1?.dim_freedom},
   ].filter(d => numVal(d.val) > 0);
   const relDimCardHtml = relDimItems.length > 0
@@ -413,11 +428,12 @@ function renderGuide(data) {
     freedom:   [9]
   };
   const relRealms = [
-    {id:'work',      label:'Work / School'},
+    {id:'god',       label:'Relationship with God'},
+    {id:'partner',   label:'Significant Other'},
     {id:'family',    label:'Family'},
     {id:'friends',   label:'Friends'},
+    {id:'work',      label:'Work / School'},
     {id:'community', label:'Community'},
-    {id:'god',       label:'With God'}
   ];
   const relDims = [
     {id:'seen',      label:'Seen'},
@@ -425,7 +441,7 @@ function renderGuide(data) {
     {id:'voice',     label:'Voice'},
     {id:'belonging', label:'Belonging'},
     {id:'support',   label:'Support'},
-    {id:'calling',   label:'Calling'},
+    {id:'calling',   label:'Calling / Purpose'},
     {id:'freedom',   label:'Freedom'}
   ];
 
@@ -482,13 +498,119 @@ function renderGuide(data) {
       + '<table class="heat-grid"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
   }
 
-  const crossTabHtml = (relGridHtml || intGridHtml)
-    ? '<div class="section-header" style="break-before:page">Heart at a Glance</div>'
-      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1.5rem;font-style:italic">Each cell shows how that specific relationship is flowing through that particular dimension of the heart. Green is healthy, gold is developing, red is worth attention.</div>'
-      + relGridHtml + intGridHtml
+  const crossTabHtml = '';  // removed — replaced by relMatrixHtml
+
+  // ── RELATIONAL MATRIX: Realms × Needs ─────────────────────
+  const needLabels = ['Being Seen','Being Known','Having a Voice','Belonging','Receiving Support','Trust & Safety','Calling / Purpose','Freedom to Be Myself'];
+  const needKeys   = ['seen','known','voice','belonging','support','trust','calling','freedom'];
+  const matrixRealms = [
+    {id:'god',      label:'Relationship with God'},
+    {id:'partner',  label:'Significant Other'},
+    {id:'family',   label:'Family'},
+    {id:'friends',  label:'Friends'},
+    {id:'work',     label:'Work / School'},
+    {id:'community',label:'Community'},
+  ];
+
+  function cellBg(score) {
+    if(!score || score === 0) return '#f8f4f0';
+    if(score >= 80) return '#d4e8c8';
+    if(score >= 60) return '#faf0d0';
+    if(score >= 40) return '#fde0c8';
+    if(score >= 20) return '#f5c8b8';
+    return '#e8b0a0';
+  }
+  function cellTx(score) {
+    if(!score || score === 0) return '#b0a090';
+    if(score >= 80) return '#2a5a2a';
+    if(score >= 60) return '#6a4a10';
+    if(score >= 40) return '#7a3010';
+    if(score >= 20) return '#6a1a10';
+    return '#4a0a08';
+  }
+
+  // ── INTERIOR MATRIX: Themes × Postures ─────────────────────
+  const postureLabels = ['Awareness','Honesty','Movement','Safety','Direction','Peace'];
+  const intThemeRows = [
+    {id:'grief',  label:'Grief & Loss'},
+    {id:'shame',  label:'Shame & Guilt'},
+    {id:'fear',   label:'Fear & Anxiety'},
+    {id:'anger',  label:'Anger'},
+    {id:'desire', label:'Desire & Hope'},
+    {id:'joy',    label:'Joy & Delight'},
+  ];
+
+  let intMatrixHtml = '';
+  if(hs?.raw || themeItems.length > 0) {
+    const thead = '<tr style="background:#faf6f0">'
+      + '<th style="padding:.4rem .5rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:left;border-bottom:2px solid #c4a882;white-space:nowrap;min-width:120px">Emotion</th>'
+      + '<th style="padding:.4rem .3rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882">Overall</th>'
+      + postureLabels.map(p => '<th style="padding:.4rem .3rem;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882;white-space:nowrap">'+p+'</th>').join('')
+      + '</tr>';
+
+    const tbody = intThemeRows.map(t => {
+      const overall = numVal(hs?.[t.id]);
+      const raw = hs?.raw?.[t.id] || [];
+      const posScores = postureLabels.map((p, pi) => {
+        const v = raw ? parseFloat(raw[pi]) : 0;
+        return isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
+      });
+      const overallBg = cellBg(overall);
+      const overallTx = cellTx(overall);
+      return '<tr>'
+        + '<td style="padding:.4rem .6rem;font-size:.7rem;font-weight:500;color:#4a3a2a;border-bottom:1px solid #ede8e0;white-space:nowrap">'+t.label+'</td>'
+        + '<td style="padding:.4rem .3rem;text-align:center;font-size:.7rem;font-weight:600;background:'+overallBg+';color:'+overallTx+';border-bottom:1px solid #ede8e0">'+(overall||'—')+'%</td>'
+        + posScores.map(s => '<td style="padding:.4rem .3rem;text-align:center;font-size:.68rem;background:'+cellBg(s)+';color:'+cellTx(s)+';border-bottom:1px solid #ede8e0">'+(s||'—')+'%</td>').join('')
+        + '</tr>';
+    }).join('');
+
+    intMatrixHtml = '<div class="section-header">Interior Scores at a Glance</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each cell shows how that emotion is scoring across each of the six heart postures. Green is healthy, gold is developing, red is worth attention.</div>'
+      + '<div style="overflow-x:auto;margin-bottom:2rem">'
+      + '<table style="width:100%;border-collapse:collapse;font-size:.72rem"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>'
+      + '</div>';
+  }
+
+  let relMatrixHtml = '';
+  if(a1?.raw || realmDefs.length > 0) {
+    const thead = '<tr style="background:#faf6f0">'
+      + '<th style="padding:.4rem .5rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:left;border-bottom:2px solid #c4a882;white-space:nowrap;min-width:120px">Relationship</th>'
+      + '<th style="padding:.4rem .3rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882">Overall</th>'
+      + needLabels.map(n => '<th style="padding:.4rem .3rem;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882;white-space:nowrap">'+n+'</th>').join('')
+      + '</tr>';
+
+    const tbody = matrixRealms.map(r => {
+      const overall = numVal(a1?.[r.id]);
+      const raw = a1?.raw?.[r.id] || [];
+      const needScores = needKeys.map((k, ki) => {
+        const qIndices = REL_DIM_MAP[k] || [];
+        return calcCellScore(raw, qIndices);
+      });
+      const overallBg = cellBg(overall);
+      const overallTx = cellTx(overall);
+      return '<tr>'
+        + '<td style="padding:.4rem .6rem;font-size:.7rem;font-weight:500;color:#4a3a2a;border-bottom:1px solid #ede8e0;white-space:nowrap">'+r.label+'</td>'
+        + '<td style="padding:.4rem .3rem;text-align:center;font-size:.7rem;font-weight:600;background:'+overallBg+';color:'+overallTx+';border-bottom:1px solid #ede8e0">'+(overall||'—')+'%</td>'
+        + needScores.map(s => '<td style="padding:.4rem .3rem;text-align:center;font-size:.68rem;background:'+cellBg(s)+';color:'+cellTx(s)+';border-bottom:1px solid #ede8e0">'+(s||'—')+'%</td>').join('')
+        + '</tr>';
+    }).join('');
+
+    relMatrixHtml = '<div class="section-header" style="break-before:page">Relational Scores at a Glance</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each cell shows how that relationship is scoring across each of the eight heart needs. Green is healthy, gold is developing, red is worth attention.</div>'
+      + '<div style="overflow-x:auto;margin-bottom:2rem">'
+      + '<table style="width:100%;border-collapse:collapse;font-size:.72rem"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>'
+      + '</div>';
+  }
+
+  // ── REALM CARDS SECTION ──────────────────────────────────
+  const realmCardsSection = realmCardsHtml
+    ? '<div class="section-header">Relational Score Breakdown</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem">'
+      + realmCardsHtml
+      + '</div>'
     : '';
 
-  const detailBreakdownHtml = (realmCardsHtml||relDimCardHtml||themeCardHtml||postureCardHtml)
+  const detailBreakdownHtml = (relDimCardHtml||themeCardHtml||postureCardHtml)
     ? '<div class="section-header" style="break-before:page">Complete Score Breakdown</div>'
       +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.75rem;width:100%">'
       +realmCardsHtml
@@ -531,7 +653,7 @@ function renderGuide(data) {
     const bigHeader = '<div class="section-header" style="break-before:page">' + (sectionHeaders[s.id] || s.label) + '</div>';
 
     if(s.id === 'practices') {
-      const pc = typeof s.content === 'object' ? s.content : null;
+      const pc = s.practicesContent || (typeof s.content === 'object' ? s.content : null);
 
       if(pc) {
         // PRIMARY cards — alternating images
@@ -690,9 +812,13 @@ function renderGuide(data) {
     + '</div>'
 
     // Page 2+: Scores then guide sections
-    + dashHtml
+    + summaryHtml
+    + relChartsHtml
+    + relMatrixHtml
+    + realmCardsSection
+    + intChartsHtml
+    + intMatrixHtml
     + detailBreakdownHtml
-    + crossTabHtml
     + sectionsHtml
 
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
@@ -729,9 +855,9 @@ function renderGuide(data) {
       }
     };
     if(document.getElementById('realmChart')) {
-      new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['Work','Partner','Family','Friends','Community','God'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
+      new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['God','Significant Other','Family','Friends','Work','Community'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
       new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Joy'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
-      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling / Purpose','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
       new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts });
     }
   }, 100);
@@ -744,8 +870,80 @@ function showError(msg) {
 
 window.addEventListener('load', async () => {
   try {
-    // Check for ?id= in URL first
     const urlParams = new URLSearchParams(window.location.search);
+
+    // ── PREVIEW MODE (?preview=true) ──────────────────────────
+    if(urlParams.get('preview') === 'true') {
+      const previewData = {
+        name: 'Preview User',
+        date: new Date().toISOString(),
+        guide: {
+          sections: [
+            { id:'picture',           label:'What Your Scores Are Saying',     content:'This is a preview of the picture section. Your scores tell a story about where your heart is right now — what is open, what is carrying weight, and where there may be room to move. This section would be written specifically for you based on your actual assessment results.' },
+            { id:'scored_well',       label:'What Is Working',                 content:'This is a preview of what is working. There are real strengths in your relational and interior health. This section highlights the areas where genuine health and connection are showing up.' },
+            { id:'could_be_stronger', label:'Where There Is Room to Grow',     content:'This is a preview of the growth section. Every heart has areas that need more attention. This section names those honestly and without judgment.' },
+            { id:'interior',          label:"What's Happening Underneath",     content:'This is a preview of the interior section. What you carry inside shapes everything about how you show up with others. This section looks at the emotional themes that are most active in your interior life.' },
+            { id:'invitation',        label:'Where God Seems to Be Moving',    content:'This is a preview of the invitation section. Even in the areas of struggle, there is often a sense of where God is at work. This section reflects on that movement.' },
+            { id:'soulcare',          label:'What Soul Care Offers You',       content:'This is a preview of the soul care section. Soul care is not a quick fix — it is a sustained practice of paying attention to what is happening inside. This section describes what that could look like for you.' },
+            { id:'nextstep',          label:'Using This Guide',                content:'This is a preview of the next step section. This guide is a starting point. Here is how to use it well.' },
+            { id:'practices',         label:'Practices for This Season',       content:'', practicesContent: {
+              primary: [
+                { name:'Sitting with What Is', instruction:'DAILY PRACTICE', description:'Set aside ten minutes each morning to sit quietly with whatever emotion is most present. Do not try to fix it or explain it away — just let it be there. Name it out loud if you can.', why:'Most of us are better at managing our emotions than meeting them. This practice interrupts that pattern.' },
+                { name:'The Honest Inventory', instruction:'WEEKLY PRACTICE', description:'Once a week, write down one relationship where you gave more than you received, one where you held back, and one that surprised you. Do not analyze — just notice.', why:'Awareness is the beginning of change. This practice builds the habit of honest self-observation.' },
+                { name:'The Permission Question', instruction:'AS NEEDED', description:'When you notice yourself shutting down or pulling back in a relationship, pause and ask: what would I do here if I actually had permission to be honest?', why:'Many of us live inside invisible permission structures. This question names the structure and creates a small opening.' },
+              ],
+              secondary: [
+                { name:'Gratitude with Specificity', description:'Instead of listing things you are grateful for, write one sentence about one specific moment from the past week that was genuinely good.' },
+                { name:'The Two-Minute Check-In', description:'Before entering any significant conversation or meeting, take two minutes to notice what you are carrying into it.' },
+              ],
+              aware: [
+                { name:'Numbing Patterns', description:'Notice what you reach for when discomfort shows up — phone, food, work, busyness. Awareness is not condemnation.' },
+                { name:'Comparison', description:'Your scores are not a ranking. Resist the urge to compare them to what you think they should be.' },
+              ]
+            }}
+          ],
+          closingNote: "This is a preview of Steve's closing note. It would be written personally for you after our Discovery Call, reflecting on what stood out most from your assessment results and our conversation."
+        },
+        a1: {
+          overall:'72%', work:'59%', partner:'83%', family:'84%', friends:'89%',
+          community:'46%', god:'73%',
+          work_outward:'53%', work_self:'71%',
+          partner_outward:'86%', partner_self:'76%',
+          family_outward:'82%', family_self:'90%',
+          friends_outward:'84%', friends_self:'100%',
+          community_outward:'45%', community_self:'48%',
+          god_outward:'83%', god_self:'63%',
+          dim_seen:'68%', dim_known:'74%', dim_voice:'79%', dim_belonging:'71%',
+          dim_support:'65%', dim_trust:'63%', dim_calling:'77%', dim_freedom:'58%',
+          raw: {
+            god:      [5,5,6,5,5,6,4,5,5,6],
+            partner:  [6,7,6,6,6,6,5,6,6,5],
+            family:   [6,6,7,6,6,6,6,5,6,7],
+            friends:  [6,7,7,6,7,6,6,6,7,7],
+            work:     [4,4,5,4,4,5,4,4,4,5],
+            community:[3,3,4,3,3,4,3,3,3,4],
+          }
+        },
+        hs: {
+          overall:'68%', grief:'67%', shame:'45%', fear:'71%', anger:'60%',
+          desire:'65%', joy:'80%',
+          awareness:'88%', honesty:'84%', movement:'83%', safety:'82%',
+          direction:'80%', peace:'76%',
+          raw: {
+            grief:  [5,5,4,5,5,5],
+            shame:  [3,3,4,3,3,4],
+            fear:   [5,5,5,5,5,5],
+            anger:  [4,4,5,4,4,4],
+            desire: [5,5,4,5,5,5],
+            joy:    [6,6,5,6,6,6],
+          }
+        }
+      };
+      renderGuide(previewData);
+      return;
+    }
+
+    // Check for ?id= in URL first
     const guideId = urlParams.get('id');
 
     if(guideId) {
