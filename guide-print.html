@@ -471,7 +471,7 @@ function renderGuide(data) {
       const raw = a1.raw[r.id];
       const cells = relDims.map(d => {
         const score = calcCellScore(raw, REL_DIM_MAP[d.id] || []);
-        return '<td class="'+cellClass(score)+'">'+cellVal(score)+'</td>';
+        return '<td class="'+cellClass(score)+'">'+cellDot(score)+'</td>';
       }).join('');
       return '<tr><td>'+r.label+'</td>'+cells+'</tr>';
     }).join('');
@@ -499,7 +499,7 @@ function renderGuide(data) {
       const cells = intPostures.map((p, pi) => {
         const v = raw ? parseFloat(raw[pi]) : 0;
         const score = isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
-        return '<td class="'+cellClass(score)+'">'+cellVal(score)+'</td>';
+        return '<td class="'+cellClass(score)+'">'+cellDot(score)+'</td>';
       }).join('');
       return '<tr><td>'+t.label+'</td>'+cells+'</tr>';
     }).join('');
