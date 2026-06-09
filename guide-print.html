@@ -294,13 +294,13 @@ function renderGuide(data) {
   const summaryHtml = '<div class="dashboard-wrap">'
     + '<div class="section-header">Your Assessment Scores</div>'
     + '<div class="dash-scores">'
-    + '<div class="dash-score"><div class="dash-score-label">Relational Health</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + relTag(numVal(a1Score)) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Relational Engagement Scores</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + relTag(numVal(a1Score)) + '</div></div>'
     + '<div class="dash-score"><div class="dash-score-label">Heart Needs</div><div class="dash-score-val" style="color:' + barColor(needsAvg) + '">' + needsScore + '</div><div class="dash-score-tag">' + needsTag(needsAvg) + '</div></div>'
     + '<div class="dash-score"><div class="dash-score-label">Relationship with God</div><div class="dash-score-val" style="color:' + barColor(numVal(godScore)) + '">' + godScore + '</div><div class="dash-score-tag">' + relTag(numVal(godScore)) + '</div></div>'
     + '</div></div>';
 
   // ── RELATIONAL CHARTS ─────────────────────────────────────
-  const relChartsHtml = '<div class="section-header" style="break-before:page">Relational Health</div>'
+  const relChartsHtml = '<div class="section-header" style="break-before:page">Relational Engagement Scores</div>'
     + '<div class="charts-grid">'
     + '<div class="chart-card"><div class="chart-label">By Relationship</div><div class="chart-wrap" style="height:160px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
     + '<div class="chart-card"><div class="chart-label">By Need</div><div class="chart-wrap" style="height:160px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
@@ -482,7 +482,7 @@ function renderGuide(data) {
       }).join('');
       return '<tr><td>'+r.label+'</td>'+cells+'</tr>';
     }).join('');
-    relGridHtml = '<div class="heat-section"><div class="heat-title">Relational Health — Realm × Dimension</div>'
+    relGridHtml = '<div class="heat-section"><div class="heat-title">Relational Engagement — Realm × Need</div>'
       + '<table class="heat-grid"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
   }
 
@@ -715,8 +715,8 @@ function renderGuide(data) {
 
   const notesToShow = relNotesArray.length >= 4 ? relNotesArray : previewNotes;
 
-  const relationalNotesHtml = '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
-    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">What the Relational Scores Are Saying</div>'
+  const relationalNotesHtml = '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
+    + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
     + '<ul style="margin:0;padding-left:1.25rem">'
     + notesToShow.map(b => '<li style="font-size:.85rem;color:#4a3a2a;line-height:1.85;margin-bottom:.5rem">'+b+'</li>').join('')
     + '</ul>'
@@ -754,9 +754,12 @@ function renderGuide(data) {
 
   const themeInsightsHtml = insightCards.length
     ? '<div class="section-header">Interior Score Breakdown</div>'
-      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Themes that scored notably high or low — and what that typically means.</div>'
-      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem;align-items:start">'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:.75rem;font-style:italic">Themes that scored notably high or low — and what that typically means.</div>'
+      + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;align-items:start">'
       + insightCards.join('')
+      + '</div>'
       + '</div>'
     : '';
 
@@ -782,35 +785,50 @@ function renderGuide(data) {
       + '</span>';
   }
 
+  // Identity gap notes
+  const identityGapNotes = {
+    grief:  {high: 'Others recognize grief in you more than you carry it yourself — worth exploring what loss you may be minimizing.', low: 'You carry more grief than others see. That gap can mean the loss is being held privately, or that it has not had space to surface.'},
+    shame:  {high: 'Others see shame operating in you more than you own it yourself — shame that is unrecognized tends to drive decisions invisibly.', low: 'You carry shame that others are not seeing. That kind of private shame tends to shape how safe it feels to be known.'},
+    fear:   {high: 'Others recognize fear in you more than you see it in yourself — fear that is unnamed tends to show up sideways in decisions and relationships.', low: 'You carry more fear than others perceive. That gap sometimes means the fear has gone internal while the outside still looks steady.'},
+    anger:  {high: 'Others see anger in you more than you identify with it yourself — when anger is not owned, it tends to leak out in ways that are hard to trace.', low: 'You carry anger that others are not seeing. Anger held privately without expression tends to find other outlets.'},
+    desire: {high: 'Others see hope and desire in you more than you experience it yourself — that gap is worth sitting with. What has made wanting feel less safe than it looks from the outside?', low: 'You carry more hope and desire than others see. That can mean desire has gone quiet publicly while still present privately — or that it has not found a place to land.'},
+    joy:    {high: 'Others see more capacity for joy in you than you experience yourself — what is keeping the good things from fully landing?', low: 'You experience more joy than others see in you. That gap sometimes means delight is present but private — or that it has not been expressed in ways others can witness.'}
+  };
+
   const identityCards = idThemeKeys.map(t => {
     const id = identityData[t];
     if(!id) return '';
     const gap = id.gap || 0;
     const hasGap = gap >= 15;
+    const othersHigh = (id.others || 0) >= 60;
+    const selfHigh = (id.self || 0) >= 60;
     const cardBg = hasGap ? '#fff8f0' : '#faf6f0';
     const cardBorder = hasGap ? 'border:1px solid #e8c8a0;border-left:3px solid #c97a5a' : 'border:1px solid #e8d8c0';
     const gapFlag = hasGap
       ? '<span style="margin-left:8px;font-size:.6rem;color:#c97a5a;background:#fde8d8;padding:1px 6px;border-radius:3px;font-weight:500">'+gap+'% gap</span>'
       : '';
+
+    // Gap note
+    let gapNote = '';
+    if(hasGap && identityGapNotes[t]) {
+      const noteText = othersHigh && !selfHigh ? identityGapNotes[t].high : !othersHigh && selfHigh ? identityGapNotes[t].low : '';
+      if(noteText) {
+        gapNote = '<div style="margin-top:.5rem;padding:.5rem .75rem;background:#fff0eb;border-left:3px solid #c97a5a;border-radius:3px;font-size:.68rem;color:#7a3a10;line-height:1.6">'+noteText+'</div>';
+      }
+    }
+
     return '<div style="background:'+cardBg+';'+cardBorder+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
-      + '<div style="font-size:.72rem;font-weight:500;color:#4a3a2a;margin-bottom:.5rem">'+idThemeLabels[t]+gapFlag+'</div>'
-      + '<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">'
-      + '<div style="width:110px;font-size:.6rem;color:#9a8a7a;flex-shrink:0;text-align:right">Others see me</div>'
-      + '<div>'+idBar(id.others)+'</div>'
-      + '<div style="font-size:.62rem;color:#6a5a4a;margin-left:4px">'+id.others+'%</div>'
-      + '</div>'
-      + '<div style="display:flex;align-items:center;gap:.5rem">'
-      + '<div style="width:110px;font-size:.6rem;color:#9a8a7a;flex-shrink:0;text-align:right">I see myself</div>'
-      + '<div>'+idBar(id.self)+'</div>'
-      + '<div style="font-size:.62rem;color:#6a5a4a;margin-left:4px">'+id.self+'%</div>'
-      + '</div>'
+      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+idThemeLabels[t]+gapFlag+'</div>'
+      + detailRow('Others see me', id.others+'%', false)
+      + detailRow('I see myself', id.self+'%', true)
+      + gapNote
       + '</div>';
   }).filter(Boolean);
 
   const identityInsightsHtml = identityCards.length
     ? '<div class="section-header">How You Identify With Each Emotion</div>'
-      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each emotion shown as two bars — how others see you carrying it, and how you see yourself. A highlighted card indicates a significant gap worth exploring.</div>'
-      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:2rem">'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each emotion shown as two bars — how others see you carrying it, and how you see yourself. A highlighted card with a gap note indicates something worth exploring.</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:2rem;align-items:start">'
       + identityCards.join('')
       + '</div>'
     : '';
@@ -994,8 +1012,9 @@ function renderGuide(data) {
       'soulcare': '<div class="pull-quote-right"><p>“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><cite>— Henri Nouwen</cite></div>',
       'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
+    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'top' : 'center';
     const sectionImg = sectionImages[s.id]
-      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:280px;height:auto;object-fit:cover;border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:280px;height:auto;object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
       : '';
     const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
@@ -1072,7 +1091,7 @@ function renderGuide(data) {
     + '<p>Steve Forney &nbsp;·&nbsp; BoldHearts &nbsp;·&nbsp; <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>'
     + '<div class="doc-footer">'
-    + '<p>&copy; 2026 The BoldHearts Group LLC &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; All Rights Reserved</p>'
+    + '<p>&copy; 2026 The BoldHearts Group LLC &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; All Rights Reserved</p><p style="margin-top:.3rem;font-size:.6rem;color:#b0a090">Guide v2.1</p>'
     + '<p style="margin-top:.4rem">This document is the exclusive intellectual property of The BoldHearts Group LLC. It is prepared solely for the individual named herein and may not be reproduced, distributed, shared, or used in any form without the express written authorization of The BoldHearts Group LLC. Unauthorized use is strictly prohibited.</p>'
     + '<p style="margin-top:.4rem">Spiritual Direction &nbsp;·&nbsp; Pastoral Counseling &nbsp;·&nbsp; Leadership Soul Care &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>';
