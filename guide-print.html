@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -261,18 +262,9 @@ function renderGuide(data) {
     return n <= 1 ? Math.round(n * 100) : Math.round(n);
   }
 
-  console.log('RAW hs:', JSON.stringify(hs));
-  console.log('RAW a1:', JSON.stringify(a1));
   const realmVals  = [a1?.god, a1?.partner, a1?.family, a1?.friends, a1?.work, a1?.community].map(numVal);
   const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
-  console.log('realmVals:', realmVals);
-  console.log('themeVals:', themeVals);
   const relDimVals = [a1?.dim_seen, a1?.dim_known, a1?.dim_voice, a1?.dim_belonging, a1?.dim_support, a1?.dim_trust, a1?.dim_calling, a1?.dim_freedom].map(numVal);
-  // Debug: log hs dim values to console
-  console.log('hs dims:', {
-    awareness: hs?.awareness, honesty: hs?.honesty, movement: hs?.movement,
-    safety: hs?.safety, direction: hs?.direction, peace: hs?.peace
-  });
   const intDimVals = [hs?.awareness, hs?.honesty, hs?.movement, hs?.safety, hs?.direction, hs?.peace].map(v => {
     if(v === null || v === undefined || v === '' || v === '—') return 0;
     const s = v.toString().trim().replace('%','');
@@ -280,7 +272,6 @@ function renderGuide(data) {
     if(isNaN(n)) return 0;
     return n <= 1 ? Math.round(n * 100) : Math.round(n);
   });
-  console.log('intDimVals:', intDimVals);
 
   // ── SUMMARY SCORES ──────────────────────────────────────
   // Calculate overall Needs average
@@ -853,7 +844,7 @@ function renderGuide(data) {
     } else if(othersHigh && selfHigh) {
       // Both see it — named but stuck
       observation = 'Your ' + negThemeNames[t] + ' score is low, and both you and the people around you recognize this is something you carry. When awareness is there but the score is still low, it usually means you know it is present — but it has not moved much yet. Something is keeping it in place.';
-      question = 'Does that feel accurate — that you are aware of it, but it has not really shifted?';
+      question = 'Does that land — that you are aware of it, but it has not really shifted?';
     } else if(!othersHigh && !selfHigh && awareness < 55) {
       // Neither see it, low awareness — underground
       observation = 'Your ' + negThemeNames[t] + ' score is low, and neither the identity data nor the awareness score suggests this is something on your radar right now. That is worth a second look — not because something is wrong, but because emotions that are not visible to us often show up sideways in other places.';
@@ -863,15 +854,15 @@ function renderGuide(data) {
       const safetyScore = numVal(hs?.safety) || 0;
       const scaredToHope = safetyScore < 55 || fearScore > 70;
       if(scaredToHope) {
-        observation = 'Your Desire & Hope score is low — and when I look at that alongside your other scores, I wonder if wanting things has started to feel a little risky. Not because you have stopped caring, but because hoping for good things and not receiving them is its own kind of loss. At some point the heart learns it is safer to want less.';
-        question = 'Does that resonate — that hope has gone a little quiet as a way of protecting yourself? That you might be scared to want much right now?';
+        observation = 'Desire & Hope is low. When wanting things starts to feel risky — not because caring has stopped, but because hope that goes unmet leaves its own mark — the heart eventually learns to want less.';
+        question = 'Does that resonate — that hope has gone a little quiet as a way of protecting itself? That wanting much right now carries some risk?';
       } else {
         observation = 'Your Desire & Hope score is low. When desire goes quiet it does not always mean something is wrong — but it is worth noticing. The heart was made to reach toward things. When it stops, something usually got in the way.';
         question = 'Is hope something that feels alive for you right now — or has it been harder to access lately?';
       }
     } else if(t === 'joy' && score < 60) {
       observation = 'Your Joy & Delight score is low. Joy is not the same as happiness — it is the capacity to receive what is good, even in hard seasons. When it goes quiet, it is usually because something underneath has accumulated enough weight that the good things cannot fully land.';
-      question = 'Does that feel true — that there are good things present, but they are not quite making it through? Or has it been hard to find much that feels genuinely good right now?';
+      question = 'Does that land — that there are good things present, but they are not quite making it through? Or has it been hard to find much that registers as genuinely good right now?';
     } else {
       return '';
     }
@@ -1081,10 +1072,14 @@ function renderGuide(data) {
     + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
 
     + '<div style="text-align:center;padding:1.25rem 2rem;margin-top:2rem;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.15rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .4rem">&ldquo;The Lord does not look at the things people look at. People look at the outward appearance, but the Lord looks at the heart.&rdquo;</p><p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; 1 Samuel 16:7</p></div>'
-    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 1.25rem">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — if you want to go deeper or have questions about what you\'re reading — reach out. That conversation is what this is really for.</p>'    + '<div style="border-top:1px solid #e8d8c0;padding-top:1.25rem;text-align:center">'    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .4rem">&ldquo;Emotional health and spiritual maturity are inseparable.&rdquo;</p>'    + '<p style="font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem">— Peter Scazzero</p>'    + '<p style="font-family:Cormorant Garamond,serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem">&ldquo;For God has not given us a spirit of fear, but of power and of love and of a sound mind.&rdquo;</p>'    + '<p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">— 2 Timothy 1:7</p>'    + '</div>'    + '</div>'
+    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'
+    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn't. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — reach out. That conversation is what this is really for.</p>'
+    + '</div>'
     + '<div class="cta-block">'
-    + '<p><strong>This guide is a starting point — not a verdict.</strong></p>'
-    + '<p>What follows in this conversation is the real work. Use this as a reference as we look at the full picture together.</p>'
+    + '<p>Questions about what you read here? Ready to talk through the full picture?</p>'
     + '<p>Steve Forney &nbsp;·&nbsp; BoldHearts &nbsp;·&nbsp; <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>'
     + '<div class="doc-footer">'
@@ -1137,13 +1132,13 @@ window.addEventListener('load', async () => {
         date: '2026-06-07T06:22:00',
         guide: {
           sections: [
-            { id:'picture',           label:'What Your Scores Are Saying',     content:'This is a preview of the picture section. Your scores tell a story about where your heart is right now — what is open, what is carrying weight, and where there may be room to move.' },
-            { id:'scored_well',       label:'What Is Working',                 content:'This is a preview of what is working. There are real strengths in your relational and interior health. This section highlights the areas where genuine health and connection are showing up.' },
-            { id:'could_be_stronger', label:'Where There Is Room to Grow',     content:'This is a preview of the growth section. Every heart has areas that need more attention. This section names those honestly and without judgment.' },
-            { id:'interior',          label:"What's Happening Underneath",     content:'This is a preview of the interior section. What you carry inside shapes everything about how you show up with others.' },
-            { id:'invitation',        label:'Where God Seems to Be Moving',    content:'This is a preview of the invitation section. Even in the areas of struggle, there is often a sense of where God is at work.' },
-            { id:'soulcare',          label:'What Soul Care Offers You',       content:'This is a preview of the soul care section. Soul care is not a quick fix — it is a sustained practice of paying attention to what is happening inside.' },
-            { id:'nextstep',          label:'Using This Guide',                content:'This is a preview of the next step section. This guide is a starting point. Here is how to use it well.' },
+            { id:'picture',           label:'What Your Scores Are Saying',     content:'The first thing worth naming is the God score — 73%, with a 20% gap between how God is engaging toward you and how you are engaging back. That asymmetry is not unusual for someone carrying a lot. When the interior demands of other relationships are high and the pace is sustained, the primary relationship is often the one that gets maintained rather than pursued. The question is not whether something is wrong — it is whether you have noticed the gap, and what you make of it.\n\nFriends scored 89% with full mutuality — the highest relational score in the picture, and genuinely rare. Something about those relationships is working at a level that the others are not. That is worth paying attention to. When you look at the interior scores alongside that — fear well-integrated, desire and joy alive, anger accessible — it suggests these friendships have something the others are being asked to carry without the same conditions being present.\n\nCommunity is the lowest realm at 46%, and the energy exchange shows both sides are low. This is not a personal failure — it is a structural gap. Something systemic has quietly pulled you to the edges of your wider community. That kind of distance tends to form gradually, often after a season of transition or a loss that was not fully grieved. The belonging dimension sits lower than the others, and that pattern usually means the wider sense of being part of something has narrowed down to a few close connections — real ones, but not the full picture the heart was made for.\n\nWhen the relational and interior scores are read together, what emerges is someone with genuine health and real capacity — and a few quiet gaps that have been there long enough to feel like just the way things are. The friends score says what is possible. The community and God gaps say what has not yet found its way back.' },
+            { id:'scored_well',       label:'What Is Working',                 content:'The interior health scores here are largely strong — and that is the real foundation. Fear at 86% means anxiety is not running the show. Desire at 86% means the heart is still reaching. Joy at 86% means there is still genuine capacity to receive what is good. Anger at 71% means clarity is available. These are not small things. They suggest that whatever weight is present, it has not shut down the interior life.\n\nFriends at 89% with full mutuality is the standout relational score. You are genuinely known in those relationships — and you are genuinely showing up in them. Being known at 83% and trust at 76% across all dimensions confirms that the capacity for depth is real and available. These scores say: when the conditions are right, connection at this level is fully possible. The question is what those conditions are, and whether they can extend to the other relationships.' },
+            { id:'could_be_stronger', label:'Where There Is Room to Grow',     content:'Community scored lowest in the relational picture — and the data suggests it is low on both sides. This is not a personal failing. It is a structural gap that tends to form gradually, often after a season of loss or transition or simply a long stretch of being too busy to invest. The wider relational world has quietly contracted.\n\nThe interior scores tell a similar story in a different register. Shame at 50% is the one interior score that sits noticeably lower than the rest. Shame that is not fully processed tends to operate quietly beneath everything else. It does not announce itself. It shapes what feels safe to bring into relationships, what feels safe to want, and what feels safe to let others see. When shame is the outlier in an otherwise healthy interior picture, it is worth asking what it is quietly protecting.\n\nThe calling dimension at 62% also sits lower than the others — suggesting a gap between who you are and how your relationships are engaging what you are built for. That is not a relational problem alone. It is often connected to the shame score. When shame is present, calling tends to go partially underground — offered in safer relationships, held back in the ones where the risk of exposure feels higher.' },
+            { id:'interior',          label:"What's Happening Underneath",     content:'The interior scores here are mostly strong — and that is real. Fear is well-integrated. Desire and joy are alive. Anger is accessible. These are not small things. They suggest genuine interior work has happened, and that the emotional life is not suppressed or defended against in the way it can be in people carrying similar relational patterns.\n\nWhat is worth naming is the shame score — not because it is catastrophic, but because it is the one interior score that sits noticeably lower than the rest. Shame that is not fully processed tends to operate quietly beneath everything else. It does not announce itself. It shapes what feels safe to bring into relationships, what feels safe to want, and what feels safe to let others see. When shame is the outlier in an otherwise healthy interior picture, it is worth asking what it is quietly protecting.\n\nThe identity data adds a layer worth sitting with. The desire gap — others at 57%, self at 86% — suggests you carry more hope and desire than others are seeing. That gap sometimes means desire has gone quiet publicly while still present privately. Or it has not found a place to land. Either way, it is worth asking where the wanting is going, and whether it is finding expression in the relationships that can receive it.' },
+            { id:'invitation',        label:'Where God Seems to Be Moving',    content:'The God score sits at 73% — genuine, functioning, real. But there is a gap in the energy exchange: God is engaging toward you at a higher rate than you are engaging back. That asymmetry shows up in the data, and it is worth naming honestly — not as failure, but as something worth noticing.\n\nWhen desire and hope are strong, as they are here, but the engagement toward God is not keeping pace, it sometimes means the reaching is happening in other directions. The aliveness is present. The orientation has shifted slightly. That is a common pattern in people who are genuinely capable and genuinely doing good work — the capacities get directed outward, and the primary relationship gets maintained rather than pursued.\n\nWhat is being offered here seems to be an invitation toward a different kind of engagement with God — not more religious activity, but something more honest and more present. Less managed. The scores suggest the interior capacity for that kind of engagement is fully there.' },
+            { id:'soulcare',          label:'What Soul Care Offers You',       content:'What soul care could offer here is not repair — the picture does not call for that. What it offers is accompaniment for someone who is genuinely healthy in many ways but carrying patterns that have been in place long enough that they no longer register as patterns. They just register as life.\n\nThe community gap, the shame score, the slight pulling-back in the God engagement — none of these are crises. But they are all quiet enough that they can go unaddressed for a long time. Soul care creates a space where the quiet things get named. Where the performance layer has somewhere to come down. Where the questions that do not have easy answers can at least be held rather than managed.\n\nFor someone at this level of health and self-awareness, the work is less about fixing what is broken and more about tending what is real. There is a lot here worth protecting. There is also a little here worth loosening.' },
+            { id:'nextstep',          label:'Using This Guide',                content:'This guide is not a verdict — it is a starting point. The scores reflect one honest day of self-assessment, and they are more useful as a conversation opener than as a final word. Some of what you read here will land. Some of it may not. Both responses are worth paying attention to.\n\nThe most useful thing to bring into the Discovery Call is not certainty — it is curiosity. What resonates? What pushes back? What surprised you? Those reactions are usually more revealing than the scores themselves.' },
             { id:'practices',         label:'Practices for This Season',       content:'', practicesContent: {
               primary: [
                 { name:'Sitting with What Is', instruction:'DAILY PRACTICE', description:'Set aside ten minutes each morning to sit quietly with whatever emotion is most present. Do not try to fix it or explain it away — just let it be there. Name it out loud if you can.', why:'Most of us are better at managing our emotions than meeting them. This practice interrupts that pattern.' },
@@ -1259,5 +1254,6 @@ window.addEventListener('load', async () => {
   }
 });
 </script>
-</div></body>
+</div><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"845f141f328c4236813734c0f75317d0","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
 </html>
