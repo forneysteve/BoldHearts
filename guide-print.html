@@ -888,7 +888,7 @@ function renderGuide(data) {
       scored_well:      'assets/images/emphyrio-waterfall-4610084_1920.jpg',
       could_be_stronger:'assets/images/bluesnap-plant-234493_1920.jpg',
       interior:         'assets/images/blackpowder75-saxon-switzerland-539418_1920.jpg',
-      invitation:       'assets/images/pexels-mosbah-471798-36911483.jpg',
+      invitation:       'assets/images/pexels-josh-willink-11499-93858.jpg',
       soulcare:         'assets/images/pexels-clement-proust-363898785-35541665.jpg',
       nextstep:         'assets/images/luisambros-mountain-7704819_1920.jpg',
       practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
@@ -997,10 +997,10 @@ function renderGuide(data) {
       'scored_well': '',
       'interior': '<div class="pull-quote-right"><p>“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><cite>— Dallas Willard</cite></div>',
       'invitation': '<div class="pull-quote-left"><p>“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><cite>— Henri Nouwen</cite></div>',
-      'soulcare': '<div class="pull-quote-right"><p>“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><cite>— Henri Nouwen</cite></div>',
+      'soulcare': '',
       'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
-    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? '20% center' : 'center';
+    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'center top' : 'center';
     const sectionImg = sectionImages[s.id]
       ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:'+(sectionImages[s.id].includes('clement')?'340px':'280px')+';height:'+(sectionImages[s.id].includes('clement')?'340px':'auto')+';object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
       : '';
