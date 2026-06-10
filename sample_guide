@@ -1,212 +1,1261 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sample Spiritual Direction Guide | BoldHearts</title>
+<title>BoldHearts Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:16px;scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#d4ccc4;background-color:#111111}
-a{color:#e8d7a0;text-decoration:none}
-nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(17,17,17,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.1)}
-nav .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase}
-nav .logo span{color:#e8d7a0}
-.hero{padding:8rem 2rem 4rem;text-align:center;background:#1a1714;border-bottom:1px solid rgba(232,215,160,.1)}
-.hero-eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;color:#f0e8df;margin-bottom:.75rem;line-height:1.2}
-.hero-sub{font-size:1rem;color:#6a6258;font-style:italic;margin-bottom:2rem}
-.hero-note{display:inline-block;background:rgba(196,168,130,.1);border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:.6rem 1.25rem;font-size:.78rem;color:#c4a882;letter-spacing:.06em}
-.main{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem}
-.section-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#6a6258;margin-bottom:.6rem;margin-top:3rem;padding-bottom:.5rem;border-bottom:1px solid rgba(196,168,130,.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:11pt}
+body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2218;background:#f5f0e8;margin:0;padding:2rem 1rem 4rem}
+.guide-wrap{background:#fff;max-width:780px;margin:0 auto;padding:3rem 3.5rem 4rem;box-shadow:0 2px 40px rgba(0,0,0,0.08);border-radius:4px}
 
-/* Score Summary */
-.score-summary{background:#1a1816;border:1px solid rgba(196,168,130,.12);border-radius:4px;padding:2rem;margin-bottom:2rem}
-.score-summary-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f0e8df;margin-bottom:1.5rem}
-.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-bottom:1.5rem}
-.score-item{background:#111;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:.9rem 1rem;text-align:center}
-.score-item-label{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem}
-.score-item-val{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700}
-.score-item-tag{font-size:.65rem;color:#6a6258;margin-top:.2rem}
-.score-high{color:#b5c4a0}
+/* ── HEADER ── */
+.doc-header{text-align:center;padding-bottom:2rem;margin-bottom:2rem;border-bottom:2px solid #c4a882}
+.bh-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#4a3a2a;margin-bottom:.3rem}
+.bh-logo span{color:#c4a882}
+.doc-eyebrow{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1.25rem}
+.doc-title{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:#1a1410;line-height:1.2;margin-bottom:.5rem}
+.doc-subtitle{font-size:.95rem;color:#6a5a4a;font-style:italic;margin-bottom:1.25rem}
+.doc-meta{display:flex;justify-content:center;gap:2rem;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#9a8a7a}
+
+/* ── PURPOSE BLOCK ── */
+.purpose-block{background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:0}
+.purpose-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500}
+.purpose-block p{font-size:.88rem;color:#4a3a2a;line-height:1.9;margin-bottom:.75rem;font-style:italic;max-width:none}
+.purpose-block p:last-child{margin-bottom:0}
+
+/* ── PAGE BREAK after intro ── */
+.page-break{page-break-after:always;break-after:page;height:0;display:block}
+
+/* ── SECTION HEADERS (big) ── */
+.heat-grid{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.72rem}
+.heat-grid th{padding:.4rem .5rem;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:1px solid #e8d8c0}
+.heat-grid th:first-child{text-align:left}
+.heat-grid td{padding:.35rem .5rem;text-align:center;border:1px solid #f0e8e0}
+.heat-grid td:first-child{text-align:left;font-size:.7rem;color:#4a3a2a;font-weight:500;white-space:nowrap;padding-right:.75rem}
+.heat-grid td.cell-g{background:#d4e8c8;color:#2a5a2a}
+.heat-grid td.cell-y{background:#f5e8c0;color:#6a4a10}
+.heat-grid td.cell-r{background:#f5d0c0;color:#6a2a10}
+.heat-grid td.cell-e{background:#f8f4f0;color:#a09080}
+.heat-section{margin-bottom:2rem}
+.heat-title{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem}
+.section-header{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#1a1410;margin:2rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0;break-after:avoid}
+
+/* ── SCORE SUMMARY ── */
+.scores-wrap{margin-bottom:2rem;break-inside:avoid}
+.scores-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+.score-block{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;text-align:center;break-inside:avoid}
+.score-block-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#9a8a7a;margin-bottom:.4rem}
+.score-block-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
+.score-high{color:#5a9a50}
 .score-mid{color:#c4a882}
 .score-low{color:#c97a5a}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.bar-label{font-size:.72rem;color:#6a6258;width:130px;flex-shrink:0;text-align:right}
-.bar-track{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
-.bar-pct{font-size:.7rem;width:32px;text-align:right;flex-shrink:0}
 
-/* Guide */
-.guide-cover{text-align:center;padding:2.5rem 0 2rem;border-bottom:1px solid rgba(196,168,130,.12);margin-bottom:2.5rem}
-.guide-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:#f0e8df;line-height:1.25;margin-bottom:.6rem}
-.guide-subtitle{font-size:1rem;color:#6a6258;font-style:italic}
-.guide-section{background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:2rem;margin-bottom:.75rem}
-.guide-section-hdr{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
-.guide-section-icon{font-size:1.2rem}
-.guide-section-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6258}
-.guide-section-body{font-size:.95rem;color:#c0b8b0;line-height:2.05}
-.guide-section-body p{margin-bottom:1.1rem}
-.guide-section-body p:last-child{margin-bottom:0}
-.guide-closing{background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:3px solid #c4a882;border-radius:4px;padding:1.75rem;margin-top:1.5rem}
-.guide-closing-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.75rem}
-.guide-closing-text{font-size:.95rem;color:#c0b8b0;line-height:2;font-style:italic}
+/* ── SECTIONS ── */
+.section{margin-bottom:1.75rem;break-inside:avoid}
+.section-eyebrow{display:flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;font-weight:500}
+.section-icon{font-size:1rem;line-height:1}
+.section-body{font-size:.88rem;color:#2a2218;line-height:1.95}
+.section-body p{font-size:.88rem;line-height:1.95;margin-bottom:.9rem;max-width:none;color:#2a2218}
+.section-body p:last-child{margin-bottom:0}
 
-/* CTA */
-.cta-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-top:3px solid #c4a882;border-radius:4px;padding:3rem;text-align:center;margin-top:2.5rem}
-.cta-card h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
-.cta-card p{font-size:.95rem;color:#a09890;line-height:1.9;max-width:480px;margin:0 auto 2rem}
-.cta-btn{display:inline-block;background:#c4a882;color:#111;font-size:.8rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:1rem 2.5rem;border-radius:4px;text-decoration:none;transition:all .3s ease}
-.cta-btn:hover{background:transparent;color:#c4a882;border:2px solid #c4a882}
-.sample-banner{background:rgba(196,168,130,.08);border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:1rem 1.5rem;margin-bottom:2rem;text-align:center;font-size:.82rem;color:#c4a882;letter-spacing:.04em}
-footer{background:#0d0d0d;text-align:center;padding:2.5rem;border-top:1px solid rgba(196,168,130,.08)}
-footer p{color:#5a5550;font-size:.8rem}
-footer a{color:#6a6258}
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(196,168,130,.15),transparent);margin:2rem 0}
+/* ── PRACTICE CARDS ── */
+.practices-wrap{break-inside:avoid}
+.practice{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem;break-inside:avoid}
+.practice:last-child{margin-bottom:0}
+.practice-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:#1a1410;margin-bottom:.4rem}
+.practice-body{font-size:.85rem;color:#4a3a2a;line-height:1.9}
+.practice-why{font-size:.82rem;color:#7a6a5a;margin-top:.6rem;font-style:italic;line-height:1.8;border-top:1px solid #e8d8c0;padding-top:.5rem}
+.practice-instruction{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500}
+.practices-tier-header{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin:1.5rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0;font-weight:500}
+.secondary-practice{background:#fff;border:1px solid #e8d8c0;border-radius:4px;padding:.9rem 1.25rem;margin-bottom:.5rem;break-inside:avoid}
+.secondary-practice-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#1a1410;margin-bottom:.2rem}
+.secondary-practice-body{font-size:.82rem;color:#4a3a2a;line-height:1.8}
+.aware-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.25rem}
+.aware-item{background:#faf6f0;border:1px solid #e8d8c0;border-radius:3px;padding:.65rem .9rem;break-inside:avoid}
+.aware-item-name{font-size:.78rem;font-weight:500;color:#1a1410;margin-bottom:.2rem}
+.aware-item-desc{font-size:.72rem;color:#7a6a5a;line-height:1.6}
+
+/* ── DIVIDER ── */
+.section-divider{border:none;border-top:1px solid #e8d8c0;margin:1.75rem 0;break-after:avoid}
+
+/* ── CLOSING ── */
+.closing-block{background:#1a1410;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid}
+.closing-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem}
+.closing-text{font-size:.88rem;color:#c8b8a8;line-height:1.95;font-style:italic}
+
+/* ── CTA ── */
+.cta-block{border:1px solid #e8d8c0;border-top:3px solid #c4a882;border-radius:4px;padding:1.5rem 2rem;text-align:center;margin-top:1.75rem;break-inside:avoid}
+.cta-block p{font-size:.85rem;color:#4a3a2a;line-height:1.8;margin-bottom:.5rem;max-width:none}
+.cta-block a{color:#c4a882;font-weight:500}
+
+/* ── FOOTER ── */
+.doc-footer{text-align:center;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e8d8c0;break-inside:avoid}
+.doc-footer p{font-size:.68rem;color:#9a8a7a;letter-spacing:.03em;max-width:none;line-height:1.6}
+
+/* ── LOADING / ERROR ── */
+.loading{text-align:center;padding:6rem 2rem;color:#9a8a7a;font-size:.9rem}
+.loading-dots{display:inline-flex;gap:6px;margin-top:1rem}
+.loading-dot{width:7px;height:7px;border-radius:50%;background:#c4a882;animation:pulse 1.2s infinite}
+.loading-dot:nth-child(2){animation-delay:.2s}
+.loading-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+.error{text-align:center;padding:4rem 2rem;color:#c97a5a;font-size:.9rem}
+
+/* ── PRINT ── */
+/* Charts */
+.dashboard-wrap{margin-bottom:2rem;break-inside:avoid}
+.dash-scores{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.dash-score{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;text-align:center;break-inside:avoid}
+.dash-score-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#9a8a7a;margin-bottom:.3rem}
+.dash-score-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
+.dash-score-tag{font-size:.7rem;color:#9a8a7a;margin-top:2px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;max-width:100%;overflow:hidden}
+.chart-card{background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:1rem;break-inside:avoid;overflow:hidden;min-width:0}
+.chart-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0}
+.chart-wrap{position:relative;overflow:hidden;width:100%}
+
+.pull-quote-left{float:left;width:42%;margin:0 1.5rem 1rem -1rem;padding:1.25rem 1.5rem;border-top:2px solid #c4a882;border-bottom:2px solid #c4a882;background:#faf6f0;break-inside:avoid}
+.pull-quote-right{float:right;width:42%;margin:0 -1rem 1rem 1.5rem;padding:1.25rem 1.5rem;border-top:2px solid #c4a882;border-bottom:2px solid #c4a882;background:#faf6f0;break-inside:avoid}
+.pull-quote-left p,.pull-quote-right p{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:#2a2218;line-height:1.65;margin:0 0 .5rem}
+.pull-quote-left cite,.pull-quote-right cite{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;font-style:normal}
+@media(max-width:600px){.pull-quote-left,.pull-quote-right{float:none;width:100%;margin:1rem 0}}
+.print-btn{position:fixed;bottom:2rem;right:2rem;background:#c4a882;color:#fff;border:none;border-radius:4px;padding:.85rem 1.5rem;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 12px rgba(196,168,130,.4);transition:all .2s;z-index:100}
+.print-btn:hover{background:#b09060;box-shadow:0 4px 20px rgba(196,168,130,.5)}
+@media(max-width:600px){
+  .guide-wrap{padding:1.5rem 1.25rem;border-radius:0;box-shadow:none}
+  body{padding:.5rem 0 4rem;background:#fff}
+  .doc-title{font-size:1.8rem}
+  .doc-meta{flex-direction:column;gap:.4rem;align-items:center}
+  .scores-grid,.charts-grid{grid-template-columns:1fr !important}
+  .dash-scores{grid-template-columns:1fr 1fr !important}
+  .chart-card{break-inside:avoid}
+  .chart-wrap{height:160px !important}
+  .aware-grid{grid-template-columns:1fr !important}
+  .print-btn{bottom:1rem;right:1rem;padding:.7rem 1.1rem;font-size:.72rem}
+  .section-header{font-size:1.3rem}
+  .practice{padding:1rem}
+  .doc-header{padding-bottom:1.5rem}
+}
+@media(max-width:400px){
+  .dash-scores{grid-template-columns:1fr !important}
+  .doc-title{font-size:1.5rem}
+}
+@media print{
+  body{padding:.5rem;max-width:none}
+  .no-print{display:none}
+  .print-btn{display:none}
+
+  /* Force page break after intro */
+  .purpose-block{break-after:page}
+
+  /* Keep together */
+  .doc-header{break-inside:avoid}
+  .scores-wrap{break-inside:avoid}
+  .score-block{break-inside:avoid}
+  .section{break-inside:avoid}
+  .practice{break-inside:avoid}
+  .practices-wrap{break-inside:avoid}
+  .closing-block{break-inside:avoid}
+  .cta-block{break-inside:avoid}
+  .doc-footer{break-inside:avoid}
+
+  /* Section headers stay with their content */
+  .section-header{break-after:avoid;break-before:auto}
+  .section-eyebrow{break-after:avoid}
+
+  /* Dividers don't break */
+  .section-divider{break-after:avoid;break-before:avoid}
+}
+@page{margin:1.8cm 2cm}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="logo">Bold<span>Hearts</span></a>
-  <a href="assessment.html" style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:#a09890">Take the Assessment</a>
-</nav>
 
-<div class="hero">
-  <div class="hero-eyebrow">Sample Spiritual Direction Guide</div>
-  <h1>What a Complete Picture Looks Like</h1>
-  <div class="hero-sub">Generated from both the Relational Health Assessment and the Heart & Soul Assessment</div>
-  <div class="hero-note">✦ This is a sample guide based on realistic composite scores — not a real person</div>
+<button class="print-btn" onclick="window.print()">⬇ Save as PDF</button>
+<div class="guide-wrap"><div id="content">
+  <div class="loading">
+    <div>Building your guide...</div>
+    <div class="loading-dots">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+  </div>
 </div>
 
-<div class="main">
+<script>
+const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
+const PURPOSE_TEXT = [
+  "Thank you for taking the time to complete both assessments. What you've done here is not small — you've given an honest look at the core of who you are.",
+  "Much of what defines us can be observed from the outside — what we produce, how we lead, the roles we fill. These assessments aren't interested in any of that. They go deeper. They are an honest look at your heart.",
+  "And the heart, like any living thing, has substance. It has muscle and fiber and tissue. It has weight and history and the marks of everything it has been through. The Interior Health Assessment reflects that substance — the hurt and pain you've carried, the joys and desires that have shaped you, the life you've actually lived beneath the surface of what anyone else sees.",
+  "But the heart was also made for something. It was made to pump blood — to create movement, to sustain life, to keep everything connected. That is what the Relational Health Assessment measures. Not just who you know, but how life actually moves between you and the people around you. Whether it flows freely or something is restricting it.",
+  "These two pictures cannot be separated. The substance of the heart determines the quality of the flow. What you carry inside shapes everything about how you show up with the people in your life. You cannot tend one without tending the other.",
+  "What follows is an honest reading of both."
+];
 
-  <div class="sample-banner">
-    This sample guide is generated from composite scores representing a high-functioning person in a season of quiet disconnection. Names and identifying details are fictional.
-  </div>
+  function emotionTag(p) { return p>=80?'Healthy Engagement':p>=60?'Room for Growth':p>=40?'Guarded':p>=20?'Suppressed':'Shut Down'; }
+  function needsTag(p) { return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Struggling':p>=20?'Weak':'Critical'; }
+  function relTag(p) { return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead'; }
+function scoreColor(val) {
+  if(!val) return 'score-mid';
+  const s = val.toString().replace('%','');
+  const n = parseFloat(s);
+  if(isNaN(n)) return 'score-mid';
+  const pct = n <= 1 ? n * 100 : n;
+  if(pct >= 70) return 'score-high';
+  if(pct >= 45) return 'score-mid';
+  return 'score-low';
+}
 
-  <!-- ASSESSMENT SCORES -->
-  <div class="section-label">Relational Health Assessment — Sample Scores</div>
-  <div class="score-summary">
-    <div class="score-summary-title">Overall: <span class="score-mid">62%</span> — Developing</div>
-    <div class="score-grid">
-      <div class="score-item"><div class="score-item-label">Work</div><div class="score-item-val score-mid">68%</div><div class="score-item-tag">Developing</div></div>
-      <div class="score-item"><div class="score-item-label">Significant Other</div><div class="score-item-val score-mid">71%</div><div class="score-item-tag">Healthy</div></div>
-      <div class="score-item"><div class="score-item-label">Family</div><div class="score-item-val score-low">44%</div><div class="score-item-tag">Needs attention</div></div>
-      <div class="score-item"><div class="score-item-label">Friends</div><div class="score-item-val score-low">48%</div><div class="score-item-tag">Needs attention</div></div>
-      <div class="score-item"><div class="score-item-label">Community</div><div class="score-item-val score-mid">57%</div><div class="score-item-tag">Developing</div></div>
-      <div class="score-item"><div class="score-item-label">God</div><div class="score-item-val score-low">43%</div><div class="score-item-tag">Needs attention</div></div>
-    </div>
-    <div style="margin-top:1rem">
-      <div class="bar-row"><div class="bar-label">Being Seen</div><div class="bar-track"><div class="bar-fill score-mid" style="width:58%;background:#c4a882"></div></div><div class="bar-pct score-mid">58%</div></div>
-      <div class="bar-row"><div class="bar-label">Being Known</div><div class="bar-track"><div class="bar-fill score-low" style="width:46%;background:#c97a5a"></div></div><div class="bar-pct score-low">46%</div></div>
-      <div class="bar-row"><div class="bar-label">Having a Voice</div><div class="bar-track"><div class="bar-fill score-low" style="width:41%;background:#c97a5a"></div></div><div class="bar-pct score-low">41%</div></div>
-      <div class="bar-row"><div class="bar-label">Belonging</div><div class="bar-track"><div class="bar-fill score-mid" style="width:63%;background:#c4a882"></div></div><div class="bar-pct score-mid">63%</div></div>
-      <div class="bar-row"><div class="bar-label">Receiving Support</div><div class="bar-track"><div class="bar-fill score-low" style="width:49%;background:#c97a5a"></div></div><div class="bar-pct score-low">49%</div></div>
-      <div class="bar-row"><div class="bar-label">Trust & Safety</div><div class="bar-track"><div class="bar-fill score-low" style="width:44%;background:#c97a5a"></div></div><div class="bar-pct score-low">44%</div></div>
-      <div class="bar-row"><div class="bar-label">Freedom</div><div class="bar-track"><div class="bar-fill score-mid" style="width:66%;background:#c4a882"></div></div><div class="bar-pct score-mid">66%</div></div>
-      <div class="bar-row"><div class="bar-label">Calling</div><div class="bar-track"><div class="bar-fill score-mid" style="width:61%;background:#c4a882"></div></div><div class="bar-pct score-mid">61%</div></div>
-    </div>
-  </div>
+function fmtScore(val) {
+  if(!val) return '—';
+  const s = val.toString().trim();
+  if(s.endsWith('%')) return s;
+  const n = parseFloat(s);
+  if(isNaN(n)) return s;
+  if(n > 0 && n <= 1) return Math.round(n * 100) + '%';
+  return Math.round(n) + '%';
+}
 
-  <div class="section-label">Heart & Soul Assessment — Sample Scores</div>
-  <div class="score-summary">
-    <div class="score-summary-title">Overall: <span class="score-low">49%</span> — Developing</div>
-    <div class="score-grid">
-      <div class="score-item"><div class="score-item-label">Self</div><div class="score-item-val score-mid">67%</div><div class="score-item-tag">Developing</div></div>
-      <div class="score-item"><div class="score-item-label">Grief & Loss</div><div class="score-item-val score-low">38%</div><div class="score-item-tag">Needs attention</div></div>
-      <div class="score-item"><div class="score-item-label">Shame & Guilt</div><div class="score-item-val score-low">42%</div><div class="score-item-tag">Needs attention</div></div>
-      <div class="score-item"><div class="score-item-label">Fear & Anxiety</div><div class="score-item-val score-low">44%</div><div class="score-item-tag">Needs attention</div></div>
-      <div class="score-item"><div class="score-item-label">Anger</div><div class="score-item-val score-low">36%</div><div class="score-item-tag">Needs attention</div></div>
-      <div class="score-item"><div class="score-item-label">Desire & Hope</div><div class="score-item-val score-mid">52%</div><div class="score-item-tag">Developing</div></div>
-      <div class="score-item"><div class="score-item-label">Joy & Delight</div><div class="score-item-val score-low">48%</div><div class="score-item-tag">Needs attention</div></div>
-    </div>
-  </div>
+function renderGuide(data) {
+  const { name, guide, a1, hs, date } = data;
+  const today = (function() {
+    const d = date ? new Date(date) : new Date();
+    if(isNaN(d.getTime())) return new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+    return d.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  })();
 
-  <div class="divider"></div>
+  const purposeHtml = PURPOSE_TEXT.map(p => '<p>' + p + '</p>').join('');
 
-  <!-- SPIRITUAL DIRECTION GUIDE -->
-  <div class="guide-cover">
-    <div class="guide-title">Present Everywhere, Known Nowhere</div>
-    <div class="guide-subtitle">When showing up has become a substitute for being seen</div>
-  </div>
+  // Score summary with header
+  const a1Score = fmtScore(a1?.overall);
+  const hsScore = fmtScore(hs?.overall);
+  const godScore = fmtScore(a1?.god);
 
-  <div class="guide-section">
-    <div class="guide-section-hdr"><span class="guide-section-icon">👁</span><span class="guide-section-label">What Your Scores Are Saying</span></div>
-    <div class="guide-section-body">
-      <p>Your scores indicate a person who has learned to function exceptionally well in the visible layers of life — and who is quietly starving in the layers no one sees. Relationally, you are present in most of the key contexts of your life. You show up. You contribute. You maintain. But the data tells a more honest story underneath: Being Known scores at 46%, Having a Voice at 41%, Trust & Safety at 44%. These are not numbers about your relationships — they are numbers about what you let people see of you inside those relationships. And the picture they paint is of someone who has become very good at being in rooms without being truly in them.</p>
-      <p>Your Heart & Soul scores sharpen that picture considerably. Grief sits at 38%, Anger at 36%, Shame at 42%. These three together are the most common interior pattern in high-functioning disconnection — a person who has learned to manage what they feel rather than move through it. The grief hasn't been processed. The anger has been suppressed rather than named. The shame has been covered rather than exposed. And so the interior life runs quietly in the background, shaping everything without being acknowledged by anyone — including yourself.</p>
-      <p>What's notable is your Self score at 67% — you are more self-aware than most. You know something is happening underneath. You can probably name it better than most people could. And yet that awareness has not yet translated into movement. Knowing and doing remain separated by something — likely fear (44%) and the long habit of carrying things alone. Your Desire & Hope score at 52% tells you something important: there is still wanting in you. The heart hasn't gone quiet. It is waiting for permission to be honest.</p>
-      <p>The God score at 43% is the piece that pulls everything together. This is not a story about relational skill or personal failure. It is a story about a person who has not yet found a place — not with people, not with God, not even fully with themselves — where it is truly safe to be undone. That is the real picture your scores are painting, and it is worth sitting with honestly.</p>
-    </div>
-  </div>
+  // Dashboard with charts
+  function scoreTag(p) {
+    const n = parseFloat(p);
+    if(isNaN(n)) return '';
+    const v = n <= 1 ? n * 100 : n;
+    return v >= 80 ? 'Strong' : v >= 60 ? 'Functioning' : v >= 40 ? 'Weak' : v >= 20 ? 'Dormant' : 'Dead';
+  }
+  function barColor(v) { return v >= 80 ? '#6bc45e' : v >= 60 ? '#c4a882' : v >= 40 ? '#d4884a' : v >= 20 ? '#c97a5a' : '#8a2a2a'; }
+  function makeColors(arr) { return arr.map(barColor); }
 
-  <div class="guide-section">
-    <div class="guide-section-hdr"><span class="guide-section-icon">🌊</span><span class="guide-section-label">What's Happening Underneath</span></div>
-    <div class="guide-section-body">
-      <p>These scores point to a pattern that develops slowly and almost invisibly in people who are capable, conscientious, and quietly self-sufficient. Somewhere along the way — probably early, probably in response to something that required you to hold yourself together — you learned that showing up was safer than being seen. That competence was a more reliable currency than vulnerability. That the cost of being truly known was higher than the cost of carrying things alone.</p>
-      <p>This pattern doesn't feel like a wound from the inside. It feels like wisdom. It feels like emotional intelligence. It feels like knowing when to speak and when to stay quiet, when to lean in and when to hold back. But the data underneath tells a different story. The grief at 38% is not about the absence of hard things — it's about hard things that were survived rather than grieved. The anger at 36% is not about the absence of things worth being angry about — it's about anger that got converted into forward motion rather than processed as honest feeling. Something keeps getting managed that was meant to be felt.</p>
-      <p>The shame pattern is worth particular attention. A score of 42% doesn't mean you are drowning in shame — it means shame is operating quietly in the background, shaping how much of yourself you offer to people. There is likely a version of you that no one has fully seen. Not because you are hiding something terrible, but because the risk of being fully known has never felt worth taking. The self-aware part of you (67%) knows this is true. The fearful part (44%) keeps choosing safety instead.</p>
-      <p>What's being managed here is not a behavioral problem. It is a soul problem. The interior life has been running in maintenance mode for a long time — functional, competent, and quietly lonely. What it needs is not more self-improvement. It needs a place where it doesn't have to perform.</p>
-    </div>
-  </div>
+  function numVal(s) {
+    if(!s) return 0;
+    const str = s.toString().replace('%','').trim();
+    const n = parseFloat(str);
+    if(isNaN(n)) return 0;
+    return n <= 1 ? Math.round(n * 100) : Math.round(n);
+  }
 
-  <div class="guide-section">
-    <div class="guide-section-hdr"><span class="guide-section-icon">✦</span><span class="guide-section-label">Where God Seems to Be Moving</span></div>
-    <div class="guide-section-body">
-      <p>God's invitation in this season is not subtle. It is showing up in the gaps — in the low Anger score, in the unprocessed Grief, in the 43% relationship with God that says something has gone quiet between you. The invitation is this: stop managing your interior life and start bringing it. Not to therapy, not to a program, not to a system — but to God, who is not waiting for you to have it together before He shows up.</p>
-      <p>The specific door God seems to be opening is the one you've kept most carefully closed — the door to being honestly, messily, unproductively present with Him. Not devotional presence. Not performance presence. The kind of presence where you say what is actually true: that you are tired, that you are angry about things you haven't named out loud, that you carry grief you haven't finished, that you are not sure He has been showing up the way you needed Him to. That conversation — the one you haven't had — is the one He is waiting for.</p>
-      <p>Your Desire & Hope score at 52% is the signal that something in you still believes this is possible. The heart is not closed. It is cautious. And the invitation of this season is to bring that cautious, half-believing, honestly unsure heart to God and let Him meet it where it actually is — not where it thinks it should be. That is where the movement begins.</p>
-    </div>
-  </div>
+  const realmVals  = [a1?.god, a1?.partner, a1?.family, a1?.friends, a1?.work, a1?.community].map(numVal);
+  const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
+  const relDimVals = [a1?.dim_seen, a1?.dim_known, a1?.dim_voice, a1?.dim_belonging, a1?.dim_support, a1?.dim_trust, a1?.dim_calling, a1?.dim_freedom].map(numVal);
+  const intDimVals = [hs?.awareness, hs?.honesty, hs?.movement, hs?.safety, hs?.direction, hs?.peace].map(v => {
+    if(v === null || v === undefined || v === '' || v === '—') return 0;
+    const s = v.toString().trim().replace('%','');
+    const n = parseFloat(s);
+    if(isNaN(n)) return 0;
+    return n <= 1 ? Math.round(n * 100) : Math.round(n);
+  });
 
-  <div class="guide-section">
-    <div class="guide-section-hdr"><span class="guide-section-icon">🧭</span><span class="guide-section-label">What Soul Care Offers You</span></div>
-    <div class="guide-section-body">
-      <p>Soul care attends to what has been neglected. For someone with your scores, what has been neglected is not your relationships — you are present in most of them. What has been neglected is the interior life underneath those relationships. The grief that hasn't finished. The anger that got converted into forward motion. The shame that keeps you offering people a curated version of yourself. Soul care creates a space where those things can finally surface — not to be fixed, but to be named honestly in the presence of someone who can hold them with you.</p>
-      <p>Spiritual direction is not therapy. It is not coaching. It is not accountability. It is the practice of sitting with someone who helps you notice what you've been too busy or too guarded to see — where God is present, where He is absent, what your interior life is actually telling you, and what honest next steps look like. Given what your scores reveal, what that kind of attention could do is significant: it could give the grief somewhere to go. It could give the anger a name. It could give the shame something to stand against. And it could give your relationship with God the honesty it has been waiting for.</p>
-    </div>
-  </div>
+  // ── SUMMARY SCORES ──────────────────────────────────────
+  // Calculate overall Needs average
+  const needDimKeys = ['dim_seen','dim_known','dim_voice','dim_belonging','dim_support','dim_trust','dim_calling','dim_freedom'];
+  const needVals = needDimKeys.map(k => numVal(a1?.[k])).filter(v => v > 0);
+  const needsAvg = needVals.length > 0 ? Math.round(needVals.reduce((a,b)=>a+b,0)/needVals.length) : 0;
+  const needsScore = needsAvg > 0 ? needsAvg + '%' : '—';
 
-  <div class="guide-section">
-    <div class="guide-section-hdr"><span class="guide-section-icon">→</span><span class="guide-section-label">Your Next Honest Step</span></div>
-    <div class="guide-section-body">
-      <p>The Discovery Call is a free 15-minute conversation with Steve to look at your complete picture together. It is not a sales call. It is not a commitment to anything. It is simply an honest conversation about what your scores are actually telling you, what you're carrying, and whether working together makes sense. No pressure, no agenda beyond that.</p>
-      <p>If what you've read in this guide resonates — if something in you recognized itself in these pages — that recognition is worth a conversation. You've been carrying this long enough to know it doesn't resolve on its own. The next honest step is a simple one: reach out.</p>
-    </div>
-  </div>
+  const summaryHtml = '<div class="dashboard-wrap">'
+    + '<div class="section-header">Your Assessment Scores</div>'
+    + '<div class="dash-scores">'
+    + '<div class="dash-score"><div class="dash-score-label">Relational Engagement Scores</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + relTag(numVal(a1Score)) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Heart Engagement Scores</div><div class="dash-score-val" style="color:' + barColor(needsAvg) + '">' + needsScore + '</div><div class="dash-score-tag">' + needsTag(needsAvg) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Relationship with God</div><div class="dash-score-val" style="color:' + barColor(numVal(godScore)) + '">' + godScore + '</div><div class="dash-score-tag">' + relTag(numVal(godScore)) + '</div></div>'
+    + '</div></div>';
 
-  <div class="guide-section">
-    <div class="guide-section-hdr"><span class="guide-section-icon">✤</span><span class="guide-section-label">A Practice for This Season</span></div>
-    <div class="guide-section-body">
-      <p><strong style="color:#f0e8df">The Daily Examen</strong><br>
-      The Examen is a 15-minute prayer practice developed by Ignatius of Loyola that trains you to notice where God was present in your day — and where you were present to God. You move through your day in reverse, asking two questions: Where did I feel most alive, most connected, most like myself? And where did I feel most drained, most absent, most like I was going through motions? You do not try to fix anything. You simply notice. Given your scores on Being Seen (58%) and your God score (43%), this practice addresses the core gap directly — it builds the habit of paying attention to your own interior experience, and it invites God into the ordinary details of your day rather than keeping Him at devotional distance.</p>
-      <p><strong style="color:#f0e8df">The Prayer of Lament</strong><br>
-      Lament is the practice of bringing honest grief and anger to God — not wrapped in theological qualifications, but raw and direct. The Psalms are full of it: "How long, Lord? Will you forget me forever?" Your Grief score (38%) and Anger score (36%) together indicate that significant weight has been carried without being released. Lament gives it somewhere to go. The practice is simple: take one thing you are genuinely grieved or angry about — something you haven't said out loud — and say it to God, directly and without editing. Stay with it for 10 minutes. Don't resolve it. Don't theologize it. Just bring it. This practice is specifically chosen for you because the pattern in your data isn't absence of feeling — it's suppression of feeling. Lament creates a container for what has been held too long.</p>
-      <p><strong style="color:#f0e8df">Confession to a Trusted Person</strong><br>
-      Not confession in the religious sense — confession as the practice of saying something true about yourself to another person that you have not said before. Your Shame score (42%) and Being Known score (46%) together point to a person who is carrying more alone than anyone around them knows. The antidote to shame is not self-compassion — it is witnessed honesty. Choose one person you trust. Tell them one true thing about yourself that you have been protecting. It doesn't need to be dramatic. It just needs to be real. The research on shame is clear: shame loses its power in the presence of empathy. This practice is chosen specifically because your data shows a person who is self-aware enough to know what they are carrying — and who has not yet let anyone else carry it with them.</p>
-    </div>
-  </div>
+  // ── RELATIONAL CHARTS ─────────────────────────────────────
+  const relChartsHtml = '<div class="section-header" style="break-before:page">Relational Engagement Scores</div>'
+    + '<div class="charts-grid">'
+    + '<div class="chart-card"><div class="chart-label">By Relationship</div><div class="chart-wrap" style="height:160px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">By Need</div><div class="chart-wrap" style="height:160px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
+    + '</div>';
 
-  <div class="guide-closing">
-    <div class="guide-closing-label">A Note from Steve</div>
-    <div class="guide-closing-text">What strikes me most about this picture is not the low scores — it's the combination of high self-awareness and continued isolation. You know yourself well. You know something needs to change. And you are still carrying most of it alone. That gap between knowing and moving is exactly where spiritual direction lives. I've sat with many people whose scores look like yours, and what I've seen consistently is that the movement they were looking for wasn't far away — it was one honest conversation away. I'd be glad to be part of that conversation if you're ready for it.</div>
-  </div>
+  // ── INTERIOR CHARTS ───────────────────────────────────────
+  const intChartsHtml = '<div class="section-header" style="break-before:page">Interior Health</div>'
+    + '<div class="charts-grid">'
+    + '<div class="chart-card"><div class="chart-label">By Emotion</div><div class="chart-wrap" style="height:160px"><canvas id="themeChart" role="img" aria-label="Interior scores by theme"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">By Posture</div><div class="chart-wrap" style="height:160px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
+    + '</div>';
 
-  <div class="cta-card">
-    <h3>Ready to see your own picture?</h3>
-    <p>Start with the Relational Health Assessment — free, honest, and about 10 minutes. Then take the Heart & Soul Assessment to complete the picture.</p>
-    <a href="assessment.html" class="cta-btn">Take the Assessment &rarr;</a>
-    <div style="margin-top:1rem;font-size:.78rem;color:#5a5550">Free &nbsp;·&nbsp; Private &nbsp;·&nbsp; No account required</div>
-  </div>
+  const dashHtml = summaryHtml;
 
-</div>
+  // ── DETAILED SCORE BREAKDOWN ─────────────────────────────────────────────
 
-<footer>
-  <p>&copy; 2026 BoldHearts &mdash; Sedalia, Colorado &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a></p>
-</footer>
+  function detailRow(label, val, isLast) {
+    const n = numVal(val);
+    if(n === 0) return '';
+    const col = barColor(n);
+    const border = isLast ? '' : 'border-bottom:1px solid #ede8e0;';
+    return '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0;'+border+'">'
+      +'<div style="width:130px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3">'+label+'</div>'
+      +'<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden">'
+      +'<div style="width:'+n+'%;height:100%;background:'+col+';border-radius:4px"></div>'
+      +'</div>'
+      +'<div style="width:34px;font-size:.7rem;font-weight:500;color:'+col+';text-align:right">'+n+'%</div>'
+      +'</div>';
+  }
+
+  function detailCard(title, rows) {
+    if(!rows) return '';
+    return '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;padding:.75rem 1rem;break-inside:avoid;margin-bottom:0">'
+      +'<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid #e8d8c0;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+title+'</div>'
+      +rows
+      +'</div>';
+  }
+
+  // Realm cards
+  const realmDefs = [
+    {label:'Relationship with God', overall:a1?.god,       out:a1?.god_outward,       self:a1?.god_self,       outLabel:'How God engages you',  selfLabel:'How you engage God'},
+    {label:'Significant Other',     overall:a1?.partner,   out:a1?.partner_outward,   self:a1?.partner_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Family',                overall:a1?.family,    out:a1?.family_outward,    self:a1?.family_self,    outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Friends',               overall:a1?.friends,   out:a1?.friends_outward,   self:a1?.friends_self,   outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Work / School',         overall:a1?.work,      out:a1?.work_outward,      self:a1?.work_self,      outLabel:'How they engage you',  selfLabel:'How you engage them'},
+    {label:'Community',             overall:a1?.community, out:a1?.community_outward, self:a1?.community_self, outLabel:'How they engage you',  selfLabel:'How you engage them'},
+  ].filter(r => numVal(r.overall) > 0);
+
+  const realmCardsHtml = realmDefs.map((r, ridx) => {
+    const outN = numVal(r.out), selfN = numVal(r.self);
+    const gap = Math.abs(outN - selfN);
+    let pattern = '';
+    if(outN > 0 && selfN > 0) {
+      if(outN < 50 && selfN >= 65) pattern = ' — Giving more than receiving';
+      else if(outN >= 65 && selfN < 50) pattern = ' — Others reaching in, holding back';
+      else if(outN < 50 && selfN < 50) pattern = ' — Disconnected on both sides';
+      else if(outN >= 65 && selfN >= 65 && gap < 15) pattern = ' — Genuine mutuality';
+      else if(gap >= 15) pattern = ' — ' + gap + '% gap worth exploring';
+      else pattern = ' — Genuine mutuality';
+    }
+    // Gap note — shown when gap >= 15%
+    const isGod = r.label === 'Relationship with God';
+    const gapNote = gap >= 15
+      ? '<div style="margin-top:.5rem;padding:.5rem .75rem;background:#fff8f0;border-left:3px solid #c97a5a;border-radius:3px;font-size:.68rem;color:#7a3a10;line-height:1.6">'
+        + '<strong>Note:</strong> There is a ' + gap + '% gap between '
+        + (isGod ? 'how you engage God and how God engages you' : 'how you engage them and how they engage you')
+        + ' — worth exploring in your session.'
+        + '</div>'
+      : '';
+    const card = detailCard(r.label + pattern,
+      detailRow(r.outLabel, r.out, false) +
+      detailRow(r.selfLabel, r.self, true) +
+      gapNote
+    );
+    return card;
+  }).join('');
+
+  // Relational dimensions card
+  const relDimItems = [
+    {label:'Being Seen',           val:a1?.dim_seen},
+    {label:'Being Known',          val:a1?.dim_known},
+    {label:'Having a Voice',       val:a1?.dim_voice},
+    {label:'Belonging',            val:a1?.dim_belonging},
+    {label:'Receiving Support',    val:a1?.dim_support},
+    {label:'Trust & Safety',       val:a1?.dim_trust},
+    {label:'Calling / Purpose',              val:a1?.dim_calling},
+    {label:'Freedom to Be Myself', val:a1?.dim_freedom},
+  ].filter(d => numVal(d.val) > 0);
+  const relDimCardHtml = relDimItems.length > 0
+    ? detailCard('Relational Dimensions', relDimItems.map((d,i)=>detailRow(d.label,d.val,i===relDimItems.length-1)).join(''))
+    : '';
+
+  // Interior themes card
+  const themeItems = [
+    {label:'Grief & Loss',   val:hs?.grief},
+    {label:'Shame & Guilt',  val:hs?.shame},
+    {label:'Fear & Anxiety', val:hs?.fear},
+    {label:'Anger',          val:hs?.anger},
+    {label:'Desire & Hope',  val:hs?.desire},
+    {label:'Joy & Delight',  val:hs?.joy},
+  ].filter(t => numVal(t.val) > 0);
+  const themeCardHtml = themeItems.length > 0
+    ? detailCard('Interior Themes', themeItems.map((t,i)=>detailRow(t.label,t.val,i===themeItems.length-1)).join(''))
+    : '';
+
+  // Interior postures card
+  const postureItems = [
+    {label:'Awareness — Can you name it?',           val:hs?.awareness},
+    {label:'Honesty — Can you own it?',              val:hs?.honesty},
+    {label:'Movement — Are you moving through?',     val:hs?.movement},
+    {label:'Safety — Is it safe to exist in you?',   val:hs?.safety},
+    {label:'Direction — Can you see where it points?',val:hs?.direction},
+    {label:'Peace — Is there settledness?',          val:hs?.peace},
+  ].filter(p => numVal(p.val) > 0);
+  const postureCardHtml = postureItems.length > 0
+    ? detailCard('Interior Postures', postureItems.map((p,i)=>detailRow(p.label,p.val,i===postureItems.length-1)).join(''))
+    : '';
+
+  // ── CROSS-TAB GRID ────────────────────────────────────────
+  function cellClass(score) {
+    if(!score || score === 0) return 'cell-e';
+    if(score >= 70) return 'cell-g';
+    if(score >= 50) return 'cell-y';
+    return 'cell-r';
+  }
+  function cellDot(score) {
+    if(!score || score === 0) return '<span style="color:#ccc">—</span>';
+    return '<span style="display:inline-block;width:13px;height:13px;border-radius:50%;background:#fff;opacity:.9"></span>';
+  }
+
+  // Relational grid: realms × dimensions
+  // Calculate per-cell from raw answers
+  const REL_DIM_MAP = {
+    seen:      [0],
+    known:     [2],
+    voice:     [3],
+    belonging: [5],
+    support:   [6],
+    trust:     [7],
+    calling:   [8],
+    freedom:   [9]
+  };
+  const relRealms = [
+    {id:'god',       label:'Relationship with God'},
+    {id:'partner',   label:'Significant Other'},
+    {id:'family',    label:'Family'},
+    {id:'friends',   label:'Friends'},
+    {id:'work',      label:'Work / School'},
+    {id:'community', label:'Community'},
+  ];
+  const relDims = [
+    {id:'seen',      label:'Seen'},
+    {id:'known',     label:'Known'},
+    {id:'voice',     label:'Voice'},
+    {id:'belonging', label:'Belonging'},
+    {id:'support',   label:'Support'},
+    {id:'calling',   label:'Calling / Purpose'},
+    {id:'freedom',   label:'Freedom'}
+  ];
+
+  function calcCellScore(rawArr, qIndices) {
+    if(!rawArr || !rawArr.length) return 0;
+    const vals = qIndices.map(i => {
+      const v = parseFloat(rawArr[i]);
+      return isNaN(v) ? 0 : v;
+    }).filter(v => v > 0);
+    if(!vals.length) return 0;
+    return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) / 7 * 100);
+  }
+
+  let relGridHtml = '';
+  if(a1?.raw) {
+    let thead = '<tr><th></th>' + relDims.map(d => '<th>'+d.label+'</th>').join('') + '</tr>';
+    let tbody = relRealms.map(r => {
+      const raw = a1.raw[r.id];
+      const cells = relDims.map(d => {
+        const score = calcCellScore(raw, REL_DIM_MAP[d.id] || []);
+        return '<td class="'+cellClass(score)+'" style="background:'+cellBg(score)+'">'+cellDot(score)+'</td>';
+      }).join('');
+      return '<tr><td>'+r.label+'</td>'+cells+'</tr>';
+    }).join('');
+    relGridHtml = '<div class="heat-section"><div class="heat-title">Relational Engagement — Realm × Need</div>'
+      + '<table class="heat-grid"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
+  }
+
+  // Interior grid: themes × postures
+  // Each theme has 6 questions mapping 1:1 to postures (awareness, honesty, movement, safety, direction, peace)
+  const intThemes = [
+    {id:'grief',  label:'Grief & Loss'},
+    {id:'shame',  label:'Shame & Guilt'},
+    {id:'fear',   label:'Fear & Anxiety'},
+    {id:'anger',  label:'Anger'},
+    {id:'desire', label:'Desire & Hope'},
+    {id:'joy',    label:'Joy & Delight'}
+  ];
+  const intPostures = ['Awareness','Honesty','Movement','Safety','Direction','Peace'];
+
+  let intGridHtml = '';
+  if(hs?.raw) {
+    let thead = '<tr><th></th>' + intPostures.map(p => '<th>'+p+'</th>').join('') + '</tr>';
+    let tbody = intThemes.map(t => {
+      const raw = hs.raw[t.id];
+      const cells = intPostures.map((p, pi) => {
+        const v = raw ? parseFloat(raw[pi]) : 0;
+        const score = isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
+        return '<td class="'+cellClass(score)+'" style="background:'+cellBg(score)+'">'+cellDot(score)+'</td>';
+      }).join('');
+      return '<tr><td>'+t.label+'</td>'+cells+'</tr>';
+    }).join('');
+    intGridHtml = '<div class="heat-section"><div class="heat-title">Interior Health — Theme × Posture</div>'
+      + '<table class="heat-grid"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table></div>';
+  }
+
+  const crossTabHtml = '';  // removed — replaced by relMatrixHtml
+
+  // ── RELATIONAL MATRIX: Realms × Needs ─────────────────────
+  const needLabels = ['Being Seen','Being Known','Having a Voice','Belonging','Receiving Support','Trust & Safety','Calling / Purpose','Freedom to Be Myself'];
+  const needKeys   = ['seen','known','voice','belonging','support','trust','calling','freedom'];
+  const matrixRealms = [
+    {id:'god',      label:'Relationship with God'},
+    {id:'partner',  label:'Significant Other'},
+    {id:'family',   label:'Family'},
+    {id:'friends',  label:'Friends'},
+    {id:'work',     label:'Work / School'},
+    {id:'community',label:'Community'},
+  ];
+
+  function cellBg(score) {
+    if(!score || score === 0) return '#f8f4f0';
+    if(score >= 80) return '#c8e6b8';
+    if(score >= 60) return '#f0e0a8';
+    if(score >= 40) return '#f8ccaa';
+    if(score >= 20) return '#f0b0a0';
+    return '#e09090';
+  }
+  function cellTx(score) {
+    if(!score || score === 0) return '#b0a090';
+    if(score >= 80) return '#2a5a2a';
+    if(score >= 60) return '#6a4a10';
+    if(score >= 40) return '#7a3010';
+    if(score >= 20) return '#6a1a10';
+    return '#4a0a08';
+  }
+
+  // ── INTERIOR MATRIX: Themes × Postures ─────────────────────
+  const postureLabels = ['Awareness','Honesty','Movement','Safety','Direction','Peace'];
+  const intThemeRows = [
+    {id:'grief',  label:'Grief & Loss'},
+    {id:'shame',  label:'Shame & Guilt'},
+    {id:'fear',   label:'Fear & Anxiety'},
+    {id:'anger',  label:'Anger'},
+    {id:'desire', label:'Desire & Hope'},
+    {id:'joy',    label:'Joy & Delight'},
+  ];
+
+  let intMatrixHtml = '';
+  if(hs?.raw || themeItems.length > 0) {
+    const thead = '<tr>'
+      + '<th style="padding:.4rem .5rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:left;border-bottom:2px solid #c4a882;white-space:nowrap;min-width:120px">Emotion</th>'
+      + '<th style="padding:.4rem .3rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882">Overall</th>'
+      + postureLabels.map(p => '<th style="padding:.4rem .3rem;height:90px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:6px;margin:0 auto">'+p+'</div></th>').join('')
+      + '</tr>';
+
+    const tbody = intThemeRows.map(t => {
+      const overall = numVal(hs?.[t.id]);
+      const raw = hs?.raw?.[t.id] || [];
+      const posScores = postureLabels.map((p, pi) => {
+        const v = raw ? parseFloat(raw[pi]) : 0;
+        return isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
+      });
+      const overallBg = cellBg(overall);
+      const overallTx = cellTx(overall);
+      return '<tr>'
+        + '<td style="padding:.4rem .6rem;font-size:.7rem;font-weight:500;color:#4a3a2a;border-bottom:1px solid #ede8e0;white-space:nowrap">'+t.label+'</td>'
+        + '<td style="padding:.4rem .3rem;text-align:center;font-size:.7rem;font-weight:600;background:'+cellBg(overall)+';color:'+overallTx+';border-bottom:1px solid #ede8e0">'+(overall||'—')+'%</td>'
+        + posScores.map(s => '<td style="padding:.5rem;text-align:center;vertical-align:middle;background:'+cellBg(s)+';border-bottom:1px solid #ede8e0">'+cellDot(s)+'</td>').join('')
+        + '</tr>';
+    }).join('');
+
+    intMatrixHtml = '<div class="section-header">Emotional Maturity at a Glance</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each cell shows how that emotion is scoring across each of the six heart postures. Green is healthy, gold is developing, red is worth attention.</div>'
+      + '<div style="overflow-x:auto;margin-bottom:2rem">'
+      + '<table style="width:100%;border-collapse:collapse;font-size:.72rem"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>'
+      + '</div>';
+  }
+
+  let relMatrixHtml = '';
+  if(a1?.raw || realmDefs.length > 0) {
+    const thead = '<tr>'
+      + '<th style="padding:.4rem .5rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:left;border-bottom:2px solid #c4a882;white-space:nowrap;min-width:120px">Relationship</th>'
+      + '<th style="padding:.4rem .3rem;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882">Overall</th>'
+      + needLabels.map(n => '<th style="padding:.4rem .3rem;height:90px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:6px;margin:0 auto">'+n+'</div></th>').join('')
+      + '</tr>';
+
+    const tbody = matrixRealms.map(r => {
+      const overall = numVal(a1?.[r.id]);
+      const raw = a1?.raw?.[r.id] || [];
+      const needScores = needKeys.map((k, ki) => {
+        const qIndices = REL_DIM_MAP[k] || [];
+        return calcCellScore(raw, qIndices);
+      });
+      const overallBg = cellBg(overall);
+      const overallTx = cellTx(overall);
+      return '<tr>'
+        + '<td style="padding:.4rem .6rem;font-size:.7rem;font-weight:500;color:#4a3a2a;border-bottom:1px solid #ede8e0;white-space:nowrap">'+r.label+'</td>'
+        + '<td style="padding:.4rem .3rem;text-align:center;font-size:.7rem;font-weight:600;background:'+cellBg(overall)+';color:'+overallTx+';border-bottom:1px solid #ede8e0">'+(overall||'—')+'%</td>'
+        + needScores.map(s => '<td style="padding:.5rem;text-align:center;vertical-align:middle;background:'+cellBg(s)+';border-bottom:1px solid #ede8e0">'+cellDot(s)+'</td>').join('')
+        + '</tr>';
+    }).join('');
+
+    relMatrixHtml = '<div class="section-header" style="break-before:page">Relational Scores at a Glance</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each cell shows how that relationship is scoring across each of the eight heart needs. Green is healthy, gold is developing, red is worth attention.</div>'
+      + '<div style="overflow-x:auto;margin-bottom:2rem">'
+      + '<table style="width:100%;border-collapse:collapse;font-size:.72rem"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>'
+      + '</div>';
+  }
+
+  // ── ENERGY CHART ─────────────────────────────────────────
+  const energyRealms = [
+    {label:'Relationship with God', inN: numVal(a1?.god_outward),     outN: numVal(a1?.god_self),      overall: numVal(a1?.god),      inLabel:'What God gives me',      outLabel:'What I give God'},
+    {label:'Significant Other',     inN: numVal(a1?.partner_outward), outN: numVal(a1?.partner_self),  overall: numVal(a1?.partner),  inLabel:'What I receive',          outLabel:'What I give'},
+    {label:'Family',                inN: numVal(a1?.family_outward),  outN: numVal(a1?.family_self),   overall: numVal(a1?.family),   inLabel:'What I receive',          outLabel:'What I give'},
+    {label:'Friends',               inN: numVal(a1?.friends_outward), outN: numVal(a1?.friends_self),  overall: numVal(a1?.friends),  inLabel:'What I receive',          outLabel:'What I give'},
+    {label:'Work / School',         inN: numVal(a1?.work_outward),    outN: numVal(a1?.work_self),     overall: numVal(a1?.work),     inLabel:'What I receive',          outLabel:'What I give'},
+    {label:'Community',             inN: numVal(a1?.community_outward),outN: numVal(a1?.community_self),overall: numVal(a1?.community),inLabel:'What I receive',         outLabel:'What I give'},
+  ].filter(r => r.overall > 0);
+
+  function makeBar(pct) {
+    const filled = Math.round(pct / 10);
+    const empty = 10 - filled;
+    return '<span style="color:#c4a882;font-family:monospace;letter-spacing:1px;font-size:11px">'
+      + '&#9608;'.repeat(filled)
+      + '<span style="opacity:.2">&#9608;</span>'.repeat(empty)
+      + '</span>';
+  }
+
+  const energyRows = energyRealms.map(r => {
+    const gap = Math.abs(r.inN - r.outN);
+    const gapFlag = gap >= 15
+      ? '<span style="margin-left:8px;font-size:.65rem;color:#c97a5a;background:#fff0eb;padding:1px 7px;border-radius:3px;font-weight:500;white-space:nowrap">'+gap+'% gap</span>'
+      : '';
+    return '<div style="padding:.75rem 1rem;border-bottom:1px solid #ede8e0">'
+      + '<div style="font-size:.72rem;font-weight:500;color:#4a3a2a;margin-bottom:.4rem;display:flex;align-items:center">'+r.label+gapFlag+'</div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.3rem">'
+      + '<div style="width:110px;font-size:.65rem;color:#9a8a7a;flex-shrink:0;text-align:right">'+r.inLabel+'</div>'
+      + '<div>'+makeBar(r.inN)+'</div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem">'
+      + '<div style="width:110px;font-size:.65rem;color:#9a8a7a;flex-shrink:0;text-align:right">'+r.outLabel+'</div>'
+      + '<div>'+makeBar(r.outN)+'</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+
+  const energyChartHtml = energyRows
+    ? '<div class="section-header">Relational Energy Exchange</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each relationship shown as two bars — what you receive and what you give. When they are significantly different, that gap is worth a closer look.</div>'
+      + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-radius:4px;margin-bottom:2rem;overflow:hidden">'
+      + energyRows
+      + '</div>'
+    : '';
+
+  // ── REALM CARDS SECTION ──────────────────────────────────
+  const realmCardsSection = realmCardsHtml
+    ? '<div class="section-header">Relational Score Breakdown</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem;align-items:start">'
+      + realmCardsHtml
+      + '</div>'
+    : '';
+
+  const detailBreakdownHtml = (relDimCardHtml||themeCardHtml||postureCardHtml)
+    ? '<div class="section-header" style="break-before:page">Complete Score Breakdown</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.75rem;width:100%">'
+      +realmCardsHtml
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem;break-before:page;width:100%">'
+      +relDimCardHtml+themeCardHtml+postureCardHtml
+      +'</div>'
+    : '';
+
+  const scoresHtml = '<div class="scores-wrap">'
+    + '<div class="section-header">Your Assessment Scores</div>'
+    + '<div class="scores-grid">'
+    + '</div></div>';
+
+  // Map section ids to big header labels
+  const sectionHeaders = {
+    picture:          'What Your Scores Are Saying',
+    scored_well:      'What Is Working',
+    could_be_stronger:'Where There Is Room to Grow',
+    interior:         "What's Happening Underneath",
+    invitation:       'Where God Seems to Be Moving',
+    soulcare:         'What Soul Care Offers You',
+    nextstep:         'Using This Guide',
+    practices:        'Practices for This Season'
+  };
+
+  // Sections
+  // ── THEME INSIGHTS ────────────────────────────────────────
+  // ── RELATIONAL NOTES ─────────────────────────────────────
+  const relNotesSection = (guide.sections || []).find(s => s.id === 'relational_notes');
+  const relNotes = relNotesSection?.content;
+  const relNotesArray = Array.isArray(relNotes) ? relNotes : [];
+
+  // Preview fallback bullets
+  const previewNotes = [
+    "Your relationship with God shows a 20% gap — you are giving significantly more than you are receiving. That asymmetry in your most foundational relationship is worth naming.",
+    "Community is your lowest realm at 46% — both sides of that relationship are low, which suggests something systemic rather than personal. Worth exploring what is keeping you at the edges.",
+    "Friends scored 89% with full mutuality — that is genuinely rare and worth protecting. Understanding what makes those relationships work could inform the others.",
+    "Your Calling / Purpose dimension is lower than your other relational dimensions — suggesting a disconnect between who you are and how your relationships engage what you are built for."
+  ];
+
+  const notesToShow = relNotesArray.length >= 4 ? relNotesArray : previewNotes;
+
+  const relationalNotesHtml = '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
+    + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
+    + '<ul style="margin:0;padding-left:1.25rem">'
+    + notesToShow.map(b => '<li style="font-size:.85rem;color:#4a3a2a;line-height:1.85;margin-bottom:.5rem">'+b+'</li>').join('')
+    + '</ul>'
+    + '</div>';
+
+  // ── INTERIOR CHARTS ───────────────────────────────────────
+  const themeComments = {
+    grief:  { high: "Your grief score reflects real access — you can name loss and let it move through you rather than around you. That is not weakness; it is one of the harder forms of strength.", low: "Grief is scoring low. Unprocessed loss has a way of going quiet rather than going away — it shows up sideways in anger, numbness, or disconnection." },
+    shame:  { high: "Shame is at a healthy level — you can hold imperfection without it defining you. That kind of self-compassion is harder to build than most people realize.", low: "Shame is your lowest score here. Shame at this level tends to run quietly beneath everything — shaping how safe it feels to be known, to fail, to need. It does not announce itself. It just makes certain things feel too risky." },
+    fear:   { high: "Fear and anxiety are well-integrated for you — present but not in charge. You can act in the presence of uncertainty without being paralyzed by it.", low: "Fear is elevated. That kind of anxiety tends to narrow the world — making risk feel more costly and safety feel more necessary than it actually is." },
+    anger:  { high: "Anger is healthy and accessible — you can name it, work with it, and let it point toward what matters. Anger at this level is often clarity.", low: "Anger is low. Sometimes that means peace — and sometimes it means something has been buried. Worth sitting with which one it is." },
+    desire: { high: "Desire and hope are alive in you. That matters more than it might seem — desire is what keeps a person reaching rather than just maintaining.", low: "Desire is low. When hope quiets down it often means something has been disappointed enough times that wanting has started to feel too costly." },
+    joy:    { high: "Joy is strong. There is still something in you that can receive what is good — that capacity is worth protecting.", low: "Joy is scoring low. Not absent — but muted. Something is keeping the good from landing fully." }
+  };
+  const themeLabels = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Joy & Delight'};
+  const themeKeys = ['grief','shame','fear','anger','desire','joy'];
+  const themeScoresSorted = themeKeys
+    .map(k => ({id:k, score: numVal(hs?.[k])}))
+    .filter(t => t.score > 0)
+    .sort((a,b) => b.score - a.score);
+
+  const insightCards = themeScoresSorted.map(t => {
+    const isHigh = t.score >= 70;
+    const isLow = t.score < 55;
+    if(!isHigh && !isLow) return '';
+    const comment = isHigh ? themeComments[t.id]?.high : themeComments[t.id]?.low;
+    if(!comment) return '';
+    const col = isHigh ? '#5a9a50' : '#c97a5a';
+    const borderCol = isHigh ? '#b5d4a0' : '#e8c0b0';
+    return '<div style="background:#faf6f0;border:1px solid '+borderCol+';border-left:3px solid '+col+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+themeLabels[t.id]+' &nbsp;<span style="color:'+col+';font-size:.58rem">'+t.score+'%</span></div>'
+      + '<p style="font-size:.78rem;color:#4a3a2a;line-height:1.8;margin:0">'+comment+'</p>'
+      + '</div>';
+  }).filter(Boolean);
+
+  const themeInsightsHtml = insightCards.length
+    ? '<div class="section-header">Interior Score Breakdown</div>'
+      + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;align-items:start">'
+      + insightCards.join('')
+      + '</div>'
+      + '</div>'
+    : '';
+
+  // ── IDENTITY INSIGHTS ────────────────────────────────────
+  const identityData = hs?.identity || {};
+  const themeIconMap = {
+    grief:'ti-heart-broken', shame:'ti-eye-off', fear:'ti-alert-triangle',
+    anger:'ti-flame', desire:'ti-star', joy:'ti-sun'
+  };
+  const themeColorMap = {
+    grief:'#a09890', shame:'#8a7a8a', fear:'#b09060',
+    anger:'#c97a5a', desire:'#c4a882', joy:'#6bc45e'
+  };
+  const idThemeKeys = ['grief','shame','fear','anger','desire','joy'];
+  const idThemeLabels = {grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'};
+
+  function idBar(pct) {
+    const filled = Math.round(pct/10);
+    const empty = 10 - filled;
+    return '<span style="font-family:monospace;letter-spacing:1px;font-size:10px;color:#c4a882">'
+      + '&#9608;'.repeat(filled)
+      + '<span style="opacity:.2">&#9608;</span>'.repeat(empty)
+      + '</span>';
+  }
+
+  // Identity gap notes
+  const identityGapNotes = {
+    grief:  {high: 'Others recognize grief in you more than you carry it yourself — worth exploring what loss you may be minimizing.', low: 'You carry more grief than others see. That gap can mean the loss is being held privately, or that it has not had space to surface.'},
+    shame:  {high: 'Others see shame operating in you more than you own it yourself — shame that is unrecognized tends to drive decisions invisibly.', low: 'You carry shame that others are not seeing. That kind of private shame tends to shape how safe it feels to be known.'},
+    fear:   {high: 'Others recognize fear in you more than you see it in yourself — fear that is unnamed tends to show up sideways in decisions and relationships.', low: 'You carry more fear than others perceive. That gap sometimes means the fear has gone internal while the outside still looks steady.'},
+    anger:  {high: 'Others see anger in you more than you identify with it yourself — when anger is not owned, it tends to leak out in ways that are hard to trace.', low: 'You carry anger that others are not seeing. Anger held privately without expression tends to find other outlets.'},
+    desire: {high: 'Others see hope and desire in you more than you experience it yourself — that gap is worth sitting with. What has made wanting feel less safe than it looks from the outside?', low: 'You carry more hope and desire than others see. That can mean desire has gone quiet publicly while still present privately — or that it has not found a place to land.'},
+    joy:    {high: 'Others see more capacity for joy in you than you experience yourself — what is keeping the good things from fully landing?', low: 'You experience more joy than others see in you. That gap sometimes means delight is present but private — or that it has not been expressed in ways others can witness.'}
+  };
+
+  const identityCards = idThemeKeys.map(t => {
+    const id = identityData[t];
+    if(!id) return '';
+    const gap = id.gap || 0;
+    const hasGap = gap >= 15;
+    const othersHigh = (id.others || 0) >= 60;
+    const selfHigh = (id.self || 0) >= 60;
+    const cardBg = hasGap ? '#fff8f0' : '#faf6f0';
+    const cardBorder = hasGap ? 'border:1px solid #e8c8a0;border-left:3px solid #c97a5a' : 'border:1px solid #e8d8c0';
+    const gapFlag = hasGap
+      ? '<span style="margin-left:8px;font-size:.6rem;color:#c97a5a;background:#fde8d8;padding:1px 6px;border-radius:3px;font-weight:500">'+gap+'% gap</span>'
+      : '';
+
+    // Gap note
+    let gapNote = '';
+    if(hasGap && identityGapNotes[t]) {
+      const noteText = othersHigh && !selfHigh ? identityGapNotes[t].high : !othersHigh && selfHigh ? identityGapNotes[t].low : '';
+      if(noteText) {
+        gapNote = '<div style="margin-top:.5rem;padding:.5rem .75rem;background:#fff0eb;border-left:3px solid #c97a5a;border-radius:3px;font-size:.68rem;color:#7a3a10;line-height:1.6">'+noteText+'</div>';
+      }
+    }
+
+    return '<div style="background:'+cardBg+';'+cardBorder+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+idThemeLabels[t]+gapFlag+'</div>'
+      + detailRow('Others see me', id.others+'%', false)
+      + detailRow('I see myself', id.self+'%', true)
+      + gapNote
+      + '</div>';
+  }).filter(Boolean);
+
+  const identityInsightsHtml = identityCards.length
+    ? '<div class="section-header">How You Identify With Each Emotion</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each emotion shown as two bars — how others see you carrying it, and how you see yourself. A highlighted card with a gap note indicates something worth exploring.</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:2rem;align-items:start">'
+      + identityCards.join('')
+      + '</div>'
+    : '';
+
+  // ── DISAMBIGUATION — written to client in Steve's voice ────
+  const negThemeNames = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Joy & Delight'};
+  const negThemeList = ['grief','shame','fear','anger','desire','joy'];
+
+  const disCards = negThemeList.map(t => {
+    const score = numVal(hs?.[t]);
+    if(!score || score >= 60) return ''; // only show for low scores
+    const id = hs?.identity?.[t] || {};
+    const othersHigh = (id.others || 0) >= 60;
+    const selfHigh   = (id.self   || 0) >= 60;
+    const awareness  = numVal(hs?.awareness) || 0;
+    const movement   = numVal(hs?.movement)  || 0;
+
+    let observation = '';
+    let question = '';
+
+    if(othersHigh && !selfHigh) {
+      // Others see it, they don't — likely stuck/blind spot
+      observation = 'Your ' + negThemeNames[t] + ' score is low, and the identity data shows something interesting — others around you tend to identify this in you more than you identify it in yourself. When that gap shows up, it often means this emotion has become part of how you move through the world without you fully realizing it.';
+      question = 'Does that land at all — that ' + negThemeNames[t].toLowerCase().replace(' & ', ' or ') + ' might be more present in you than you are aware of?';
+    } else if(othersHigh && selfHigh) {
+      // Both see it — named but stuck
+      observation = 'Your ' + negThemeNames[t] + ' score is low, and both you and the people around you recognize this is something you carry. When awareness is there but the score is still low, it usually means you know it is present — but it has not moved much yet. Something is keeping it in place.';
+      question = 'Does that land — that you are aware of it, but it has not really shifted?';
+    } else if(!othersHigh && !selfHigh && awareness < 55) {
+      // Neither see it, low awareness — underground
+      observation = 'Your ' + negThemeNames[t] + ' score is low, and neither the identity data nor the awareness score suggests this is something on your radar right now. That is worth a second look — not because something is wrong, but because emotions that are not visible to us often show up sideways in other places.';
+      question = 'Is ' + negThemeNames[t].toLowerCase().replace(' & ', ' or ') + ' something that feels absent for you — or just something you have not had much space to look at?';
+    } else if(t === 'desire' && score < 60) {
+      const fearScore   = numVal(hs?.fear)   || 0;
+      const safetyScore = numVal(hs?.safety) || 0;
+      const scaredToHope = safetyScore < 55 || fearScore > 70;
+      if(scaredToHope) {
+        observation = 'Desire & Hope is low. When wanting things starts to feel risky — not because caring has stopped, but because hope that goes unmet leaves its own mark — the heart eventually learns to want less.';
+        question = 'Does that resonate — that hope has gone a little quiet as a way of protecting itself? That wanting much right now carries some risk?';
+      } else {
+        observation = 'Your Desire & Hope score is low. When desire goes quiet it does not always mean something is wrong — but it is worth noticing. The heart was made to reach toward things. When it stops, something usually got in the way.';
+        question = 'Is hope something that feels alive for you right now — or has it been harder to access lately?';
+      }
+    } else if(t === 'joy' && score < 60) {
+      observation = 'Your Joy & Delight score is low. Joy is not the same as happiness — it is the capacity to receive what is good, even in hard seasons. When it goes quiet, it is usually because something underneath has accumulated enough weight that the good things cannot fully land.';
+      question = 'Does that land — that there are good things present, but they are not quite making it through? Or has it been hard to find much that registers as genuinely good right now?';
+    } else {
+      return '';
+    }
+
+    return '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:3px solid #c4a882;border-radius:4px;padding:1rem 1.25rem;break-inside:avoid">'
+      + '<div style="font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500">'+negThemeNames[t]+'  <span style="color:#9a8a7a">'+score+'%</span></div>'
+      + '<p style="font-size:.82rem;color:#4a3a2a;line-height:1.85;margin-bottom:.6rem">'+observation+'</p>'
+      + '<p style="font-size:.82rem;color:#6a5a4a;font-style:italic;line-height:1.8;margin:0">'+question+'</p>'
+      + '</div>';
+  }).filter(Boolean);
+
+  const disambiguationHtml = disCards.length
+    ? '<div class="section-header">A Few Things Worth Naming</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">These observations come from looking at your emotion scores alongside the identity data — how you see yourself and how others see you. They are not conclusions. They are things worth sitting with.</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:2rem;align-items:start">'
+      + disCards.join('')
+      + '</div>'
+    : '';
+
+  const sectionsHtml = (guide.sections || []).map((s, idx) => {
+    const sectionImages = {
+      picture:          'assets/images/aatlas-peak-299014_1920.jpg',
+      scored_well:      'assets/images/emphyrio-waterfall-4610084_1920.jpg',
+      could_be_stronger:'assets/images/bluesnap-plant-234493_1920.jpg',
+      interior:         'assets/images/blackpowder75-saxon-switzerland-539418_1920.jpg',
+      invitation:       'assets/images/pexels-josh-willink-11499-93858.jpg',
+      soulcare:         'assets/images/pexels-clement-proust-363898785-35541665.jpg',
+      nextstep:         'assets/images/luisambros-mountain-7704819_1920.jpg',
+      practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
+    };
+
+    const bigHeader = '<div class="section-header" style="break-before:page">' + (sectionHeaders[s.id] || s.label) + '</div>';
+
+    if(s.id === 'practices') {
+      const pc = s.practicesContent || (typeof s.content === 'object' ? s.content : null);
+
+      if(pc) {
+        // PRIMARY cards — alternating images
+        const practiceImages = [
+          'assets/images/pexels-camerongawn-18157703.jpg',
+          'assets/images/pexels-john-callery-3749962-5620407.jpg',
+          'assets/images/gangcunseong-road-5767221_1920.jpg',
+          'assets/images/wonderlandwoo-plant-5381649_1920.jpg',
+          'assets/images/stocksnap-tree-2598164_1920.jpg',
+          'assets/images/pexels-gizem-gokce-1072613075-31439700.jpg',
+        ];
+        const primHtml = (pc.primary||[]).map((p, pi) => {
+          if(!p || !p.name) return '';
+          const imgSrc = practiceImages[pi % practiceImages.length];
+          const isRight = pi % 2 === 0;
+          const imgStyle = isRight
+            ? 'float:right;width:140px;height:140px;object-fit:cover;border-radius:4px;margin:0 0 .75rem 1.25rem;opacity:0.85'
+            : 'float:left;width:140px;height:140px;object-fit:cover;border-radius:4px;margin:0 1.25rem .75rem 0;opacity:0.85';
+          return '<div class="practice" style="overflow:hidden">'
+            +'<img src="'+imgSrc+'" alt="" style="'+imgStyle+'">'
+            +'<div class="practice-name">'+(p.name||'')+'</div>'
+            +(p.instruction ? '<div class="practice-instruction">'+(p.instruction||'')+'</div>' : '')
+            +'<div class="practice-body">'+(p.description||'')+'</div>'
+            +(p.why ? '<div class="practice-why">'+(p.why||'')+'</div>' : '')
+            +'<div style="clear:both"></div>'
+            +'</div>';
+        }).filter(Boolean).join('');
+
+        // SECONDARY list
+        const secHtml = (pc.secondary||[]).filter(p=>p&&p.name).length > 0
+          ? '<div class="practices-tier-header">These Would Also Help</div>'
+            + (pc.secondary||[]).filter(p=>p&&p.name).map(p =>
+                '<div class="secondary-practice"><div class="secondary-practice-name">'+p.name+'</div>'
+                +'<div class="secondary-practice-body">'+(p.description||'')+'</div></div>'
+              ).join('')
+          : '';
+
+        // AWARE grid
+        const awareHtml = (pc.aware||[]).filter(p=>p&&p.name).length > 0
+          ? '<div class="practices-tier-header">Worth Being Aware Of</div>'
+            + '<div class="aware-grid">'
+            + (pc.aware||[]).filter(p=>p&&p.name).map(p =>
+                '<div class="aware-item"><div class="aware-item-name">'+p.name+'</div>'
+                +'<div class="aware-item-desc">'+(p.description||'')+'</div></div>'
+              ).join('')
+            + '</div>'
+          : '';
+
+        return bigHeader
+          + '<div class="section">'
+          + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;font-style:italic;margin-bottom:1.25rem;border-left:3px solid #c4a882;padding-left:1rem">Look at these three practices and choose one that appeals to you — or try them on a day or two at a time. You don\'t need to do all of them. One practiced with intention is worth more than three attempted at once.</p>'
+          + '<div class="practices-wrap">'+primHtml+'</div>'
+          + '</div>';
+      }
+
+      // Fallback: raw string content
+      const practiceBlocks = s.content.toString().split(/\n\n+/).filter(p => p.trim()).map(p => {
+        const lines = p.trim().split('\n');
+        const title = lines[0].replace(/^\*\*|\*\*$/g,'').replace(/^#+\s*/,'').replace(/^\d+\.\s*/,'');
+        const body = lines.slice(1).join(' ').trim();
+        return '<div class="practice"><div class="practice-name">'+title+'</div><div class="practice-body">'+body+'</div></div>';
+      }).join('');
+      return bigHeader
+        + '<div class="section">'
+        + '<div class="practices-wrap">'+practiceBlocks+'</div></div>';
+    }
+
+        // Strip any paragraph that is just the section title or label repeated
+    const headerText = (sectionHeaders[s.id] || s.label || '').toLowerCase().replace(/[^a-z]/g,'');
+    const altLabel = (s.label || '').toLowerCase().replace(/[^a-z]/g,'');
+    const rawParas = s.content.split(/\n\n+/).filter(p=>p.trim());
+    const filteredParas = rawParas.filter(p => {
+      // Remove paragraph if its entire content is just a heading/title
+      const stripped = p.trim()
+        .replace(/^#{1,4}\s*/,'')           // remove markdown headers
+        .replace(/^\*\*[^*]+\*\*:?\s*$/,'') // remove standalone bold lines
+        .trim();
+      if(!stripped) return false;
+      // Remove if it's just a short line that matches any known section title
+      const allTitles = ['what your scores are saying','what is working','where there is room to grow',
+        "what's happening underneath",'where god seems to be moving','what soul care offers you',
+        'using this guide','practices for this season'];
+      const pClean = p.trim().toLowerCase().replace(/[^a-z]/g,'');
+      if(p.trim().length < 80 && allTitles.some(t => pClean === t.replace(/[^a-z]/g,''))) return false;
+      return true;
+    });
+    const paragraphs = filteredParas.map(p => {
+      // Strip any leading bold/heading line within a paragraph
+      let text = p.trim()
+        .replace(/^#{1,4}[^\n]+\n?/,'')
+        .replace(/^\*\*[^*]+\*\*:?\s*\n/,'')
+        .trim();
+      return text ? '<p>' + text + '</p>' : '';
+    }).filter(Boolean).join('');
+    const sectionQuotes = {
+      'picture': '<div class="pull-quote-right"><p>“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><cite>— A.W. Tozer</cite></div>',
+      'scored_well': '',
+      'interior': '<div class="pull-quote-right"><p>“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><cite>— Dallas Willard</cite></div>',
+      'invitation': '<div class="pull-quote-left"><p>“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><cite>— Henri Nouwen</cite></div>',
+      'soulcare': '',
+      'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
+    };
+    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'center top' : 'center';
+    const sectionImg = sectionImages[s.id]
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:'+(sectionImages[s.id].includes('clement')?'340px':'280px')+';height:'+(sectionImages[s.id].includes('clement')?'340px':'auto')+';object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
+      : '';
+    const sectionQuote = sectionQuotes[s.id] || '';
+    return bigHeader
+      + '<div class="section">'
+      + (function() {
+        const paraList = filteredParas.map(p => {
+          let text = p.trim()
+            .replace(/^#{1,4}[^\n]+\n?/,'')
+            .replace(/^\*\*[^*]+\*\*:?\s*\n/,'')
+            .trim();
+          return text ? '<p>' + text + '</p>' : '';
+        }).filter(Boolean);
+        // Image full width at top, then quote floats mid-text after second paragraph
+        const insertAfter = Math.min(1, paraList.length - 1);
+        if(sectionQuote && paraList.length > 0) {
+          paraList.splice(insertAfter + 1, 0, sectionQuote);
+        }
+        return '<div class="section-body">' + sectionImg + paraList.join('') + '</div>';
+      })()
+      + '</div>';
+  }).join('');
+
+  document.getElementById('content').innerHTML =
+    // Page 1: Cover + intro
+    '<div class="doc-header">'
+    + '<div class="bh-logo"><img src="favicon.ico" alt="BoldHearts" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:.5rem;opacity:0.85">Bold<span>Hearts</span></div>'
+    + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-top:.25rem">Full Heart Report v1.0</div>'
+    + '<div class="doc-title">Your Full Heart Report</div>'
+    + '<div class="doc-subtitle">A Compilation of the Interior and Relational Assessments</div>'
+    + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>Prepared on: ' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
+    + '</div>'
+    // Intro block — forces page break after in print
+    + '<div class="purpose-block">'
+    + '<div class="purpose-label">Purpose of the Assessments</div>'
+    // Proverbs centered at top — clean, no float
+    + '<div style="text-align:center;padding:.5rem 0 1.25rem;border-bottom:1px solid #e8d8c0;margin-bottom:1.25rem">'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .3rem">&ldquo;Above all else, guard your heart, for everything you do flows from it.&rdquo;</p>'
+    + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882">&mdash; Proverbs 4:23</p>'
+    + '</div>'
+    // First two paragraphs (thank you + much of what defines us)
+    + '<p>' + PURPOSE_TEXT[0] + '</p>'
+    + '<p>' + PURPOSE_TEXT[1] + '</p>'
+    // Heart image floated right alongside the blood/movement paragraph
+    + '<img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:160px;height:160px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.8">'
+    + '<p>' + PURPOSE_TEXT[2] + '</p>'
+    + '<p>' + PURPOSE_TEXT[3] + '</p>'
+    + '<p>' + PURPOSE_TEXT[4] + '</p>'
+    + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
+    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are &mdash; it is the seat of everything that matters.&rdquo;</p>'
+    + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; John Eldredge</p>'
+    + '</div>'
+    + '</div>'
+
+    // Page 2+: Scores then guide sections
+    + summaryHtml
+    + relChartsHtml
+    + relMatrixHtml
+    + realmCardsSection
+    + relationalNotesHtml
+    + intChartsHtml
+    + intMatrixHtml
+    + identityInsightsHtml
+    + themeInsightsHtml
+    + disambiguationHtml
+    + sectionsHtml
+
+    + (guide.closingNote ? '<div class="closing-block"><div class="closing-label">A Note from Steve</div><div class="closing-text">' + guide.closingNote + '</div></div>' : '')
+
+    + '<div style="text-align:center;padding:1.25rem 2rem;margin-top:2rem;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.15rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .4rem">&ldquo;The Lord does not look at the things people look at. People look at the outward appearance, but the Lord looks at the heart.&rdquo;</p><p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; 1 Samuel 16:7</p></div>'
+    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'
+    + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0 0 .75rem">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — reach out. That conversation is what this is really for.</p>'
+    + '</div>'
+    + '<div class="cta-block">'
+    + '<p>Questions about what you read here? Ready to talk through the full picture?</p>'
+    + '<p>Steve Forney &nbsp;·&nbsp; BoldHearts &nbsp;·&nbsp; <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
+    + '</div>'
+    + '<div class="doc-footer">'
+    + '<p>&copy; 2026 The BoldHearts Group LLC &nbsp;·&nbsp; Sedalia, Colorado &nbsp;·&nbsp; All Rights Reserved</p><p style="margin-top:.3rem;font-size:.6rem;color:#b0a090">Guide v2.1</p>'
+    + '<p style="margin-top:.4rem">This document is the exclusive intellectual property of The BoldHearts Group LLC. It is prepared solely for the individual named herein and may not be reproduced, distributed, shared, or used in any form without the express written authorization of The BoldHearts Group LLC. Unauthorized use is strictly prohibited.</p>'
+    + '<p style="margin-top:.4rem">Spiritual Direction &nbsp;·&nbsp; Pastoral Counseling &nbsp;·&nbsp; Leadership Soul Care &nbsp;·&nbsp; boldhearts.org</p>'
+    + '</div>';
+
+  // Build charts after DOM is set
+  setTimeout(() => {
+    const baseOpts = {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw + '%' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#7a6a5a' } },
+        y: { min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 }, color: '#7a6a5a', callback: v => v + '%' } }
+      }
+    };
+    const horizOpts = {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw + '%' } } },
+      scales: {
+        x: { min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 }, color: '#7a6a5a', callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#7a6a5a' } }
+      }
+    };
+    if(document.getElementById('realmChart')) {
+      new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['God','Significant Other','Family','Friends','Work','Community'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
+      new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Joy'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
+      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling / Purpose','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
+      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts });
+    }
+  }, 100);
+  // Auto-print removed — guide displays as HTML
+}
+
+function showError(msg) {
+  document.getElementById('content').innerHTML = '<div class="error"><p>' + msg + '</p></div>';
+}
+
+window.addEventListener('load', async () => {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // ── PREVIEW MODE (?preview=true) ──────────────────────────
+    if(urlParams.get('preview') === 'true') {
+      sessionStorage.clear();
+      const previewData = {
+        name: 'Pastor Sample',
+        date: '2026-06-09T10:00:00',
+        guide: {
+          sections: [
+            { id:'picture',           label:'What Your Scores Are Saying',     content:'The first thing worth naming is the God score — 60%, with a 24% gap between how God is engaging toward you and how you are engaging back. That gap is significant. When the interior life is carrying this much weight — grief, shame, anger, desire all sitting in the 35-50% range — the primary relationship tends to go quiet. Not out of rejection. Out of exhaustion. The reaching requires something that is not currently available.\n\nWork scored highest in the relational picture at 85%, with strong mutuality on both sides. That is where the energy is going. That is where the engagement is happening. The work relationship is functioning at a level that most others are not — and that gap is worth sitting with. When work is the highest-scoring realm by a significant margin, it sometimes means it is carrying more than just work. It may be carrying the identity, the sense of purpose, the primary place of being needed.\n\nCommunity scored 48% with both sides low — disconnected on both ends. That sits alongside belonging at 40% and receiving support at 35%, the two lowest relational dimensions. Something has pulled this person away from the wider relational world, and the wider world has not been reaching back. That kind of mutual distance usually has a history behind it.\n\nWhen the interior and relational scores are read together, what emerges is a high-functioning person running on empty. The exterior is largely holding. The interior is not. What is carrying all of this — and for how long — is the real question.' },
+            { id:'scored_well',       label:'What Is Working',                 content:'Work scored 85% — the highest relational score in the picture, with genuine engagement on both sides. Having a Voice at 80% and Calling at 70% are the two standout relational dimensions. These suggest that in the right context, this person can speak, contribute, and operate from a sense of purpose. That capacity is real. The question is whether it is sustainable from where things currently stand.\n\nAwareness at 60% is the strongest interior posture score. That matters. It means there is some capacity to see what is happening internally, even when movement and peace are at the bottom. Awareness without movement is still better than blindness — it is a starting point. And the honesty score at 45%, while not high, means there is some willingness to name what is true.' },
+            { id:'could_be_stronger', label:'Where There Is Room to Grow',     content:'Community scored lowest in the relational picture — and the data suggests it is low on both sides. This is not a personal failing. It is a structural gap that tends to form gradually, often after a season of loss or transition or simply a long stretch of being too busy to invest. The wider relational world has quietly contracted.\n\nThe interior scores tell a similar story in a different register. Shame at 50% is the one interior score that sits noticeably lower than the rest. Shame that is not fully processed tends to operate quietly beneath everything else. It does not announce itself. It shapes what feels safe to bring into relationships, what feels safe to want, and what feels safe to let others see. When shame is the outlier in an otherwise healthy interior picture, it is worth asking what it is quietly protecting.\n\nThe calling dimension at 62% also sits lower than the others — suggesting a gap between who you are and how your relationships are engaging what you are built for. That is not a relational problem alone. It is often connected to the shame score. When shame is present, calling tends to go partially underground — offered in safer relationships, held back in the ones where the risk of exposure feels higher.' },
+            { id:'interior',          label:"What's Happening Underneath",     content:'The interior scores here are mostly strong — and that is real. Fear is well-integrated. Desire and joy are alive. Anger is accessible. These are not small things. They suggest genuine interior work has happened, and that the emotional life is not suppressed or defended against in the way it can be in people carrying similar relational patterns.\n\nWhat is worth naming is the shame score — not because it is catastrophic, but because it is the one interior score that sits noticeably lower than the rest. Shame that is not fully processed tends to operate quietly beneath everything else. It does not announce itself. It shapes what feels safe to bring into relationships, what feels safe to want, and what feels safe to let others see. When shame is the outlier in an otherwise healthy interior picture, it is worth asking what it is quietly protecting.\n\nThe identity data adds a layer worth sitting with. The desire gap — others at 57%, self at 86% — suggests you carry more hope and desire than others are seeing. That gap sometimes means desire has gone quiet publicly while still present privately. Or it has not found a place to land. Either way, it is worth asking where the wanting is going, and whether it is finding expression in the relationships that can receive it.' },
+            { id:'invitation',        label:'Where God Seems to Be Moving',    content:'The God score sits at 73% — genuine, functioning, real. But there is a gap in the energy exchange: God is engaging toward you at a higher rate than you are engaging back. That asymmetry shows up in the data, and it is worth naming honestly — not as failure, but as something worth noticing.\n\nWhen desire and hope are strong, as they are here, but the engagement toward God is not keeping pace, it sometimes means the reaching is happening in other directions. The aliveness is present. The orientation has shifted slightly. That is a common pattern in people who are genuinely capable and genuinely doing good work — the capacities get directed outward, and the primary relationship gets maintained rather than pursued.\n\nWhat is being offered here seems to be an invitation toward a different kind of engagement with God — not more religious activity, but something more honest and more present. Less managed. The scores suggest the interior capacity for that kind of engagement is fully there.' },
+            { id:'soulcare',          label:'What Soul Care Offers You',       content:'What soul care could offer here is not repair — the picture does not call for that. What it offers is accompaniment for someone who is genuinely healthy in many ways but carrying patterns that have been in place long enough that they no longer register as patterns. They just register as life.\n\nThe community gap, the shame score, the slight pulling-back in the God engagement — none of these are crises. But they are all quiet enough that they can go unaddressed for a long time. Soul care creates a space where the quiet things get named. Where the performance layer has somewhere to come down. Where the questions that do not have easy answers can at least be held rather than managed.\n\nFor someone at this level of health and self-awareness, the work is less about fixing what is broken and more about tending what is real. There is a lot here worth protecting. There is also a little here worth loosening.' },
+            { id:'nextstep',          label:'Using This Guide',                content:'This guide is not a verdict — it is a starting point. The scores reflect one honest day of self-assessment, and they are more useful as a conversation opener than as a final word. Some of what you read here will land. Some of it may not. Both responses are worth paying attention to.\n\nThe most useful thing to bring into the Discovery Call is not certainty — it is curiosity. What resonates? What pushes back? What surprised you? Those reactions are usually more revealing than the scores themselves.' },
+            { id:'practices',         label:'Practices for This Season',       content:'', practicesContent: {
+              primary: [
+                { name:'Sitting with What Is', instruction:'DAILY PRACTICE', description:'Set aside ten minutes each morning to sit quietly with whatever emotion is most present. Do not try to fix it or explain it away — just let it be there. Name it out loud if you can.', why:'Most of us are better at managing our emotions than meeting them. This practice interrupts that pattern.' },
+                { name:'The Honest Inventory', instruction:'WEEKLY PRACTICE', description:'Once a week, write down one relationship where you gave more than you received, one where you held back, and one that surprised you. Do not analyze — just notice.', why:'Awareness is the beginning of change. This practice builds the habit of honest self-observation.' },
+                { name:'The Permission Question', instruction:'AS NEEDED', description:'When you notice yourself shutting down or pulling back in a relationship, pause and ask: what would I do here if I actually had permission to be honest?', why:'Many of us live inside invisible permission structures. This question names the structure and creates a small opening.' },
+              ],
+              secondary: [
+                { name:'Gratitude with Specificity', description:'Instead of listing things you are grateful for, write one sentence about one specific moment from the past week that was genuinely good.' },
+                { name:'The Two-Minute Check-In', description:'Before entering any significant conversation or meeting, take two minutes to notice what you are carrying into it.' },
+              ],
+              aware: [
+                { name:'Numbing Patterns', description:'Notice what you reach for when discomfort shows up — phone, food, work, busyness. Awareness is not condemnation.' },
+                { name:'Comparison', description:'Your scores are not a ranking. Resist the urge to compare them to what you think they should be.' },
+              ]
+            }}
+          ],
+          closingNote: "Thank you for going first with this. What you carry is real — and it is worth the attention you are giving it."
+        },
+        a1: {
+          overall:'72%', work:'85%', partner:'65%', family:'70%', friends:'55%',
+          community:'48%', god:'60%',
+          work_outward:'88%', work_self:'82%',
+          partner_outward:'68%', partner_self:'62%',
+          family_outward:'72%', family_self:'68%',
+          friends_outward:'58%', friends_self:'52%',
+          community_outward:'50%', community_self:'46%',
+          god_outward:'72%', god_self:'48%',
+          dim_seen:'75%', dim_known:'45%', dim_voice:'80%', dim_belonging:'40%',
+          dim_support:'35%', dim_trust:'45%', dim_calling:'70%', dim_freedom:'40%',
+          raw: {
+            god:      [4,4,4,5,4,4,3,4,4,5],
+            partner:  [6,7,6,5,5,6,7,6,5,5],
+            family:   [5,7,6,5,6,7,5,7,5,6],
+            friends:  [5,7,6,6,7,6,5,7,6,7],
+            work:     [5,6,6,5,5,6,4,5,5,6],
+            community:[3,3,3,5,3,3,2,3,3,4],
+          }
+        },
+        hs: {
+          overall:'43%', grief:'35%', shame:'40%', fear:'45%', anger:'50%',
+          desire:'40%', joy:'35%',
+          awareness:'60%', honesty:'45%', movement:'30%', safety:'35%',
+          direction:'50%', peace:'25%',
+          raw: {
+            grief:  [4,3,4,4,3,3],
+            shame:  [3,3,4,3,3,4],
+            fear:   [4,3,3,4,3,3],
+            anger:  [4,4,4,3,3,3],
+            desire: [4,4,3,4,4,3],
+            joy:    [4,4,4,3,3,3],
+          },
+          identity: {
+            grief:  {others:29, self:71, gap:42},
+            shame:  {others:57, self:29, gap:28},
+            fear:   {others:43, self:43, gap:0},
+            anger:  {others:43, self:71, gap:28},
+            desire: {others:43, self:43, gap:0},
+            joy:    {others:29, self:57, gap:28}
+          }
+        }
+      };
+      renderGuide(previewData);
+      return;
+    }
+
+    // Check for ?id= in URL first
+    const guideId = urlParams.get('id');
+
+    if(guideId) {
+      // Fetch guide data from Sheets by ID
+      document.getElementById('content').innerHTML = '<div class="loading"><div>Loading your guide...</div><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>';
+      const res = await fetch(SHEETS_URL + '?action=getguide&id=' + encodeURIComponent(guideId));
+      const text = await res.text();
+      try {
+        const data = JSON.parse(text);
+        if(data.error || !data.guide) { showError('Guide not found. The link may be invalid or expired.'); return; }
+        renderGuide(data);
+      } catch(e) {
+        showError('Could not load guide data.');
+      }
+      return;
+    }
+
+    // Fall back to sessionStorage (admin preview)
+    const raw = sessionStorage.getItem('boldhearts_guide_data');
+    if(!raw) { showError('No guide data found. Please use the Build Guide button in the admin dashboard.'); return; }
+    const data = JSON.parse(raw);
+
+    if(data.guide && data.guide.sections && data.guide.sections.length > 0) {
+      renderGuide(data);
+      return;
+    }
+
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        assessment1: data.a1,
+        heartsoul: data.hs
+      })
+    });
+
+    const result = await res.json();
+    if(result.error) { showError('Guide generation failed: ' + result.error); return; }
+
+    data.guide = result.guide;
+    renderGuide(data);
+
+  } catch(e) {
+    showError('Something went wrong: ' + e.message);
+  }
+});
+</script>
+</div><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"845f141f328c4236813734c0f75317d0","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"845f141f328c4236813734c0f75317d0","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
