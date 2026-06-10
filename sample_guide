@@ -1,7 +1,6 @@
 
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,7 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoldHearts Guide</title>
+<title>BoldHearts | Sample Full Heart Report</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1121,14 +1120,8 @@ function showError(msg) {
   document.getElementById('content').innerHTML = '<div class="error"><p>' + msg + '</p></div>';
 }
 
-window.addEventListener('load', async () => {
-  try {
-    const urlParams = new URLSearchParams(window.location.search);
 
-    // ── PREVIEW MODE (?preview=true) ──────────────────────────
-    if(urlParams.get('preview') === 'true') {
-      sessionStorage.clear();
-      const previewData = {
+    const previewData = {
         name: 'Pastor Sample',
         date: '2026-06-09T10:00:00',
         guide: {
@@ -1201,61 +1194,8 @@ window.addEventListener('load', async () => {
           }
         }
       };
-      renderGuide(previewData);
-      return;
-    }
-
-    // Check for ?id= in URL first
-    const guideId = urlParams.get('id');
-
-    if(guideId) {
-      // Fetch guide data from Sheets by ID
-      document.getElementById('content').innerHTML = '<div class="loading"><div>Loading your guide...</div><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>';
-      const res = await fetch(SHEETS_URL + '?action=getguide&id=' + encodeURIComponent(guideId));
-      const text = await res.text();
-      try {
-        const data = JSON.parse(text);
-        if(data.error || !data.guide) { showError('Guide not found. The link may be invalid or expired.'); return; }
-        renderGuide(data);
-      } catch(e) {
-        showError('Could not load guide data.');
-      }
-      return;
-    }
-
-    // Fall back to sessionStorage (admin preview)
-    const raw = sessionStorage.getItem('boldhearts_guide_data');
-    if(!raw) { showError('No guide data found. Please use the Build Guide button in the admin dashboard.'); return; }
-    const data = JSON.parse(raw);
-
-    if(data.guide && data.guide.sections && data.guide.sections.length > 0) {
-      renderGuide(data);
-      return;
-    }
-
-    const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        assessment1: data.a1,
-        heartsoul: data.hs
-      })
-    });
-
-    const result = await res.json();
-    if(result.error) { showError('Guide generation failed: ' + result.error); return; }
-
-    data.guide = result.guide;
-    renderGuide(data);
-
-  } catch(e) {
-    showError('Something went wrong: ' + e.message);
-  }
-});
+    renderGuide(previewData);
 </script>
 </div><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"845f141f328c4236813734c0f75317d0","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"845f141f328c4236813734c0f75317d0","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
