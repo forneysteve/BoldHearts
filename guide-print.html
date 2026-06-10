@@ -63,10 +63,8 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .section-eyebrow{display:flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;font-weight:500}
 .section-icon{font-size:1rem;line-height:1}
 .section-body{font-size:.88rem;color:#2a2218;line-height:1.95}
-.section-body p{margin-bottom:.9rem;max-width:none}
+.section-body p{font-size:.88rem;line-height:1.95;margin-bottom:.9rem;max-width:none;color:#2a2218}
 .section-body p:last-child{margin-bottom:0}
-.section-body p:first-of-type{font-size:.98rem;line-height:2;color:#1a1410}
-.section-body p:first-of-type::first-letter{float:left;font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:700;line-height:.75;margin:.05em .1em 0 0;color:#c4a882}
 
 /* ── PRACTICE CARDS ── */
 .practices-wrap{break-inside:avoid}
@@ -295,7 +293,7 @@ function renderGuide(data) {
     + '<div class="section-header">Your Assessment Scores</div>'
     + '<div class="dash-scores">'
     + '<div class="dash-score"><div class="dash-score-label">Relational Engagement Scores</div><div class="dash-score-val" style="color:' + barColor(numVal(a1Score)) + '">' + a1Score + '</div><div class="dash-score-tag">' + relTag(numVal(a1Score)) + '</div></div>'
-    + '<div class="dash-score"><div class="dash-score-label">Heart Needs</div><div class="dash-score-val" style="color:' + barColor(needsAvg) + '">' + needsScore + '</div><div class="dash-score-tag">' + needsTag(needsAvg) + '</div></div>'
+    + '<div class="dash-score"><div class="dash-score-label">Heart Engagement Scores</div><div class="dash-score-val" style="color:' + barColor(needsAvg) + '">' + needsScore + '</div><div class="dash-score-tag">' + needsTag(needsAvg) + '</div></div>'
     + '<div class="dash-score"><div class="dash-score-label">Relationship with God</div><div class="dash-score-val" style="color:' + barColor(numVal(godScore)) + '">' + godScore + '</div><div class="dash-score-tag">' + relTag(numVal(godScore)) + '</div></div>'
     + '</div></div>';
 
@@ -746,15 +744,14 @@ function renderGuide(data) {
     if(!comment) return '';
     const col = isHigh ? '#5a9a50' : '#c97a5a';
     const borderCol = isHigh ? '#b5d4a0' : '#e8c0b0';
-    return '<div style="background:#faf6f0;border:1px solid '+borderCol+';border-top:3px solid '+col+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
-      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:'+col+';margin-bottom:.4rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+themeLabels[t.id]+' &nbsp;<span style="color:#9a8a7a;font-size:.58rem">'+t.score+'%</span></div>'
-      + '<p style="font-size:.78rem;color:#4a3a2a;line-height:1.85;margin:0">'+comment+'</p>'
+    return '<div style="background:#faf6f0;border:1px solid '+borderCol+';border-left:3px solid '+col+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+themeLabels[t.id]+' &nbsp;<span style="color:'+col+';font-size:.58rem">'+t.score+'%</span></div>'
+      + '<p style="font-size:.78rem;color:#4a3a2a;line-height:1.8;margin:0">'+comment+'</p>'
       + '</div>';
   }).filter(Boolean);
 
   const themeInsightsHtml = insightCards.length
     ? '<div class="section-header">Interior Score Breakdown</div>'
-      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:.75rem;font-style:italic">Themes that scored notably high or low — and what that typically means.</div>'
       + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
       + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;align-items:start">'
@@ -1012,9 +1009,9 @@ function renderGuide(data) {
       'soulcare': '<div class="pull-quote-right"><p>“The friend who can be silent with us in a moment of despair, who can stay with us in an hour of grief, who can tolerate not knowing, not curing, not healing — that is a friend who cares.”</p><cite>— Henri Nouwen</cite></div>',
       'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
-    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'top' : 'center';
+    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? '20% center' : 'center';
     const sectionImg = sectionImages[s.id]
-      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:280px;height:auto;object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
+      ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:'+(sectionImages[s.id].includes('clement')?'340px':'280px')+';height:'+(sectionImages[s.id].includes('clement')?'340px':'auto')+';object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
       : '';
     const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
