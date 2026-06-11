@@ -814,7 +814,7 @@ function renderGuide(data) {
     ? '<div class="section-header">Interior Score Breakdown</div>'
       + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
-      + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.6rem;align-items:start">'
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;align-items:start">'
       + insightCards.join('')
       + '</div>'
       + '</div>'
@@ -1069,7 +1069,7 @@ function renderGuide(data) {
       'soulcare': '',
       'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
-    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'center top' : 'center';
+    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'center 15%' : 'center';
     const sectionImg = sectionImages[s.id]
       ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:'+(sectionImages[s.id].includes('clement')?'340px':'280px')+';height:'+(sectionImages[s.id].includes('clement')?'340px':'auto')+';object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
       : '';
