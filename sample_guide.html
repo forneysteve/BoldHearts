@@ -293,10 +293,8 @@ function renderGuide(data) {
     {num:'08', name:'Freedom to Be Myself', desc:'Valued for who you are, not what you produce'},
   ];
   const aboutRelationalHtml = '<div class="section-header" style="break-before:page">About Your Relational Scores</div>'
-    + '<div style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.5rem">'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart was made to pump — to move life between people. The Relational Assessment measures the quality of that flow. Not just whether you are in relationships, but whether something real is moving between you and the people in your life. Like blood through the body, this exchange either flows freely or something is restricting it.</p>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Each relationship is measured in two directions: how the other person is engaging toward you, and how you are engaging toward them. A gap between those two numbers is significant — it tells you something about where the restriction is. The eight dimensions below show what kind of connection is present or missing across all your relationships at once.</p>'
-    + '</div>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart was made to pump — to move blood between cells and organs. Without that interaction between the heart and the rest of the body, there is death. Similarly, the Relational Assessment is built to understand our interactions within our spheres. It measures the interaction between you and God, you and your significant others, as well as others. It measures the quality of the flow in those relationships, whether something real is moving between you and those in your life.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.25rem;max-width:none">Here are the needs within those relationships that were measured in the assessment.</p>'
     + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.25rem">'
     + relDimCards.map(d =>
         '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-top:3px solid #c4a882;border-radius:4px;padding:.65rem .75rem;break-inside:avoid">'
@@ -306,8 +304,9 @@ function renderGuide(data) {
         + '</div>'
       ).join('')
     + '</div>'
-    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:3px solid #c4a882;border-radius:4px;padding:.85rem 1.1rem;font-size:.82rem;color:#4a3a2a;line-height:1.85;margin-bottom:2rem;max-width:none">'
-    + 'People can get stuck anywhere in this progression. Someone can be seen by others but never really known. Someone can belong but still cannot use their voice. Someone can be trusted but cannot receive support — being the strong one has become its own kind of isolation. Each stuck place has its own shape, and the scores help locate where the flow has slowed.'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Each relationship is also being measured in two directions: how the other person is engaging toward you, and how you are engaging toward them. Ideally, the relationships that we are putting energy and time into are equally reciprocated. A gap between those two numbers is significant and worth discussion.</p>'
+    + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:3px solid #c4a882;border-radius:4px;padding:.85rem 1.1rem;font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:2rem;max-width:none">'
+    + 'It should be understood that no two people are alike and that every relationship is unique. Someone can be seen by others but never really known. Someone can belong but still cannot use their voice. Someone can be trusted but cannot receive support. Each scenario is different, each person unique, each score worth a conversation.'
     + '</div>';
 
   // ── ABOUT YOUR INTERIOR SCORES ────────────────────────────
@@ -339,6 +338,16 @@ function renderGuide(data) {
     + '<div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;font-weight:500;padding-bottom:.4rem;border-bottom:1px solid #e8d8c0">Identity — the question beneath the postures</div>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The six postures describe how an emotion moves. Identity describes what happens when it stops moving and starts settling — when what you carry begins to feel like who you are. Someone who has carried grief long enough may begin to identify as a grieving person. Someone whose anger has never had a safe place to go may not identify with anger at all — it has gone so far underground it no longer feels like theirs.</p>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:2rem;max-width:none">This is why identity is measured separately — for each emotion, in two directions: how others see you carrying it, and how you see yourself. A gap between those two numbers often means the emotion is operating at a level the person cannot fully see. The goal is not to stop identifying with anything. The goal is that no single emotion gets to be the final word on who you are.</p>';
+
+
+  // ── OPENING INTRO BLOCK ──────────────────────────────────
+  const introHtml = '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:2rem;break-inside:avoid">'
+    + '<div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">Purpose of This Assessment</div>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Thank you for taking the time to complete both assessments. What you have done here is not small — looking honestly at your own heart takes courage, and we do not take lightly that you gave it.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The Scriptures speak of the heart as something worth tending. In Jeremiah 31 and Ezekiel 36, God promises a new heart — not a fixed version of the old one, but something genuinely transformed. That promise assumes the heart matters. That what happens inside you has weight. That taking inventory of it is not self-indulgence — it is stewardship.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">At BoldHearts, we believe that out of our hearts grow enormous dreams for the Kingdom of God. The heart was made for more than survival — it was made to reach, to hope, to love, to lead. But emotions can be distracting. They can pull us away from trusting what our hearts most deeply know. They can cloud the signal with noise — fear dressed as wisdom, anger posing as conviction, desire mistaken for selfishness.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:0;max-width:none">Proverbs 4:23 says that everything flows from the heart. If that is true — and we believe it is — then it is worth being wise about what the heart is actually saying. Not reactive. Not dismissive. Wise. These scores are a tool for that kind of wisdom. So with that, let\'s look at what yours are telling us.</p>'
+    + '</div>';
 
 
   const summaryHtml = '<div class="dashboard-wrap">'
@@ -806,7 +815,7 @@ function renderGuide(data) {
     ? '<div class="section-header">Interior Score Breakdown</div>'
       + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
-      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;align-items:start">'
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.6rem;align-items:start">'
       + insightCards.join('')
       + '</div>'
       + '</div>'
@@ -899,7 +908,7 @@ function renderGuide(data) {
     let question = '';
 
     if(othersHigh && !selfHigh) {
-      // Others see it, they don't — likely stuck/blind spot
+      // Others see it, they don\'t — likely stuck/blind spot
       observation = 'Your ' + negThemeNames[t] + ' score is low, and the identity data shows something interesting — others around you tend to identify this in you more than you identify it in yourself. When that gap shows up, it often means this emotion has become part of how you move through the world without you fully realizing it.';
       question = 'Does that land at all — that ' + negThemeNames[t].toLowerCase().replace(' & ', ' or ') + ' might be more present in you than you are aware of?';
     } else if(othersHigh && selfHigh) {
@@ -1037,9 +1046,9 @@ function renderGuide(data) {
         .replace(/^\*\*[^*]+\*\*:?\s*$/,'') // remove standalone bold lines
         .trim();
       if(!stripped) return false;
-      // Remove if it's just a short line that matches any known section title
+      // Remove if it\'s just a short line that matches any known section title
       const allTitles = ['what your scores are saying','what is working','where there is room to grow',
-        "what's happening underneath",'where god seems to be moving','what soul care offers you',
+        "what\'s happening underneath",'where god seems to be moving','what soul care offers you',
         'using this guide','practices for this season'];
       const pClean = p.trim().toLowerCase().replace(/[^a-z]/g,'');
       if(p.trim().length < 80 && allTitles.some(t => pClean === t.replace(/[^a-z]/g,''))) return false;
@@ -1090,34 +1099,15 @@ function renderGuide(data) {
     // Page 1: Cover + intro
     '<div class="doc-header">'
     + '<div class="bh-logo"><img src="favicon.ico" alt="BoldHearts" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:.5rem;opacity:0.85">Bold<span>Hearts</span></div>'
-    + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-top:.25rem">Full Heart Report v1.0</div>'
+    
     + '<div class="doc-title">Your Full Heart Report</div>'
     + '<div class="doc-subtitle">A Compilation of the Interior and Relational Assessments</div>'
     + '<div class="doc-meta"><span>Prepared for: ' + name + '</span><span>Prepared on: ' + today + '</span><span>Steve Forney · BoldHearts</span></div>'
     + '</div>'
-    // Intro block — forces page break after in print
-    + '<div class="purpose-block">'
-    + '<div class="purpose-label">Purpose of the Assessments</div>'
-    // Proverbs centered at top — clean, no float
-    + '<div style="text-align:center;padding:.5rem 0 1.25rem;border-bottom:1px solid #e8d8c0;margin-bottom:1.25rem">'
-    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.2rem;font-style:italic;color:#2a2218;line-height:1.6;margin:0 0 .3rem">&ldquo;Above all else, guard your heart, for everything you do flows from it.&rdquo;</p>'
-    + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882">&mdash; Proverbs 4:23</p>'
-    + '</div>'
-    // First two paragraphs (thank you + much of what defines us)
-    + '<p>' + PURPOSE_TEXT[0] + '</p>'
-    + '<p>' + PURPOSE_TEXT[1] + '</p>'
-    // Heart image floated right alongside the blood/movement paragraph
-    + '<img src="assets/images/detailed-anatomical-heart-realistic-black-white-dark-background-decaying_949067-68782.avif" alt="" style="float:right;width:160px;height:160px;object-fit:cover;border-radius:4px;margin:0 0 1rem 1.5rem;opacity:0.8">'
-    + '<p>' + PURPOSE_TEXT[2] + '</p>'
-    + '<p>' + PURPOSE_TEXT[3] + '</p>'
-    + '<p>' + PURPOSE_TEXT[4] + '</p>'
-    + '<div style="clear:both;border-top:1px solid #e8d8c0;margin-top:1.25rem;padding-top:1.25rem">'
-    + '<p style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .35rem;text-align:center">&ldquo;The heart is the core of who you are &mdash; it is the seat of everything that matters.&rdquo;</p>'
-    + '<p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;text-align:center">&mdash; John Eldredge</p>'
-    + '</div>'
-    + '</div>'
+
 
     // Page 2+: Scores then guide sections
+    + introHtml
     + aboutRelationalHtml
     + summaryHtml
     + relChartsHtml
