@@ -68,7 +68,6 @@ a{color:#e8d7a0;text-decoration:none}
 .action-btn-gold:hover{border-color:#c4a882;color:#f0e8df;background:rgba(196,168,130,.1)}
 .action-btn-blue{border-color:rgba(100,160,200,.3);color:#7aaac8}
 .action-btn-blue:hover{border-color:#7aaac8;color:#b0d4e8;background:rgba(100,160,200,.08)}
-.action-btn-gold:hover{border-color:#c4a882;color:#f0e8df;background:rgba(196,168,130,.1)}
 .action-col{display:flex;flex-direction:column;gap:4px}
 .pipeline-bar{display:flex;gap:2px;align-items:center;margin-top:3px}
 .pip{width:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06)}
@@ -100,7 +99,7 @@ a{color:#e8d7a0;text-decoration:none}
   <div class="login-card">
     <div class="login-logo">Bold<span>Hearts</span></div>
     <div class="login-sub">Admin Dashboard</div>
-    <div style="font-size:.65rem;color:#3a3530;letter-spacing:.06em;margin-top:-.5rem;margin-bottom:1.5rem">v1.6</div>
+    <div style="font-size:.65rem;color:#3a3530;letter-spacing:.06em;margin-top:-.5rem;margin-bottom:1.5rem">v1.7</div>
     <input type="password" class="login-input" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">Sign In</button>
     <div class="login-err" id="login-err"></div>
@@ -109,7 +108,7 @@ a{color:#e8d7a0;text-decoration:none}
 
 <div class="dashboard" id="dashboard">
   <div class="topbar">
-    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span> <span style="font-size:.65rem;color:#3a3530;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;margin-left:.75rem">v1.6</span></div>
+    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span> <span style="font-size:.65rem;color:#3a3530;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;margin-left:.75rem">v1.7</span></div>
     <div class="topbar-right">
       <span class="topbar-label" id="last-updated"></span>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
@@ -190,12 +189,11 @@ function fmtDate(val){
   return s.split(' ')[0];
 }
 
-// Convert raw value to percentage string
 function fmtScore(val){
   if(val === null || val === undefined || val === '' || val === '—') return '—';
   const s = val.toString().trim();
   if(!s || s === '—') return '—';
-  if(s.endsWith('%')) return s; // already formatted
+  if(s.endsWith('%')) return s;
   const n = parseFloat(s);
   if(isNaN(n)) return s;
   if(n > 0 && n <= 1) return Math.round(n * 100) + '%';
@@ -227,9 +225,9 @@ function badge(text, type){
 function pipelineProgress(row){
   const hasRelational = !!fmtDate(row[0]);
   const hasInterior = !!fmtDate(row[100]);
-  const hasFollowup = row[145] && row[145].toString().toLowerCase() === 'yes';
-  const hasGuideCreated = !!fmtDate(row[147]);
-  const hasGuideSent = !!fmtDate(row[148]);
+  const hasFollowup = row[157] && row[157].toString().toLowerCase() === 'yes';
+  const hasGuideCreated = !!fmtDate(row[159]);
+  const hasGuideSent = !!fmtDate(row[160]);
   const steps = [hasRelational, hasInterior, hasFollowup, hasGuideCreated, hasGuideSent];
   const done = steps.filter(Boolean).length;
   const pips = steps.map((s,i) => '<div class="pip'+(s?' done':i===done?' active':'')+'"></div>').join('');
@@ -252,12 +250,13 @@ function renderTable(rows){
     const relOverall = row[3] ? row[3].toString() : '';
     const intDate = fmtDate(row[100]);
     const intOverall = row[99] ? row[99].toString() : '';
-    const relEmailSent = row[143] ? row[143].toString() : '';
-    const intEmailSent = row[144] ? row[144].toString() : '';
-    const followupReq  = row[145] ? row[145].toString() : '';
-    const followupDate = fmtDate(row[146]);
-    const guideCreated = fmtDate(row[147]);
-    const guideSent    = fmtDate(row[148]);
+    const relEmailSent = row[155] ? row[143].toString() : '';
+    const intEmailSent = row[156] ? row[144].toString() : '';
+    const followupReq  = row[157] ? row[145].toString() : '';
+    const followupDate = fmtDate(row[158]);
+    const guideCreated = fmtDate(row[159]);
+    const guideSent    = fmtDate(row[160]);
+    const guideId      = row[161] ? row[161].toString().trim() : '';
 
     const relEmailHtml = relEmailSent && relEmailSent.toLowerCase()==='yes'
       ? badge('✓ Sent','done')
@@ -284,6 +283,12 @@ function renderTable(rows){
       +(intOverall ? '<div style="font-size:.68rem;color:#6a6258">I: '+pill(intOverall)+'</div>' : '')
       +'</div>';
 
+    // Guide cell — Build button always shown if interior complete; View button shown if guide exists
+    const guideCellHtml = '<div class="action-col">'
+      +(row[100]&&fmtDate(row[100]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+', event)">Build Guide</button>' : guideCreatedHtml)
+      +(guideId ? '<button class="action-btn action-btn-blue" onclick="viewGuide('+idx+')">View Guide</button>' : '')
+      +'</div>';
+
     return '<tr data-idx="'+idx+'">'
       +'<td><div class="person-name">'+name+'</div><div class="person-email">'+email+'</div>'+pipelineProgress(row)+'</td>'
       +'<td>'+(relDate ? '<div class="stage-date">'+relDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
@@ -292,7 +297,7 @@ function renderTable(rows){
       +'<td>'+(intDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
       +'<td>'+followupHtml+'</td>'
       +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
-      +'<td>'+(row[100]&&fmtDate(row[100]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+', event)">Build Guide</button>' : guideCreatedHtml)+'</td>'
+      +'<td>'+guideCellHtml+'</td>'
       +'<td>'+guideSentHtml+'</td>'
       +'<td>'+scoresHtml+'</td>'
       +'<td><div class="action-col">'
@@ -319,6 +324,16 @@ function filterTable(){
     (r[1]||'').toLowerCase().includes(q) || (r[2]||'').toLowerCase().includes(q)
   );
   renderTable(filtered);
+}
+
+function viewGuide(idx){
+  const row = allRows[idx];
+  const guideId = row[161] ? row[161].toString().trim() : '';
+  if(guideId){
+    window.open('https://boldhearts.org/guide-print.html?id=' + guideId, '_blank');
+  } else {
+    alert('No guide has been built for this person yet.');
+  }
 }
 
 function viewScores(idx){
@@ -373,7 +388,9 @@ function viewScores(idx){
     +scoreRow('Movement', row[103])
     +scoreRow('Safety', row[104])
     +scoreRow('Direction', row[105])
-    +scoreRow('Peace', row[106]);
+    +scoreRow('Peace', row[106])
+
+    +(row[161] ? '<div class="modal-section">Guide</div><div class="modal-row"><span class="modal-row-label">Guide ID</span><span class="modal-row-val" style="font-size:.68rem;color:#6a6258">'+row[161]+'</span></div>' : '');
 
   document.getElementById('modal-overlay').classList.add('open');
 }
@@ -381,7 +398,7 @@ function viewScores(idx){
 function markFollowup(idx){
   const row = allRows[idx];
   const email = row[2] || '';
-  const current = row[145] ? row[145].toString().toLowerCase() : '';
+  const current = row[157] ? row[145].toString().toLowerCase() : '';
   const newVal = current === 'yes' ? 'No' : 'Yes';
   const newDate = newVal === 'Yes' ? new Date().toLocaleString() : '';
 
@@ -393,11 +410,10 @@ function markFollowup(idx){
   });
   new Image().src = SHEETS_URL + '?' + params.toString();
 
-  allRows[idx][52] = newVal;
-  allRows[idx][53] = newDate;
+  allRows[idx][157] = newVal;
+  allRows[idx][158] = newDate;
   renderTable(allRows);
 }
-
 
 function identityScore(val, reverse) {
   const v = parseFloat(val);
@@ -423,7 +439,6 @@ function viewReport(idx, type) {
   }
 
   function dc(p){const n=parseFloat(p);if(isNaN(n))return'#c4a882';const v=n<=1?n*100:n;return v>=80?'#6bc45e':v>=60?'#c4a882':v>=40?'#d4884a':v>=20?'#c97a5a':'#8a2a2a';}
-
   function relTag(p){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;return v>=80?'Strong':v>=60?'Functioning':v>=40?'Weak':v>=20?'Dormant':'Dead';}
   function needsTag(p){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;return v>=80?'Thriving':v>=60?'Healthy':v>=40?'Struggling':v>=20?'Weak':'Critical';}
   function emotionTag(p){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;return v>=80?'Healthy Engagement':v>=60?'Room for Growth':v>=40?'Guarded':v>=20?'Suppressed':'Shut Down';}
@@ -451,8 +466,6 @@ function viewReport(idx, type) {
   let html = '';
 
   if(type === 'relational') {
-    const overall = ps(row[3]);
-    const rc = dc(overall);
     const realmRows = [
       row2('Relationship with God', row[9], relTag),
       row2('Significant Other', row[5], relTag),
@@ -493,8 +506,6 @@ function viewReport(idx, type) {
   }
 
   if(type === 'interior') {
-    const overall = ps(row[99]);
-    const oc = dc(overall);
     const themeRows = [
       row2('Grief & Loss', row[93], emotionTag),
       row2('Shame & Guilt', row[94], emotionTag),
@@ -541,7 +552,6 @@ async function buildGuide(idx, event){
   const name = row[1] || '';
   const email = row[2] || '';
 
-  // Check they have at least interior scores
   if(!row[100] || !fmtDate(row[100])){
     alert(name + ' has not completed the Interior Health Assessment yet.');
     return;
@@ -588,7 +598,6 @@ async function buildGuide(idx, event){
     community_self:    ps(row[30]),
     god_outward:       ps(row[31]),
     god_self:          ps(row[32]),
-    // Raw answers for cross-tab grid (columns AH-BQ, indices 33-92)
     raw: {
       work:      row.slice(33, 43),
       partner:   row.slice(43, 53),
@@ -613,7 +622,6 @@ async function buildGuide(idx, event){
     safety:    ps(row[104]),
     direction: ps(row[105]),
     peace:     ps(row[106]),
-    // Raw answers for cross-tab grid (columns CF-DF, indices 107-142)
     raw: {
       grief:   row.slice(107, 113),
       shame:   row.slice(113, 119),
@@ -622,7 +630,6 @@ async function buildGuide(idx, event){
       desire:  row.slice(131, 137),
       joy:     row.slice(137, 143)
     },
-    // Identity question answers (cols 144-155, indices 143-154)
     identity: {
       grief:  {others: identityScore(row[143], true), self: identityScore(row[144], true), gap: Math.abs((identityScore(row[143],true)||0)-(identityScore(row[144],true)||0))},
       shame:  {others: identityScore(row[145], true), self: identityScore(row[146], true), gap: Math.abs((identityScore(row[145],true)||0)-(identityScore(row[146],true)||0))},
@@ -641,11 +648,9 @@ async function buildGuide(idx, event){
     date: new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})
   };
 
-  // Open blank window NOW (before async) to avoid popup blocker
   const guideWin = window.open('', '_blank');
   guideWin.document.write('<html><body style="background:#f5f0e8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;color:#6a5a4a"><p>Building guide, please wait...</p></body></html>');
 
-  // Show loading state
   const btn = event?.target;
   if(btn) { btn.textContent = 'Building...'; btn.disabled = true; }
 
@@ -663,17 +668,14 @@ async function buildGuide(idx, event){
     const result = await res.json();
     if(result.error) { alert('Guide generation failed: ' + result.error); return; }
 
-    // Store in sessionStorage as fallback
     guideData.guide = result.guide;
     sessionStorage.setItem('boldhearts_guide_data', JSON.stringify(guideData));
 
-    // Open with shareable ID if available
     const guideId = result.guideId;
     const guideUrl = guideId
       ? 'https://boldhearts.org/guide-print.html?id=' + guideId
       : 'guide-print.html';
 
-    // Update sheet to mark guide created
     const params = new URLSearchParams({
       action: 'updatepipeline',
       email: email,
@@ -682,7 +684,10 @@ async function buildGuide(idx, event){
     });
     new Image().src = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec?' + params.toString();
 
-    // Navigate the pre-opened window to the guide
+    // Update local row so View Guide button appears immediately
+    if(guideId) allRows[idx][161] = guideId;
+    renderTable(allRows);
+
     guideWin.location.href = guideUrl;
 
   } catch(e) {
