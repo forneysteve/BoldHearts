@@ -341,14 +341,13 @@ function renderGuide(data) {
 
 
   // ── OPENING INTRO BLOCK ──────────────────────────────────
-  const introHtml = '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-bottom:2rem;break-inside:avoid">'
-    + '<div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">Purpose of This Assessment</div>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Thank you for taking the time to complete both assessments. What you have done here is not small — looking honestly at your own heart takes courage, and we do not take lightly that you gave it.</p>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The Scriptures speak of the heart as something worth tending. In Jeremiah 31 and Ezekiel 36, God promises a new heart — not a fixed version of the old one, but something genuinely transformed. That promise assumes the heart matters. That what happens inside you has weight. That taking inventory of it is not self-indulgence — it is stewardship.</p>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">At BoldHearts, we believe that out of our hearts grow enormous dreams for the Kingdom of God. The heart was made for more than survival — it was made to reach, to hope, to love, to lead. But emotions can be distracting. They can pull us away from trusting what our hearts most deeply know. They can cloud the signal with noise — fear dressed as wisdom, anger posing as conviction, desire mistaken for selfishness.</p>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:0;max-width:none">Proverbs 4:23 says that everything flows from the heart. If that is true — and we believe it is — then it is worth being wise about what the heart is actually saying. Not reactive. Not dismissive. Wise. These scores are a tool for that kind of wisdom. So with that, let\'s look at what yours are telling us.</p>'
+  const introHtml = '<div style="margin-bottom:2rem;break-inside:avoid">'
+    + '<div class="section-header">Purpose of This Assessment</div>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">Thank you for taking the time to complete both assessments. What you have done here is not small — looking honestly at your own heart takes courage, and we do not take lightly that you gave it.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">The Scriptures speak of the heart as something worth tending. In Jeremiah 31 and Ezekiel 36, God promises a new heart — not a fixed version of the old one, but something genuinely transformed. That promise assumes the heart matters. That what happens inside you has weight. That taking inventory of it is not self-indulgence — it is stewardship.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">At BoldHearts, we believe that out of our hearts grow enormous dreams for the Kingdom of God. The heart was made for more than survival — it was made to reach, to hope, to love, to lead. But emotions can be distracting. They can pull us away from trusting what our hearts most deeply know. They can cloud the signal with noise — fear dressed as wisdom, anger posing as conviction, desire mistaken for selfishness.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:0;max-width:none">Proverbs 4:23 says that everything flows from the heart. If that is true — and we believe it is — then it is worth being wise about what the heart is actually saying. Not reactive. Not dismissive. Wise. These scores are a tool for that kind of wisdom. So with that, let\'s look at what yours are telling us.</p>'
     + '</div>';
-
 
   const summaryHtml = '<div class="dashboard-wrap">'
     + '<div class="section-header">Your Assessment Scores</div>'
@@ -815,7 +814,7 @@ function renderGuide(data) {
     ? '<div class="section-header">Interior Score Breakdown</div>'
       + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
-      + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.6rem;align-items:start">'
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;align-items:start">'
       + insightCards.join('')
       + '</div>'
       + '</div>'
@@ -1066,11 +1065,11 @@ function renderGuide(data) {
       'picture': '<div class="pull-quote-right"><p>“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><cite>— A.W. Tozer</cite></div>',
       'scored_well': '',
       'interior': '<div class="pull-quote-right"><p>“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><cite>— Dallas Willard</cite></div>',
-      'invitation': '<div class="pull-quote-left"><p>“By inviting God into our difficulties, we ground life — even its sad moments — in joy and hope. When we stop grasping our lives, we can finally be given more than we could ever grab for ourselves.”</p><cite>— Henri Nouwen</cite></div>',
+      'invitation': '',
       'soulcare': '',
       'practices': '<div class="pull-quote-left"><p>“A carefully cultivated heart will, assisted by the grace of God, foresee, forestall, or transform most of the painful situations before which others stand like helpless children.”</p><cite>— Dallas Willard</cite></div>',
     };
-    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'center top' : 'center';
+    const imgPos = sectionImages[s.id] && sectionImages[s.id].includes('clement') ? 'center 15%' : 'center';
     const sectionImg = sectionImages[s.id]
       ? '<img src="'+sectionImages[s.id]+'" alt="" style="width:100%;max-height:'+(sectionImages[s.id].includes('clement')?'340px':'280px')+';height:'+(sectionImages[s.id].includes('clement')?'340px':'auto')+';object-fit:cover;object-position:'+imgPos+';border-radius:4px;margin-bottom:1.5rem;display:block;clear:both;break-inside:avoid;opacity:0.9">'
       : '';
@@ -1107,6 +1106,7 @@ function renderGuide(data) {
 
 
     // Page 2+: Scores then guide sections
+    + '<img src="assets/images/pexels-gabii-fernandez-199438359-35864900.jpg" alt="" style="width:100%;max-height:320px;object-fit:cover;object-position:center;border-radius:4px;margin-bottom:2rem;display:block;opacity:0.9">'
     + introHtml
     + aboutRelationalHtml
     + summaryHtml
