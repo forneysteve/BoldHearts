@@ -995,7 +995,7 @@ function renderGuide(data) {
       interior:         'assets/images/blackpowder75-saxon-switzerland-539418_1920.jpg',
       invitation:       'assets/images/pexels-josh-willink-11499-93858.jpg',
       soulcare:         'assets/images/pexels-clement-proust-363898785-35541665.jpg',
-      nextstep:         'assets/images/luisambros-mountain-7704819_1920.jpg',
+      nextstep:         'assets/images/pexels-thephotosaccount-30773316.jpg',
       practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
     };
 
@@ -1057,13 +1057,17 @@ function renderGuide(data) {
       const botNeeds = needEntries.slice(-3).reverse();
       let pills = scorePill('Relationship with God', a1?.god, '');
       if(gap >= 10) pills += scorePill('God toward you', a1?.god_outward, '') + scorePill('You toward God', a1?.god_self, '');
-      const needPills = '<div style="display:flex;flex-wrap:wrap;gap:0;margin:.4rem 0 0">'
-        + '<span style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin:.5rem .5rem .25rem 0;align-self:center">Strongest</span>'
+      const needPills = '<div style="text-align:center;margin:.25rem 0 1rem">'
+        + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.4rem;font-weight:500">Strongest Needs in This Relationship</div>'
+        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin-bottom:.75rem">'
         + topNeeds.map(([l,v])=>scorePill(l,v+'')).join('')
-        + '<span style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin:.5rem .5rem .25rem .5rem;align-self:center">Weakest</span>'
+        + '</div>'
+        + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.4rem;font-weight:500">Weakest Needs in This Relationship</div>'
+        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0">'
         + botNeeds.map(([l,v])=>scorePill(l,v+'')).join('')
+        + '</div>'
         + '</div>';
-      sectionPillsHtml = pillRow(pills) + needPills + '<div style="margin-bottom:.75rem"></div>';
+      sectionPillsHtml = '<div style="text-align:center;margin:.75rem 0 .5rem">' + pills + '</div>' + needPills;
     }
 
     if(s.id === 'soulcare') {
