@@ -1005,6 +1005,24 @@ function renderGuide(data) {
     // ── SCORE PILLS per section ──────────────────────────────
     let sectionPillsHtml = '';
 
+    if(s.id === 'picture') {
+      // Top 2 relational + top 2 interior + bottom 2 relational + bottom 2 interior
+      const allRel = [
+        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
+        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
+        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
+      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
+      const allInt = ['grief','shame','fear','anger','desire','joy']
+        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'}[k], val:hs?.[k]}))
+        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
+      const top = [...allRel.slice(0,2), ...allInt.slice(0,2)];
+      const bot = [...allRel.slice(-2).reverse(), ...allInt.slice(-2).reverse()];
+      const pills = top.map(i=>scorePill(i.label, i.val, '')).join('')
+        + '<span style="display:inline-flex;align-items:center;padding:4px 6px;font-size:.6rem;color:#c4a882;font-family:sans-serif;opacity:.6">·</span>'
+        + bot.map(i=>scorePill(i.label, i.val, '')).join('');
+      sectionPillsHtml = pillRow(pills);
+    }
+
     if(s.id === 'scored_well') {
       // Top relational realms
       const relSorted = [
