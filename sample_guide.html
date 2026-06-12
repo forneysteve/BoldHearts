@@ -262,6 +262,42 @@ function renderGuide(data) {
     return n <= 1 ? Math.round(n * 100) : Math.round(n);
   }
 
+  // ── SCORE PILL HELPER ────────────────────────────────────
+  function scorePill(label, val, tag) {
+    const n = numVal(val);
+    if(!n) return '';
+    const col = barColor(n);
+    const bg = n>=80?'#f0f8ec':n>=60?'#fdf6e8':n>=40?'#fdf0e8':'#faeae0';
+    const border = n>=80?'#b5d49a':n>=60?'#e8d8a0':n>=40?'#e8c0a0':'#e8a890';
+    const tc = n>=80?'#2a5a20':n>=60?'#6a4a10':n>=40?'#7a3010':'#6a1a10';
+    return '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:'+bg+';border:1px solid '+border+';font-size:.68rem;font-family:Inter,sans-serif;white-space:nowrap;margin:0 4px 4px 0">'
+      +'<span style="font-weight:600;color:'+tc+'">'+n+'%</span>'
+      +'<span style="color:'+tc+'">'+label+'</span>'
+      +(tag ? '<span style="font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;color:'+tc+';opacity:.7">'+tag+'</span>' : '')
+      +'</span>';
+  }
+
+  function pillRow(pills) {
+    return '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:.75rem 0 1.1rem">'+pills+'</div>';
+  }
+
+  // Per-realm need scores from raw answers
+  function realmNeedScores(realmId) {
+    const raw = a1?.raw?.[realmId] || [];
+    const needs = {
+      'Being Seen': calcCellScore(raw, [0]),
+      'Being Known': calcCellScore(raw, [2]),
+      'Having a Voice': calcCellScore(raw, [3]),
+      'Belonging': calcCellScore(raw, [5]),
+      'Receiving Support': calcCellScore(raw, [6]),
+      'Trust & Safety': calcCellScore(raw, [7]),
+      'Calling / Purpose': calcCellScore(raw, [8]),
+      'Freedom': calcCellScore(raw, [9]),
+    };
+    const entries = Object.entries(needs).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    return entries;
+  }
+
   const realmVals  = [a1?.god, a1?.partner, a1?.family, a1?.friends, a1?.work, a1?.community].map(numVal);
   const themeVals  = [hs?.grief, hs?.shame, hs?.fear, hs?.anger, hs?.desire, hs?.joy].map(numVal);
   const relDimVals = [a1?.dim_seen, a1?.dim_known, a1?.dim_voice, a1?.dim_belonging, a1?.dim_support, a1?.dim_trust, a1?.dim_calling, a1?.dim_freedom].map(numVal);
@@ -810,11 +846,12 @@ function renderGuide(data) {
       + '</div>';
   }).filter(Boolean);
 
+  const themeInsightsCols = insightCards.length <= 2 ? 2 : insightCards.length === 3 ? 3 : insightCards.length === 4 ? 2 : insightCards.length === 5 ? 3 : 3;
   const themeInsightsHtml = insightCards.length
     ? '<div class="section-header">Interior Score Breakdown</div>'
       + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
-      + '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;align-items:start">'
+      + '<div style="display:grid;grid-template-columns:repeat('+themeInsightsCols+',1fr);gap:.6rem;align-items:start">'
       + insightCards.join('')
       + '</div>'
       + '</div>'
@@ -959,11 +996,107 @@ function renderGuide(data) {
       interior:         'assets/images/blackpowder75-saxon-switzerland-539418_1920.jpg',
       invitation:       'assets/images/pexels-josh-willink-11499-93858.jpg',
       soulcare:         'assets/images/pexels-clement-proust-363898785-35541665.jpg',
-      nextstep:         'assets/images/luisambros-mountain-7704819_1920.jpg',
+      nextstep:         'assets/images/pexels-thephotosaccount-30773316.jpg',
       practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
     };
 
     const bigHeader = '<div class="section-header" style="break-before:page">' + (sectionHeaders[s.id] || s.label) + '</div>';
+
+    // ── SCORE PILLS per section ──────────────────────────────
+    let sectionPillsHtml = '';
+
+    if(s.id === 'picture') {
+      // Top 2 relational + top 2 interior + bottom 2 relational + bottom 2 interior
+      const allRel = [
+        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
+        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
+        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
+      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
+      const allInt = ['grief','shame','fear','anger','desire','joy']
+        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'}[k], val:hs?.[k]}))
+        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
+      const top = [...allRel.slice(0,2), ...allInt.slice(0,2)];
+      const bot = [...allRel.slice(-2).reverse(), ...allInt.slice(-2).reverse()];
+      const pills = top.map(i=>scorePill(i.label, i.val, '')).join('')
+        + '<span style="display:inline-flex;align-items:center;padding:4px 6px;font-size:.6rem;color:#c4a882;font-family:sans-serif;opacity:.6">·</span>'
+        + bot.map(i=>scorePill(i.label, i.val, '')).join('');
+      sectionPillsHtml = pillRow(pills);
+    }
+
+    if(s.id === 'scored_well') {
+      // Top relational realms
+      const relSorted = [
+        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
+        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
+        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
+      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val)).slice(0,3);
+      // Top interior themes
+      const intSorted = ['grief','shame','fear','anger','desire','joy']
+        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'}[k], val:hs?.[k]}))
+        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val)).slice(0,2);
+      const pills = [...relSorted, ...intSorted].map(i=>scorePill(i.label, i.val, '')).join('');
+      sectionPillsHtml = pillRow(pills);
+    }
+
+    if(s.id === 'could_be_stronger') {
+      const relSorted = [
+        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
+        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
+        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
+      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,3);
+      const intSorted = ['grief','shame','fear','anger','desire','joy']
+        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'}[k], val:hs?.[k]}))
+        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,2);
+      const pills = [...relSorted, ...intSorted].map(i=>scorePill(i.label, i.val, '')).join('');
+      sectionPillsHtml = pillRow(pills);
+    }
+
+    if(s.id === 'interior') {
+      const themeSorted = ['grief','shame','fear','anger','desire','joy']
+        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'}[k], val:hs?.[k]}))
+        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val));
+      const postureSorted = [
+        {label:'Awareness', val:hs?.awareness},{label:'Honesty', val:hs?.honesty},
+        {label:'Movement', val:hs?.movement},{label:'Safety', val:hs?.safety},
+        {label:'Direction', val:hs?.direction},{label:'Peace', val:hs?.peace}
+      ].filter(p=>numVal(p.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,2);
+      const low = themeSorted.slice(0,2);
+      const high = themeSorted.slice(-2).reverse();
+      const pills = [...high, ...low, ...postureSorted].map(i=>scorePill(i.label, i.val, '')).join('');
+      sectionPillsHtml = pillRow(pills);
+    }
+
+    if(s.id === 'invitation') {
+      const godOverall = numVal(a1?.god);
+      const godOut = numVal(a1?.god_outward);
+      const godSelf = numVal(a1?.god_self);
+      const gap = Math.abs(godOut - godSelf);
+      const needEntries = realmNeedScores('god');
+      const topNeeds = needEntries.slice(0,3);
+      const botNeeds = needEntries.slice(-3).reverse();
+      let pills = scorePill('Relationship with God', a1?.god, '');
+      if(gap >= 10) pills += scorePill('God toward you', a1?.god_outward, '') + scorePill('You toward God', a1?.god_self, '');
+      const needPills = '<div style="text-align:center;margin:.25rem 0 1rem">'
+        + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.4rem;font-weight:500">Strongest Needs in This Relationship</div>'
+        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin-bottom:.75rem">'
+        + topNeeds.map(([l,v])=>scorePill(l,v+'')).join('')
+        + '</div>'
+        + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.4rem;font-weight:500">Weakest Needs in This Relationship</div>'
+        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0">'
+        + botNeeds.map(([l,v])=>scorePill(l,v+'')).join('')
+        + '</div>'
+        + '</div>';
+      sectionPillsHtml = '<div style="text-align:center;margin:.75rem 0 .5rem">' + pills + '</div>' + needPills;
+    }
+
+    if(s.id === 'soulcare') {
+      const postureSorted = [
+        {label:'Awareness', val:hs?.awareness},{label:'Honesty', val:hs?.honesty},
+        {label:'Movement', val:hs?.movement},{label:'Safety', val:hs?.safety},
+        {label:'Direction', val:hs?.direction},{label:'Peace', val:hs?.peace}
+      ].filter(p=>numVal(p.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,3);
+      sectionPillsHtml = pillRow(postureSorted.map(p=>scorePill(p.label, p.val, '')).join(''));
+    }
 
     if(s.id === 'practices') {
       const pc = s.practicesContent || (typeof s.content === 'object' ? s.content : null);
@@ -1076,6 +1209,7 @@ function renderGuide(data) {
     const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
       + '<div class="section">'
+      + sectionPillsHtml
       + (function() {
         const paraList = filteredParas.map(p => {
           let text = p.trim()
@@ -1175,7 +1309,7 @@ function showError(msg) {
 
 
     const previewData = {
-        name: 'Pastor Sample',
+        name: 'Thomas',
         date: '2026-06-09T10:00:00',
         guide: {
           sections: [
@@ -1247,7 +1381,7 @@ function showError(msg) {
           }
         }
       };
-    renderGuide(previewData);
+      renderGuide(previewData);
 </script>
 </div><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"845f141f328c4236813734c0f75317d0","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
