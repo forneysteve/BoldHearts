@@ -964,30 +964,7 @@ function renderGuide(data) {
       ? '<span style="margin-left:8px;font-size:.6rem;color:#c97a5a;background:#fde8d8;padding:1px 6px;border-radius:3px;font-weight:500">'+gap+'% gap</span>'
       : '';
 
-    // Gap note
     let gapNote = '';
-    if(hasGap && identityGapNotes[t]) {
-      const noteText = othersHigh && !selfHigh ? identityGapNotes[t].high : !othersHigh && selfHigh ? identityGapNotes[t].low : '';
-      if(noteText) {
-        gapNote = '<div style="margin-top:.5rem;padding:.5rem .75rem;background:#fff0eb;border-left:3px solid #c97a5a;border-radius:3px;font-size:.68rem;color:#7a3a10;line-height:1.6">'+noteText+'</div>';
-      }
-    }
-
-    return '<div style="background:'+cardBg+';'+cardBorder+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
-      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+idThemeLabels[t]+gapFlag+'</div>'
-      + '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0;border-bottom:1px solid #ede8e0">'
-      + '<div style="width:130px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3">How others see my maturity</div>'
-      + '<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden"><div style="width:'+(id.others||0)+'%;height:100%;background:'+barColor(id.others||0)+';border-radius:4px"></div></div>'
-      + '<div style="width:34px;font-size:.7rem;font-weight:500;color:'+barColor(id.others||0)+';text-align:right">'+(id.others||0)+'%</div>'
-      + '<div style="font-size:.6rem;color:'+barColor(id.others||0)+';margin-left:4px;white-space:nowrap">'+maturityTag(id.others||0)+'</div>'
-      + '</div>'
-      + '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0">'
-      + '<div style="width:130px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3">How I see my own maturity</div>'
-      + '<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden"><div style="width:'+(id.self||0)+'%;height:100%;background:'+barColor(id.self||0)+';border-radius:4px"></div></div>'
-      + '<div style="width:34px;font-size:.7rem;font-weight:500;color:'+barColor(id.self||0)+';text-align:right">'+(id.self||0)+'%</div>'
-      + '<div style="font-size:.6rem;color:'+barColor(id.self||0)+';margin-left:4px;white-space:nowrap">'+maturityTag(id.self||0)+'</div>'
-      + '</div>'
-      + gapNote
       + '</div>';
   }).filter(Boolean);
 
