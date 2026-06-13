@@ -1,7 +1,4 @@
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,19 +61,15 @@ nav .nav-links a:hover{color:#e8d7a0}
 .qblock{background:#1a1816;border:1px solid rgba(232,215,160,.08);border-radius:4px;padding:1.5rem;margin-bottom:.6rem;transition:border-color .2s ease}
 .qblock.answered{border-color:rgba(232,215,160,.25)}
 .qnum{font-size:.7rem;color:#5a5550;font-weight:400;margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase}
-.qlabel{font-size:.95rem;color:#d4ccc4;line-height:1.7;margin-bottom:1rem}
-.scale-opts{display:flex;flex-direction:column;gap:0}
-.scale-endlabels{display:flex;justify-content:space-between;padding:0 2px;margin-bottom:6px}
-.scale-endlabel{font-size:.7rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
-.scale-circles{display:flex;align-items:center;justify-content:space-between;gap:0;width:100%}
-.sopt{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:8px 4px;cursor:pointer;user-select:none;position:relative;background:none;border:none}
-.sopt-circle{width:32px;height:32px;border-radius:50%;border:2px solid rgba(232,215,160,.25);background:#111111;transition:all .15s;display:flex;align-items:center;justify-content:center;position:relative}
-.sopt:hover .sopt-circle{border-color:rgba(232,215,160,.6);background:#1e1c1a}
-.sopt.sel .sopt-circle{border-color:#e8d7a0;background:#e8d7a0}
-.sopt.sel .sopt-circle::after{content:'✓';color:#111111;font-size:16px;font-weight:700;line-height:1;display:block}
-.sopt input[type=radio]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
-.scale-num{font-size:.65rem;color:#4a4540;margin-top:5px;letter-spacing:.04em}
-.sopt.sel .scale-num{color:#e8d7a0}
+.qlabel{font-size:.95rem;color:#d4ccc4;line-height:1.7;margin-bottom:1.1rem}
+.scale-endlabels{display:flex;justify-content:space-between;padding:0 2px;margin-bottom:4px}
+.scale-endlabel{font-size:.65rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
+.slider-area{position:relative;padding:.5rem 0 .25rem}
+.slider-area input[type=range]{width:100%;height:3px;-webkit-appearance:none;appearance:none;background:rgba(232,215,160,.15);border-radius:2px;outline:none;cursor:pointer}
+.slider-area input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#e8d7a0;cursor:pointer;border:2px solid #f0e8df;transition:transform .15s}
+.slider-area input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.hash-row{display:flex;justify-content:space-between;padding:0 2px;margin-top:5px}
+.hash-mark{width:1px;height:7px;background:rgba(232,215,160,.3)}
 .submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px}
 .submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem;letter-spacing:.04em}
 .sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#e8d7a0;padding:1rem 2.5rem;border-radius:4px;border:2px solid #e8d7a0;transition:all .3s ease;cursor:pointer}
@@ -101,69 +94,8 @@ nav .nav-links a:hover{color:#e8d7a0}
 .results-hero h2{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:.5rem;color:#f0e8df}
 .results-hero h2::after{margin:1rem auto 0;width:60px;height:2px;background:#e8d7a0;content:'';display:block}
 .results-hero p{font-size:.95rem;color:#6a6258;margin:0 auto;max-width:none;letter-spacing:.04em}
-.ring-wrap{display:flex;flex-direction:column;align-items:center;margin:2rem 0}
-.ring-inner{position:relative;width:150px;height:150px;flex-shrink:0}
-.ring-summary{text-align:center;font-size:.95rem;color:#a09890;font-style:italic;font-family:'Cormorant Garamond',serif;max-width:340px;margin:.75rem auto 0;line-height:1.6}
-.ring-inner svg{transform:rotate(-90deg)}
-.ring-lbl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.ring-lbl .big{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:#f0e8df}
-.ring-lbl .sm{font-size:.7rem;color:#6a6258;letter-spacing:.08em;text-transform:uppercase;margin-top:-2px}
-.score-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
-.score-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px;padding:1.25rem 1.5rem}
-.score-card-lbl{font-size:.7rem;color:#6a6258;font-weight:400;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
-.score-card-val{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700}
-.score-card-tag{font-size:.75rem;color:#6a6258;margin-top:3px;letter-spacing:.04em}
-.score-bar{height:2px;border-radius:2px;background:rgba(232,215,160,.1);margin-top:12px}
-.score-bar-fill{height:100%;border-radius:2px;transition:width .8s ease}
 .section-label{font-size:.7rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.1)}
-.realm-rows-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem}
-.chart-legend{display:flex;gap:1.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
-.chart-legend-item{display:flex;align-items:center;gap:7px;font-size:.75rem;color:#6a6258;letter-spacing:.04em}
-.chart-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.realm-result-row{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(232,215,160,.08)}
-.realm-result-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.realm-result-name{font-size:.85rem;color:#b0a898;margin-bottom:.5rem;display:flex;align-items:center;gap:8px}
-.gap-badge{font-size:.7rem;color:#c97a5a;background:rgba(201,122,90,.1);padding:1px 7px;border-radius:3px;margin-left:4px}
-.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.bar-row-label{font-size:.7rem;color:#5a5550;width:130px;flex-shrink:0;text-align:right;letter-spacing:.03em}
-.bar-track{flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:visible;position:relative}
-.bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
-.bar-pct{font-size:.75rem;font-weight:500;margin-left:6px;width:30px;flex-shrink:0}
-.gap-zone{position:absolute;top:0;height:100%;background:rgba(201,122,90,.12);border-left:1px dashed rgba(201,122,90,.35);border-right:1px dashed rgba(201,122,90,.35)}
-.gap-note{font-size:.7rem;color:#c97a5a;margin-top:4px;margin-left:138px;display:flex;align-items:center;gap:4px}
-.dim-grid{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
-.dim-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-left:3px solid #e8d7a0;border-radius:4px;padding:1rem 1.25rem}
-.dim-card.low{border-left-color:#c97a5a}
-.dim-card.high{border-left-color:#6bc45e}
-.dim-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
-.dim-name{font-size:.85rem;font-weight:500;color:#f0e8df}
-.dim-overall{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700}
-.dim-desc{font-size:.75rem;color:#6a6258;line-height:1.6;margin-bottom:.75rem}
-.dim-realm-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.dim-realm-row:last-child{margin-bottom:0}
-.dim-realm-label{font-size:.7rem;color:#5a5550;width:120px;flex-shrink:0;text-align:right;letter-spacing:.02em}
-.dim-realm-track{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
-.dim-realm-fill{height:100%;border-radius:3px;transition:width .9s ease}
-.dim-realm-pct{font-size:.7rem;font-weight:500;width:28px;text-align:right;flex-shrink:0}
-.pattern-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem;margin-bottom:1rem}
-.pattern-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1rem 1.25rem;display:flex;gap:1rem;align-items:flex-start}
-.pattern-card.open{border-left:3px solid #6bc45e}
-.pattern-card.giver{border-left:3px solid #c97a5a}
-.pattern-card.guarded{border-left:3px solid #e8d7a0}
-.pattern-card.disconnected{border-left:3px solid #c97a5a;background:#1a1614}
-.pattern-realm{font-size:.7rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.pattern-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#f0e8df;margin-bottom:.4rem}
-.pattern-desc{font-size:.8rem;color:#a09890;line-height:1.7}
-.warning-card{background:#1a1614;border:1px solid rgba(232,215,160,.12);border-left:3px solid #e8d7a0;border-radius:4px;padding:1.5rem;margin-bottom:.75rem;display:flex;gap:1.25rem;align-items:flex-start}
-.warning-card.severity-red{border-left-color:#c97a5a}
-.warning-card.severity-amber{border-left-color:#e8d7a0}
-.warning-icon{width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px}
-.warning-icon.red{background:rgba(201,122,90,.1);color:#c97a5a}
-.warning-icon.amber{background:rgba(232,215,160,.08);color:#e8d7a0}
-.warning-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#f0e8df;margin-bottom:5px}
-.warning-text{font-size:.875rem;color:#a09890;line-height:1.8}
 .deepdive-card{background:#1a1714;border:1px solid rgba(196,168,130,.3);border-top:3px solid #c4a882;border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
-.deepdive-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,168,130,.05) 0%,transparent 60%);pointer-events:none}
 .deepdive-card .dd-eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem}
 .deepdive-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
 .deepdive-card p{font-size:.95rem;color:#a09890;line-height:1.9;margin:0 auto 2rem;max-width:520px}
@@ -171,14 +103,12 @@ nav .nav-links a:hover{color:#e8d7a0}
 .deepdive-btn:hover{background-color:transparent;color:#c4a882}
 .deepdive-note{font-size:.78rem;color:#5a5550;letter-spacing:.04em}
 .discovery-card{background:#1a1714;border:1px solid rgba(232,215,160,.2);border-radius:4px;padding:3rem 2.5rem;text-align:center;margin-top:2rem;position:relative;overflow:hidden}
-.discovery-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,215,160,.04) 0%,transparent 60%)}
 .discovery-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#f0e8df;margin-bottom:.75rem}
 .discovery-card p{font-size:.95rem;color:#a09890;line-height:1.9;margin:0 auto 2rem;max-width:500px}
 .discovery-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#e8d7a0;padding:1rem 2.5rem;border-radius:4px;border:2px solid #e8d7a0;transition:all .3s ease;cursor:pointer;margin-bottom:1rem;text-decoration:none}
 .discovery-btn:hover{background-color:transparent;color:#e8d7a0}
 .discovery-email{font-size:.8rem;color:#5a5550;letter-spacing:.04em}
 .discovery-email a{color:#a09890;border-bottom:1px solid rgba(232,215,160,.2);transition:color .3s ease}
-.discovery-email a:hover{color:#e8d7a0}
 .retake-btn{display:block;margin:2rem auto 0;padding:.75rem 2rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:4px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;cursor:pointer;font-family:'Inter',sans-serif;transition:all .3s ease}
 .retake-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
 footer{background-color:#0d0d0d;text-align:center;padding:2.5rem 2rem;border-top:1px solid rgba(232,215,160,.08)}
@@ -186,31 +116,6 @@ footer p{color:#5a5550;font-size:.8rem;letter-spacing:.06em;max-width:none;margi
 footer a{color:#6a6258}
 footer a:hover{color:#e8d7a0}
 .divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,215,160,.15),transparent)}
-@media(max-width:768px){
-  .nav-toggle{display:flex}
-  nav .nav-links{display:none;flex-direction:column;align-items:center;gap:0;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(13,13,13,.98);backdrop-filter:blur(16px);justify-content:center;z-index:999}
-  nav .nav-links.open{display:flex}
-  nav .nav-links li{width:100%;text-align:center}
-  nav .nav-links a{display:block;font-size:1.1rem;letter-spacing:.12em;padding:1.25rem 2rem;color:#d4ccc4;border-bottom:1px solid rgba(232,215,160,.08)}
-  nav .nav-links a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
-  .cta-nav{background-color:#e8d7a0 !important;color:#111111 !important;margin:1.5rem auto 0;width:calc(100% - 4rem);border-radius:4px}
-  .hero{padding:6rem 1.5rem 3rem}
-  .main{padding:2rem 1.25rem 4rem}
-  .gate-wrap{padding:3rem 1.25rem}
-  .sopt-circle{width:34px;height:34px}
-  .sopt{padding:6px 1px}
-  .scale-num{font-size:.6rem}
-  .score-cards{grid-template-columns:1fr}
-  nav{padding:1rem 1.25rem}
-  .progress-wrap{top:57px}
-  .realm-hdr{padding:1.25rem}
-  .qblock{padding:1.25rem}
-  .bar-row-label{width:90px;font-size:.65rem}
-  .dim-realm-label{width:90px;font-size:.65rem}
-  .pattern-grid{grid-template-columns:1fr}
-  .gap-note{margin-left:0;margin-top:8px}
-  .deepdive-card{padding:2rem 1.5rem}
-}
 .nav-dropdown{position:relative}
 .nav-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;z-index:1001;backdrop-filter:blur(12px)}
 .nav-dropdown>a{padding-bottom:12px;margin-bottom:-12px}
@@ -219,10 +124,18 @@ footer a:hover{color:#e8d7a0}
 .dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
 .dropdown-menu li+li{border-top:1px solid rgba(232,215,160,.08)}
 .nav-dropdown>a::after{content:' ▾';font-size:.6rem;opacity:.6}
-@media(max-width:480px){
-  .bar-row-label{width:70px;font-size:.6rem}
-  .bar-row{gap:4px}
-  .pattern-grid{grid-template-columns:1fr}
+@media(max-width:768px){
+  .nav-toggle{display:flex}
+  nav .nav-links{display:none;flex-direction:column;align-items:center;gap:0;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(13,13,13,.98);backdrop-filter:blur(16px);justify-content:center;z-index:999}
+  nav .nav-links.open{display:flex}
+  nav .nav-links li{width:100%;text-align:center}
+  nav .nav-links a{display:block;font-size:1.1rem;letter-spacing:.12em;padding:1.25rem 2rem;color:#d4ccc4;border-bottom:1px solid rgba(232,215,160,.08)}
+  .cta-nav{background-color:#e8d7a0 !important;color:#111111 !important;margin:1.5rem auto 0;width:calc(100% - 4rem);border-radius:4px}
+  .hero{padding:6rem 1.5rem 3rem}
+  .main{padding:2rem 1.25rem 4rem}
+  .gate-wrap{padding:3rem 1.25rem}
+  nav{padding:1rem 1.25rem}
+  .progress-wrap{top:57px}
 }
 </style>
 </head>
@@ -237,13 +150,13 @@ footer a:hover{color:#e8d7a0}
     <li><a href="https://forneysteve.github.io/BoldHearts/services.html">Services</a></li>
     <li><a href="https://forneysteve.github.io/BoldHearts/about.html">About</a></li>
     <li><a href="https://forneysteve.github.io/BoldHearts/testimonials.html">Stories</a></li>
-                <a href="#">Resources</a>
-                <ul class="dropdown-menu">
-                    <li><a href="relational.html">Relational Health Assessment</a></li>
-                    <li><a href="sample_guide.html">Sample Heart Assessment Guide</a></li>
-                    <li><a href="leadership_guide_sample.html">Leadership Culture Report</a></li>
-                </ul>
-
+    <li class="nav-dropdown">
+      <a href="#">Resources</a>
+      <ul class="dropdown-menu">
+        <li><a href="relational.html">Relational Health Assessment</a></li>
+        <li><a href="sample_guide.html">Sample Heart Assessment Guide</a></li>
+        <li><a href="leadership_guide_sample.html">Leadership Culture Report</a></li>
+      </ul>
     </li>
     <li><a href="https://forneysteve.github.io/BoldHearts/contact.html" class="cta-nav">Schedule Now</a></li>
   </ul>
@@ -264,7 +177,7 @@ footer a:hover{color:#e8d7a0}
 <div class="progress-wrap" id="progress-section">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-lbl">0 of 48 answered</div>
+    <div class="progress-label" id="progress-lbl">0 of 60 answered</div>
   </div>
 </div>
 <div id="app"></div>
@@ -277,10 +190,10 @@ footer a:hover{color:#e8d7a0}
 <script>
 const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
 const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
-const SCALE=[{val:1},{val:2},{val:3},{val:4},{val:5},{val:6},{val:7}];
+
 const REALMS=[
   {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',bar:'#c4a882',
-   desc:'Think honestly about your relationship with God — answer based on what is actually true right now, not what you think it should be.',
+   desc:"Answer based on what is actually true right now — not what it used to be, not what you think it should be. God already knows. Your honesty here is more useful than a polished answer.",
    questions:[
     {t:"I have a sense that God is personally watching the details of my life — like a good friend watching things unfold with great interest.",self:false},
     {t:"God delights in who I am, beyond what I do or produce.",self:false},
@@ -291,10 +204,10 @@ const REALMS=[
     {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
     {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true},
     {t:"When I think about the last several weeks, I have been actively pursuing God in my spiritual walk.",self:true},
-    {t:"I feel directionless in my walk with God currently — I'm not sure where it's headed.",self:true,reverse:true}
+    {t:"I feel free to be fully myself with God — I'm not managing what God sees or presenting a version of me that is more acceptable.",self:true}
   ]},
   {id:'significant_other',label:'Significant Other',icon:'ti-heart',color:'#c97a5a',bar:'#c97a5a',
-   desc:'Think about your spouse or significant other. Skip this section if not currently applicable.',
+   desc:"Think about your relationship as it actually is today. If things are in a hard season, that will show — and that's exactly the kind of information worth bringing to a conversation. There are no right answers here.",
    questions:[
     {t:"My partner can read what's happening in me before I put it into words.",self:false},
     {t:"I take responsibility for letting my partner really know me — I don't make them guess.",self:true},
@@ -308,7 +221,7 @@ const REALMS=[
     {t:"I feel free to be myself with my partner — I'm valued for who I am, beyond what I bring to the table.",self:true}
   ]},
   {id:'family',label:'Family',icon:'ti-home-heart',color:'#a09890',bar:'#a09890',
-   desc:'Think about your family relationships — answer based on your closest family ties (spouse/children if applicable, otherwise siblings or parents).',
+   desc:"Think about the family relationship that carries the most weight for you right now. If that's complicated, that's fine. You're not being graded — you're being honest.",
    questions:[
     {t:"My closest family members notice when I'm struggling emotionally — they don't need me to announce it.",self:false},
     {t:"I work to improve my family relationships rather than waiting for others to make the first move.",self:true},
@@ -322,7 +235,7 @@ const REALMS=[
     {t:"I feel free to be myself in my family — my value isn't tied to what I do or the role I fill.",self:true}
   ]},
   {id:'friends',label:'Friends',icon:'ti-users',color:'#6bc45e',bar:'#6bc45e',
-   desc:'Think about your close friends and social circle.',
+   desc:"You may find yourself thinking of one specific person as you answer these. Notice that — and bring it to your conversation with Steve. A single friendship can shape these scores significantly, and that's worth talking about.",
    questions:[
     {t:"My friends could tell something was off with me even if I showed up smiling.",self:false},
     {t:"I pursue my friendships with intention — I don't just wait for things to happen.",self:true},
@@ -336,7 +249,7 @@ const REALMS=[
     {t:"My friends are there for me as a person — for who I am, beyond what I bring to the group.",self:true}
   ]},
   {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
-   desc:'Think about the people you work or study alongside day to day.',
+   desc:"If you're in a transition, between jobs, or in an unusually hard season at work, answer based on what's true right now. That context matters, and you can name it when you meet.",
    questions:[
     {t:"My colleagues track how I'm actually doing — beyond what I produce.",self:false},
     {t:"I make genuine effort to connect with the people I work with, beyond getting through the day.",self:true},
@@ -350,7 +263,7 @@ const REALMS=[
     {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
   ]},
   {id:'community',label:'Community',icon:'ti-building-community',color:'#c4a882',bar:'#c4a882',
-   desc:'Think about your church, neighborhood, or broader community.',
+   desc:"If you don't feel strongly connected to a community right now, answer honestly from that place. Absence is information too — and it's not a verdict on you.",
    questions:[
     {t:"When I'm absent from my community, people actually notice.",self:false},
     {t:"I invest in my community with regularity, even when it costs me something.",self:true},
@@ -364,6 +277,7 @@ const REALMS=[
     {t:"In this community, I don't have to perform to belong — I'm valued for who I am, not what I do.",self:true}
   ]}
 ];
+
 const WARNINGS=[
   {id:'invisible',title:'Working in the Shadows',subtitle:"You're giving but not being seen",severity:'red',icon:'ti-eye-off',
    trigger:(s)=>s.outward<60,
@@ -381,15 +295,14 @@ const WARNINGS=[
    trigger:(s)=>s.voice<45,
    text:"In more than one area of your life, you may be holding back what you actually think and carry. Maybe you've learned that speaking up costs more than staying quiet. Maybe you've been dismissed enough times that you've stopped trying. Whatever the reason, the result is the same: a real part of you is going unheard, and over time that part gets quieter and quieter. A voice that goes unused doesn't just get ignored — it starts to disappear. That matters. You were made to speak."}
 ];
+
 let answers={},userName='',userEmail='',isTestMode=false;
 function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
 function totalAns(){return Object.keys(answers).length}
+function dcolor(p){return p>=80?'#C4A055':p>=60?'#B8AA7A':p>=40?'#8AACCB':p>=20?'#5B8DB0':'#3A6D94'}
+function relTag(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'}
+function needsTag(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'}
 
-
-function needsTag(p){ return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Struggling':p>=20?'Weak':'Critical'; }
-function relTag(p){ return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead'; }
-function dcolor(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a'}
-function dtag(p){return p>=80?'Running Clean':p>=60?'Warning Light':p>=40?'Needs Attention':p>=20?'Running Low':'Engine Off'}
 function calcScores(){
   const realm={};let allT=0,allN=0;
   REALMS.forEach(r=>{
@@ -405,6 +318,7 @@ function calcScores(){
   });
   return{realm,overall:allN>0?Math.round((allT/(allN*7))*100):0};
 }
+
 function getWarnings(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
@@ -414,15 +328,11 @@ function getWarnings(scores){
   const comp={overall,outward:outAvg,self:selfAvg,voice:voiceAvg};
   return WARNINGS.filter(w=>w.trigger(comp,realm)).slice(0,4);
 }
-function lowestRealms(realm){
-  return Object.entries(realm).filter(([,s])=>s.overall>0)
-    .sort((a,b)=>a[1].overall-b[1].overall).slice(0,2)
-    .map(([id])=>REALMS.find(r=>r.id===id));
-}
+
 function getActionPlan(scores){
   const{realm}=scores;
-  const low=lowestRealms(realm);
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
+  const low=[...Object.entries(realm)].filter(([,s])=>s.overall>0).sort((a,b)=>a[1].overall-b[1].overall).slice(0,2).map(([id])=>REALMS.find(r=>r.id===id));
   const selfAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].self,0)/ar.length):50;
   const outAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].outward,0)/ar.length):50;
   const steps=[];
@@ -432,107 +342,9 @@ function getActionPlan(scores){
   steps.push({title:'Consider working with a guide',text:"These patterns didn't form overnight and they won't shift overnight either. But they do shift — with the right kind of accompaniment. A guide who understands these dynamics can help you move much faster than you could alone."});
   return steps.slice(0,4);
 }
-function scoreBar(pct,color){
-  const filled=Math.round(pct/10);
-  return '<span style="color:'+color+';font-family:monospace;letter-spacing:1px">'+'&#9608;'.repeat(filled)+'&#9617;'.repeat(10-filled)+'</span> <strong style="color:'+color+'">'+pct+'%</strong>';
-}
-function getEngagementPatterns(scores){
-  const{realm}=scores;
-  const patterns=[];
-  REALMS.forEach(r=>{
-    const s=realm[r.id];
-    if(!s||s.answered===0)return;
-    const p=getPattern(s.outward,s.self,r.id);
-    if(p&&p.key&&p.key!=='open'&&p.key!=='developing'){
-      patterns.push({title:r.label+' — '+p.name,text:p.desc||''});
-    }
-  });
-  return patterns;
-}
-function buildHtmlEmail(scores){
-  const{realm,overall,dimScores,patterns}=scores;
-  const ar=REALMS.filter(r=>realm[r.id].answered>0);
-  function dc(p){return p>=80?'#6bc45e':p>=60?'#c4a882':p>=40?'#d4884a':p>=20?'#c97a5a':'#8a2a2a';}
-  function rt(p){return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead';}
-  function nt(p){return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Struggling':p>=20?'Weak':'Critical';}
 
-  function emailBar(pct){
-    const col=dc(pct);
-    const filled=Math.round(pct/10);
-    return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px;font-size:13px">'+'█'.repeat(filled)+'<span style="opacity:.2">'+'█'.repeat(10-filled)+'</span></span>';
-  }
+const HASH_ROW='<div class="hash-row"><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div></div>';
 
-  function scoreRow(label,pct,tagFn){
-    if(!pct && pct!==0) return '';
-    const col=dc(pct);
-    return '<tr>'
-      +'<td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825;width:180px">'+label+'</td>'
-      +'<td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+emailBar(pct)+'</td>'
-      +'<td style="padding:8px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825;white-space:nowrap">'+tagFn(pct)+'</td>'
-      +'</tr>';
-  }
-
-  function equityRow(label,outPct,selfPct){
-    if(!outPct && !selfPct) return '';
-    const gap=Math.abs(outPct-selfPct);
-    const gapHtml=gap>=15?'<span style="font-size:10px;color:#c97a5a;margin-left:6px">'+gap+'% gap</span>':'';
-    return '<tr>'
-      +'<td style="padding:6px 12px;font-size:12px;color:#8a7a6a;border-bottom:1px solid #2a2825" colspan="3">'
-      +'<strong style="color:#c8c0b8">'+label+'</strong>'+gapHtml+'<br>'
-      +'<span style="font-size:11px">How they engage you &nbsp;'+emailBar(outPct)+'&nbsp; '
-      +'How you engage them &nbsp;'+emailBar(selfPct)+'</span>'
-      +'</td></tr>';
-  }
-
-  // Realm rows — God first
-  const realmOrder = ['god','partner','family','friends','work','community'];
-  const realmLabels = {god:'Relationship with God',partner:'Significant Other',family:'Family',friends:'Friends',work:'Work / School',community:'Community'};
-  const realmRows = realmOrder
-    .filter(id => realm[id] && realm[id].answered>0)
-    .map(id => scoreRow(realmLabels[id], realm[id].overall, rt))
-    .join('');
-
-  // Equity rows
-  const equityRows = realmOrder
-    .filter(id => realm[id] && realm[id].answered>0 && realm[id].outward!=null && realm[id].self!=null)
-    .map(id => equityRow(realmLabels[id], realm[id].outward, realm[id].self))
-    .join('');
-
-  // Needs rows
-  const needRows = (dimScores||[]).map(d => scoreRow(d.name, d.score, nt)).join('');
-
-  // Patterns
-  const patternHtml = (patterns||[]).length>0
-    ? '<p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;margin:16px 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Engagement Patterns</p>'
-      +(patterns||[]).map(p=>'<p style="font-size:12px;color:#c4a882;margin:0 0 4px">'+p+'</p>').join('')
-    : '';
-
-  return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>'
-    +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
-    +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
-    +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
-    +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p>'
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr>'
-    +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
-    +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+userName+', here are your Relational Health Assessment results.</p>'
-
-    +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Relationships</p>'
-    +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'
-
-    +(needRows ? '<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Needs</p>'
-      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+needRows+'</tbody></table>' : '')
-
-    +(equityRows ? '<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p>'
-      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+equityRows+'</tbody></table>' : '')
-
-    +patternHtml
-    +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:16px 0 0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
-    +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
-    +'</td></tr>'
-    +'<tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 The BoldHearts Group LLC</p></td></tr>'
-    +'</table></td></tr></table></body></html>';
-}
 function updateProgress(){
   const pct=Math.round((totalAns()/totalQs())*100);
   const pb=document.getElementById('progress-bar');
@@ -540,34 +352,50 @@ function updateProgress(){
   if(pb)pb.style.width=pct+'%';
   if(lbl)lbl.textContent=totalAns()+' of '+totalQs()+' answered';
 }
+
 function renderSurvey(){
-  let html='<div class="main">';let qNum=0;
+  let html='<div class="main">';
+  html+='<div style="padding:2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.2);border-left:4px solid #e8d7a0;border-radius:4px;margin-bottom:2rem">';
+  html+='<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.75rem;font-weight:500">Before You Begin</div>';
+  html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">These questions are a snapshot — what is true for you on this specific day, in this specific season. What you\'re carrying right now, who you\'ve been thinking about, what happened this week — all of it will show up here. That\'s not a flaw. That\'s the point.</p>';
+  html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">You are not trying to ace this. There is no right answer, no passing score, no version of yourself you should be performing. Your honesty is more valuable than a high number. An honest answer in the middle tells us more than a performed answer at the top.</p>';
+  html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin:0">These scores are not a judgment. They are a starting point for a conversation.</p>';
+  html+='</div>';
+  let qNum=0;
   REALMS.forEach(r=>{
     html+='<div class="realm-hdr"><div class="realm-icon"><i class="ti '+r.icon+'" style="color:'+r.color+'"></i></div><div class="realm-hdr-text"><h2>'+r.label+'</h2><p>'+r.desc+'</p></div></div>';
     r.questions.forEach((q,i)=>{
-      const k=r.id+'_'+i;const cur=answers[k];
-      const opts=SCALE.map((s,si)=>{
-        const id='opt_'+k+'_'+si;const sel=cur===s.val;
-        return '<label class="sopt'+(sel?' sel':'')+'" for="'+id+'"><input type="radio" id="'+id+'" name="'+k+'" value="'+s.val+'" '+(sel?'checked':'')+' onchange="setA(\''+k+'\','+s.val+')"><div class="sopt-circle"></div><span class="scale-num">'+(si+1)+'</span></label>';
-      }).join('');
-      html+='<div class="qblock'+(cur!==undefined?' answered':'')+'" id="q_'+k+'"><div class="qnum">Question '+(qNum+1)+'</div><div class="qlabel">'+q.t+'</div><div class="scale-opts"><div class="scale-endlabels"><span class="scale-endlabel">Disagree</span><span class="scale-endlabel">Agree</span></div><div class="scale-circles">'+opts+'</div></div></div>';
+      const k=r.id+'_'+i;
+      const cur=answers[k];
+      const hasAns=cur!==undefined;
+      html+='<div class="qblock'+(hasAns?' answered':'')+'" id="q_'+k+'">';
+      html+='<div class="qnum">Question '+(qNum+1)+'</div>';
+      html+='<div class="qlabel">'+q.t+'</div>';
+      html+='<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
+      html+='<div class="slider-area">';
+      html+='<input type="range" min="1" max="7" step="0.01" value="'+(hasAns?cur:'1')+'" id="sl_'+k+'" style="opacity:'+(hasAns?'1':'0.4')+';transition:opacity .2s" oninput="onSlide(\''+k+'\',this.value)" onchange="onCommit(\''+k+'\',this.value)">';
+      html+=HASH_ROW;
+      html+='</div></div>';
       qNum++;
     });
   });
-  html+='<div class="submit-section"><div class="submit-meta">Answer all required questions — Significant Other and God are optional</div><button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  html+='<div class="submit-section"><div class="submit-meta">Move each slider to answer — your honesty matters more than a high score</div><button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
   document.getElementById('app').innerHTML=html;
   updateProgress();
 }
-function setA(k,v){
-  answers[k]=v;
-  document.querySelectorAll('[name="'+k+'"]').forEach(el=>{
-    const lbl=el.closest('.sopt');
-    if(lbl)lbl.classList.toggle('sel',parseInt(el.value)===v);
-  });
-  const qb=document.getElementById('q_'+k);if(qb)qb.classList.add('answered');
+
+function onSlide(k,val){
+  document.getElementById('sl_'+k).style.opacity='1';
+  document.getElementById('q_'+k)?.classList.add('answered');
+}
+
+function onCommit(k,val){
+  answers[k]=parseFloat(val);
+  document.getElementById('q_'+k)?.classList.add('answered');
   updateProgress();
   const em=document.getElementById('errmsg');if(em)em.textContent='';
 }
+
 function trySubmit(){
   const unanswered=[];
   REALMS.forEach(r=>{
@@ -583,10 +411,12 @@ function trySubmit(){
   }
   renderGate();window.scrollTo({top:0,behavior:'smooth'});
 }
+
 function renderGate(){
   document.getElementById('progress-section').style.display='none';
   document.getElementById('app').innerHTML='<div class="gate-wrap"><div class="gate-card"><div class="gate-icon"><i class="ti ti-mail-heart"></i></div><h2>Your results are ready.</h2><p>Enter your name and email to see your Heart Engagement score, personalized warning signs, and an action plan — plus we\'ll send you a copy to keep.</p><div class="gate-field"><label for="gname">First Name</label><input type="text" id="gname" placeholder="Your first name" autocomplete="given-name"></div><div class="gate-field"><label for="gemail">Email Address</label><input type="email" id="gemail" placeholder="you@example.com" autocomplete="email"></div><button class="gate-btn" onclick="submitGate()">Show Me My Results &rarr;</button><div class="errmsg" id="gate-err"></div><div class="gate-note">Your information is private. We don\'t share or sell your data.</div></div></div>';
 }
+
 function saveToSheets(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
@@ -607,7 +437,7 @@ function saveToSheets(scores){
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
     calling:getDim('calling'),freedom:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v5.9',
+    patterns:patterns,warnings:warningList,version:'v6.0',
     work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
     partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
     partner_self:realm.significant_other?realm.significant_other.self+'%':'',
@@ -631,6 +461,7 @@ function saveToSheets(scores){
   });
   fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
 }
+
 function submitGate(){
   const name=document.getElementById('gname').value.trim();
   const email=document.getElementById('gemail').value.trim();
@@ -639,19 +470,30 @@ function submitGate(){
   if(!email||!email.includes('@')){err.textContent='Please enter a valid email address.';return;}
   userName=name;userEmail=email;
   const scores=calcScores();
-  if(!isTestMode) saveToSheets(scores);
-  const htmlEmail=buildHtmlEmail(scores);
- try {
-  emailjs.init(EJSPUB);
-  if(!isTestMode) emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).then(()=>{
-    new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,rel_email_sent:'Yes'}).toString();
-  }).catch(e=>console.error('Email error:',e));
-} catch(ejsErr) { console.warn('EmailJS blocked:', ejsErr); }
+  if(!isTestMode)saveToSheets(scores);
+  try{
+    emailjs.init(EJSPUB);
+    if(!isTestMode){
+      function dc(p){return p>=80?'#C4A055':p>=60?'#B8AA7A':p>=40?'#8AACCB':p>=20?'#5B8DB0':'#3A6D94';}
+      function rt(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There';}
+      function emailBar(pct){const col=dc(pct);const filled=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px;font-size:13px">'+'█'.repeat(filled)+'<span style="opacity:.2">'+'█'.repeat(10-filled)+'</span></span>';}
+      function scoreRow(label,pct,tagFn){if(!pct&&pct!==0)return '';const col=dc(pct);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825;width:180px">'+label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+emailBar(pct)+'</td><td style="padding:8px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825;white-space:nowrap">'+tagFn(pct)+'</td></tr>';}
+      const realmOrder=['god','significant_other','family','friends','work','community'];
+      const realmLabels={god:'Relationship with God',significant_other:'Significant Other',family:'Family',friends:'Friends',work:'Work / School',community:'Community'};
+      const realm=scores.realm;
+      const realmRows=realmOrder.filter(id=>realm[id]&&realm[id].answered>0).map(id=>scoreRow(realmLabels[id],realm[id].overall,rt)).join('');
+      const htmlEmail='<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%"><tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center"><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr><tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px"><p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+userName+', here are your Relational Health Assessment results.</p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table><p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br><span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p></td></tr><tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 The BoldHearts Group LLC</p></td></tr></table></td></tr></table></body></html>';
+      emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).then(()=>{
+        new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,rel_email_sent:'Yes'}).toString();
+      }).catch(e=>console.error('Email error:',e));
+    }
+  }catch(ejsErr){console.warn('EmailJS blocked:',ejsErr);}
   renderResults(scores);
   const hero=document.querySelector('.hero');if(hero)hero.style.display='none';
   const divider=document.querySelector('.divider');if(divider)divider.style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
 const REALM_PATTERNS={
   work:{open:"Your colleagues are engaging you and you are engaging them. There is genuine mutuality here — people know something of the real you, and you are invested in them. That is not common.",giver:"You are showing up for your colleagues more than they are showing up for you. You invest, you notice, you care — but it may not be coming back in equal measure. That imbalance is worth paying attention to.",guarded:"The people at work may be reaching toward you, but you may be holding something back. Connection is available here — but you may not be fully walking through the door.",disconnected:"There is significant distance on both sides at work. You may be more like a function than a person here — and you may also be keeping your distance in return. Something needs to shift.",developing:"There is some real engagement at work, but it hasn't found its depth yet. Something is present — and something is also holding back. There is more possible here than you're currently experiencing."},
   significant_other:{open:"You and your partner are genuinely showing up for each other. There is real mutuality here — you know each other and you are both investing in being known. This is the kind of intimacy most people quietly long for.",giver:"You are investing deeply in this relationship, but may not be equally known or pursued in return. You may be carrying more of the emotional weight than your partner realizes.",guarded:"Your partner may be reaching toward you — but something in you may be holding back from being fully known. The love may be present, but full intimacy requires letting someone see the parts you haven't shown yet.",disconnected:"There is real distance in this relationship right now — on both sides. This doesn't have to be permanent, but it does need honest attention. Distance this deep rarely closes on its own.",developing:"There is connection in this relationship, but it hasn't reached the depth it could. Something is present — and something is also being held back. There is more available here."},
@@ -660,6 +502,7 @@ const REALM_PATTERNS={
   community:{open:"You are genuinely present in your community and your community is genuinely present with you. You are known here — not just recognized — and that kind of belonging is worth protecting.",giver:"You may be investing more in your community than your community is investing in you. You show up, you serve, you engage — but you may be more contributor than member who is truly known.",guarded:"Your community may be more open to you than you're allowing yourself to receive. You may be participating without truly belonging.",disconnected:"There is significant distance between you and your community right now. You may be an attendee rather than a member. Something needs to shift here.",developing:"There is some real connection in your community, but it hasn't taken root yet. Belonging in community takes time — but there is more available here than you may be experiencing."},
   god:{open:"There is real, mutual engagement in your relationship with God. You are bringing your honest self and experiencing genuine connection in return. That kind of spiritual intimacy is something many people long for and never quite find.",giver:"You may be showing up in your faith — praying, seeking, engaging — but not experiencing much sense of God's presence or response in return. That can be a profoundly isolating place to be.",guarded:"There may be more available to you in your relationship with God than you're currently allowing yourself to receive. Something is keeping you at a careful distance.",disconnected:"There is significant distance in your relationship with God right now — felt on both sides. You may be going through the motions of faith without much lived experience of connection.",developing:"There is something real in your relationship with God, but it hasn't reached the depth it could. You may be in a season of seeking — present, but not yet fully known or knowing."}
 };
+
 function getPattern(outward,self_,realmId){
   const hiOut=outward>=65,loOut=outward<50,hiSelf=self_>=65,loSelf=self_<50;
   const rp=REALM_PATTERNS[realmId]||REALM_PATTERNS.friends;
@@ -671,6 +514,7 @@ function getPattern(outward,self_,realmId){
   else{key='developing';name='Still Developing';cls='guarded';}
   return{key,name,cls,desc:rp[key]};
 }
+
 const DIMS=[
   {id:'seen',name:'Being Seen',qi:0,desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
   {id:'known',name:'Being Known',qi:2,desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
@@ -682,17 +526,8 @@ const DIMS=[
   {id:'fullself',name:'Freedom to Be Myself',qi:9,desc:(p)=>p>=70?'You are free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You have some freedom to be yourself, but in certain contexts there is still pressure to perform or prove your worth.':'Your place in relationships may be conditional on what you do or produce. The freedom to simply be yourself is thin or absent.'}
 ];
 
-function tierIcon(p) {
-  const pct = parseFloat(p);
-  if(isNaN(pct)) return '';
-  const wrap = (inner) => `<div style="width:52px;height:52px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px">${inner}</div>`;
-  if(pct >= 80) return wrap(`<svg viewBox="0 0 60 80" width="36" height="48"><rect x="8" y="2" width="44" height="76" rx="7" fill="none" stroke="#6bc45e" stroke-width="2.5"/><circle cx="30" cy="20" r="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/><circle cx="30" cy="40" r="9" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="1.5"/><circle cx="30" cy="60" r="9" fill="#6bc45e"/><circle cx="27" cy="57" r="3" fill="#9de08a" opacity=".5"/></svg>`);
-  if(pct >= 60) return wrap(`<div style="background:#1a1500;border:1px solid #d4b96a;border-radius:4px;padding:2px 5px;text-align:center"><div style="font-family:Inter,sans-serif;font-size:9px;font-weight:600;color:#d4b96a;letter-spacing:.05em;line-height:1.3">NEEDS<br>MAINT</div></div>`);
-  if(pct >= 40) return wrap(`<img src="assets/images/enginelight.jpg" style="width:48px;height:48px;object-fit:contain;border-radius:4px">`);
-  if(pct >= 20) return wrap(`<img src="assets/images/lowfuel.jpg" style="width:48px;height:48px;object-fit:contain;border-radius:4px">`);
-  return wrap(`<img src="assets/images/batterydead.jpg" style="width:48px;height:48px;object-fit:contain;border-radius:4px">`);
-}
-const GOD_QI_MAP={0:0,2:1,3:2,5:3,6:4,7:5,8:7,9:8};
+const GOD_QI_MAP={0:0,2:1,3:2,5:3,6:4,7:5,8:7,9:9};
+
 function calcDimScores(realm){
   return DIMS.map(d=>{
     let t=0,n=0;const realmScores=[];
@@ -707,114 +542,93 @@ function calcDimScores(realm){
   });
 }
 
+function barRowIndent(label,pct,tag,col){
+  const fillW=Math.round(pct);
+  const ticks=[20,40,60,80].map(t=>'<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(232,215,160,.25);z-index:2"></div>').join('');
+  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.4rem .75rem .4rem 1.5rem;border-bottom:1px solid rgba(232,215,160,.04)">'
+    +'<div style="width:150px;flex-shrink:0;font-size:.75rem;color:#8a8078">'+label+'</div>'
+    +'<div style="flex:1;position:relative;height:10px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+    +ticks
+    +'<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px"></div>'
+    +'</div>'
+    +'<div style="width:100px;text-align:right;font-size:.72rem;font-weight:500;color:'+col+'">'+tag+'</div>'
+    +'</div>';
+}
 
-function barRowIndent(label, pct, tag, col) {
-  const fillW = Math.round(pct);
-  const ticks = [20,40,60,80].map(t =>
-    '<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(196,168,130,.25);z-index:2"></div>'
-  ).join('');
-  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.4rem .75rem .4rem 1.5rem;border-bottom:1px solid rgba(196,168,130,.04)">'
-    + '<div style="width:150px;flex-shrink:0;font-size:.75rem;color:#8a8078">'+label+'</div>'
-    + '<div style="flex:1;position:relative;height:10px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
-    + ticks
-    + '<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px"></div>'
-    + '</div>'
-    + '<div style="width:100px;text-align:right;font-size:.72rem;font-weight:500;color:'+col+'">'+tag+'</div>'
-    + '</div>';
+function barRow(label,pct,tag,col){
+  const fillW=Math.round(pct);
+  const ticks=[20,40,60,80].map(t=>'<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(232,215,160,.25);z-index:2"></div>').join('');
+  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)">'
+    +'<div style="width:160px;flex-shrink:0;font-size:.82rem;color:#c0b8b0">'+label+'</div>'
+    +'<div style="flex:1;position:relative;height:14px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+    +ticks
+    +'<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px;transition:width .8s ease"></div>'
+    +'</div>'
+    +'<div style="width:140px;text-align:right;font-size:.78rem;font-weight:500;color:'+col+'">'+tag+'</div>'
+    +'</div>';
 }
-function barRow(label, pct, tag, col) {
-  const fillW = Math.round(pct);
-  const ticks = [20,40,60,80].map(t =>
-    '<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(196,168,130,.25);z-index:2"></div>'
-  ).join('');
-  return '<div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(196,168,130,.06)">'
-    + '<div style="width:160px;flex-shrink:0;font-size:.82rem;color:#c0b8b0">'+label+'</div>'
-    + '<div style="flex:1;position:relative;height:14px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
-    + ticks
-    + '<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px;transition:width .8s ease"></div>'
-    + '</div>'
-    + '<div style="width:140px;text-align:right;font-size:.78rem;font-weight:500;color:'+col+'">'+tag+'</div>'
-    + '</div>';
-}
+
 function renderResults(scores){
   const{realm,overall}=scores;
-  const r=60,cx=75,cy=75,circ=2*Math.PI*r;
-  const offset=(circ-(overall/100)*circ).toFixed(1);
-  const rc=dcolor(overall);
   const warnings=getWarnings(scores);
-  const actionSteps=getActionPlan(scores);
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
-  const selfAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].self,0)/ar.length):0;
-  const outAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].outward,0)/ar.length):0;
-  const headline=overall<40?'You may be carrying more invisibility than you realize':overall<60?'Real connections exist — and real gaps do too':overall<75?'You have a solid foundation with room to go deeper':'You\'re well-connected — and depth is always worth pursuing';
   const realmRows=REALMS.map(r=>{
     const s=realm[r.id];if(s.answered===0)return'';
     const col=dcolor(s.overall);
-    return barRow('<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px;margin-right:6px"></i>'+r.label, s.overall, relTag(s.overall), col);
-  }).join('');;
+    return barRow('<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px;margin-right:6px"></i>'+r.label,s.overall,relTag(s.overall),col);
+  }).join('');
   const dimScores=calcDimScores(realm);
-  const dimHtml=dimScores.map(d=>{
-    const col=dcolor(d.score);
-    return barRow(d.name, d.score, needsTag(d.score), col);
-  }).join('');;
-  const patternHtml=REALMS.map(r=>{const s=realm[r.id];if(s.answered===0)return'';const p=getPattern(s.outward,s.self,r.id);const icon=tierIcon(s.overall);return'<div class="pattern-card '+p.cls+'" style="display:flex;gap:1rem;align-items:flex-start"><div style="flex-shrink:0;width:64px;text-align:center">'+icon+'</div><div><div class="pattern-realm"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+'</div><div class="pattern-name">'+p.name+'</div><div class="pattern-desc">'+p.desc+'</div></div></div>';}).join('');
-  const warningHtml=warnings.map(w=>'<div class="warning-card severity-'+w.severity+'"><div class="warning-icon '+w.severity+'"><i class="ti '+w.icon+'"></i></div><div><div class="warning-title">'+w.title+'</div>'+(w.subtitle?'<div style="font-size:.75rem;color:#6a6258;letter-spacing:.04em;margin-bottom:6px;font-style:italic">'+w.subtitle+'</div>':'')+' <div class="warning-text">'+w.text+'</div></div></div>').join('');
-
-    const engagementRows=REALMS.map(r=>{
+  const dimHtml=dimScores.map(d=>{const col=dcolor(d.score);return barRow(d.name,d.score,needsTag(d.score),col);}).join('');
+  const engagementRows=REALMS.map(r=>{
     const s=realm[r.id];if(s.answered===0)return'';
-    const outCol=dcolor(s.outward); const selfCol=dcolor(s.self);
+    const outCol=dcolor(s.outward);const selfCol=dcolor(s.self);
     const outLabel=r.id==='god'?'How I engage God':r.id==='significant_other'?'How I engage my partner':'How I engage them';
     const inLabel=r.id==='god'?'How God engages me':r.id==='significant_other'?'How my partner engages me':'How they engage me';
-    const gap = Math.abs(s.self - s.outward);
-    const gapBadge = gap >= 15
-      ? '<span style="font-size:.65rem;color:#c97a5a;background:rgba(201,122,90,.12);padding:1px 7px;border-radius:3px;margin-left:8px">'+gap+'% gap</span>'
-      : '';
+    const gap=Math.abs(s.self-s.outward);
+    const gapBadge=gap>=15?'<span style="font-size:.65rem;color:#c97a5a;background:rgba(201,122,90,.12);padding:1px 7px;border-radius:3px;margin-left:8px">'+gap+'% gap</span>':'';
     return '<div style="padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(196,168,130,.06)">'
-      +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px">'
-      +'<i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+gapBadge+'</div>'
-      +barRowIndent(outLabel, s.self, relTag(s.self), selfCol)
-      +barRowIndent(inLabel, s.outward, relTag(s.outward), outCol)
+      +'<div style="font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem;display:flex;align-items:center;gap:6px"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:12px"></i>'+r.label+gapBadge+'</div>'
+      +barRowIndent(outLabel,s.self,relTag(s.self),selfCol)
+      +barRowIndent(inLabel,s.outward,relTag(s.outward),outCol)
       +'</div>';
   }).join('');
-  var _intro='<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>';
-  var _hero='<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>';
-  document.getElementById('app').innerHTML='<div class="main"><div class="results-page">'+_intro+_hero+'<div class="section-label">Heart Engagement Scores Across the Following Relationships</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
-    +'<div class="section-label">Heart Engagement Scores Across the Following Needs</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
-    +'<div class="section-label">Heart Engagement Equity</div><div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
-    
-    +(()=>{
-      const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
-      const lowestRealm=realmsSorted[0];
-      const dimScores2=calcDimScores(realm);
-      const lowestDim=dimScores2.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
-      // Find greatest gap in engagement
-      const gapRealm=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0)
-        .map(r=>({label:r.label,gap:Math.abs(realm[r.id].self-realm[r.id].outward)}))
-        .sort((a,b)=>b.gap-a.gap)[0];
-      const bullets=[];
-      if(lowestRealm) bullets.push('Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong>.');
-      if(lowestDim) bullets.push('Across all your relationship needs, your lowest need is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong>.');
-      if(gapRealm&&gapRealm.gap>=10) bullets.push('For your relationship engagement, <strong style="color:#e8d7a0">'+gapRealm.label+'</strong> has the greatest gap between how you engage and how they engage you.');
-      const bulletHtml=bullets.map(b=>'<li style="font-size:.92rem;color:#a09890;line-height:1.9;margin-bottom:.5rem">'+b+'</li>').join('');
-      return '<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3>'
-        +'<ul style="text-align:left;max-width:520px;margin:0 auto 1.5rem;padding-left:1.25rem">'+bulletHtml+'</ul>'
-        +'</div>';
-    })()
-    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 49 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
-    +'<div class="discovery-card"><h3>Once you\'ve completed both assessments.</h3><p>When you\'ve finished the Interior Health Assessment, set up a Discovery Call. Steve will bring both sets of scores together and walk through the complete picture with you — no pressure, no agenda, just an honest conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Assessments Complete&body=Hi Steve, I have completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Set Up a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div></div>'
+  const realmsSorted=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).sort((a,b)=>realm[a.id].overall-realm[b.id].overall);
+  const lowestRealm=realmsSorted[0];
+  const lowestDim=dimScores.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
+  const gapRealm=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).map(r=>({label:r.label,gap:Math.abs(realm[r.id].self-realm[r.id].outward)})).sort((a,b)=>b.gap-a.gap)[0];
+  const bullets=[];
+  if(lowestRealm)bullets.push('Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong>.');
+  if(lowestDim)bullets.push('Across all your relationship needs, your lowest need is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong>.');
+  if(gapRealm&&gapRealm.gap>=10)bullets.push('For your relationship engagement, <strong style="color:#e8d7a0">'+gapRealm.label+'</strong> has the greatest gap between how you engage and how they engage you.');
+  const bulletHtml=bullets.map(b=>'<li style="font-size:.92rem;color:#a09890;line-height:1.9;margin-bottom:.5rem">'+b+'</li>').join('');
+  document.getElementById('app').innerHTML='<div style="max-width:860px;margin:0 auto;padding:3rem 2rem 5rem"><div class="results-page">'
+    +'<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>'
+    +'<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>'
+    +'<div class="section-label">Heart Engagement Scores Across the Following Relationships</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+realmRows+'</div>'
+    +'<div class="section-label">Heart Engagement Scores Across the Following Needs</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
+    +'<div class="section-label">Heart Engagement Equity</div>'
+    +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
+    +'<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3><ul style="text-align:left;max-width:520px;margin:0 auto 1.5rem;padding-left:1.25rem">'+bulletHtml+'</ul></div>'
+    +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 48 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
+    +'<div class="discovery-card"><h3>Once you\'ve completed both assessments.</h3><p>When you\'ve finished the Interior Health Assessment, set up a Discovery Call. Steve will bring both sets of scores together and walk through the complete picture with you — no pressure, no agenda, just an honest conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Assessments Complete&body=Hi Steve, I have completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Set Up a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
 }
+
 function retake(){
   answers={};userName='';userEmail='';
   document.getElementById('progress-section').style.display='';
-  const hero2=document.querySelector('.hero');if(hero2)hero2.style.display='';
-  const divider2=document.querySelector('.divider');if(divider2)divider2.style.display='';
+  const hero=document.querySelector('.hero');if(hero)hero.style.display='';
+  const divider=document.querySelector('.divider');if(divider)divider.style.display='';
   renderSurvey();window.scrollTo({top:0,behavior:'smooth'});
 }
+
 document.getElementById('nav-toggle').addEventListener('click',function(){
   this.classList.toggle('open');
   document.getElementById('nav-links').classList.toggle('open');
 });
+
 function checkTestMode(){
   const params=new URLSearchParams(window.location.search);
   if(params.get('test')!=='true')return false;
@@ -823,6 +637,7 @@ function checkTestMode(){
   ['significant_other','family'].forEach(id=>{REALMS.find(r=>r.id===id).questions.forEach((_,i)=>{answers[id+'_'+i]=Math.floor(Math.random()*3)+1;});});
   return false;
 }
+
 if(!checkTestMode())renderSurvey();
 else{renderSurvey();setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),300);}
 </script>
