@@ -794,20 +794,70 @@ function renderGuide(data) {
 
   // Sections
   // ── THEME INSIGHTS ────────────────────────────────────────
-  // ── RELATIONAL NOTES ─────────────────────────────────────
-  const relNotesSection = (guide.sections || []).find(s => s.id === 'relational_notes');
-  const relNotes = relNotesSection?.content;
-  const relNotesArray = Array.isArray(relNotes) ? relNotes : [];
+  // ── RELATIONAL NOTES — dynamically generated from score data ───
+  function realmLabel(id) {
+    return {work:'Work / School',partner:'Significant Other',family:'Family',
+            friends:'Friends',community:'Community',god:'Relationship with God'}[id] || id;
+  }
+  function realmScore(id) { return numVal(a1?.[id]); }
+  function realmOut(id)   { return numVal(a1?.[id+'_outward']); }
+  function realmSelf(id)  { return numVal(a1?.[id+'_self']); }
+  function tierLabel(n)   { return n>=80?'Strong':n>=60?'Functioning':n>=40?'Developing':'Disconnected'; }
 
-  // Preview fallback bullets
-  const previewNotes = [
-    "Your relationship with God shows a 20% gap — you are giving significantly more than you are receiving. That asymmetry in your most foundational relationship is worth naming.",
-    "Community is your lowest realm at 46% — both sides of that relationship are low, which suggests something systemic rather than personal. Worth exploring what is keeping you at the edges.",
-    "Friends scored 89% with full mutuality — that is genuinely rare and worth protecting. Understanding what makes those relationships work could inform the others.",
-    "Your Calling / Purpose dimension is lower than your other relational dimensions — suggesting a disconnect between who you are and how your relationships engage what you are built for."
-  ];
+  const realmIds = ['god','partner','family','friends','work','community'];
+  const realmsSorted = realmIds
+    .map(id => ({ id, score: realmScore(id), out: realmOut(id), self: realmSelf(id) }))
+    .filter(r => r.score > 0)
+    .sort((a,b) => b.score - a.score);
 
-  const notesToShow = relNotesArray.length >= 4 ? relNotesArray : previewNotes;
+  const dynamicNotes = [];
+
+  // 1. Highest realm — celebrate it
+  const topRealm = realmsSorted[0];
+  if(topRealm) {
+    const gap = Math.abs(topRealm.out - topRealm.self);
+    const mutualNote = gap < 10 ? ' with genuine mutuality on both sides' : '';
+    dynamicNotes.push(realmLabel(topRealm.id) + ' scored ' + topRealm.score + '%' + mutualNote + ' — ' + tierLabel(topRealm.score).toLowerCase() + ' engagement. That is worth naming and protecting.');
+  }
+
+  // 2. Lowest realm — name it
+  const botRealm = realmsSorted[realmsSorted.length - 1];
+  if(botRealm && botRealm.id !== topRealm?.id) {
+    const gap = Math.abs(botRealm.out - botRealm.self);
+    let note = realmLabel(botRealm.id) + ' scored lowest at ' + botRealm.score + '%.';
+    if(botRealm.out < 50 && botRealm.self < 50) note += ' Both sides are low — something systemic rather than personal may be at work.';
+    else if(gap >= 15 && botRealm.out > botRealm.self) note += ' There is a ' + gap + '% gap — more engagement coming toward you than you are giving back.';
+    else if(gap >= 15 && botRealm.self > botRealm.out) note += ' There is a ' + gap + '% gap — you are giving more than you are receiving.';
+    dynamicNotes.push(note);
+  }
+
+  // 3. God gap if significant
+  const godData = realmsSorted.find(r => r.id === 'god');
+  if(godData && godData.id !== topRealm?.id && godData.id !== botRealm?.id) {
+    const godGap = Math.abs(godData.out - godData.self);
+    if(godGap >= 15) {
+      const dir = godData.out > godData.self ? 'God is engaging toward you more than you are engaging back' : 'You are engaging toward God more than you are receiving back';
+      dynamicNotes.push('Relationship with God scored ' + godData.score + '% with a ' + godGap + '% gap — ' + dir + '. Worth sitting with what that means.');
+    }
+  }
+
+  // 4. Lowest dimension
+  const dims = [
+    {label:'Being Seen', val: numVal(a1?.dim_seen)},
+    {label:'Being Known', val: numVal(a1?.dim_known)},
+    {label:'Having a Voice', val: numVal(a1?.dim_voice)},
+    {label:'Belonging', val: numVal(a1?.dim_belonging)},
+    {label:'Receiving Support', val: numVal(a1?.dim_support)},
+    {label:'Trust & Safety', val: numVal(a1?.dim_trust)},
+    {label:'Calling / Purpose', val: numVal(a1?.dim_calling)},
+    {label:'Freedom to Be Myself', val: numVal(a1?.dim_freedom)},
+  ].filter(d => d.val > 0).sort((a,b) => a.val - b.val);
+
+  if(dims.length > 0 && dims[0].val < 70) {
+    dynamicNotes.push(dims[0].label + ' scored ' + dims[0].val + '% — the lowest relational dimension. Worth exploring what is keeping that need from being more fully met across your relationships.');
+  }
+
+  const notesToShow = dynamicNotes.length >= 2 ? dynamicNotes : dynamicNotes;
 
   const relationalNotesHtml = '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
     + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
@@ -1256,6 +1306,8 @@ function renderGuide(data) {
     + disambiguationHtml
     + sectionsHtml
 
+    
+
     + '<div style="text-align:center;padding:1.25rem 2rem;margin-top:2rem;break-inside:avoid"><p style="font-family:Cormorant Garamond,serif;font-size:1.15rem;font-style:italic;color:#2a2218;line-height:1.7;margin:0 0 .4rem">&ldquo;The Lord does not look at the things people look at. People look at the outward appearance, but the Lord looks at the heart.&rdquo;</p><p style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882">&mdash; 1 Samuel 16:7</p></div>'
     + '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:4px solid #c4a882;border-radius:4px;padding:1.75rem 2rem;margin-top:2rem;break-inside:avoid">'
     + '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:500">A Word About These Scores</div>'
@@ -1313,7 +1365,7 @@ window.addEventListener('load', async () => {
     if(urlParams.get('preview') === 'true') {
       sessionStorage.clear();
       const previewData = {
-        name: 'Pastor Sample',
+        name: 'Thomas',
         date: '2026-06-09T10:00:00',
         guide: {
           sections: [
@@ -1340,7 +1392,7 @@ window.addEventListener('load', async () => {
               ]
             }}
           ],
-          closingNote: "Thank you for going first with this. What you carry is real — and it is worth the attention you are giving it."
+          closingNote: ""
         },
         a1: {
           overall:'72%', work:'85%', partner:'65%', family:'70%', friends:'55%',
