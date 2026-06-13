@@ -250,9 +250,9 @@ function renderTable(rows){
     const relOverall = row[3] ? row[3].toString() : '';
     const intDate = fmtDate(row[100]);
     const intOverall = row[99] ? row[99].toString() : '';
-    const relEmailSent = row[155] ? row[143].toString() : '';
-    const intEmailSent = row[156] ? row[144].toString() : '';
-    const followupReq  = row[157] ? row[145].toString() : '';
+    const relEmailSent = row[155] ? row[155].toString() : '';
+    const intEmailSent = row[156] ? row[156].toString() : '';
+    const followupReq  = row[157] ? row[157].toString() : '';
     const followupDate = fmtDate(row[158]);
     const guideCreated = fmtDate(row[159]);
     const guideSent    = fmtDate(row[160]);
@@ -314,8 +314,8 @@ function renderTable(rows){
 function updateStats(rows){
   document.getElementById('stat-total').textContent = rows.length;
   document.getElementById('stat-relational').textContent = rows.filter(r => r[0] && fmtDate(r[0])).length;
-  document.getElementById('stat-interior').textContent = rows.filter(r => r[43] && fmtDate(r[43])).length;
-  document.getElementById('stat-followup').textContent = rows.filter(r => r[52] && r[52].toString().toLowerCase()==='yes').length;
+  document.getElementById('stat-interior').textContent = rows.filter(r => r[100] && fmtDate(r[100])).length;
+  document.getElementById('stat-followup').textContent = rows.filter(r => r[157] && r[157].toString().toLowerCase()==='yes').length;
 }
 
 function filterTable(){
@@ -355,29 +355,29 @@ function viewScores(idx){
 
     +'<div class="modal-section">Relational Health</div>'
     +scoreRow('Overall', row[3])
-    +scoreRow('Work', row[4])
+    +scoreRow('Work / School', row[4])
     +scoreRow('Significant Other', row[5])
     +scoreRow('Family', row[6])
     +scoreRow('Friends', row[7])
     +scoreRow('Community', row[8])
-    +scoreRow('God', row[9])
-    +(row[17] ? '<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem;padding:.35rem 0">Patterns: '+row[17]+'</div>' : '')
+    +scoreRow('Relationship with God', row[9])
+    +(row[18] ? '<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem;padding:.35rem 0">Patterns: '+row[18]+'</div>' : '')
 
     +'<div class="modal-section">Relational — Dimensions</div>'
-    +scoreRow('Being Seen', row[9])
-    +scoreRow('Being Known', row[10])
-    +scoreRow('Having a Voice', row[11])
-    +scoreRow('Belonging', row[12])
-    +scoreRow('Receiving Support', row[13])
-    +scoreRow('Trust & Safety', row[14])
-    +scoreRow('Calling', row[15])
-    +scoreRow('Freedom to Be Myself', row[16])
+    +scoreRow('Being Seen', row[10])
+    +scoreRow('Being Known', row[11])
+    +scoreRow('Having a Voice', row[12])
+    +scoreRow('Belonging', row[13])
+    +scoreRow('Receiving Support', row[14])
+    +scoreRow('Trust & Safety', row[15])
+    +scoreRow('Calling / Purpose', row[16])
+    +scoreRow('Freedom to Be Myself', row[17])
 
     +'<div class="modal-section">Interior Health — Themes</div>'
     +scoreRow('Overall', row[99])
-    +scoreRow('Grief & Loss', row[20])
-    +scoreRow('Shame & Guilt', row[93])
-    +scoreRow('Fear & Anxiety', row[94])
+    +scoreRow('Grief & Loss', row[93])
+    +scoreRow('Shame & Guilt', row[94])
+    +scoreRow('Fear & Anxiety', row[95])
     +scoreRow('Anger', row[96])
     +scoreRow('Desire & Hope', row[97])
     +scoreRow('Joy & Delight', row[98])
@@ -398,7 +398,7 @@ function viewScores(idx){
 function markFollowup(idx){
   const row = allRows[idx];
   const email = row[2] || '';
-  const current = row[157] ? row[145].toString().toLowerCase() : '';
+  const current = row[157] ? row[157].toString().toLowerCase() : '';
   const newVal = current === 'yes' ? 'No' : 'Yes';
   const newDate = newVal === 'Yes' ? new Date().toLocaleString() : '';
 
