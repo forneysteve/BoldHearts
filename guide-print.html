@@ -605,7 +605,9 @@ function renderGuide(data) {
     let tbody = intThemes.map(t => {
       const raw = hs.raw[t.id];
       const cells = intPostures.map((p, pi) => {
-        const v = raw ? parseFloat(raw[pi]) : 0;
+        const rawV = raw ? parseFloat(raw[pi]) : 0;
+        const reverseIdx = (REVERSE_SCORED[t.id] || []);
+        const v = (!isNaN(rawV) && rawV > 0 && reverseIdx.includes(pi)) ? (8 - rawV) : rawV;
         const score = isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
         return '<td class="'+cellClass(score)+'" style="background:'+cellBg(score)+'">'+cellDot(score)+'</td>';
       }).join('');
@@ -669,8 +671,10 @@ function renderGuide(data) {
       const overall = numVal(hs?.[t.id]);
       const raw = hs?.raw?.[t.id] || [];
       const posScores = postureLabels.map((p, pi) => {
-        const v = raw ? parseFloat(raw[pi]) : 0;
-        return isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
+         const rawV = raw ? parseFloat(raw[pi]) : 0;
+         const reverseIdx = (REVERSE_SCORED[t.id] || []);
+         const v = (!isNaN(rawV) && rawV > 0 && reverseIdx.includes(pi)) ? (8 - rawV) : rawV;
+         return isNaN(v) || v === 0 ? 0 : Math.round(v / 7 * 100);
       });
       const overallBg = cellBg(overall);
       const overallTx = cellTx(overall);
