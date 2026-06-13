@@ -57,7 +57,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .score-block-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700}
 .score-high{color:#5a9a50}
 .score-mid{color:#c4a882}
-.score-low{color:#c97a5a}
+.score-low{color:#5B8DB0}
 
 /* ── SECTIONS ── */
 .section{margin-bottom:1.75rem;break-inside:avoid}
@@ -205,10 +205,10 @@ const PURPOSE_TEXT = [
   "What follows is an honest reading of both."
 ];
 
-  function emotionTag(p) { return p>=80?'Healthy Engagement':p>=60?'Room for Growth':p>=40?'Guarded':p>=20?'Suppressed':'Shut Down'; }
-  function maturityTag(p) { return p>=80?'Processed Well':p>=60?'Still Room to Process':p>=40?'Needing to Process More':p>=20?'Largely Unprocessed':'Not Yet Engaged'; }
-  function needsTag(p) { return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Struggling':p>=20?'Weak':'Critical'; }
-  function relTag(p) { return p>=80?'Strong':p>=60?'Functioning':p>=40?'Weak':p>=20?'Dormant':'Dead'; }
+  function emotionTag(p) { return p>=80?'Strong':p>=60?'Present':p>=40?'Quiet':p>=20?'Withdrawn':'Deeply Quiet'; }
+  function maturityTag(p) { return p>=80?'Processed Well':p>=60?'More to Explore':p>=40?'Worth Attention':p>=20?'Largely Quiet':'Not Yet Named'; }
+  function needsTag(p) { return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'; }
+  function relTag(p) { return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'; }
 function scoreColor(val) {
   if(!val) return 'score-mid';
   const s = val.toString().replace('%','');
@@ -252,7 +252,7 @@ function renderGuide(data) {
     const v = n <= 1 ? n * 100 : n;
     return v >= 80 ? 'Strong' : v >= 60 ? 'Functioning' : v >= 40 ? 'Weak' : v >= 20 ? 'Dormant' : 'Dead';
   }
-  function barColor(v) { return v >= 80 ? '#6bc45e' : v >= 60 ? '#c4a882' : v >= 40 ? '#d4884a' : v >= 20 ? '#c97a5a' : '#8a2a2a'; }
+  function barColor(v) { return v >= 80 ? '#C4A055' : v >= 60 ? '#B8AA7A' : v >= 40 ? '#8AACCB' : v >= 20 ? '#5B8DB0' : '#3A6D94'; }
   function makeColors(arr) { return arr.map(barColor); }
 
   function numVal(s) {
@@ -381,6 +381,9 @@ function renderGuide(data) {
   const introHtml = '<div style="margin-bottom:2rem;break-inside:avoid">'
     + '<div class="section-header">Purpose of This Assessment</div>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">Thank you for taking the time to complete both assessments. What you have done here is not small — looking honestly at your own heart takes courage, and we do not take lightly that you gave it.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:0;max-width:none">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — reach out. That conversation is what this is really for.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">The Scriptures speak of the heart as something worth tending. In Jeremiah 31 and Ezekiel 36, God promises a new heart — not a fixed version of the old one, but something genuinely transformed. That promise assumes the heart matters. That what happens inside you has weight. That taking inventory of it is not self-indulgence — it is stewardship.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">At BoldHearts, we believe that out of our hearts grow enormous dreams for the Kingdom of God. The heart was made for more than survival — it was made to reach, to hope, to love, to lead. But emotions can be distracting. They can pull us away from trusting what our hearts most deeply know. They can cloud the signal with noise — fear dressed as wisdom, anger posing as conviction, desire mistaken for selfishness.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:0;max-width:none">Proverbs 4:23 says that everything flows from the heart. If that is true — and we believe it is — then it is worth being wise about what the heart is actually saying. Not reactive. Not dismissive. Wise. These scores are a tool for that kind of wisdom. So with that, let\'s look at what yours are telling us.</p>'
@@ -559,7 +562,7 @@ function renderGuide(data) {
   // Reverse-scored questions (0-indexed within each theme's/realm's raw answers):
   // Interior: grief[2] and desire[2] are reverse-scored
   // Relational: god[9] is reverse-scored ("I feel directionless in my walk with God")
-  const REVERSE_SCORED = { grief: [2], desire: [2], god: [9] };
+  const REVERSE_SCORED = { grief: [2], desire: [2] };
 
   function calcCellScore(rawArr, qIndices, themeId) {
     if(!rawArr || !rawArr.length) return 0;
@@ -634,9 +637,9 @@ function renderGuide(data) {
 
   function cellBg(score) {
     if(!score || score === 0) return '#f8f4f0';
-    if(score >= 80) return '#c8e6b8';
-    if(score >= 60) return '#f0e0a8';
-    if(score >= 40) return '#f8ccaa';
+    if(score >= 80) return '#F0E8D0';
+    if(score >= 60) return '#E8DEBA';
+    if(score >= 40) return '#D0E4F0';
     if(score >= 20) return '#f0b0a0';
     return '#e09090';
   }
@@ -900,7 +903,7 @@ function renderGuide(data) {
     if(!isHigh && !isLow) return '';
     const comment = isHigh ? themeComments[t.id]?.high : themeComments[t.id]?.low;
     if(!comment) return '';
-    const col = isHigh ? '#5a9a50' : '#c97a5a';
+    const col = isHigh ? '#C4A055' : '#5B8DB0';
     const borderCol = isHigh ? '#b5d4a0' : '#e8c0b0';
     return '<div style="background:#faf6f0;border:1px solid '+borderCol+';border-left:3px solid '+col+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+themeLabels[t.id]+' &nbsp;<span style="color:'+col+';font-size:.58rem">'+t.score+'%</span></div>'
@@ -927,7 +930,7 @@ function renderGuide(data) {
   };
   const themeColorMap = {
     grief:'#a09890', shame:'#8a7a8a', fear:'#b09060',
-    anger:'#c97a5a', desire:'#c4a882', joy:'#6bc45e'
+    anger:'#5B8DB0', desire:'#c4a882', joy:'#C4A055'
   };
   const idThemeKeys = ['grief','shame','fear','anger','desire','joy'];
   const idThemeLabels = {grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'};
@@ -1315,7 +1318,9 @@ function renderGuide(data) {
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.9;margin:0">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — reach out. That conversation is what this is really for.</p>'
     + '</div>'
     + '<div class="cta-block">'
-    + '<p>Questions about what you read here? Ready to talk through the full picture?</p>'
+    + '<p style="font-size:.9rem;color:#4a3a2a;line-height:1.9;margin-bottom:.9rem">You have just read a picture of your heart taken on one specific day. Scores shift — with time, with seasons, with what God is doing, with what life brings. You may have taken this in a hard week, or a good one. That context matters. These numbers do not know your circumstances. Only you do.</p>'
+    + '<p style="font-size:.9rem;color:#4a3a2a;line-height:1.9;margin-bottom:.9rem">Some of what you read here landed. Some of it may have missed. Both of those responses are worth a conversation. Bring what resonated. Bring what pushed back. Bring what you are sitting with right now. That is where the real work begins.</p>'
+    + '<p style="font-size:.9rem;color:#4a3a2a;line-height:1.9;margin-bottom:1.25rem">Questions about what you read here? Ready to talk through the full picture?</p>'
     + '<p>Steve Forney &nbsp;·&nbsp; BoldHearts &nbsp;·&nbsp; <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a> &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>'
     + '<div class="doc-footer">'
