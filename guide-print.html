@@ -285,14 +285,14 @@ function renderGuide(data) {
   function realmNeedScores(realmId) {
     const raw = a1?.raw?.[realmId] || [];
     const needs = {
-      'Being Seen': calcCellScore(raw, [0]),
-      'Being Known': calcCellScore(raw, [2]),
-      'Having a Voice': calcCellScore(raw, [3]),
-      'Belonging': calcCellScore(raw, [5]),
-      'Receiving Support': calcCellScore(raw, [6]),
-      'Trust & Safety': calcCellScore(raw, [7]),
-      'Calling / Purpose': calcCellScore(raw, [8]),
-      'Freedom': calcCellScore(raw, [9]),
+      'Being Seen': calcCellScore(raw, [0], realmId),
+      'Being Known': calcCellScore(raw, [2], realmId),
+      'Having a Voice': calcCellScore(raw, [3], realmId),
+      'Belonging': calcCellScore(raw, [5], realmId),
+      'Receiving Support': calcCellScore(raw, [6], realmId),
+      'Trust & Safety': calcCellScore(raw, [7], realmId),
+      'Calling / Purpose': calcCellScore(raw, [8], realmId),
+      'Freedom': calcCellScore(raw, [9], realmId),
     };
     const entries = Object.entries(needs).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
     return entries;
@@ -555,11 +555,18 @@ function renderGuide(data) {
     {id:'freedom',   label:'Freedom'}
   ];
 
-  function calcCellScore(rawArr, qIndices) {
+  // Reverse-scored questions (0-indexed within each theme's/realm's raw answers):
+  // Interior: grief[2] and desire[2] are reverse-scored
+  // Relational: god[9] is reverse-scored ("I feel directionless in my walk with God")
+  const REVERSE_SCORED = { grief: [2], desire: [2], god: [9] };
+
+  function calcCellScore(rawArr, qIndices, themeId) {
     if(!rawArr || !rawArr.length) return 0;
+    const reverseIndices = (themeId && REVERSE_SCORED[themeId]) || [];
     const vals = qIndices.map(i => {
       const v = parseFloat(rawArr[i]);
-      return isNaN(v) ? 0 : v;
+      if(isNaN(v) || v === 0) return 0;
+      return reverseIndices.includes(i) ? (8 - v) : v;
     }).filter(v => v > 0);
     if(!vals.length) return 0;
     return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) / 7 * 100);
@@ -571,7 +578,7 @@ function renderGuide(data) {
     let tbody = relRealms.map(r => {
       const raw = a1.raw[r.id];
       const cells = relDims.map(d => {
-        const score = calcCellScore(raw, REL_DIM_MAP[d.id] || []);
+        const score = calcCellScore(raw, REL_DIM_MAP[d.id] || [], r.id);
         return '<td class="'+cellClass(score)+'" style="background:'+cellBg(score)+'">'+cellDot(score)+'</td>';
       }).join('');
       return '<tr><td>'+r.label+'</td>'+cells+'</tr>';
@@ -694,7 +701,7 @@ function renderGuide(data) {
       const raw = a1?.raw?.[r.id] || [];
       const needScores = needKeys.map((k, ki) => {
         const qIndices = REL_DIM_MAP[k] || [];
-        return calcCellScore(raw, qIndices);
+        return calcCellScore(raw, qIndices, r.id);
       });
       const overallBg = cellBg(overall);
       const overallTx = cellTx(overall);
