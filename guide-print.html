@@ -949,8 +949,22 @@ function renderGuide(data) {
     const gap = id.gap || 0;
     const cardBg = '#faf6f0';
     const cardBorder = 'border:1px solid #e8d8c0';
-    const gapFlag = '';
-    let gapNote = '';
+    const themeLabel = idThemeLabels[t] || t;
+
+    return '<div style="background:'+cardBg+';'+cardBorder+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500">'+themeLabel+'</div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0;border-bottom:1px solid #ede8e0">'
+      + '<div style="width:165px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3;white-space:nowrap">How others see my maturity</div>'
+      + '<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden"><div style="width:'+(id.others||0)+'%;height:100%;background:'+barColor(id.others||0)+';border-radius:4px"></div></div>'
+      + '<div style="width:34px;font-size:.7rem;font-weight:500;color:'+barColor(id.others||0)+';text-align:right">'+(id.others||0)+'%</div>'
+      + '<div style="font-size:.6rem;color:'+barColor(id.others||0)+';margin-left:4px;white-space:nowrap">'+maturityTag(id.others||0)+'</div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0">'
+      + '<div style="width:165px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3;white-space:nowrap">How I see my own maturity</div>'
+      + '<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden"><div style="width:'+(id.self||0)+'%;height:100%;background:'+barColor(id.self||0)+';border-radius:4px"></div></div>'
+      + '<div style="width:34px;font-size:.7rem;font-weight:500;color:'+barColor(id.self||0)+';text-align:right">'+(id.self||0)+'%</div>'
+      + '<div style="font-size:.6rem;color:'+barColor(id.self||0)+';margin-left:4px;white-space:nowrap">'+maturityTag(id.self||0)+'</div>'
+      + '</div>'
       + '</div>';
   }).filter(Boolean);
 
