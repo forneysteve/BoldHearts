@@ -942,28 +942,14 @@ function renderGuide(data) {
   }
 
   // Identity gap notes
-  const identityGapNotes = {
-    grief:  {high: 'Others recognize grief in you more than you carry it yourself — worth exploring what loss you may be minimizing.', low: 'You carry more grief than others see. That gap can mean the loss is being held privately, or that it has not had space to surface.'},
-    shame:  {high: 'Others see shame operating in you more than you own it yourself — shame that is unrecognized tends to drive decisions invisibly.', low: 'You carry shame that others are not seeing. That kind of private shame tends to shape how safe it feels to be known.'},
-    fear:   {high: 'Others recognize fear in you more than you see it in yourself — fear that is unnamed tends to show up sideways in decisions and relationships.', low: 'You carry more fear than others perceive. That gap sometimes means the fear has gone internal while the outside still looks steady.'},
-    anger:  {high: 'Others see anger in you more than you identify with it yourself — when anger is not owned, it tends to leak out in ways that are hard to trace.', low: 'You carry anger that others are not seeing. Anger held privately without expression tends to find other outlets.'},
-    desire: {high: 'Others see hope and desire in you more than you experience it yourself — that gap is worth sitting with. What has made wanting feel less safe than it looks from the outside?', low: 'You carry more hope and desire than others see. That can mean desire has gone quiet publicly while still present privately — or that it has not found a place to land.'},
-    joy:    {high: 'Others see more capacity for joy in you than you experience yourself — what is keeping the good things from fully landing?', low: 'You experience more joy than others see in you. That gap sometimes means delight is present but private — or that it has not been expressed in ways others can witness.'}
-  };
 
   const identityCards = idThemeKeys.map(t => {
     const id = identityData[t];
     if(!id) return '';
     const gap = id.gap || 0;
-    const hasGap = gap >= 15;
-    const othersHigh = (id.others || 0) >= 60;
-    const selfHigh = (id.self || 0) >= 60;
-    const cardBg = hasGap ? '#fff8f0' : '#faf6f0';
-    const cardBorder = hasGap ? 'border:1px solid #e8c8a0;border-left:3px solid #c97a5a' : 'border:1px solid #e8d8c0';
-    const gapFlag = hasGap
-      ? '<span style="margin-left:8px;font-size:.6rem;color:#c97a5a;background:#fde8d8;padding:1px 6px;border-radius:3px;font-weight:500">'+gap+'% gap</span>'
-      : '';
-
+    const cardBg = '#faf6f0';
+    const cardBorder = 'border:1px solid #e8d8c0';
+    const gapFlag = '';
     let gapNote = '';
       + '</div>';
   }).filter(Boolean);
