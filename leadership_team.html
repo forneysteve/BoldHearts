@@ -1,7 +1,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v2.0
+  Version: v2.2
   Last updated: 2026-06-30
 
   CHANGELOG:
@@ -163,7 +163,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v2.0</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v2.2</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -457,9 +457,8 @@ function renderResults(scores){
     const desc = circleDescs[label] || "";
     return "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem\">"
       + "<div style=\"margin-bottom:.85rem\">"
-      + "<div style=\"display:flex;align-items:center;gap:8px;margin-bottom:.35rem\">"
+      + "<div style=\"margin-bottom:.35rem\">"
       + "<div style=\"font-size:.88rem;font-weight:500;color:#f0e8df;letter-spacing:.04em\">" + label + "</div>"
-      + "<div style=\"font-size:.65rem;color:" + curCol + ";background:rgba(232,215,160,.06);padding:2px 8px;border-radius:3px\">" + tierLabel(curPct) + "</div>"
       + "</div>"
       + "<div style=\"font-size:.8rem;color:#6a6258;line-height:1.6\">" + desc + "</div>"
       + "</div>"
@@ -483,14 +482,25 @@ function renderResults(scores){
       + "</div>";
   }
 
-  function giveBar(label, pct){
-    const col = barColor(pct||0);
-    return "<div style=\"display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)\">"
-      + "<div style=\"width:120px;flex-shrink:0;font-size:.82rem;color:#c0b8b0\">" + label + "</div>"
-      + "<div style=\"flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
-      + "<div style=\"width:" + (pct||0) + "%;height:100%;background:" + col + ";border-radius:3px;transition:width .8s ease\"></div>"
+  function giveReceiveRow(label, receivePct, givePct){
+    const recCol = barColor(receivePct||0);
+    const giveCol = barColor(givePct||0);
+    return "<div style=\"padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(232,215,160,.06)\">"
+      + "<div style=\"font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem\">" + label + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.75rem;margin-bottom:.35rem\">"
+      + "<div style=\"width:90px;flex-shrink:0;font-size:.65rem;color:#6a6258\">I receive</div>"
+      + "<div style=\"flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (receivePct||0) + "%;height:100%;background:" + recCol + ";border-radius:3px;transition:width .8s ease\"></div>"
       + "</div>"
-      + "<div style=\"width:70px;text-align:right;font-size:.75rem;font-weight:500;color:" + col + "\">" + tierLabel(pct||0) + "</div>"
+      + "<div style=\"width:60px;text-align:right;font-size:.68rem;font-weight:500;color:" + recCol + "\">" + tierLabel(receivePct||0) + "</div>"
+      + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.75rem\">"
+      + "<div style=\"width:90px;flex-shrink:0;font-size:.65rem;color:#6a6258\">I give</div>"
+      + "<div style=\"flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (givePct||0) + "%;height:100%;background:" + giveCol + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:60px;text-align:right;font-size:.68rem;font-weight:500;color:" + giveCol + "\">" + tierLabel(givePct||0) + "</div>"
+      + "</div>"
       + "</div>";
   }
 
@@ -529,12 +539,34 @@ function renderResults(scores){
   html += barPair("Relationships", rel.current, rel.ideal, rel.outwardCurrent, rel.selfCurrent, biggestGapCircle);
   html += barPair("Values", val.current, val.ideal, val.outwardCurrent, val.selfCurrent, biggestGapCircle);
   html += barPair("Calling", cal.current, cal.ideal, cal.outwardCurrent, cal.selfCurrent, biggestGapCircle);
-  html += "<div class=\"section-label\" style=\"margin-top:2rem\">What You Bring to This Team</div>";
-  html += "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:.5rem 0;margin-bottom:1rem\">";
-  html += giveBar("Relationships", rel.selfCurrent);
-  html += giveBar("Values", val.selfCurrent);
-  html += giveBar("Calling", cal.selfCurrent);
+  // Find biggest give/receive imbalance
+  const giveReceiveGaps = [
+    {label:"Relationships", give:rel.selfCurrent, receive:rel.outwardCurrent, gap:rel.selfCurrent - rel.outwardCurrent},
+    {label:"Values", give:val.selfCurrent, receive:val.outwardCurrent, gap:val.selfCurrent - val.outwardCurrent},
+    {label:"Calling", give:cal.selfCurrent, receive:cal.outwardCurrent, gap:cal.selfCurrent - cal.outwardCurrent}
+  ];
+  const bigImbalance = giveReceiveGaps.sort((a,b)=>Math.abs(b.gap)-Math.abs(a.gap))[0];
+
+  html += "<div class=\"section-label\" style=\"margin-top:2rem\">Your Relationship With This Team</div>";
+  html += "<p style=\"font-size:.85rem;color:#6a6258;line-height:1.7;margin-bottom:1rem\">Both sides matter — what you draw from this team and what you put back into it.</p>";
+  html += "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:.5rem 0;margin-bottom:.75rem\">";
+  html += giveReceiveRow("Relationships", rel.outwardCurrent, rel.selfCurrent);
+  html += giveReceiveRow("Values", val.outwardCurrent, val.selfCurrent);
+  html += giveReceiveRow("Calling", cal.outwardCurrent, cal.selfCurrent);
   html += "</div>";
+
+  if(Math.abs(bigImbalance.gap) >= 15){
+    const dir = bigImbalance.gap > 0
+      ? "giving significantly more than you are receiving"
+      : "receiving significantly more than you are giving";
+    const note = bigImbalance.gap > 0
+      ? "That kind of imbalance can be energizing for a season, but it has a cost over time."
+      : "That is worth noticing — it may be worth asking what is keeping you from investing more fully.";
+    html += "<div style=\"background:#1a1714;border:1px solid rgba(196,168,130,.2);border-left:4px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1rem\">"
+      + "<div style=\"font-size:.72rem;color:#c4a882;margin-bottom:.5rem\">&#9733; Worth Naming</div>"
+      + "<p style=\"font-size:.88rem;color:#c0b8b0;line-height:1.8;margin:0\">In <strong style=\"color:#f0e8df\">" + bigImbalance.label + "</strong>, you are " + dir + ". " + note + "</p>"
+      + "</div>";
+  }
   html += "<div style=\"background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:2rem;margin-top:1.5rem\">";
   html += "<div style=\"font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.85rem;font-weight:500\">Worth Sitting With</div>";
   html += writeup;
