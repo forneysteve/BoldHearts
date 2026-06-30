@@ -1,7 +1,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v1.2
+  Version: v1.3
   Last updated: 2026-06-30
 
   CHANGELOG:
@@ -33,6 +33,15 @@
     - ?test=true continues to preview results WITHOUT writing to sheet
     - Both test modes now correctly skip the intro gate and survey
       entirely, jumping straight to finalizeSubmission()
+
+  v1.3 — Sheet write reliability fix
+    - Replaced fetch(...,{mode:'no-cors'}) with new Image().src beacon
+      for the sheet submission call. Direct curl/browser test of the
+      Apps Script URL confirmed the script itself works correctly
+      ({"status":"ok"}), but the page's fetch() call was not reliably
+      reaching it (likely blocked by browser/extension no-cors handling).
+      Image beacon pattern matches what other BoldHearts assessment
+      pages already use for fire-and-forget submissions.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +146,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.2</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.3</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -340,7 +349,7 @@ function finalizeSubmission(){
       calling_out_current: scores.calling.outwardCurrent+'%', calling_out_ideal: scores.calling.outwardIdeal+'%',
       calling_self_current: scores.calling.selfCurrent+'%', calling_self_ideal: scores.calling.selfIdeal+'%'
     });
-    fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
+    new Image().src = SHEETS_URL+'?'+params.toString();
   }
 
   renderResults(scores);
