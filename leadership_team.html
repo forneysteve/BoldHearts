@@ -1,7 +1,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v1.3
+  Version: v1.4
   Last updated: 2026-06-30
 
   CHANGELOG:
@@ -42,6 +42,16 @@
       reaching it (likely blocked by browser/extension no-cors handling).
       Image beacon pattern matches what other BoldHearts assessment
       pages already use for fire-and-forget submissions.
+
+  v1.4 — Raw answer capture
+    - Previously only calculated scores (current/ideal % per circle)
+      were saved. Now all 48 raw individual answers (24 questions x
+      2 ratings) are also submitted, matching the pattern used by
+      relational.html / interior.html. Enables future re-scoring if
+      question wording changes, and gives an audit trail down to the
+      individual question level. NOTE: corresponding Apps Script and
+      sheet columns must be updated to capture these new fields -- see
+      leadership_apps_script.gs for the updated handler.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -146,7 +156,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.3</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.4</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -333,10 +343,24 @@ function calcScores(){
   return result;
 }
 
+function buildRawAnswerParams(){
+  const raw = {};
+  CIRCLES.forEach(c=>{
+    ['outward','self'].forEach(grp=>{
+      c[grp].forEach((_,i)=>{
+        raw[c.id+'_'+grp+'_'+i+'_cur'] = answers[c.id+'_'+grp+'_'+i+'_cur'] ?? '';
+        raw[c.id+'_'+grp+'_'+i+'_ideal'] = answers[c.id+'_'+grp+'_'+i+'_ideal'] ?? '';
+      });
+    });
+  });
+  return raw;
+}
+
 function finalizeSubmission(){
   const scores = calcScores();
 
   if(!isTestMode){
+    const rawParams = buildRawAnswerParams();
     const params = new URLSearchParams({
       action:'leadershipteam', name:userName, email:userEmail, team:teamName,
       rel_current: scores.relationships.current+'%', rel_ideal: scores.relationships.ideal+'%',
@@ -347,7 +371,8 @@ function finalizeSubmission(){
       values_self_current: scores.values.selfCurrent+'%', values_self_ideal: scores.values.selfIdeal+'%',
       calling_current: scores.calling.current+'%', calling_ideal: scores.calling.ideal+'%',
       calling_out_current: scores.calling.outwardCurrent+'%', calling_out_ideal: scores.calling.outwardIdeal+'%',
-      calling_self_current: scores.calling.selfCurrent+'%', calling_self_ideal: scores.calling.selfIdeal+'%'
+      calling_self_current: scores.calling.selfCurrent+'%', calling_self_ideal: scores.calling.selfIdeal+'%',
+      ...rawParams
     });
     new Image().src = SHEETS_URL+'?'+params.toString();
   }
