@@ -477,8 +477,13 @@ function retake(){
 
 function checkTestMode(){
   const params = new URLSearchParams(window.location.search);
-  if(params.get('test') !== 'true') return false;
-  isTestMode = true;
+  const testParam = params.get('test');
+  if(testParam !== 'true' && testParam !== 'write') return false;
+
+  // 'test=true' previews results WITHOUT writing to the sheet
+  // 'test=write' fills random answers AND writes to the sheet (for testing the Apps Script connection)
+  isTestMode = (testParam === 'true');
+
   userName = 'Test Leader'; userEmail = 'test@example.com'; teamName = 'Test Team';
   CIRCLES.forEach(c=>{
     ['outward','self'].forEach(grp=>{
