@@ -279,6 +279,12 @@ async function submitGate(){
   if(!tname){err.textContent='Please enter your team or organization name.';return;}
   userName=name;userEmail=email;teamName=tname;
   const scores = calcScores();
+  if(isTestMode){
+    renderResults(scores);
+    const hero=document.querySelector('.hero');if(hero)hero.style.display='none';
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
 
   const params = new URLSearchParams({
     action:'leadershipteam', name:userName, email:userEmail, team:teamName,
@@ -388,7 +394,29 @@ function retake(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-renderSurvey();
+let isTestMode = false;
+
+function checkTestMode(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('test') !== 'true') return false;
+  isTestMode = true;
+  CIRCLES.forEach(c=>{
+    ['outward','self'].forEach(grp=>{
+      c[grp].forEach((_,i)=>{
+        answers[c.id+'_'+grp+'_'+i+'_cur'] = Math.round((2 + Math.random()*4)*100)/100;
+        answers[c.id+'_'+grp+'_'+i+'_ideal'] = Math.round((5 + Math.random()*2)*100)/100;
+      });
+    });
+  });
+  return true;
+}
+
+if(checkTestMode()){
+  renderSurvey();
+  setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),300);
+} else {
+  renderSurvey();
+}
 </script>
 </body>
 </html>
