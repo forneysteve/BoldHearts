@@ -1,7 +1,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v1.1
+  Version: v1.2
   Last updated: 2026-06-30
 
   CHANGELOG:
@@ -25,6 +25,14 @@
       full team comparison comes later in the facilitated debrief
     - Old "thank you only" screen removed in favor of this richer single-
       person reveal
+
+  v1.2 — Test mode fix
+    - Added ?test=write mode: auto-fills randomized answers AND submits
+      to the Google Sheet (for verifying the Apps Script connection
+      without manually moving 64 sliders)
+    - ?test=true continues to preview results WITHOUT writing to sheet
+    - Both test modes now correctly skip the intro gate and survey
+      entirely, jumping straight to finalizeSubmission()
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -129,7 +137,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.1</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.2</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
