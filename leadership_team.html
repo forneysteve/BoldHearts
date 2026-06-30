@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Leadership Team Culture Assessment | BoldHearts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#d4ccc4;background-color:#111111}
+a{color:#e8d7a0;text-decoration:none}
+ul{list-style:none}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f0e8df;line-height:1.2}
+h1{font-size:clamp(2.2rem,5vw,3.5rem)}
+h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:1.5rem}
+p{margin-bottom:1rem;max-width:720px}
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(17,17,17,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.1)}
+nav .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase}
+nav .logo span{color:#e8d7a0}
+.hero{position:relative;width:100%;min-height:35vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 3rem;background-color:#1a1714}
+.hero-content{max-width:800px;margin:0 auto}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#e8d7a0;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.progress-wrap{background:rgba(17,17,17,.95);border-bottom:1px solid rgba(232,215,160,.1);padding:.75rem 2rem;position:sticky;top:73px;z-index:99;backdrop-filter:blur(8px)}
+.progress-row{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:1.25rem}
+.progress-bar-bg{flex:1;height:2px;background:rgba(232,215,160,.15);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:#e8d7a0;border-radius:2px;transition:width .3s ease}
+.progress-label{font-size:.75rem;color:#6a6258;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
+.main{max-width:860px;margin:0 auto;padding:3rem 2rem 5rem}
+.realm-hdr{display:flex;align-items:flex-start;gap:1.25rem;margin:3rem 0 1.25rem;padding:1.5rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.15);border-radius:4px}
+.realm-hdr:first-child{margin-top:1rem}
+.realm-icon{width:46px;height:46px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(232,215,160,.08)}
+.realm-hdr-text h2{font-size:1.5rem;margin-bottom:3px;color:#f0e8df}
+.realm-hdr-text p{font-size:.9rem;color:#6a6258;line-height:1.6;margin:0;max-width:none}
+.subgroup-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin:1.5rem 0 .5rem;padding-left:.25rem}
+.qblock{background:#1a1816;border:1px solid rgba(232,215,160,.08);border-radius:6px;padding:1.5rem;margin-bottom:.75rem;transition:border-color .2s}
+.qblock.answered{border-color:rgba(232,215,160,.25)}
+.qnum{font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+.qlabel{font-size:.92rem;color:#d4ccc4;line-height:1.7;margin-bottom:1.25rem}
+.rating-row{margin-bottom:1.25rem}
+.rating-row:last-child{margin-bottom:0}
+.rating-label{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem}
+.scale-endlabels{display:flex;justify-content:space-between;margin-bottom:4px}
+.scale-endlabel{font-size:.6rem;color:#5a5550;letter-spacing:.04em;text-transform:uppercase}
+.slider-area input[type=range]{width:100%;height:3px;-webkit-appearance:none;appearance:none;background:rgba(232,215,160,.15);border-radius:2px;outline:none;cursor:pointer}
+.slider-area input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #f0e8df;transition:transform .15s}
+.cur-thumb::-webkit-slider-thumb{background:#1D9E75}
+.ideal-thumb::-webkit-slider-thumb{background:#854F0B}
+.hash-row{display:flex;justify-content:space-between;padding:0 1px;margin-top:5px}
+.hash-mark{width:1px;height:6px;background:rgba(232,215,160,.3)}
+.submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px}
+.submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem}
+.sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#e8d7a0;padding:1rem 2.5rem;border-radius:4px;border:2px solid #e8d7a0;cursor:pointer}
+.errmsg{font-size:.85rem;color:#c97a5a;margin-top:12px;min-height:18px}
+.gate-wrap{max-width:860px;margin:0 auto;padding:5rem 2rem;min-height:60vh;display:flex;align-items:center;justify-content:center}
+.gate-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.15);border-radius:4px;padding:3rem;max-width:500px;width:100%;text-align:center}
+.gate-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;text-align:left}
+.gate-field label{font-size:.75rem;color:#6a6258;text-transform:uppercase;letter-spacing:.08em}
+.gate-field input{width:100%;padding:.9rem 1rem;background:#111111;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.95rem}
+.gate-btn{width:100%;padding:1rem;background-color:#e8d7a0;color:#111111;border:2px solid #e8d7a0;border-radius:4px;font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.5rem}
+.results-page{animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.1)}
+.legend-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:1rem;font-size:.8rem;color:#a09890}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:6px}
+.retake-btn{display:block;margin:2rem auto 0;padding:.75rem 2rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:4px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;cursor:pointer}
+.bar-row{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)}
+.bar-label{width:130px;flex-shrink:0;font-size:.8rem;color:#c0b8b0}
+.bar-track{flex:1;position:relative;height:12px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}
+.bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:3px}
+.bar-pct{width:36px;text-align:right;font-size:.75rem;font-weight:500}
+footer{background-color:#0d0d0d;text-align:center;padding:2.5rem 2rem;border-top:1px solid rgba(232,215,160,.08)}
+footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,215,160,.15),transparent)}
+@media(max-width:768px){.hero{padding:5rem 1.5rem 2rem}.main{padding:2rem 1.25rem 4rem}.gate-wrap{padding:3rem 1.25rem}}
+</style>
+</head>
+<body>
+<nav><a href="index.html" class="logo">Bold<span>Hearts</span></a></nav>
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tagline">Leadership Team Culture Assessment</div>
+    <h1>How healthy is your leadership team?</h1>
+  </div>
+</section>
+<div class="divider"></div>
+<div class="progress-wrap" id="progress-section">
+  <div class="progress-row">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-lbl">0 of 48 answered</div>
+  </div>
+</div>
+<div id="app"></div>
+<div class="divider"></div>
+<footer>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved</p>
+</footer>
+<script>
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
+
+const CIRCLES = [
+  {id:'relationships', label:'Relationships', color:'#D85A30', icon:'ti-users',
+   desc:"Does this team genuinely know, trust, and enjoy each other — not just work well together?",
+   outward:[
+    "The other leaders on this team know me — not just my role, but who I am.",
+    "I trust the people on this team enough to be honest when something is wrong.",
+    "If I were struggling personally, I believe this team would notice and show up for me.",
+    "This team has been through hard things together and come out more connected, not less."
+   ],
+   self:[
+    "I genuinely know the other leaders on this team — not just their roles, but who they are.",
+    "When I disagree with someone on this team, I initiate the conversation rather than letting distance grow.",
+    "I am the kind of person on this team who notices when someone else is struggling and shows up for them.",
+    "I would call the people on this team friends, not just colleagues — and I act like it."
+   ]},
+  {id:'values', label:'Values', color:'#185FA5', icon:'ti-compass',
+   desc:"Does this team share real, lived convictions — not just stated principles?",
+   outward:[
+    "I know what this team actually believes is non-negotiable — not just what's written down, but what's lived out.",
+    "When this team makes a hard decision, I trust the reasoning reflects what we say we value.",
+    "When someone on this team raises a moral or ethical concern, it gets taken seriously, not dismissed.",
+    "This team's values shape how I am treated — not just what gets preached to others."
+   ],
+   self:[
+    "I have held this team's convictions even when it was costly for me personally to do so.",
+    "When I see something on this team that doesn't reflect our stated values, I am the one who raises it.",
+    "I hold myself to the same convictions I expect from this team, even when no one would notice if I didn't.",
+    "If I strongly disagreed with a decision on values grounds, I would actually say so — not just believe I'd be heard."
+   ]},
+  {id:'calling', label:'Calling', color:'#534AB7', icon:'ti-flag',
+   desc:"Is there a shared, owned, energizing sense of where this team is headed?",
+   outward:[
+    "I have a clear and shared understanding of where this team believes God is leading us.",
+    "The mission of this team feels like something I am personally part of, not just something leadership decided.",
+    "Decisions on this team are generally made with our shared calling in mind, not just convenience or urgency.",
+    "This team revisits and re-clarifies our calling regularly — it isn't something decided once and forgotten."
+   ],
+   self:[
+    "I actively help cast and clarify this team's calling for others — I don't just wait to be told where we're headed.",
+    "When the mission gets hard or unclear, I am one of the people who keeps it alive for the team.",
+    "My own sense of personal calling feels aligned with where this team is headed, and I bring that energy into the room.",
+    "I could articulate this team's calling to someone outside the team, and I actually do this — not just could."
+   ]}
+];
+
+let answers = {}, userName = '', userEmail = '', teamName = '';
+
+function totalQs(){ return CIRCLES.reduce((a,c)=>a+c.outward.length+c.self.length,0) * 2; }
+function totalAns(){ return Object.keys(answers).length; }
+
+function updateProgress(){
+  const pct = Math.round((totalAns()/totalQs())*100);
+  document.getElementById('progress-bar').style.width = pct+'%';
+  document.getElementById('progress-lbl').textContent = totalAns()+' of '+totalQs()+' answered';
+}
+
+const HASH_ROW = '<div class="hash-row">'+'<div class="hash-mark"></div>'.repeat(7)+'</div>';
+
+function renderQuestionBlock(c, groupKey, q, idx){
+  const curK = c.id+'_'+groupKey+'_'+idx+'_cur';
+  const idealK = c.id+'_'+groupKey+'_'+idx+'_ideal';
+  const curHas = answers[curK]!==undefined;
+  const idealHas = answers[idealK]!==undefined;
+  let html = '<div class="qblock'+((curHas&&idealHas)?' answered':'')+'" id="q_'+c.id+'_'+groupKey+'_'+idx+'">';
+  html += '<div class="qnum">'+c.label+' &mdash; '+(groupKey==='outward'?'Receiving':'Giving')+'</div>';
+  html += '<div class="qlabel">'+q+'</div>';
+  html += '<div class="rating-row"><div class="rating-label">How true is this right now?</div>';
+  html += '<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
+  html += '<div class="slider-area"><input type="range" min="1" max="7" step="0.01" value="'+(curHas?answers[curK]:'1')+'" class="cur-thumb" id="sl_'+curK+'" style="opacity:'+(curHas?'1':'.4')+'" oninput="onSlide(\''+curK+'\')" onchange="onCommit(\''+curK+'\',this.value)">'+HASH_ROW+'</div></div>';
+  html += '<div class="rating-row"><div class="rating-label">How true should this be for a healthy team?</div>';
+  html += '<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
+  html += '<div class="slider-area"><input type="range" min="1" max="7" step="0.01" value="'+(idealHas?answers[idealK]:'1')+'" class="ideal-thumb" id="sl_'+idealK+'" style="opacity:'+(idealHas?'1':'.4')+'" oninput="onSlide(\''+idealK+'\')" onchange="onCommit(\''+idealK+'\',this.value)">'+HASH_ROW+'</div></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderSurvey(){
+  let html = '<div class="main">';
+  html += '<div style="padding:2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.2);border-left:4px solid #e8d7a0;border-radius:4px;margin-bottom:2rem">';
+  html += '<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.75rem;font-weight:500">Before You Begin</div>';
+  html += '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">Each question is asked twice — how true this is for your team right now, and how true it should be for your team to be healthy. The gap between those two answers is often more revealing than either number alone.</p>';
+  html += '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">Within each area, some questions ask what you receive from this team — and others ask what you actually give to it. Both matter. A team can look healthy on paper while a few people quietly carry the weight of holding it together.</p>';
+  html += '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin:0">Answer honestly, not diplomatically.</p>';
+  html += '</div>';
+  CIRCLES.forEach(c=>{
+    html += '<div class="realm-hdr"><div class="realm-icon" style="color:'+c.color+'"><i class="ti '+c.icon+'"></i></div><div class="realm-hdr-text"><h2>'+c.label+'</h2><p>'+c.desc+'</p></div></div>';
+    html += '<div class="subgroup-label">What I Receive From This Team</div>';
+    c.outward.forEach((q,i)=>{ html += renderQuestionBlock(c,'outward',q,i); });
+    html += '<div class="subgroup-label">What I Give To This Team</div>';
+    c.self.forEach((q,i)=>{ html += renderQuestionBlock(c,'self',q,i); });
+  });
+  html += '<div class="submit-section"><div class="submit-meta">Move every slider to answer &mdash; your honest perspective matters more than a flattering score</div><button class="sub-btn" onclick="trySubmit()">See Team Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  document.getElementById('app').innerHTML = html;
+  updateProgress();
+}
+
+function onSlide(k){ document.getElementById('sl_'+k).style.opacity = '1'; }
+
+function onCommit(k, val){
+  answers[k] = parseFloat(val);
+  const parts = k.split('_');
+  const blockId = 'q_'+parts[0]+'_'+parts[1]+'_'+parts[2];
+  const curK = parts[0]+'_'+parts[1]+'_'+parts[2]+'_cur';
+  const idealK = parts[0]+'_'+parts[1]+'_'+parts[2]+'_ideal';
+  if(answers[curK]!==undefined && answers[idealK]!==undefined){
+    document.getElementById(blockId)?.classList.add('answered');
+  }
+  updateProgress();
+  document.getElementById('errmsg').textContent='';
+}
+
+function trySubmit(){
+  const unanswered=[];
+  CIRCLES.forEach(c=>{
+    ['outward','self'].forEach(grp=>{
+      c[grp].forEach((_,i)=>{
+        if(answers[c.id+'_'+grp+'_'+i+'_cur']===undefined) unanswered.push(1);
+        if(answers[c.id+'_'+grp+'_'+i+'_ideal']===undefined) unanswered.push(1);
+      });
+    });
+  });
+  if(unanswered.length>0){
+    document.getElementById('errmsg').textContent = unanswered.length+' rating'+(unanswered.length>1?'s':'')+' still need'+(unanswered.length===1?'s':'')+' an answer.';
+    return;
+  }
+  renderGate();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderGate(){
+  document.getElementById('progress-section').style.display='none';
+  let g = '<div class="gate-wrap"><div class="gate-card">';
+  g += '<h2 style="margin-bottom:1.5rem">Your team results are ready.</h2>';
+  g += '<div class="gate-field"><label>Your First Name</label><input type="text" id="gname" placeholder="Your first name"></div>';
+  g += '<div class="gate-field"><label>Your Email Address</label><input type="email" id="gemail" placeholder="you@example.com"></div>';
+  g += '<div class="gate-field"><label>Team or Organization Name</label><input type="text" id="tname" placeholder="e.g. Elder Board, Staff Team"></div>';
+  g += '<button class="gate-btn" id="gate-btn" onclick="submitGate()">See Results &rarr;</button>';
+  g += '<div class="errmsg" id="gate-err"></div></div></div>';
+  document.getElementById('app').innerHTML = g;
+}
+
+function calcScores(){
+  const result = {};
+  CIRCLES.forEach(c=>{
+    const groupScore = (grp, rating) => {
+      let t=0,n=0;
+      c[grp].forEach((_,i)=>{
+        const v = answers[c.id+'_'+grp+'_'+i+'_'+rating];
+        if(v!==undefined){t+=v;n++;}
+      });
+      return n>0?Math.round((t/(n*7))*100):0;
+    };
+    const outCur=groupScore('outward','cur'), outIdeal=groupScore('outward','ideal');
+    const selfCur=groupScore('self','cur'), selfIdeal=groupScore('self','ideal');
+    result[c.id] = {
+      current: Math.round((outCur+selfCur)/2),
+      ideal: Math.round((outIdeal+selfIdeal)/2),
+      outwardCurrent: outCur, outwardIdeal: outIdeal,
+      selfCurrent: selfCur, selfIdeal: selfIdeal
+    };
+  });
+  return result;
+}
+
+async function submitGate(){
+  const name=document.getElementById('gname').value.trim();
+  const email=document.getElementById('gemail').value.trim();
+  const tname=document.getElementById('tname').value.trim();
+  const err=document.getElementById('gate-err');
+  if(!name){err.textContent='Please enter your first name.';return;}
+  if(!email||!email.includes('@')){err.textContent='Please enter a valid email.';return;}
+  if(!tname){err.textContent='Please enter your team or organization name.';return;}
+  userName=name;userEmail=email;teamName=tname;
+  const scores = calcScores();
+
+  const params = new URLSearchParams({
+    action:'leadershipteam', name:userName, email:userEmail, team:teamName,
+    rel_current: scores.relationships.current+'%', rel_ideal: scores.relationships.ideal+'%',
+    rel_out_current: scores.relationships.outwardCurrent+'%', rel_out_ideal: scores.relationships.outwardIdeal+'%',
+    rel_self_current: scores.relationships.selfCurrent+'%', rel_self_ideal: scores.relationships.selfIdeal+'%',
+    values_current: scores.values.current+'%', values_ideal: scores.values.ideal+'%',
+    values_out_current: scores.values.outwardCurrent+'%', values_out_ideal: scores.values.outwardIdeal+'%',
+    values_self_current: scores.values.selfCurrent+'%', values_self_ideal: scores.values.selfIdeal+'%',
+    calling_current: scores.calling.current+'%', calling_ideal: scores.calling.ideal+'%',
+    calling_out_current: scores.calling.outwardCurrent+'%', calling_out_ideal: scores.calling.outwardIdeal+'%',
+    calling_self_current: scores.calling.selfCurrent+'%', calling_self_ideal: scores.calling.selfIdeal+'%'
+  });
+  fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
+
+  renderResults(scores);
+  const hero=document.querySelector('.hero');if(hero)hero.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function starPath(cx,cy,r){
+  let pts=[];
+  for(let i=0;i<10;i++){
+    const angle=(Math.PI/5)*i-Math.PI/2;
+    const radius=i%2===0?r:r*0.45;
+    pts.push((cx+radius*Math.cos(angle))+','+(cy+radius*Math.sin(angle)));
+  }
+  return 'M'+pts.join('L')+'Z';
+}
+
+function computeVennPos(rel,val,cal){
+  const centers={relationships:{x:220,y:400},values:{x:340,y:180},calling:{x:460,y:400}};
+  const total=rel+val+cal;
+  if(total===0) return {x:340,y:340};
+  const x=(centers.relationships.x*rel+centers.values.x*val+centers.calling.x*cal)/total;
+  const y=(centers.relationships.y*rel+centers.values.y*val+centers.calling.y*cal)/total;
+  return {x:Math.round(x),y:Math.round(y)};
+}
+
+function barRow(label,pct,col){
+  return '<div class="bar-row"><div class="bar-label">'+label+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div><div class="bar-pct" style="color:'+col+'">'+pct+'%</div></div>';
+}
+
+function renderResults(scores){
+  const rel=scores.relationships, val=scores.values, cal=scores.calling;
+  const curPos = computeVennPos(rel.current, val.current, cal.current);
+  const idealPos = computeVennPos(rel.ideal, val.ideal, cal.ideal);
+
+  const vennSvg = '<svg width="100%" viewBox="0 0 680 580">'
+    +'<circle cx="340" cy="180" r="160" fill="#185FA5" fill-opacity="0.18" stroke="#185FA5" stroke-width="1"/>'
+    +'<circle cx="220" cy="400" r="160" fill="#D85A30" fill-opacity="0.18" stroke="#D85A30" stroke-width="1"/>'
+    +'<circle cx="460" cy="400" r="160" fill="#534AB7" fill-opacity="0.18" stroke="#534AB7" stroke-width="1"/>'
+    +'<text x="340" y="80" text-anchor="middle" fill="#f0e8df" font-size="16" font-family="Cormorant Garamond,serif" font-weight="700">Values</text>'
+    +'<text x="150" y="500" text-anchor="middle" fill="#f0e8df" font-size="16" font-family="Cormorant Garamond,serif" font-weight="700">Relationships</text>'
+    +'<text x="530" y="500" text-anchor="middle" fill="#f0e8df" font-size="16" font-family="Cormorant Garamond,serif" font-weight="700">Calling</text>'
+    +'<path d="'+starPath(curPos.x,curPos.y,13)+'" fill="#1D9E75" stroke="#04342C" stroke-width="1"/>'
+    +'<text x="'+(curPos.x+18)+'" y="'+(curPos.y+5)+'" fill="#d4ccc4" font-size="12">Current</text>'
+    +'<path d="'+starPath(idealPos.x,idealPos.y,13)+'" fill="#854F0B" stroke="#412402" stroke-width="1"/>'
+    +'<text x="'+(idealPos.x+18)+'" y="'+(idealPos.y+5)+'" fill="#d4ccc4" font-size="12">Ideal</text>'
+    +'</svg>';
+
+  let html = '<div class="main"><div class="results-page">';
+  html += '<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;font-family:Cormorant Garamond,serif;font-style:italic;margin:0">Thank you, '+userName+'. Here is your perspective on '+teamName+'\'s culture at this point in time.</p></div>';
+  html += '<div style="text-align:center;padding:2rem 0;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:2rem"><h2>Your View of '+teamName+'</h2></div>';
+  html += '<div class="section-label">Where the Team Sits</div>';
+  html += vennSvg;
+  html += '<div class="legend-row"><span><span class="legend-dot" style="background:#1D9E75"></span>Current state</span><span><span class="legend-dot" style="background:#854F0B"></span>Ideal state</span></div>';
+  html += '<div class="section-label">Current vs. Ideal Across Each Dimension</div>';
+  html += '<div style="position:relative;width:100%;height:380px;margin-top:1rem"><canvas id="radarChart"></canvas></div>';
+  html += '<div class="legend-row"><span><span class="legend-dot" style="background:#1D9E75"></span>Current state</span><span><span class="legend-dot" style="background:#854F0B"></span>Ideal state</span></div>';
+  html += '<div class="section-label">What You Receive vs. What You Give</div>';
+  html += '<div style="background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px">';
+  html += barRow('Relationships — Receiving', rel.outwardCurrent, '#D85A30');
+  html += barRow('Relationships — Giving', rel.selfCurrent, '#D85A30');
+  html += barRow('Values — Receiving', val.outwardCurrent, '#185FA5');
+  html += barRow('Values — Giving', val.selfCurrent, '#185FA5');
+  html += barRow('Calling — Receiving', cal.outwardCurrent, '#534AB7');
+  html += barRow('Calling — Giving', cal.selfCurrent, '#534AB7');
+  html += '</div>';
+  html += '<div style="background:#1a1714;border:1px solid rgba(232,215,160,.2);border-radius:4px;padding:2.5rem;text-align:center;margin-top:3rem"><h3 style="margin-bottom:1rem">Next Step</h3><p style="color:#a09890;margin-bottom:1.5rem">Once your full team has completed this assessment, Steve will aggregate the results into a Team Culture Report and facilitate a 90-minute debrief to walk through what the data reveals together.</p><a href="mailto:admin@boldhearts.org?subject=Leadership Team Culture — Assessment Complete" style="display:inline-block;background:#e8d7a0;color:#111;padding:.85rem 2rem;border-radius:4px;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500">Schedule a Debrief</a></div>';
+  html += '<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button>';
+  html += '</div></div>';
+  document.getElementById('app').innerHTML = html;
+
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['Relationships','Values','Calling'],
+      datasets: [
+        {label:'Current', data:[rel.current, val.current, cal.current], borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.15)', borderWidth:2, pointBackgroundColor:'#1D9E75'},
+        {label:'Ideal', data:[rel.ideal, val.ideal, cal.ideal], borderColor:'#854F0B', backgroundColor:'rgba(133,79,11,0.1)', borderWidth:2, borderDash:[5,4], pointBackgroundColor:'#854F0B'}
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{r:{min:0,max:100,ticks:{stepSize:25,backdropColor:'transparent',color:'#6a6258'},grid:{color:'rgba(232,215,160,0.15)'},angleLines:{color:'rgba(232,215,160,0.15)'},pointLabels:{font:{size:13},color:'#d4ccc4'}}}
+    }
+  });
+}
+
+function retake(){
+  answers={};userName='';userEmail='';teamName='';
+  document.getElementById('progress-section').style.display='';
+  const hero=document.querySelector('.hero');if(hero)hero.style.display='';
+  renderSurvey();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderSurvey();
+</script>
+</body>
+</html>
