@@ -196,7 +196,7 @@ function renderSurvey(){
     html += '<div class="subgroup-label">What I Give To This Team</div>';
     c.self.forEach((q,i)=>{ html += renderQuestionBlock(c,'self',q,i); });
   });
-  html += '<div class="submit-section"><div class="submit-meta">Move every slider to answer &mdash; your honest perspective matters more than a flattering score</div><button class="sub-btn" onclick="trySubmit()">See Team Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  html += '<div class="submit-section"><div class="submit-meta">Move every slider to answer &mdash; your honest perspective matters more than a flattering score</div><button class="sub-btn" onclick="trySubmit()">Submit My Responses &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
   document.getElementById('app').innerHTML = html;
   updateProgress();
 }
@@ -300,9 +300,18 @@ async function submitGate(){
   });
   fetch(SHEETS_URL+'?'+params.toString(),{mode:'no-cors'}).catch(e=>console.error('Sheets error:',e));
 
-  renderResults(scores);
+  renderThankYou();
   const hero=document.querySelector('.hero');if(hero)hero.style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderThankYou(){
+  document.getElementById('app').innerHTML = '<div class="gate-wrap"><div class="gate-card">'
+    + '<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.75rem;font-weight:500">Thank You</div>'
+    + '<h2 style="margin-bottom:1.25rem">Your responses are recorded.</h2>'
+    + '<p style="color:#a09890;line-height:1.9;margin-bottom:1.5rem">Thanks, '+userName+'. Your perspective on '+teamName+' has been submitted.</p>'
+    + '<p style="color:#a09890;line-height:1.9;margin-bottom:0">Once everyone on the team has completed this assessment, Steve will combine all the responses into a Team Culture Report and walk through it together in a facilitated session. You\'ll see the full picture then &mdash; not just your own view, but how it compares with the rest of the team.</p>'
+    + '</div></div>';
 }
 
 function starPath(cx,cy,r){
