@@ -1,7 +1,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v1.5
+  Version: v2.0
   Last updated: 2026-06-30
 
   CHANGELOG:
@@ -163,7 +163,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v1.5</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v2.0</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -445,29 +445,52 @@ function renderResults(scores){
     return "with most of your answers strongly disagreeing";
   }
 
-  function barPair(label, curPct, idealPct){
+  const circleDescs = {
+    "Relationships": "How well this team knows, trusts, and actually enjoys each other — not just works together.",
+    "Values": "Whether this team's convictions are real and lived, or just stated on paper.",
+    "Calling": "Whether there is a shared, owned, energizing sense of where this team is headed."
+  };
+
+  function barPair(label, curPct, idealPct, receivePct, givePct, biggestGapId){
     const curCol = barColor(curPct);
     const idealCol = barColor(idealPct);
-    const gap = idealPct - curPct;
-    const gapBadge = gap >= 20
-      ? "<span style=\"font-size:.65rem;color:#5B8DB0;background:rgba(91,141,176,.15);padding:2px 8px;border-radius:3px;margin-left:8px\">" + tierLabel(idealPct) + " potential</span>"
-      : "";
+    const desc = circleDescs[label] || "";
     return "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem\">"
-      + "<div style=\"display:flex;align-items:center;gap:8px;margin-bottom:1rem\">"
-      + "<div style=\"font-size:.78rem;font-weight:500;color:#f0e8df;letter-spacing:.04em\">" + label + "</div>"
-      + "<div style=\"font-size:.68rem;color:" + curCol + ";background:rgba(232,215,160,.06);padding:2px 8px;border-radius:3px\">" + tierLabel(curPct) + "</div>"
-      + gapBadge
+      + "<div style=\"margin-bottom:.85rem\">"
+      + "<div style=\"display:flex;align-items:center;gap:8px;margin-bottom:.35rem\">"
+      + "<div style=\"font-size:.88rem;font-weight:500;color:#f0e8df;letter-spacing:.04em\">" + label + "</div>"
+      + "<div style=\"font-size:.65rem;color:" + curCol + ";background:rgba(232,215,160,.06);padding:2px 8px;border-radius:3px\">" + tierLabel(curPct) + "</div>"
+      + "</div>"
+      + "<div style=\"font-size:.8rem;color:#6a6258;line-height:1.6\">" + desc + "</div>"
       + "</div>"
       + "<div style=\"display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem\">"
-      + "<div style=\"width:80px;flex-shrink:0;font-size:.68rem;color:#6a6258;text-align:right\">Right now</div>"
+      + "<div style=\"width:110px;flex-shrink:0;font-size:.68rem;color:#6a6258\">Current</div>"
       + "<div style=\"flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
       + "<div style=\"width:" + curPct + "%;height:100%;background:" + curCol + ";border-radius:3px;transition:width .8s ease\"></div>"
-      + "</div></div>"
+      + "</div>"
+      + "<div style=\"width:70px;text-align:right;font-size:.68rem;font-weight:500;color:" + curCol + "\">" + tierLabel(curPct) + "</div>"
+      + "</div>"
       + "<div style=\"display:flex;align-items:center;gap:.75rem\">"
-      + "<div style=\"width:80px;flex-shrink:0;font-size:.68rem;color:#6a6258;text-align:right\">Should be</div>"
+      + "<div style=\"width:110px;flex-shrink:0;font-size:.68rem;color:#6a6258\">Ideal</div>"
       + "<div style=\"flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
-      + "<div style=\"width:" + idealPct + "%;height:100%;background:" + idealCol + ";border-radius:3px;opacity:.5;transition:width .8s ease\"></div>"
-      + "</div></div>"
+      + "<div style=\"width:" + idealPct + "%;height:100%;background:" + idealCol + ";border-radius:3px;opacity:.45;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:70px;text-align:right;font-size:.68rem;font-weight:500;color:" + idealCol + ";opacity:.7\">" + tierLabel(idealPct) + "</div>"
+      + "</div>"
+      + (label === biggestGapId && (idealPct - curPct) >= 15
+          ? "<div style=\"margin-top:.75rem;font-size:.72rem;color:#c4a882;font-style:italic;display:flex;align-items:center;gap:6px\"><span>&#9733;</span> Your greatest desire for change on this team.</div>"
+          : "")
+      + "</div>";
+  }
+
+  function giveBar(label, pct){
+    const col = barColor(pct||0);
+    return "<div style=\"display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)\">"
+      + "<div style=\"width:120px;flex-shrink:0;font-size:.82rem;color:#c0b8b0\">" + label + "</div>"
+      + "<div style=\"flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (pct||0) + "%;height:100%;background:" + col + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:70px;text-align:right;font-size:.75rem;font-weight:500;color:" + col + "\">" + tierLabel(pct||0) + "</div>"
       + "</div>";
   }
 
@@ -495,9 +518,23 @@ function renderResults(scores){
   html += "<div style=\"padding:1.5rem 0 1rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem\"><p style=\"font-size:.95rem;color:#a09890;font-family:Cormorant Garamond,serif;font-style:italic;margin:0\">Thank you, " + userName + ". Here is how you see " + teamName + " at this point in time.</p></div>";
   html += "<div style=\"text-align:center;padding:2rem 0;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:2rem\"><h2>Your View of " + teamName + "</h2><p style=\"color:#6a6258;font-size:.85rem;max-width:none\">This is your perspective only. Once the full team has responded, Steve will bring all perspectives together.</p></div>";
   html += "<div class=\"section-label\">How You See the Team Right Now</div>";
-  html += barPair("Relationships", rel.current, rel.ideal);
-  html += barPair("Values", val.current, val.ideal);
-  html += barPair("Calling", cal.current, cal.ideal);
+  // Find which circle has biggest gap for "greatest desire for change" tag
+  const allGaps = [
+    {id:"Relationships", gap: rel.ideal - rel.current},
+    {id:"Values", gap: val.ideal - val.current},
+    {id:"Calling", gap: cal.ideal - cal.current}
+  ];
+  const biggestGapCircle = allGaps.sort((a,b)=>b.gap-a.gap)[0].id;
+
+  html += barPair("Relationships", rel.current, rel.ideal, rel.outwardCurrent, rel.selfCurrent, biggestGapCircle);
+  html += barPair("Values", val.current, val.ideal, val.outwardCurrent, val.selfCurrent, biggestGapCircle);
+  html += barPair("Calling", cal.current, cal.ideal, cal.outwardCurrent, cal.selfCurrent, biggestGapCircle);
+  html += "<div class=\"section-label\" style=\"margin-top:2rem\">What You Bring to This Team</div>";
+  html += "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:.5rem 0;margin-bottom:1rem\">";
+  html += giveBar("Relationships", rel.selfCurrent);
+  html += giveBar("Values", val.selfCurrent);
+  html += giveBar("Calling", cal.selfCurrent);
+  html += "</div>";
   html += "<div style=\"background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:2rem;margin-top:1.5rem\">";
   html += "<div style=\"font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.85rem;font-weight:500\">Worth Sitting With</div>";
   html += writeup;
