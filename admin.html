@@ -147,19 +147,18 @@ a{color:#e8d7a0;text-decoration:none}
     </div>
   </div>
 
-  <div class="stats-bar">
-    <div class="stat-card"><div class="stat-label">Total People</div><div class="stat-val" id="stat-total">—</div></div>
-    <div class="stat-card"><div class="stat-label">Relational Complete</div><div class="stat-val" id="stat-relational">—</div></div>
-    <div class="stat-card"><div class="stat-label">Interior Complete</div><div class="stat-val" id="stat-interior">—</div></div>
-    <div class="stat-card"><div class="stat-label">Follow-up Requested</div><div class="stat-val" id="stat-followup">—</div></div>
-  </div>
-
   <div class="tab-bar">
     <button class="tab-btn active" id="tab-btn-individuals" onclick="switchTab('individuals')">Individual Assessments</button>
     <button class="tab-btn" id="tab-btn-leadership" onclick="switchTab('leadership')">Leadership Teams</button>
   </div>
 
   <div id="tab-individuals" class="tab-panel active">
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">Total People</div><div class="stat-val" id="stat-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">Relational Complete</div><div class="stat-val" id="stat-relational">—</div></div>
+    <div class="stat-card"><div class="stat-label">Interior Complete</div><div class="stat-val" id="stat-interior">—</div></div>
+    <div class="stat-card"><div class="stat-label">Follow-up Requested</div><div class="stat-val" id="stat-followup">—</div></div>
+  </div>
     <div class="controls">
       <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
       <button class="refresh-btn" onclick="loadData()">↺ Refresh</button>
@@ -885,18 +884,45 @@ function renderTeamMembers(rows){
   let html = '';
   rows.forEach((r,i)=>{
     const name = r[1] || 'Unknown';
-    const rc = pctVal(r[4]), vi = pctVal(r[10]), cc = pctVal(r[16]);
+    const rc = pctVal(r[4]), ri = pctVal(r[5]);
+    const vc = pctVal(r[10]), vi = pctVal(r[11]);
+    const cc = pctVal(r[16]), ci = pctVal(r[17]);
+    const relOut = pctVal(r[6]), relSelf = pctVal(r[8]);
+    const valOut = pctVal(r[12]), valSelf = pctVal(r[14]);
+    const calOut = pctVal(r[18]), calSelf = pctVal(r[20]);
+
     html += '<div class="lt-member-card">';
     html += '<div class="lt-member-name">'+name+'</div>';
     html += '<div class="lt-bar-wrap">';
-    for(const [label, pct, color] of [['Rel',rc,'#D85A30'],['Val',vi,'#185FA5'],['Cal',cc,'#534AB7']]){
-      html += '<div class="lt-bar-row">';
-      html += '<div class="lt-bar-label">'+label+'</div>';
-      html += '<div class="lt-bar-track"><div class="lt-bar-fill" style="width:'+pct+'%;background:'+barColor(pct)+'"></div></div>';
-      html += '<div class="lt-bar-val" style="color:'+barColor(pct)+'">'+pct+'%</div>';
+
+    for(const [label, cur, ideal, col] of [
+      ['Relationships', rc, ri, '#D85A30'],
+      ['Values', vc, vi, '#185FA5'],
+      ['Calling', cc, ci, '#534AB7']
+    ]){
+      html += '<div class="lt-bar-row" style="margin-bottom:3px">';
+      html += '<div class="lt-bar-label" style="width:100px">'+label+'</div>';
+      html += '<div class="lt-bar-track" style="flex:1"><div class="lt-bar-fill" style="width:'+cur+'%;background:'+barColor(cur)+'"></div></div>';
+      html += '<div class="lt-bar-val" style="color:'+barColor(cur)+';width:45px">'+cur+'% <span style="color:#5a5550;font-size:.55rem">→ '+ideal+'%</span></div>';
       html += '</div>';
     }
-    html += '</div></div>';
+
+    // Give/receive summary
+    const avgGive = Math.round((relSelf+valSelf+calSelf)/3);
+    const avgReceive = Math.round((relOut+valOut+calOut)/3);
+    const giveReceiveDiff = avgGive - avgReceive;
+    const grNote = Math.abs(giveReceiveDiff) >= 10
+      ? '<span style="color:'+(giveReceiveDiff>0?'#c4a882':'#8AACCB')+';font-size:.62rem">'+(giveReceiveDiff>0?'Gives more':'Receives more')+'</span>'
+      : '<span style="color:#5a5550;font-size:.62rem">Balanced</span>';
+
+    html += '<div style="margin-top:6px;display:flex;align-items:center;gap:8px">';
+    html += grNote;
+    html += '<span style="color:#3a3530;font-size:.55rem">|</span>';
+    html += '<span style="font-size:.62rem;color:#5a5550">Ideal avg: '+Math.round((ri+vi+ci)/3)+'%</span>';
+    html += '</div>';
+    html += '</div>';
+    html += '<button onclick="viewMemberSummary('+i+')" style="padding:.4rem .9rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:3px;color:#6a6258;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex-shrink:0">View Summary</button>';
+    html += '</div>';
   });
   document.getElementById('lt-member-list').innerHTML = html;
 }
@@ -1115,6 +1141,70 @@ async function generateAllIndividuals(){
 
   btn.disabled = false;
   btn.innerHTML = 'Generate Individual Summaries';
+}
+
+function viewMemberSummary(idx){
+  const r = ltTeamData[idx];
+  const name = r[1] || 'Member '+(idx+1);
+  const scores = {
+    relationships: { current:pctVal(r[4]), ideal:pctVal(r[5]), outwardCurrent:pctVal(r[6]), outwardIdeal:pctVal(r[7]), selfCurrent:pctVal(r[8]), selfIdeal:pctVal(r[9]) },
+    values:        { current:pctVal(r[10]), ideal:pctVal(r[11]), outwardCurrent:pctVal(r[12]), outwardIdeal:pctVal(r[13]), selfCurrent:pctVal(r[14]), selfIdeal:pctVal(r[15]) },
+    calling:       { current:pctVal(r[16]), ideal:pctVal(r[17]), outwardCurrent:pctVal(r[18]), outwardIdeal:pctVal(r[19]), selfCurrent:pctVal(r[20]), selfIdeal:pctVal(r[21]) }
+  };
+
+  function tl(p){ return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'; }
+  function bc(p){ return p>=80?'#C4A055':p>=60?'#B8AA7A':p>=40?'#8AACCB':p>=20?'#5B8DB0':'#3A6D94'; }
+
+  function bRow(label, cur, ideal, outC, selfC){
+    const cc = bc(cur), ic = bc(ideal);
+    const gap = ideal - cur;
+    return '<div style="background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem">'
+      + '<div style="font-size:.88rem;font-weight:500;color:#f0e8df;margin-bottom:.25rem">'+label+'</div>'
+      + '<div style="font-size:.78rem;color:#6a6258;margin-bottom:.85rem">'+(gap>=20?'<span style="color:#c4a882">&#9733; Greatest desire for change</span>':tl(cur)+'</div>')
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.4rem">'
+      + '<div style="width:90px;font-size:.65rem;color:#6a6258">Current</div>'
+      + '<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+cur+'%;height:100%;background:'+cc+'"></div></div>'
+      + '<div style="width:65px;text-align:right;font-size:.65rem;color:'+cc+'">'+tl(cur)+'</div></div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">'
+      + '<div style="width:90px;font-size:.65rem;color:#6a6258">Ideal</div>'
+      + '<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+ideal+'%;height:100%;background:'+ic+';opacity:.45"></div></div>'
+      + '<div style="width:65px;text-align:right;font-size:.65rem;color:'+ic+';opacity:.7">'+tl(ideal)+'</div></div>'
+      + '<div style="border-top:1px solid rgba(232,215,160,.08);padding-top:.65rem">'
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.3rem">'
+      + '<div style="width:90px;font-size:.62rem;color:#5a5550">I receive</div>'
+      + '<div style="flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+outC+'%;height:100%;background:'+bc(outC)+'"></div></div>'
+      + '<div style="width:65px;text-align:right;font-size:.62rem;color:'+bc(outC)+'">'+tl(outC)+'</div></div>'
+      + '<div style="display:flex;align-items:center;gap:.75rem">'
+      + '<div style="width:90px;font-size:.62rem;color:#5a5550">I give</div>'
+      + '<div style="flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+selfC+'%;height:100%;background:'+bc(selfC)+'"></div></div>'
+      + '<div style="width:65px;text-align:right;font-size:.62rem;color:'+bc(selfC)+'">'+tl(selfC)+'</div></div>'
+      + '</div></div>';
+  }
+
+  // Build modal content
+  let html = '<h3 style="font-family:Cormorant Garamond,serif;margin-bottom:.25rem">'+name+'</h3>';
+  html += '<p style="font-size:.78rem;color:#6a6258;margin-bottom:1.5rem">'+r[3]+' &mdash; Individual Assessment Results</p>';
+  html += bRow('Relationships', scores.relationships.current, scores.relationships.ideal, scores.relationships.outwardCurrent, scores.relationships.selfCurrent);
+  html += bRow('Values', scores.values.current, scores.values.ideal, scores.values.outwardCurrent, scores.values.selfCurrent);
+  html += bRow('Calling', scores.calling.current, scores.calling.ideal, scores.calling.outwardCurrent, scores.calling.selfCurrent);
+
+  // Worth Naming
+  const gaps = [
+    {l:'Relationships', gap: scores.relationships.selfCurrent - scores.relationships.outwardCurrent},
+    {l:'Values', gap: scores.values.selfCurrent - scores.values.outwardCurrent},
+    {l:'Calling', gap: scores.calling.selfCurrent - scores.calling.outwardCurrent}
+  ].sort((a,b)=>Math.abs(b.gap)-Math.abs(a.gap))[0];
+
+  if(Math.abs(gaps.gap) >= 15){
+    const dir = gaps.gap > 0 ? 'giving significantly more than receiving' : 'receiving significantly more than giving';
+    html += '<div style="background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem">';
+    html += '<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem">Worth Naming</div>';
+    html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.8;margin:0">In <strong style="color:#f0e8df">'+gaps.l+'</strong>, '+name+' is '+dir+'.</p>';
+    html += '</div>';
+  }
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').style.display = 'flex';
 }
 
 function showIndivReport(idx){
