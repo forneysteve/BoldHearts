@@ -854,7 +854,7 @@ function switchTab(tab){
 
 function barColor(pct){ return pct>=80?'#C4A055':pct>=60?'#B8AA7A':pct>=40?'#8AACCB':pct>=20?'#5B8DB0':'#3A6D94'; }
 function tierLabel(pct){ return pct>=80?'Strong':pct>=60?'Present':pct>=40?'Thin':pct>=20?'Quiet':'Barely There'; }
-function pctVal(str){ if(!str && str!==0) return 0; if(typeof str === 'number') return Math.round(str); return parseInt(String(str).replace('%','')) || 0; }
+function pctVal(str){ if(!str && str!==0) return 0; if(typeof str === 'number') return str > 0 && str <= 1 ? Math.round(str*100) : Math.round(str); return parseInt(String(str).replace('%','')) || 0; }
 
 function avg(arr){ return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0; }
 
@@ -1251,8 +1251,62 @@ function viewMemberSummary(idx){
     html += '</div>';
   }
 
+  // ── Things to Consider (same logic as leadership_team.html) ──
+  const circles = [
+    {label:'Relationships', current:scores.relationships.current, ideal:scores.relationships.ideal},
+    {label:'Values', current:scores.values.current, ideal:scores.values.ideal},
+    {label:'Calling', current:scores.calling.current, ideal:scores.calling.ideal}
+  ];
+
+  function agreePhrase(pct){
+    if(pct>=80) return 'with most of your answers strongly agreeing';
+    if(pct>=60) return 'with your answers leaning toward agreement';
+    if(pct>=40) return 'with your answers closer to the middle';
+    if(pct>=20) return 'with most of your answers leaning toward disagreement';
+    return 'with most of your answers strongly disagreeing';
+  }
+
+  const strongest = [...circles].sort((a,b)=>b.current-a.current)[0];
+  const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.current)-(a.ideal-a.current))[0];
+
+  html += '<div style="background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-top:1rem">';
+  html += '<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.65rem;font-weight:500">Things to Consider</div>';
+  html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin-bottom:.65rem">Your strongest area for <strong style="color:#f0e8df">'+r[3]+'</strong> is <strong style="color:#f0e8df">'+strongest.label+'</strong> — '+agreePhrase(strongest.current)+'. That is worth naming.</p>';
+  if(biggestGap.label !== strongest.label && (biggestGap.ideal - biggestGap.current) >= 15){
+    html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin-bottom:.65rem">Your biggest opportunity is in <strong style="color:#f0e8df">'+biggestGap.label+'</strong> — '+agreePhrase(biggestGap.current)+' on where the team is now, but pointing toward a higher bar on where it should be. That gap is worth exploring.</p>';
+  }
+  html += '<p style="font-size:.85rem;color:#a09890;line-height:1.9;font-style:italic;margin:0">Before the group conversation: what is your read on why those areas scored the way they did?</p>';
+  html += '</div>';
+
+  // ── Worth Naming (give/receive imbalance) ──────────────────
+  const grGaps = [
+    {label:'Relationships', gap: scores.relationships.selfCurrent - scores.relationships.outwardCurrent},
+    {label:'Values', gap: scores.values.selfCurrent - scores.values.outwardCurrent},
+    {label:'Calling', gap: scores.calling.selfCurrent - scores.calling.outwardCurrent}
+  ].sort((a,b)=>Math.abs(b.gap)-Math.abs(a.gap))[0];
+
+  const avgGiveAll = Math.round((scores.relationships.selfCurrent + scores.values.selfCurrent + scores.calling.selfCurrent)/3);
+  const avgRecAll = Math.round((scores.relationships.outwardCurrent + scores.values.outwardCurrent + scores.calling.outwardCurrent)/3);
+  const overallGap = avgGiveAll - avgRecAll;
+
+  html += '<div style="background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-top:.75rem">';
+  html += '<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.65rem;font-weight:500">Worth Naming</div>';
+
+  if(Math.abs(grGaps.gap) >= 15){
+    const dir = grGaps.gap > 0 ? 'giving significantly more than receiving' : 'receiving significantly more than giving';
+    const note = grGaps.gap > 0 ? 'That kind of imbalance can be energizing for a season, but it has a cost over time.' : 'That is worth noticing — it may be worth asking what is keeping you from investing more fully.';
+    html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin:0">In <strong style="color:#f0e8df">'+grGaps.label+'</strong>, you are '+dir+'. '+note+'</p>';
+  } else if(overallGap > 5){
+    html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin:0">Across all three areas, what you give to this team is running slightly ahead of what you receive. That generosity is worth naming — and worth protecting.</p>';
+  } else if(overallGap < -5){
+    html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin:0">Across all three areas, what you receive from this team is running slightly ahead of what you give. That is not a verdict — but it is worth sitting with before the group conversation.</p>';
+  } else {
+    html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin:0">Your give and receive scores are closely matched across all three areas. That kind of balance is genuinely worth noticing — it suggests a real mutuality in how you are experiencing this team.</p>';
+  }
+  html += '</div>';
+
   document.getElementById('modal-body').innerHTML = html;
-  document.getElementById('modal-overlay').style.display = 'flex';
+  document.getElementById('modal-overlay').classList.add('open');
 }
 
 function showIndivReport(idx){
