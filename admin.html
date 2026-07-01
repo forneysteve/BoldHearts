@@ -189,23 +189,24 @@ a{color:#e8d7a0;text-decoration:none}
 
   <div id="tab-leadership" class="tab-panel">
     <div style="padding:1.5rem 2rem 3rem">
-    <div class="lt-search">
-      <input type="text" id="lt-team-input" placeholder="Enter exact team name (e.g. Test Team)" onkeydown="if(event.key==='Enter')loadTeamData()">
-      <button onclick="loadTeamData()">Load Team Data</button>
-    </div>
-    <div id="lt-status" style="font-size:.85rem;color:#6a6258;margin-bottom:1rem"></div>
-    <div id="lt-members" style="display:none">
-      <div id="lt-avg-section"></div>
-      <div id="lt-member-list"></div>
-      <div style="display:flex;gap:.75rem;margin:1.5rem 0;flex-wrap:wrap">
-        <button class="gen-btn" id="btn-team-report" onclick="generateTeamReport()">Generate Team Culture Report</button>
-        <button class="gen-btn secondary" id="btn-indiv-summaries" onclick="generateAllIndividuals()">Generate Individual Summaries</button>
+      <div id="lt-team-list" style="margin-bottom:1.5rem">
+        <div style="font-size:.72rem;color:#6a6258;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem">Teams</div>
+        <div id="lt-team-cards" style="display:flex;flex-wrap:wrap;gap:.5rem">
+          <div style="font-size:.85rem;color:#5a5550">Loading teams...</div>
+        </div>
       </div>
-      <div id="lt-report-area"></div>
+      <div id="lt-status" style="font-size:.85rem;color:#6a6258;margin-bottom:1rem"></div>
+      <div id="lt-members" style="display:none">
+        <div id="lt-avg-section"></div>
+        <div id="lt-member-list"></div>
+        <div style="display:flex;gap:.75rem;margin:1.5rem 0;flex-wrap:wrap">
+          <button class="gen-btn" id="btn-team-report" onclick="generateTeamReport()">Generate Team Culture Report</button>
+          <button class="gen-btn secondary" id="btn-indiv-summaries" onclick="generateAllIndividuals()">Generate Individual Summaries</button>
+        </div>
+        <div id="lt-report-area"></div>
+      </div>
     </div>
   </div>
-
-</div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modal-content">
@@ -799,6 +800,48 @@ async function loadData(){
 // ── LEADERSHIP TEAM ──────────────────────────────────────────
 
 const LT_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
+
+function loadAllTeams(){
+  const cbName = '_lt_teams_' + Date.now();
+  const script = document.createElement('script');
+  const timeout = setTimeout(()=>{
+    document.getElementById('lt-team-cards').innerHTML = '<div style="font-size:.85rem;color:#c97a5a">Could not load teams. Check Apps Script deployment.</div>';
+    try{ delete window[cbName]; script.remove(); }catch(e){}
+  }, 12000);
+
+  window[cbName] = (data) => {
+    clearTimeout(timeout);
+    try{ delete window[cbName]; script.remove(); }catch(e){}
+
+    if(!data.rows || data.rows.length === 0){
+      document.getElementById('lt-team-cards').innerHTML = '<div style="font-size:.85rem;color:#5a5550">No team submissions yet.</div>';
+      return;
+    }
+
+    // Group by team name
+    const teams = {};
+    data.rows.forEach(r=>{
+      const team = r[3];
+      if(!team) return;
+      if(!teams[team]) teams[team] = 0;
+      teams[team]++;
+    });
+
+    const sorted = Object.entries(teams).sort((a,b)=>b[1]-a[1]);
+
+    let html = '';
+    sorted.forEach(([team, count])=>{
+      html += '<button class="lt-team-card" data-team="'+team+'" onclick="loadTeamData(\''+team.replace(/'/g,"\\'")+'\')';
+      html += '" style="padding:.6rem 1.25rem;background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#a09890;font-size:.82rem;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s">';
+      html += '<strong style="color:#f0e8df">'+team+'</strong> <span style="color:#5a5550;font-size:.72rem;margin-left:4px">'+count+' assessment'+(count>1?'s':'')+'</span>';
+      html += '</button>';
+    });
+    document.getElementById('lt-team-cards').innerHTML = html;
+  };
+
+  script.src = LT_SHEETS_URL + '?action=getteamdata&callback=' + cbName;
+  document.head.appendChild(script);
+}
 let ltTeamData = [];
 
 function switchTab(tab){
@@ -806,6 +849,7 @@ function switchTab(tab){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   document.getElementById('tab-btn-'+tab).classList.add('active');
+  if(tab === 'leadership') loadAllTeams();
 }
 
 function barColor(pct){ return pct>=80?'#C4A055':pct>=60?'#B8AA7A':pct>=40?'#8AACCB':pct>=20?'#5B8DB0':'#3A6D94'; }
@@ -814,9 +858,13 @@ function pctVal(str){ if(!str && str!==0) return 0; if(typeof str === 'number') 
 
 function avg(arr){ return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0; }
 
-function loadTeamData(){
-  const team = document.getElementById('lt-team-input').value.trim();
-  if(!team){ document.getElementById('lt-status').textContent = 'Please enter a team name.'; return; }
+function loadTeamData(team){
+  if(!team){ return; }
+  // Highlight selected team card
+  document.querySelectorAll('.lt-team-card').forEach(el=>{
+    el.style.borderColor = el.dataset.team === team ? '#e8d7a0' : 'rgba(232,215,160,.15)';
+    el.style.color = el.dataset.team === team ? '#e8d7a0' : '#a09890';
+  });
   document.getElementById('lt-status').textContent = 'Loading...';
   document.getElementById('lt-members').style.display = 'none';
   document.getElementById('lt-report-area').innerHTML = '';
