@@ -140,7 +140,7 @@ a{color:#e8d7a0;text-decoration:none}
 
 <div class="dashboard" id="dashboard">
   <div class="topbar">
-    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span> <span style="font-size:.65rem;color:#3a3530;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;margin-left:.75rem">v1.8</span></div>
+    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span> <span style="font-size:.65rem;color:#3a3530;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;margin-left:.75rem">v2.0</span></div>
     <div class="topbar-right">
       <span class="topbar-label" id="last-updated"></span>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
@@ -853,7 +853,7 @@ function switchTab(tab){
 }
 
 function barColor(pct){ return pct>=80?'#C4A055':pct>=60?'#B8AA7A':pct>=40?'#8AACCB':pct>=20?'#5B8DB0':'#3A6D94'; }
-function tierLabel(pct){ return pct>=80?'Strong':pct>=60?'Present':pct>=40?'Thin':pct>=20?'Quiet':'Barely There'; }
+function tierLabel(pct){ return pct>=80?'Thriving':pct>=60?'Healthy':pct>=40?'Developing':pct>=20?'Struggling':'Critical'; }
 function pctVal(str){ if(!str && str!==0) return 0; if(typeof str === 'number') return str > 0 && str <= 1 ? Math.round(str*100) : Math.round(str); return parseInt(String(str).replace('%','')) || 0; }
 
 function avg(arr){ return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0; }
@@ -910,6 +910,10 @@ function renderTeamMembers(rows){
   // Team average bar
   let avgHtml = '<div class="lt-avg-row">';
   avgHtml += '<div class="lt-avg-label">Team Average</div>';
+  avgHtml += '<div style="display:flex;gap:1rem;font-size:.62rem;color:#5a5550;margin-bottom:.5rem;padding-left:0">';
+  avgHtml += '<span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:16px;height:3px;background:#a09890;border-radius:1px"></span>Current</span>';
+  avgHtml += '<span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:16px;height:3px;background:repeating-linear-gradient(90deg,#a09890 0px,#a09890 3px,transparent 3px,transparent 6px)"></span>Ideal</span>';
+  avgHtml += '</div>';
   avgHtml += '<div class="lt-bar-wrap">';
   for(const [label, cur, ideal, col] of [
     ['Relationships', relCur, relIdeal, '#D85A30'],
@@ -948,25 +952,26 @@ function renderTeamMembers(rows){
       ['Values', vc, vi, '#185FA5'],
       ['Calling', cc, ci, '#534AB7']
     ]){
-      html += '<div class="lt-bar-row" style="margin-bottom:3px">';
-      html += '<div class="lt-bar-label" style="width:100px">'+label+'</div>';
-      html += '<div class="lt-bar-track" style="flex:1"><div class="lt-bar-fill" style="width:'+cur+'%;background:'+barColor(cur)+'"></div></div>';
-      html += '<div class="lt-bar-val" style="color:'+barColor(cur)+';width:45px">'+cur+'% <span style="color:#5a5550;font-size:.55rem">→ '+ideal+'%</span></div>';
+      html += '<div class="lt-bar-row" style="margin-bottom:5px;align-items:flex-start">';
+      html += '<div style="width:110px;flex-shrink:0">';
+      html += '<div style="font-size:.65rem;color:#6a6258;margin-bottom:2px">'+label+'</div>';
+      html += '<div style="font-size:.7rem;color:'+barColor(cur)+';font-weight:500">'+cur+'% <span style="color:#3a3530;font-weight:300">/ '+ideal+'%</span></div>';
+      html += '</div>';
+      html += '<div style="flex:1;display:flex;flex-direction:column;gap:2px;padding-top:2px">';
+      html += '<div style="width:100%;height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+cur+'%;height:100%;background:'+barColor(cur)+';border-radius:2px"></div></div>';
+      html += '<div style="width:100%;height:5px;background:rgba(255,255,255,.03);border-radius:2px;overflow:hidden"><div style="width:'+ideal+'%;height:100%;background:repeating-linear-gradient(90deg,'+barColor(ideal)+'88 0px,'+barColor(ideal)+'88 4px,transparent 4px,transparent 8px)"></div></div>';
+      html += '</div>';
       html += '</div>';
     }
 
-    // Give/receive summary
+    // Give/receive note — compact
     const avgGive = Math.round((relSelf+valSelf+calSelf)/3);
     const avgReceive = Math.round((relOut+valOut+calOut)/3);
     const giveReceiveDiff = avgGive - avgReceive;
-    const grNote = Math.abs(giveReceiveDiff) >= 10
-      ? '<span style="color:'+(giveReceiveDiff>0?'#c4a882':'#8AACCB')+';font-size:.62rem">'+(giveReceiveDiff>0?'Gives more':'Receives more')+'</span>'
-      : '<span style="color:#5a5550;font-size:.62rem">Balanced</span>';
-
-    html += '<div style="margin-top:6px;display:flex;align-items:center;gap:8px">';
-    html += grNote;
-    html += '<span style="color:#3a3530;font-size:.55rem">|</span>';
-    html += '<span style="font-size:.62rem;color:#5a5550">Ideal avg: '+Math.round((ri+vi+ci)/3)+'%</span>';
+    html += '<div style="margin-top:5px;font-size:.62rem;color:#5a5550">';
+    html += Math.abs(giveReceiveDiff) >= 10
+      ? (giveReceiveDiff>0?'<span style="color:#c4a882">Gives more</span>':'<span style="color:#8AACCB">Receives more</span>')
+      : 'Balanced';
     html += '</div>';
     html += '</div>';
     html += '<button onclick="viewMemberSummary('+i+')" style="padding:.4rem .9rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:3px;color:#6a6258;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex-shrink:0">View Summary</button>';
@@ -1200,7 +1205,7 @@ function viewMemberSummary(idx){
     calling:       { current:pctVal(r[16]), ideal:pctVal(r[17]), outwardCurrent:pctVal(r[18]), outwardIdeal:pctVal(r[19]), selfCurrent:pctVal(r[20]), selfIdeal:pctVal(r[21]) }
   };
 
-  function tl(p){ return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'; }
+  function tl(p){ return p>=80?'Thriving':p>=60?'Healthy':p>=40?'Developing':p>=20?'Struggling':'Critical'; }
   function bc(p){ return p>=80?'#C4A055':p>=60?'#B8AA7A':p>=40?'#8AACCB':p>=20?'#5B8DB0':'#3A6D94'; }
 
   function bRow(label, cur, ideal, outC, selfC){
