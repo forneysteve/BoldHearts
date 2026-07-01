@@ -811,7 +811,7 @@ function switchTab(tab){
 
 function barColor(pct){ return pct>=80?'#C4A055':pct>=60?'#B8AA7A':pct>=40?'#8AACCB':pct>=20?'#5B8DB0':'#3A6D94'; }
 function tierLabel(pct){ return pct>=80?'Strong':pct>=60?'Present':pct>=40?'Thin':pct>=20?'Quiet':'Barely There'; }
-function pctVal(str){ return str ? parseInt(str.replace('%','')) : 0; }
+function pctVal(str){ if(!str && str!==0) return 0; if(typeof str === 'number') return Math.round(str); return parseInt(String(str).replace('%','')) || 0; }
 
 function avg(arr){ return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0; }
 
