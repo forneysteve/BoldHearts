@@ -1,863 +1,667 @@
 
+<!--
+  BoldHearts Leadership Team Culture Assessment
+  Version: v2.8
+  Last updated: 2026-06-30
+
+  CHANGELOG:
+  v1.0 — Initial build
+    - 3 circles: Relationships, Values, Calling
+    - Each circle: 4 Receiving + 4 Giving questions (8 per circle, 24 total)
+    - Each question rated twice: Current state + Ideal state (48 total ratings)
+    - Slider UI matching relational.html / interior.html (hash marks, no numbers)
+    - Test mode via ?test=true
+    - Submits to Google Apps Script (action=leadershipteam) -> "LeadershipTeam" tab
+
+  v1.1 — Flow restructure
+    - Name/email/team gate now collected UP FRONT, before the survey begins
+      (prevents typo'd team names from splitting aggregated data later, and
+      means we know who's mid-assessment)
+    - After submission, person now sees THEIR OWN individual results page:
+      personal Venn position, personal radar chart, give/receive bars,
+      and an auto-generated reflection paragraph based on their specific
+      give/receive pattern and biggest current-vs-ideal gap
+    - Results page explicitly labeled "Your View" with framing that the
+      full team comparison comes later in the facilitated debrief
+    - Old "thank you only" screen removed in favor of this richer single-
+      person reveal
+
+  v1.2 — Test mode fix
+    - Added ?test=write mode: auto-fills randomized answers AND submits
+      to the Google Sheet (for verifying the Apps Script connection
+      without manually moving 64 sliders)
+    - ?test=true continues to preview results WITHOUT writing to sheet
+    - Both test modes now correctly skip the intro gate and survey
+      entirely, jumping straight to finalizeSubmission()
+
+  v1.3 — Sheet write reliability fix
+    - Replaced fetch(...,{mode:'no-cors'}) with new Image().src beacon
+      for the sheet submission call. Direct curl/browser test of the
+      Apps Script URL confirmed the script itself works correctly
+      ({"status":"ok"}), but the page's fetch() call was not reliably
+      reaching it (likely blocked by browser/extension no-cors handling).
+      Image beacon pattern matches what other BoldHearts assessment
+      pages already use for fire-and-forget submissions.
+
+  v1.4 — Raw answer capture
+    - Previously only calculated scores (current/ideal % per circle)
+      were saved. Now all 48 raw individual answers (24 questions x
+      2 ratings) are also submitted, matching the pattern used by
+      relational.html / interior.html.
+
+  v1.5 — Results page redesign
+    - Replaced Venn diagram + radar chart with 3 clean bar pairs
+      (one per circle: Relationships, Values, Calling), each showing
+      current and ideal side by side with tier labels (Strong/Present/
+      Thin/Quiet/Barely There) and cool-to-warm color system
+    - Added dynamic "Worth Sitting With" reflection paragraph
+      generated from actual scores: names strongest circle with
+      agreePhrase language, names biggest current-vs-ideal gap circle
+    - Removed Venn, radar, give/receive bars, buildReflection function,
+      starPath, computeVennPos -- all replaced by simpler barPair format
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<title>Leadership Health Assessment | BoldHearts</title>
+<title>Leadership Team Culture Assessment | BoldHearts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{font-size:15px}
-body{font-family:'Inter',sans-serif;font-weight:300;background:#0d0c0b;color:#d4ccc4;min-height:100vh}
-
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(13,12,11,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.08);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#f0e8df;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
-.logo span{color:#e8d7a0}
-.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-.nav-toggle span{width:22px;height:2px;background:#d4ccc4;border-radius:2px;transition:all .3s}
-.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
-.nav-links a{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#a09890;text-decoration:none;transition:color .2s}
-.nav-links a:hover,.nav-links a.active{color:#e8d7a0}
-.cta-nav{background:rgba(232,215,160,.1);border:1px solid rgba(232,215,160,.2);border-radius:3px;padding:.35rem .9rem !important;color:#e8d7a0 !important}
-.nav-dropdown{position:relative}
-.nav-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;z-index:1001;backdrop-filter:blur(12px)}
-.nav-dropdown>a{padding-bottom:12px;margin-bottom:-12px}
-.nav-dropdown:hover .dropdown-menu,.nav-dropdown.open .dropdown-menu{display:block}
-.dropdown-menu li a{display:block;padding:.65rem 1.25rem;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a09890;white-space:nowrap;transition:color .2s,background .2s}
-.dropdown-menu li a:hover{color:#e8d7a0;background:rgba(232,215,160,.05)}
-.dropdown-menu li+li{border-top:1px solid rgba(232,215,160,.08)}
-.nav-dropdown>a::after{content:' ▾';font-size:.6rem;opacity:.6}
-
-/* HERO */
-.hero{padding:5rem 2rem 3.5rem;text-align:center;max-width:780px;margin:0 auto}
-.hero-tagline{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.2rem);font-weight:700;color:#f0e8df;line-height:1.15;margin-bottom:1.25rem}
-.hero p{font-size:1rem;color:#a09890;line-height:1.85;max-width:580px;margin:0 auto 1.75rem}
-.hero-meta{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
-.hero-meta span{font-size:.75rem;color:#6a6258;display:flex;align-items:center;gap:.4rem}
-.hero-meta i{color:#c4a882;font-size:.9rem}
-
-/* PROGRESS */
-.progress-wrap{position:sticky;top:57px;z-index:90;background:rgba(13,12,11,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(232,215,160,.06);padding:.6rem 2rem}
-.progress-row{display:flex;align-items:center;gap:1rem;max-width:860px;margin:0 auto}
-.progress-bar-bg{flex:1;height:3px;background:rgba(232,215,160,.1);border-radius:2px;overflow:hidden}
-.progress-bar-fill{height:100%;background:linear-gradient(90deg,#c4a882,#e8d7a0);border-radius:2px;transition:width .4s ease}
-.progress-label{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:#5a5550;white-space:nowrap;min-width:120px;text-align:right}
-
-/* GATE */
-.gate-wrap{max-width:520px;margin:0 auto;padding:3rem 2rem 5rem;text-align:center}
-.gate-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#f0e8df;margin-bottom:.5rem}
-.gate-sub{font-size:.88rem;color:#7a7068;line-height:1.8;margin-bottom:2rem}
-.gate-field{margin-bottom:1rem}
-.gate-field input{width:100%;padding:.85rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.12);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
-.gate-field input:focus{border-color:rgba(232,215,160,.3)}
-.gate-field input::placeholder{color:#4a4540}
-.gate-btn{width:100%;padding:.9rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
-.gate-btn:hover{background:#f5e8c8}
-.gate-err{font-size:.8rem;color:#c97a5a;margin-top:.75rem;min-height:18px}
-
-/* DIMENSION BLOCKS */
-.dim-block{max-width:860px;margin:0 auto 2rem;padding:0 1.5rem}
-.dim-hdr{background:#161412;border:1px solid rgba(232,215,160,.08);border-radius:6px 6px 0 0;padding:1.5rem 1.75rem;display:flex;align-items:center;gap:1rem}
-.dim-icon{width:44px;height:44px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(232,215,160,.06);color:#e8d7a0}
-.dim-info{flex:1}
-.dim-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:.25rem}
-.dim-name{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;color:#f0e8df;line-height:1.2}
-.dim-desc{font-size:.82rem;color:#6a6258;margin-top:.25rem;line-height:1.6}
-.dim-badge{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .75rem;border-radius:3px;white-space:nowrap;flex-shrink:0}
-.badge-team{background:rgba(100,150,200,.1);color:#7aaac8;border:1px solid rgba(100,150,200,.2)}
-.badge-work{background:rgba(196,168,130,.1);color:#c4a882;border:1px solid rgba(196,168,130,.2)}
-
-/* AXIS LABELS */
-.axis-header{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(232,215,160,.06);border-left:1px solid rgba(232,215,160,.08);border-right:1px solid rgba(232,215,160,.08)}
-.axis-label{padding:.6rem 1.25rem;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;text-align:center}
-.axis-team{color:#7aaac8;background:rgba(100,150,200,.04)}
-.axis-work{color:#c4a882;background:rgba(196,168,130,.04)}
-
-/* QUESTION BLOCKS */
-.qblock{background:#1a1816;border:1px solid rgba(232,215,160,.06);border-top:none;padding:1.25rem 1.75rem;display:grid;grid-template-columns:1fr 1px 1fr;gap:1.5rem;min-width:0}
-.qblock:last-child{border-radius:0 0 6px 6px}
-.q-cell{display:flex;flex-direction:column;gap:.75rem}
-.q-text{font-size:.86rem;color:#c8c0b8;line-height:1.75;min-height:48px}
-.q-text.self-q{font-style:italic;color:#a09890}
-.scale-row{display:flex;gap:4px;align-items:center}
-.scale-btn{flex:1;height:32px;background:rgba(255,255,255,.04);border:1px solid rgba(232,215,160,.1);border-radius:3px;cursor:pointer;font-size:.72rem;color:#5a5550;transition:all .15s;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
-.scale-btn:hover{background:rgba(232,215,160,.08);color:#d4ccc4;border-color:rgba(232,215,160,.2)}
-.scale-btn.sel-team{background:rgba(100,150,200,.2);border-color:#7aaac8;color:#b0d4e8}
-.scale-btn.sel-work{background:rgba(196,168,130,.2);border-color:#c4a882;color:#e8d7a0}
-.scale-ends{display:flex;justify-content:space-between;font-size:.62rem;color:#4a4540;letter-spacing:.04em;margin-top:2px;padding:0 2px}
-.q-divider{width:1px;background:rgba(232,215,160,.06);align-self:stretch}
-
-/* AXIS SEPARATOR LINE */
-.dim-separator{height:1px;background:rgba(232,215,160,.06);margin:0 1.75rem}
-
-/* SUBMIT SECTION */
-.submit-wrap{max-width:860px;margin:0 auto;padding:0 1.5rem 5rem}
-.submit-card{background:#161412;border:1px solid rgba(232,215,160,.1);border-radius:6px;padding:2.5rem;text-align:center}
-.submit-card h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#f0e8df;margin-bottom:.5rem}
-.submit-card p{font-size:.88rem;color:#7a7068;line-height:1.8;margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
-.submit-btn{padding:.95rem 2.5rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
-.submit-btn:hover{background:#f5e8c8}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed}
-.submit-note{font-size:.75rem;color:#4a4540;margin-top:.75rem}
-
-/* RESULTS */
-.results-wrap{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
-.results-header{text-align:center;padding:2rem 0 3rem;border-bottom:1px solid rgba(232,215,160,.08);margin-bottom:3rem}
-.results-name{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:#f0e8df;margin-bottom:.35rem}
-.results-sub{font-size:.8rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase}
-.results-overall{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2rem 0}
-.overall-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.5rem;text-align:center}
-.overall-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
-.overall-label.team-label{color:#7aaac8}
-.overall-label.work-label{color:#c4a882}
-.overall-score{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700}
-.overall-tag{font-size:.75rem;margin-top:.3rem}
-.score-h{color:#7aad6a}
-.score-m{color:#c4a882}
-.score-l{color:#c97a5a}
-
-/* DIM RESULTS */
-.dim-results{margin-bottom:3rem}
-.dim-result-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#f0e8df;margin-bottom:1rem}
-.bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem}
-.bar-row-label{font-size:.72rem;color:#7a7068;width:120px;flex-shrink:0;text-align:right}
-.bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
-.bar-fill-team{height:100%;background:#7aaac8;border-radius:4px;transition:width 1s ease}
-.bar-fill-work{height:100%;background:#c4a882;border-radius:4px;transition:width 1s ease}
-.bar-pct{font-size:.72rem;font-weight:500;width:36px;text-align:right;flex-shrink:0}
-.gap-note{font-size:.72rem;color:#5a5550;font-style:italic;margin-left:128px;margin-bottom:.75rem}
-.gap-flag{color:#c97a5a}
-.gap-good{color:#7aad6a}
-
-/* PATTERN RESULTS */
-.pattern-section{margin-top:2rem}
-.pattern-card{border-left:3px solid #c4a882;padding:1.25rem 1.5rem;margin-bottom:1rem;background:#1a1816;border-radius:0 4px 4px 0}
-.pattern-card.flag{border-left-color:#c97a5a;background:rgba(201,122,90,.05)}
-.pattern-card.strong{border-left-color:#7aad6a;background:rgba(122,173,106,.05)}
-.pattern-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#f0e8df;margin-bottom:.3rem}
-.pattern-body{font-size:.83rem;color:#9a9088;line-height:1.8}
-
-/* DEEPDIVE */
-.deepdive-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:6px;padding:2.5rem;margin-top:2rem;text-align:center}
-.deepdive-card h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#f0e8df;margin-bottom:.5rem}
-.deepdive-card p{font-size:.9rem;color:#8a8078;line-height:1.85;max-width:500px;margin:0 auto 1.5rem}
-.deepdive-btn{display:inline-block;background:#c4a882;color:#111;font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2rem;border-radius:4px;text-decoration:none;cursor:pointer;border:none;font-family:'Inter',sans-serif}
-.deepdive-btn:hover{background:#d4b892}
-
-/* DIVIDER */
-.divider{max-width:860px;margin:0 auto 0;padding:0 1.5rem}
-.divider-line{height:1px;background:rgba(232,215,160,.08)}
-
-/* FOOTER */
-footer{background:#0a0908;border-top:1px solid rgba(232,215,160,.06);padding:2.5rem 2rem;text-align:center}
-footer p{color:#3a3530;font-size:.78rem;letter-spacing:.04em;margin-bottom:.3rem;max-width:none}
-footer a{color:#4a4540}
-footer a:hover{color:#e8d7a0}
-
-@media(max-width:600px){
-  .nav-toggle{display:flex}
-  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(13,12,11,.98);border-top:1px solid rgba(232,215,160,.08);flex-direction:column;gap:0;padding:.5rem 0}
-  .nav-links.open{display:flex}
-  .nav-links li{border-bottom:1px solid rgba(232,215,160,.06)}
-  .nav-links a{display:block;padding:.9rem 1.5rem}
-  .nav-dropdown .dropdown-menu{position:static;transform:none;box-shadow:none;border:none;background:rgba(232,215,160,.03);padding:.25rem 0 .25rem 1rem;display:none}
-  .nav-dropdown.open .dropdown-menu{display:block}
-  .qblock{grid-template-columns:1fr;gap:1rem}.q-divider{display:none}
-  .axis-header{grid-template-columns:1fr}
-  .q-divider{display:none}
-  .results-overall{grid-template-columns:1fr}
-  .bar-row-label{width:90px;font-size:.65rem}
-  .gap-note{margin-left:98px}
-  .progress-wrap{top:53px}
-}
-@media(max-width:480px){
-  .hero{padding:3rem 1.25rem 2rem}
-  .dim-block{padding:0 1rem}
-  .submit-wrap{padding:0 1rem 4rem}
-  .results-wrap{padding:1.5rem 1rem 4rem}
-  .dim-hdr{padding:1.25rem}
-  .qblock{padding:1rem 1.25rem}
-  .bar-row-label{width:70px;font-size:.6rem}
-  .gap-note{margin-left:78px}
-}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#d4ccc4;background-color:#111111}
+a{color:#e8d7a0;text-decoration:none}
+ul{list-style:none}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f0e8df;line-height:1.2}
+h1{font-size:clamp(2.2rem,5vw,3.5rem)}
+h2{font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:1.5rem}
+p{margin-bottom:1rem;max-width:720px}
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.25rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(17,17,17,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,215,160,.1)}
+nav .logo{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4rem;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase}
+nav .logo span{color:#e8d7a0}
+.hero{position:relative;width:100%;min-height:35vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 3rem;background-color:#1a1714}
+.hero-content{max-width:800px;margin:0 auto}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#e8d7a0;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.progress-wrap{background:rgba(17,17,17,.95);border-bottom:1px solid rgba(232,215,160,.1);padding:.75rem 2rem;position:sticky;top:73px;z-index:99;backdrop-filter:blur(8px)}
+.progress-row{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:1.25rem}
+.progress-bar-bg{flex:1;height:2px;background:rgba(232,215,160,.15);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;background:#e8d7a0;border-radius:2px;transition:width .3s ease}
+.progress-label{font-size:.75rem;color:#6a6258;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
+.main{max-width:860px;margin:0 auto;padding:3rem 2rem 5rem}
+.realm-hdr{display:flex;align-items:flex-start;gap:1.25rem;margin:3rem 0 1.25rem;padding:1.5rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.15);border-radius:4px}
+.realm-hdr:first-child{margin-top:1rem}
+.realm-icon{width:46px;height:46px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(232,215,160,.08)}
+.realm-hdr-text h2{font-size:1.5rem;margin-bottom:3px;color:#f0e8df}
+.realm-hdr-text p{font-size:.9rem;color:#6a6258;line-height:1.6;margin:0;max-width:none}
+.subgroup-label{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin:1.5rem 0 .5rem;padding-left:.25rem}
+.qblock{background:#1a1816;border:1px solid rgba(232,215,160,.08);border-radius:6px;padding:1.5rem;margin-bottom:.75rem;transition:border-color .2s}
+.qblock.answered{border-color:rgba(232,215,160,.25)}
+.qnum{font-size:.65rem;color:#5a5550;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+.qlabel{font-size:.92rem;color:#d4ccc4;line-height:1.7;margin-bottom:1.25rem}
+.rating-row{margin-bottom:1.25rem}
+.rating-row:last-child{margin-bottom:0}
+.rating-label{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem}
+.scale-endlabels{display:flex;justify-content:space-between;margin-bottom:4px}
+.scale-endlabel{font-size:.6rem;color:#5a5550;letter-spacing:.04em;text-transform:uppercase}
+.slider-area input[type=range]{width:100%;height:3px;-webkit-appearance:none;appearance:none;background:rgba(232,215,160,.15);border-radius:2px;outline:none;cursor:pointer}
+.slider-area input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid #f0e8df;transition:transform .15s}
+.cur-thumb::-webkit-slider-thumb{background:#1D9E75}
+.ideal-thumb::-webkit-slider-thumb{background:#854F0B}
+.hash-row{display:flex;justify-content:space-between;padding:0 1px;margin-top:5px}
+.hash-mark{width:1px;height:6px;background:rgba(232,215,160,.3)}
+.submit-section{margin-top:3rem;text-align:center;padding:3rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.12);border-radius:4px}
+.submit-meta{font-size:.85rem;color:#6a6258;margin-bottom:1.5rem}
+.sub-btn{display:inline-block;font-family:'Inter',sans-serif;font-weight:500;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#111111;background-color:#e8d7a0;padding:1rem 2.5rem;border-radius:4px;border:2px solid #e8d7a0;cursor:pointer}
+.errmsg{font-size:.85rem;color:#c97a5a;margin-top:12px;min-height:18px}
+.gate-wrap{max-width:860px;margin:0 auto;padding:5rem 2rem;min-height:60vh;display:flex;align-items:center;justify-content:center}
+.gate-card{background:#1e1c1a;border:1px solid rgba(232,215,160,.15);border-radius:4px;padding:3rem;max-width:500px;width:100%;text-align:center}
+.gate-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1.25rem;text-align:left}
+.gate-field label{font-size:.75rem;color:#6a6258;text-transform:uppercase;letter-spacing:.08em}
+.gate-field input{width:100%;padding:.9rem 1rem;background:#111111;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.95rem}
+.gate-btn{width:100%;padding:1rem;background-color:#e8d7a0;color:#111111;border:2px solid #e8d7a0;border-radius:4px;font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.5rem}
+.results-page{animation:fadeUp .4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#6a6258;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:.5rem;border-bottom:1px solid rgba(232,215,160,.1)}
+.legend-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:1rem;font-size:.8rem;color:#a09890}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:6px}
+.retake-btn{display:block;margin:2rem auto 0;padding:.75rem 2rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:4px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;cursor:pointer}
+.bar-row{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)}
+.bar-label{width:150px;flex-shrink:0;font-size:.8rem;color:#c0b8b0}
+.bar-track{flex:1;position:relative;height:12px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}
+.bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:3px}
+.bar-pct{width:36px;text-align:right;font-size:.75rem;font-weight:500}
+.reflection-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:2rem;margin-top:1.5rem}
+.reflection-eyebrow{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.85rem;font-weight:500}
+footer{background-color:#0d0d0d;text-align:center;padding:2.5rem 2rem;border-top:1px solid rgba(232,215,160,.08)}
+footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,215,160,.15),transparent)}
+@media(max-width:768px){.hero{padding:5rem 1.5rem 2rem}.main{padding:2rem 1.25rem 4rem}.gate-wrap{padding:3rem 1.25rem}}
 </style>
 </head>
 <body>
-
-<nav>
-  <a href="https://forneysteve.github.io/BoldHearts/index.html" class="logo">Bold<span>Hearts</span></a>
-  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
-    <span></span><span></span><span></span>
-  </button>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="https://forneysteve.github.io/BoldHearts/index.html">Home</a></li>
-    <li><a href="https://forneysteve.github.io/BoldHearts/services.html">Services</a></li>
-    <li><a href="https://forneysteve.github.io/BoldHearts/about.html">About</a></li>
-    <li><a href="https://forneysteve.github.io/BoldHearts/testimonials.html">Stories</a></li>
-    <li class="nav-dropdown"><a href="#">Resources</a>
-      <ul class="dropdown-menu">
-        <li><a href="relational.html">Relational Health Assessment</a></li>
-        <li><a href="interior.html">Interior Health Assessment</a></li>
-        <li><a href="leadership.html">Leadership Health Assessment</a></li>
-      </ul>
-    </li>
-    <li><a href="https://forneysteve.github.io/BoldHearts/contact.html" class="cta-nav">Schedule Now</a></li>
-  </ul>
-</nav>
-
-<section class="hero">
-  <div class="hero-tagline">Leadership Health Assessment</div>
-  <h1>How healthy is the culture you lead from?</h1>
-  <p>Two axes. One honest picture. This assessment looks at how you experience your team culture — and how you experience the work itself. The gap between the two is often where the most important conversations live.</p>
-  <div class="hero-meta">
-    <span><i class="ti ti-clock"></i> About 12 minutes</span>
-    <span><i class="ti ti-lock"></i> Anonymous &amp; confidential</span>
-    <span><i class="ti ti-checklist"></i> 60 questions</span>
+<nav><a href="index.html" class="logo">Bold<span>Hearts</span></a></nav>
+<section class="hero" id="hero-section">
+  <div class="hero-content">
+    <div class="hero-tagline">Leadership Team Culture Assessment</div>
+    <h1>How healthy is your leadership team?</h1>
   </div>
 </section>
-
-<div class="divider"><div class="divider-line"></div></div>
+<div class="divider" id="top-divider"></div>
 <div class="progress-wrap" id="progress-section" style="display:none">
   <div class="progress-row">
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-lbl">0 of 60 answered</div>
+    <div class="progress-label" id="progress-lbl">0 of 48 answered</div>
   </div>
 </div>
-
-<!-- GATE -->
-<div id="gate-section">
-  <div class="gate-wrap">
-    <div class="gate-title">Before you begin</div>
-    <div class="gate-sub">This assessment is anonymous. Your name is used only to personalize your results — it will not be connected to your scores in any team report.</div>
-    <div class="gate-field"><input type="text" id="gate-name" placeholder="Your first name" autocomplete="off"></div>
-    <div class="gate-field"><input type="email" id="gate-email" placeholder="Your email address (for your results)" autocomplete="off"></div>
-    <div class="gate-field"><input type="text" id="gate-org" placeholder="Organization or team name" autocomplete="off"></div>
-    <button class="gate-btn" onclick="startAssessment()">Begin Assessment</button>
-    <div class="gate-err" id="gate-err"></div>
-  </div>
-</div>
-
-<div id="app" style="display:none"></div>
-
-<div id="submit-section" style="display:none">
-  <div class="submit-wrap">
-    <div class="submit-card">
-      <h3>You&rsquo;re done.</h3>
-      <p>Take a moment before you submit. These answers are honest — and honest answers are the only kind worth looking at.</p>
-      <button class="submit-btn" id="submit-btn" onclick="submitAssessment()">Submit &amp; See My Results</button>
-      <div class="submit-note">Results will also be sent to your email.</div>
-    </div>
-  </div>
-</div>
-
-<div id="results-section" style="display:none"></div>
-
-<div class="divider"><div class="divider-line"></div></div>
+<div id="app"></div>
+<div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved</p>
-  <p style="font-size:.7rem;color:#3a3530;margin-top:.3rem;max-width:none">This assessment and its results are the exclusive intellectual property of The BoldHearts Group LLC and are prepared solely for the individual respondent. They may not be reproduced, distributed, or used in any form without express written authorization. Unauthorized use is strictly prohibited.</p>
-  <p style="margin-top:.4rem"><a href="index.html">Home</a> &nbsp;|&nbsp; <a href="contact.html">Schedule Now</a></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v2.8</span></p>
 </footer>
-
 <script>
-const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lmbf';
-const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
-const SCALE=[1,2,3,4,5,6,7];
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
 
-// ── DIMENSIONS ────────────────────────────────────────────────────────────────
-// Each dimension has:
-//   team: question asking about the TEAM/CULTURE experience
-//   work: question asking about the WORK ITSELF experience
-const DIMS = [
-  {
-    id:'seen', icon:'ti-eye', color:'#7aaac8',
-    name:'Being Seen',
-    desc:'Do people notice you as a person — beyond your role and output?',
-    team:{
-      label:'Team Culture',
-      q:'The people on my team notice when something is personally off with me — not just when my work is affected.',
-      hint:'How your team sees you'
-    },
-    work:{
-      label:'The Work',
-      q:'The work I do requires the real me — my perspective, my creativity, my particular way of thinking.',
-      hint:'How the work sees you'
-    }
-  },
-  {
-    id:'known', icon:'ti-user-heart', color:'#c97a5a',
-    name:'Being Known',
-    desc:'Do the people you lead with have a real picture of who you are?',
-    team:{
-      label:'Team Culture',
-      q:'There are people on this team who know what is actually going on in my life — not just my professional performance.',
-      hint:'How deeply known you are here'
-    },
-    work:{
-      label:'The Work',
-      q:'The role I fill here draws on who I actually am — not just the skills I can perform on demand.',
-      hint:'How the work engages your whole self'
-    }
-  },
-  {
-    id:'voice', icon:'ti-message-circle', color:'#a09890',
-    name:'Having a Voice',
-    desc:'Can you speak honestly — including the hard things — without bracing for consequences?',
-    team:{
-      label:'Team Culture',
-      q:'I can raise a concern or disagree with leadership on this team without it costing me relationally or professionally.',
-      hint:'Safety to speak on the team'
-    },
-    work:{
-      label:'The Work',
-      q:'My perspective genuinely shapes decisions in this organization — I am not just executing someone else\'s thinking.',
-      hint:'Whether your voice shapes the work'
-    }
-  },
-  {
-    id:'belonging', icon:'ti-users', color:'#b5c4a0',
-    name:'Belonging',
-    desc:'Are you genuinely wanted — not just useful — in this context?',
-    team:{
-      label:'Team Culture',
-      q:'I am chosen for this team, not just assigned to it. People want me here for who I am, not just what I produce.',
-      hint:'How wanted you are on the team'
-    },
-    work:{
-      label:'The Work',
-      q:'The mission of this organization is something I genuinely believe in — not just something I execute.',
-      hint:'Whether you belong to the mission'
-    }
-  },
-  {
-    id:'support', icon:'ti-heart-handshake', color:'#e8d7a0',
-    name:'Receiving Support',
-    desc:'Do people actually show up when things are hard?',
-    team:{
-      label:'Team Culture',
-      q:'When I am struggling — personally or professionally — people on this team move toward me rather than waiting for me to ask.',
-      hint:'Whether the team shows up for you'
-    },
-    work:{
-      label:'The Work',
-      q:'I have the resources, structures, and time I need to do this work without running on empty.',
-      hint:'Whether the work supports you'
-    }
-  },
-  {
-    id:'trust', icon:'ti-shield-check', color:'#c4a882',
-    name:'Trust & Safety',
-    desc:'Can you be imperfect, honest, and uncertain here without it costing you?',
-    team:{
-      label:'Team Culture',
-      q:'I can admit failure, doubt, or personal struggle on this team without fear of how it will affect my standing.',
-      hint:'Safety to be real on the team'
-    },
-    work:{
-      label:'The Work',
-      q:'I am trusted to make significant decisions in my area without excessive oversight or second-guessing.',
-      hint:'How much the work trusts you'
-    }
-  },
-  {
-    id:'freedom', icon:'ti-bird', color:'#9a8a7a',
-    name:'Freedom to Be Myself',
-    desc:'Do you show up as a whole person — or mostly as your role?',
-    team:{
-      label:'Team Culture',
-      q:'I can bring my full self to this team — my humor, my struggles, my outside-of-work identity — without it being inappropriate.',
-      hint:'Freedom to be whole on the team'
-    },
-    work:{
-      label:'The Work',
-      q:'I have appropriate freedom to lead in a way that reflects my unique style and convictions — I am not required to fit a mold.',
-      hint:'Freedom to lead as yourself'
-    }
-  },
-  {
-    id:'calling', icon:'ti-flame', color:'#e8a070',
-    name:'Calling',
-    desc:'Does this work connect to who you believe you are built to be?',
-    team:{
-      label:'Team Culture',
-      q:'The people I lead with genuinely engage my sense of calling — they know what I am built for and they invest in it.',
-      hint:'How the team honors your calling'
-    },
-    work:{
-      label:'The Work',
-      q:'What I do here connects to something I believe I am specifically made for — this is not just a job I am good at.',
-      hint:'Whether the work fits your calling'
-    }
-  },
-  {
-    id:'challenged', icon:'ti-mountain', color:'#8ab0c8',
-    name:'Challenge & Growth',
-    desc:'Does this work stretch you — or have you stopped growing?',
-    team:{
-      label:'Team Culture',
-      q:'The people on this team push my thinking, challenge my assumptions, and make me a better leader.',
-      hint:'How the team challenges you'
-    },
-    work:{
-      label:'The Work',
-      q:'The work itself regularly requires me to grow — I am learning, stretching, and developing in this role.',
-      hint:'Whether the work challenges you'
-    }
-  },
-  {
-    id:'enjoying', icon:'ti-sun', color:'#d4b86a',
-    name:'Enjoyment & Life',
-    desc:'Do you actually find life in this work — or are you just doing it?',
-    team:{
-      label:'Team Culture',
-      q:'I genuinely enjoy the people I work alongside — there is real warmth and life in these relationships, not just function.',
-      hint:'How much life you draw from the team'
-    },
-    work:{
-      label:'The Work',
-      q:'Most days, this work gives me energy rather than draining it. I leave more alive than I arrived.',
-      hint:'Whether the work gives you life'
-    }
-  },
-  {
-    id:'sustainability', icon:'ti-leaf', color:'#7aad6a',
-    name:'Sustainability',
-    desc:'Can you keep doing this without breaking — or are you running on fumes?',
-    team:{
-      label:'Team Culture',
-      q:'This team culture gives me permission to slow down, rest, and admit limits without it being seen as weakness.',
-      hint:'Whether the team sustains you'
-    },
-    work:{
-      label:'The Work',
-      q:'The pace and demands of this work are sustainable. I am not running at a level I cannot maintain long-term.',
-      hint:'Whether the work pace is sustainable'
-    }
-  },
-  {
-    id:'empowered', icon:'ti-bolt', color:'#b5c4a0',
-    name:'Empowerment',
-    desc:'Are you trusted and equipped to lead — or managed and constrained?',
-    team:{
-      label:'Team Culture',
-      q:'Leadership trusts me to lead in my area without micromanagement. I have real authority and real accountability.',
-      hint:'How the team empowers you'
-    },
-    work:{
-      label:'The Work',
-      q:'I have the authority, clarity, and resources I need to lead effectively. I am not blocked by systems or structures.',
-      hint:'Whether the work equips you'
-    }
+const CIRCLES = [
+  {id:'relationships', label:'Relationships', color:'#D85A30', icon:'ti-users',
+   desc:"Does this team genuinely know, trust, and enjoy each other — not just work well together?",
+   outward:[
+    "The other leaders on this team know me — not just my role, but who I am.",
+    "I trust the people on this team enough to be honest when something is wrong.",
+    "If I were struggling personally, I believe this team would notice and show up for me.",
+    "This team has been through hard things together and come out more connected, not less."
+   ],
+   self:[
+    "I genuinely know the other leaders on this team — not just their roles, but who they are.",
+    "When I disagree with someone on this team, I initiate the conversation rather than letting distance grow.",
+    "I am the kind of person on this team who notices when someone else is struggling and shows up for them.",
+    "I would call the people on this team friends, not just colleagues — and I act like it."
+   ]},
+  {id:'values', label:'Values', color:'#185FA5', icon:'ti-compass',
+   desc:"Does this team share real, lived convictions — not just stated principles?",
+   outward:[
+    "I know what this team actually believes is non-negotiable — not just what's written down, but what's lived out.",
+    "When this team makes a hard decision, I trust the reasoning reflects what we say we value.",
+    "When someone on this team raises a moral or ethical concern, it gets taken seriously, not dismissed.",
+    "This team's values shape how I am treated — not just what gets preached to others."
+   ],
+   self:[
+    "I have held this team's convictions even when it was costly for me personally to do so.",
+    "When I see something on this team that doesn't reflect our stated values, I am the one who raises it.",
+    "I hold myself to the same convictions I expect from this team, even when no one would notice if I didn't.",
+    "If I strongly disagreed with a decision on values grounds, I would actually say so — not just believe I'd be heard."
+   ]},
+  {id:'calling', label:'Calling', color:'#534AB7', icon:'ti-flag',
+   desc:"Is there a shared, owned, energizing sense of where this team is headed?",
+   outward:[
+    "I have a clear and shared understanding of where this team believes God is leading us.",
+    "The mission of this team feels like something I am personally part of, not just something leadership decided.",
+    "Decisions on this team are generally made with our shared calling in mind, not just convenience or urgency.",
+    "This team revisits and re-clarifies our calling regularly — it isn't something decided once and forgotten."
+   ],
+   self:[
+    "I actively help cast and clarify this team's calling for others — I don't just wait to be told where we're headed.",
+    "When the mission gets hard or unclear, I am one of the people who keeps it alive for the team.",
+    "My own sense of personal calling feels aligned with where this team is headed, and I bring that energy into the room.",
+    "I could articulate this team's calling to someone outside the team, and I actually do this — not just could."
+   ]}
+];
+
+let answers = {}, userName = '', userEmail = '', teamName = '', assessmentRound = '', isTestMode = false;
+
+function totalQs(){ return CIRCLES.reduce((a,c)=>a+c.outward.length+c.self.length,0) * 2; }
+function totalAns(){ return Object.keys(answers).length; }
+
+function updateProgress(){
+  const pct = Math.round((totalAns()/totalQs())*100);
+  document.getElementById('progress-bar').style.width = pct+'%';
+  document.getElementById('progress-lbl').textContent = totalAns()+' of '+totalQs()+' answered';
+}
+
+const HASH_ROW = '<div class="hash-row">'+'<div class="hash-mark"></div>'.repeat(7)+'</div>';
+
+// ── INTRO GATE — collected FIRST, before survey ──────────────
+function renderIntroGate(){
+  document.getElementById('hero-section').style.display = 'none';
+  document.getElementById('top-divider').style.display = 'none';
+  let g = '<div class="gate-wrap"><div class="gate-card">';
+  g += '<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.75rem;font-weight:500">Before You Begin</div>';
+  g += '<h2 style="margin-bottom:1rem">Let\'s get started.</h2>';
+  g += '<p style="color:#a09890;font-size:.9rem;margin-bottom:1.75rem">This assessment takes about 10&ndash;12 minutes. Each leader on your team will complete it separately under the same team name.</p>';
+  g += '<div class="gate-field"><label>Your First Name</label><input type="text" id="gname" placeholder="Your first name"></div>';
+  g += '<div class="gate-field"><label>Your Email Address</label><input type="email" id="gemail" placeholder="you@example.com"></div>';
+  g += '<div class="gate-field"><label>Team or Organization Name</label><input type="text" id="tname" placeholder="e.g. Elder Board, Staff Team"></div>';
+  g += '<p style="font-size:.72rem;color:#5a5550;margin:-.5rem 0 1rem">Use the exact same team name every leader will use &mdash; this is how responses get grouped together later.</p>';
+  g += '<div class="gate-field"><label>Assessment Round</label><select id="ground" style="width:100%;padding:.9rem 1rem;background:#111111;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:Inter,sans-serif;font-size:.95rem"><option value="Initial Assessment">Initial Assessment</option><option value="3-Month Follow-up">3-Month Follow-up</option><option value="6-Month Follow-up">6-Month Follow-up</option><option value="Annual Review">Annual Review</option><option value="Custom">Custom...</option></select></div>';
+  g += '<div class="gate-field" id="ground-custom-wrap" style="display:none"><label>Custom Round Name</label><input type="text" id="ground-custom" placeholder="e.g. Post-Retreat Assessment"></div>';
+  g += '<button class="gate-btn" onclick="submitIntroGate()">Begin Assessment &rarr;</button>';
+  g += '<div class="errmsg" id="intro-err"></div></div></div>';
+  document.getElementById('app').innerHTML = g;
+}
+
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id === 'ground'){
+    document.getElementById('ground-custom-wrap').style.display = e.target.value === 'Custom' ? '' : 'none';
   }
-];
+});
 
-// Additional open questions within each dim (one per axis per dim = 2 per dim × 12 dims = 24 extra q-slots)
-// We'll add 1 self-reflection question per dimension (team side = how I show up, work side = what I notice)
-const DIM_EXTRA = [
-  {id:'seen',    team_self:'I actively work to notice and acknowledge the people on my team as whole persons — not just contributors.', work_self:'I regularly take time to reflect on whether I am bringing my full self to this work.'},
-  {id:'known',   team_self:'I have made myself genuinely known to at least one person on this team — not just professionally.', work_self:'I seek out mentors or peers who help me see my own blind spots in this role.'},
-  {id:'voice',   team_self:'I create space for others on this team to speak honestly — including when they disagree with me.', work_self:'When something isn\'t working in this role, I say so rather than managing through it silently.'},
-  {id:'belonging',team_self:'I actively invest in the belonging of others on this team — I notice who might be on the edges.', work_self:'I regularly ask myself whether I am in the right role — not out of anxiety, but out of honest reflection.'},
-  {id:'support', team_self:'I show up for my colleagues when things are hard — not just when it\'s convenient.', work_self:'I ask for help when I need it rather than quietly absorbing more than I can carry.'},
-  {id:'trust',   team_self:'I extend genuine trust to the people I lead — I am not managing their work out of my own anxiety.', work_self:'I can acknowledge mistakes in this role without it threatening my sense of worth or security.'},
-  {id:'freedom', team_self:'I give the people I lead genuine freedom to lead in their own style rather than requiring them to mirror mine.', work_self:'I have a clear sense of the difference between my role and my identity — this job does not define me.'},
-  {id:'calling', team_self:'I invest in the calling of others on this team — I know what they are built for and I support it.', work_self:'I am actively growing in clarity about my calling — not just executing a job description.'},
-  {id:'challenged',team_self:'I am growing as a leader right now — not just maintaining what I already know how to do.', work_self:'I pursue learning and development beyond what is required — I take my own growth seriously.'},
-  {id:'enjoying', team_self:'I bring genuine enthusiasm to this team — I am not just showing up and going through the motions.', work_self:'I regularly notice and name what I am grateful for in this work — not to perform positivity, but honestly.'},
-  {id:'sustainability',team_self:'I protect margin in my schedule — I do not model unhealthy pace for the people I lead.', work_self:'I have rhythms of rest, renewal, and disconnection that I actually practice, not just intend.'},
-  {id:'empowered',team_self:'I give others the authority they need to do their work — I do not hoard decisions out of habit or fear.', work_self:'When I hit a structural barrier, I address it directly rather than absorbing it or going around it.'},
-];
-
-let answers = {};
-let userName = '', userEmail = '', userOrg = '';
-let totalQ = 0;
-
-// Test mode — ?test=true auto-fills all answers
-const isTestMode = new URLSearchParams(window.location.search).get('test') === 'true';
-if(isTestMode) {
-  userName = 'Test User';
-  userEmail = 'test@boldhearts.org';
-  userOrg = 'Test Organization';
+function submitIntroGate(){
+  const name=document.getElementById('gname').value.trim();
+  const email=document.getElementById('gemail').value.trim();
+  const tname=document.getElementById('tname').value.trim();
+  const groundEl=document.getElementById('ground');
+  const roundName=groundEl.value==='Custom'?document.getElementById('ground-custom').value.trim():groundEl.value;
+  const err=document.getElementById('intro-err');
+  if(!name){err.textContent='Please enter your first name.';return;}
+  if(!email||!email.includes('@')){err.textContent='Please enter a valid email.';return;}
+  if(!tname){err.textContent='Please enter your team or organization name.';return;}
+  if(!roundName){err.textContent='Please enter a round name.';return;}
+  userName=name;userEmail=email;teamName=tname;assessmentRound=roundName;
+  document.getElementById('progress-section').style.display='';
+  renderSurvey();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function startAssessment() {
-  const n = document.getElementById('gate-name').value.trim();
-  const e = document.getElementById('gate-email').value.trim();
-  const o = document.getElementById('gate-org').value.trim();
-  if(!n || !e) { document.getElementById('gate-err').textContent='Please enter your name and email.'; return; }
-  if(!e.includes('@')) { document.getElementById('gate-err').textContent='Please enter a valid email.'; return; }
-  userName = n; userEmail = e; userOrg = o;
-  document.getElementById('gate-section').style.display='none';
-  document.getElementById('progress-section').style.display='block';
-  document.getElementById('app').style.display='block';
-  renderApp();
-  if(isTestMode) setTimeout(autoFillAnswers, 100);
+function renderQuestionBlock(c, groupKey, q, idx){
+  const curK = c.id+'_'+groupKey+'_'+idx+'_cur';
+  const idealK = c.id+'_'+groupKey+'_'+idx+'_ideal';
+  const curHas = answers[curK]!==undefined;
+  const idealHas = answers[idealK]!==undefined;
+  let html = '<div class="qblock'+((curHas&&idealHas)?' answered':'')+'" id="q_'+c.id+'_'+groupKey+'_'+idx+'">';
+  html += '<div class="qnum">'+c.label+' &mdash; '+(groupKey==='outward'?'Receiving':'Giving')+'</div>';
+  html += '<div class="qlabel">'+q+'</div>';
+  html += '<div class="rating-row"><div class="rating-label">How true is this right now?</div>';
+  html += '<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
+  html += '<div class="slider-area"><input type="range" min="1" max="7" step="0.01" value="'+(curHas?answers[curK]:'1')+'" class="cur-thumb" id="sl_'+curK+'" style="opacity:'+(curHas?'1':'.4')+'" oninput="onSlide(\''+curK+'\')" onchange="onCommit(\''+curK+'\',this.value)">'+HASH_ROW+'</div></div>';
+  html += '<div class="rating-row"><div class="rating-label">How true should this be for a healthy team?</div>';
+  html += '<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
+  html += '<div class="slider-area"><input type="range" min="1" max="7" step="0.01" value="'+(idealHas?answers[idealK]:'1')+'" class="ideal-thumb" id="sl_'+idealK+'" style="opacity:'+(idealHas?'1':'.4')+'" oninput="onSlide(\''+idealK+'\')" onchange="onCommit(\''+idealK+'\',this.value)">'+HASH_ROW+'</div></div>';
+  html += '</div>';
+  return html;
 }
 
-function autoFillAnswers() {
-  DIMS.forEach(dim => {
-    ['team_main','team_self','work_main','work_self'].forEach(suffix => {
-      const qid = dim.id + '_' + suffix;
-      const val = Math.floor(Math.random() * 4) + 4; // 4-7 range
-      const axis = suffix.startsWith('team') ? 'team' : 'work';
-      setAnswer(qid, val, axis);
+function renderSurvey(){
+  let html = '<div class="main">';
+  html += '<div style="padding:2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.2);border-left:4px solid #e8d7a0;border-radius:4px;margin-bottom:2rem">';
+  html += '<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.75rem;font-weight:500">A Few Things Before You Start</div>';
+  html += '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">Each question is asked twice &mdash; how true this is for your team right now, and how true it should be for your team to be healthy. The gap between those two answers is often more revealing than either number alone.</p>';
+  html += '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">Within each area, some questions ask what you receive from this team &mdash; and others ask what you actually give to it. Both matter. A team can look healthy on paper while a few people quietly carry the weight of holding it together.</p>';
+  html += '<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin:0">Answer honestly, not diplomatically.</p>';
+  html += '</div>';
+  CIRCLES.forEach(c=>{
+    html += '<div class="realm-hdr"><div class="realm-icon" style="color:'+c.color+'"><i class="ti '+c.icon+'"></i></div><div class="realm-hdr-text"><h2>'+c.label+'</h2><p>'+c.desc+'</p></div></div>';
+    html += '<div class="subgroup-label">What I Receive From This Team</div>';
+    c.outward.forEach((q,i)=>{ html += renderQuestionBlock(c,'outward',q,i); });
+    html += '<div class="subgroup-label">What I Give To This Team</div>';
+    c.self.forEach((q,i)=>{ html += renderQuestionBlock(c,'self',q,i); });
+  });
+  html += '<div class="submit-section"><div class="submit-meta">Move every slider to answer &mdash; your honest perspective matters more than a flattering score</div><button class="sub-btn" onclick="trySubmit()">Submit My Responses &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
+  document.getElementById('app').innerHTML = html;
+  updateProgress();
+}
+
+function onSlide(k){ document.getElementById('sl_'+k).style.opacity = '1'; }
+
+function onCommit(k, val){
+  answers[k] = parseFloat(val);
+  const parts = k.split('_');
+  const blockId = 'q_'+parts[0]+'_'+parts[1]+'_'+parts[2];
+  const curK = parts[0]+'_'+parts[1]+'_'+parts[2]+'_cur';
+  const idealK = parts[0]+'_'+parts[1]+'_'+parts[2]+'_ideal';
+  if(answers[curK]!==undefined && answers[idealK]!==undefined){
+    document.getElementById(blockId)?.classList.add('answered');
+  }
+  updateProgress();
+  document.getElementById('errmsg').textContent='';
+}
+
+function trySubmit(){
+  const unanswered=[];
+  CIRCLES.forEach(c=>{
+    ['outward','self'].forEach(grp=>{
+      c[grp].forEach((_,i)=>{
+        if(answers[c.id+'_'+grp+'_'+i+'_cur']===undefined) unanswered.push(1);
+        if(answers[c.id+'_'+grp+'_'+i+'_ideal']===undefined) unanswered.push(1);
+      });
     });
   });
+  if(unanswered.length>0){
+    document.getElementById('errmsg').textContent = unanswered.length+' rating'+(unanswered.length>1?'s':'')+' still need'+(unanswered.length===1?'s':'')+' an answer.';
+    return;
+  }
+  finalizeSubmission();
 }
 
-function renderApp() {
-  const app = document.getElementById('app');
-  totalQ = DIMS.length * 4; // 2 main + 2 self per dim
-
-  let html = '';
-  DIMS.forEach((dim, di) => {
-    const extra = DIM_EXTRA.find(e => e.id === dim.id) || {};
-    html += `
-    <div class="dim-block">
-      <div class="dim-hdr">
-        <div class="dim-icon"><i class="ti ${dim.icon}" style="color:${dim.color}"></i></div>
-        <div class="dim-info">
-          <div class="dim-label">Dimension ${di+1} of ${DIMS.length}</div>
-          <div class="dim-name">${dim.name}</div>
-          <div class="dim-desc">${dim.desc}</div>
-        </div>
-      </div>
-      <div class="axis-header">
-        <div class="axis-label axis-team"><i class="ti ti-users" style="font-size:.8rem;margin-right:4px"></i> Team Culture</div>
-        <div class="axis-label axis-work"><i class="ti ti-briefcase" style="font-size:.8rem;margin-right:4px"></i> The Work</div>
-      </div>
-      ${qRow(dim.id+'_team_main', dim.team.q, false, 'team', dim.id+'_work_main', dim.work.q, false, 'work')}
-      <div class="dim-separator"></div>
-      ${qRow(dim.id+'_team_self', extra.team_self||'', true, 'team', dim.id+'_work_self', extra.work_self||'', true, 'work')}
-    </div>`;
-  });
-
-  html += `<div id="submit-section-inline" style="max-width:860px;margin:2rem auto;padding:0 1.5rem 3rem">
-    <div class="submit-card">
-      <h3>You&rsquo;re done.</h3>
-      <p>Take a moment before you submit. These answers are honest — and honest answers are the only kind worth looking at.</p>
-      <button class="submit-btn" id="submit-btn" onclick="submitAssessment()">Submit &amp; See My Results</button>
-      <div class="submit-note">Results will be sent to your email.</div>
-    </div>
-  </div>`;
-
-  app.innerHTML = html;
-  updateProgress();
-}
-
-function qRow(id1, q1, self1, axis1, id2, q2, self2, axis2) {
-  return `<div class="qblock">
-    <div class="q-cell">
-      <div class="q-text${self1?' self-q':''}">${q1}</div>
-      ${scaleHtml(id1, axis1)}
-    </div>
-    <div class="q-divider"></div>
-    <div class="q-cell">
-      <div class="q-text${self2?' self-q':''}">${q2}</div>
-      ${scaleHtml(id2, axis2)}
-    </div>
-  </div>`;
-}
-
-function scaleHtml(qid, axis) {
-  const selClass = axis === 'team' ? 'sel-team' : 'sel-work';
-  const btns = SCALE.map(v =>
-    `<button class="scale-btn" id="q_${qid}_${v}" onclick="setAnswer('${qid}',${v},'${axis}')">${v}</button>`
-  ).join('');
-  return `<div class="scale-row">${btns}</div>
-  <div class="scale-ends"><span>Strongly Disagree</span><span>Strongly Agree</span></div>`;
-}
-
-function setAnswer(qid, val, axis) {
-  answers[qid] = val;
-  const selClass = axis === 'team' ? 'sel-team' : 'sel-work';
-  SCALE.forEach(v => {
-    const btn = document.getElementById(`q_${qid}_${v}`);
-    if(btn) { btn.className = 'scale-btn' + (v === val ? ' ' + selClass : ''); }
-  });
-  updateProgress();
-}
-
-function updateProgress() {
-  const answered = Object.keys(answers).length;
-  const pct = Math.round(answered / totalQ * 100);
-  const bar = document.getElementById('progress-bar');
-  const lbl = document.getElementById('progress-lbl');
-  if(bar) bar.style.width = pct + '%';
-  if(lbl) lbl.textContent = answered + ' of ' + totalQ + ' answered';
-}
-
-// ── SCORING ───────────────────────────────────────────────────────────────────
-function calcScores() {
-  const scores = {};
-  DIMS.forEach(dim => {
-    const teamVals = ['team_main','team_self'].map(s => answers[dim.id+'_'+s] || null).filter(Boolean);
-    const workVals = ['work_main','work_self'].map(s => answers[dim.id+'_'+s] || null).filter(Boolean);
-    const teamAvg = teamVals.length ? teamVals.reduce((a,b)=>a+b,0)/teamVals.length : 0;
-    const workAvg = workVals.length ? workVals.reduce((a,b)=>a+b,0)/workVals.length : 0;
-    scores[dim.id] = {
-      team: Math.round(teamAvg / 7 * 100),
-      work: Math.round(workAvg / 7 * 100),
-      overall: Math.round((teamAvg + workAvg) / 14 * 100)
+function calcScores(){
+  const result = {};
+  CIRCLES.forEach(c=>{
+    const groupScore = (grp, rating) => {
+      let t=0,n=0;
+      c[grp].forEach((_,i)=>{
+        const v = answers[c.id+'_'+grp+'_'+i+'_'+rating];
+        if(v!==undefined){t+=v;n++;}
+      });
+      return n>0?Math.round((t/(n*7))*100):0;
+    };
+    const outCur=groupScore('outward','cur'), outIdeal=groupScore('outward','ideal');
+    const selfCur=groupScore('self','cur'), selfIdeal=groupScore('self','ideal');
+    result[c.id] = {
+      current: Math.round((outCur+selfCur)/2),
+      ideal: Math.round((outIdeal+selfIdeal)/2),
+      outwardCurrent: outCur, outwardIdeal: outIdeal,
+      selfCurrent: selfCur, selfIdeal: selfIdeal
     };
   });
-
-  const teamOverall = Math.round(DIMS.map(d => scores[d.id].team).reduce((a,b)=>a+b,0) / DIMS.length);
-  const workOverall = Math.round(DIMS.map(d => scores[d.id].work).reduce((a,b)=>a+b,0) / DIMS.length);
-
-  return { dims: scores, teamOverall, workOverall };
+  return result;
 }
 
-function scoreTag(pct) {
-  if(pct >= 70) return {label:'Flowing Freely', cls:'score-h'};
-  if(pct >= 50) return {label:'Meeting Resistance', cls:'score-m'};
-  if(pct >= 35) return {label:'Running Low', cls:'score-l'};
-  return {label:'Dammed Up', cls:'score-l'};
-}
-
-function barColor(pct) {
-  if(pct >= 70) return '#7aad6a';
-  if(pct >= 50) return '#c4a882';
-  return '#c97a5a';
-}
-
-// ── PATTERNS ─────────────────────────────────────────────────────────────────
-function detectPatterns(scores) {
-  const patterns = [];
-  const s = scores.dims;
-
-  // Called & Running Dry
-  if(s.calling.work >= 65 && s.sustainability.work < 50) {
-    patterns.push({type:'flag', title:'Called but Running Dry', body:'Your work score for Calling is strong — you believe in what you\'re doing. But your Sustainability score tells a different story. This is the most common burnout pattern in ministry and nonprofit leadership: deep conviction that keeps you going long past what is healthy.'});
-  }
-  // High calling, low challenge
-  if(s.calling.work >= 65 && s.challenged.work < 55) {
-    patterns.push({type:'flag', title:'Called but Not Challenged', body:'You believe this work fits your calling, but it\'s not stretching you. Over time, work that doesn\'t challenge tends to quietly diminish the sense of calling itself. This is worth paying attention to before the gap widens.'});
-  }
-  // Team culture strong, work weak
-  if(scores.teamOverall >= 65 && scores.workOverall < 55) {
-    patterns.push({type:'flag', title:'Great Team, Draining Work', body:'You score significantly higher on Team Culture than on The Work. The people around you are a genuine asset — but something about the work itself is costing you. This gap often points to role misalignment, unsustainable pace, or lack of challenge.'});
-  }
-  // Work strong, team weak
-  if(scores.workOverall >= 65 && scores.teamOverall < 55) {
-    patterns.push({type:'flag', title:'Strong Work, Weak Culture', body:'The work itself energizes you, but the team culture around you is not supporting you well. You\'re drawing life from the mission but not from the people. This is sustainable for a season — but the relational deficit tends to compound over time.'});
-  }
-  // Trust & Voice low together
-  if(s.trust.team < 55 && s.voice.team < 55) {
-    patterns.push({type:'flag', title:'Guarded and Unheard', body:'Low Trust & Safety and low Having a Voice together suggest a culture where honesty has a cost. Leaders in this pattern typically work hard, deliver well, and hold more than they say. The culture gets their competence but not their wisdom.'});
-  }
-  // High belonging, low known
-  if(s.belonging.team >= 65 && s.known.team < 55) {
-    patterns.push({type:'flag', title:'Warm but Surface-Level', body:'High Belonging with low Being Known is a common pattern in healthy but shallow teams. People like each other and feel wanted — but the depth isn\'t there. The warmth is real. The vulnerability is not yet normalized.'});
-  }
-  // Both axes strong
-  if(scores.teamOverall >= 70 && scores.workOverall >= 70) {
-    patterns.push({type:'strong', title:'Healthy in Both Directions', body:'Both your Team Culture and Work scores are strong. This is genuinely rare. You are in a context that supports you relationally and engages you meaningfully. The question is not whether this is healthy — it is — but what it makes possible from here.'});
-  }
-  // Calling + Empowerment high
-  if(s.calling.work >= 70 && s.empowered.work >= 70) {
-    patterns.push({type:'strong', title:'Trusted and Called', body:'High Calling and Empowerment together — in the Work axis — is the foundation every leader needs. You believe in what you\'re doing and you\'re trusted to do it. This is real capital. Protect it.'});
-  }
-  // Enjoying low
-  if(s.enjoying.work < 45 || s.enjoying.team < 45) {
-    patterns.push({type:'flag', title:'The Life Has Gone Out', body:'Your Enjoyment score is notably low. This deserves honest attention — not to manufacture positivity, but to understand what has changed. When work stops giving life, it\'s rarely just about the work. Something underneath is worth looking at.'});
-  }
-
-  return patterns;
-}
-
-// ── SUBMIT ────────────────────────────────────────────────────────────────────
-async function submitAssessment() {
-  const btn = document.getElementById('submit-btn');
-  if(btn) { btn.textContent = 'Submitting...'; btn.disabled = true; }
-
-  const scores = calcScores();
-  renderResults(scores);
-
-  // Save to Sheets
-  try {
-    const row = [new Date().toISOString(), userName, userEmail, userOrg,
-      scores.teamOverall, scores.workOverall];
-    DIMS.forEach(d => { row.push(scores.dims[d.id].team, scores.dims[d.id].work); });
-    const params = new URLSearchParams({action:'saveleadership', name:userName, email:userEmail, org:userOrg,
-      team_overall:scores.teamOverall, work_overall:scores.workOverall,
-      scores_json:JSON.stringify(scores.dims)});
-    new Image().src = SHEETS_URL + '?' + params.toString();
-  } catch(e) { console.error('Sheets error:', e); }
-
-  // Send email
-  try {
-    emailjs.init(EJSPUB);
-    const emailHtml = buildEmailHtml(scores);
-    await emailjs.send(EJSSVC, EJSTPL, {
-      to_name: userName, to_email: userEmail, reply_to: userEmail,
-      subject: userName + ', your BoldHearts Leadership Health Results',
-      results_body: emailHtml,
-      from_name: 'Steve Forney — BoldHearts',
-      overall_score: scores.teamOverall + '%'
+function buildRawAnswerParams(){
+  const raw = {};
+  CIRCLES.forEach(c=>{
+    ['outward','self'].forEach(grp=>{
+      c[grp].forEach((_,i)=>{
+        raw[c.id+'_'+grp+'_'+i+'_cur'] = answers[c.id+'_'+grp+'_'+i+'_cur'] ?? '';
+        raw[c.id+'_'+grp+'_'+i+'_ideal'] = answers[c.id+'_'+grp+'_'+i+'_ideal'] ?? '';
+      });
     });
-  } catch(e) { console.error('Email error:', e); }
+  });
+  return raw;
 }
 
-// ── RESULTS RENDER ────────────────────────────────────────────────────────────
-function renderResults(scores) {
-  document.getElementById('app').style.display='none';
+function finalizeSubmission(){
+  const scores = calcScores();
+
+  if(!isTestMode){
+    const rawParams = buildRawAnswerParams();
+    const params = new URLSearchParams({
+      action:'leadershipteam', name:userName, email:userEmail, team:teamName, round:assessmentRound,
+      rel_current: scores.relationships.current+'%', rel_ideal: scores.relationships.ideal+'%',
+      rel_out_current: scores.relationships.outwardCurrent+'%', rel_out_ideal: scores.relationships.outwardIdeal+'%',
+      rel_self_current: scores.relationships.selfCurrent+'%', rel_self_ideal: scores.relationships.selfIdeal+'%',
+      values_current: scores.values.current+'%', values_ideal: scores.values.ideal+'%',
+      values_out_current: scores.values.outwardCurrent+'%', values_out_ideal: scores.values.outwardIdeal+'%',
+      values_self_current: scores.values.selfCurrent+'%', values_self_ideal: scores.values.selfIdeal+'%',
+      calling_current: scores.calling.current+'%', calling_ideal: scores.calling.ideal+'%',
+      calling_out_current: scores.calling.outwardCurrent+'%', calling_out_ideal: scores.calling.outwardIdeal+'%',
+      calling_self_current: scores.calling.selfCurrent+'%', calling_self_ideal: scores.calling.selfIdeal+'%',
+      ...rawParams
+    });
+    new Image().src = SHEETS_URL+'?'+params.toString();
+  }
+
+  renderResults(scores);
   document.getElementById('progress-section').style.display='none';
-
-  const teamTag = scoreTag(scores.teamOverall);
-  const workTag = scoreTag(scores.workOverall);
-  const patterns = detectPatterns(scores);
-
-  let dimHtml = '';
-  DIMS.forEach(dim => {
-    const ds = scores.dims[dim.id];
-    const gap = Math.abs(ds.team - ds.work);
-    const gapDir = ds.team > ds.work ? 'Team culture is stronger than work experience' : 'Work experience is stronger than team culture';
-    const gapClass = gap >= 20 ? 'gap-flag' : (gap <= 8 ? 'gap-good' : '');
-    dimHtml += `
-    <div style="margin-bottom:1.75rem">
-      <div class="dim-result-name"><i class="ti ${dim.icon}" style="color:${dim.color};margin-right:.5rem;font-size:1rem"></i>${dim.name}</div>
-      <div class="bar-row">
-        <div class="bar-row-label" style="color:#7aaac8">Team Culture</div>
-        <div class="bar-track"><div class="bar-fill-team" style="width:${ds.team}%;background:${barColor(ds.team)}"></div></div>
-        <div class="bar-pct" style="color:${barColor(ds.team)}">${ds.team}%</div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-row-label" style="color:#c4a882">The Work</div>
-        <div class="bar-track"><div class="bar-fill-work" style="width:${ds.work}%;background:${barColor(ds.work)}"></div></div>
-        <div class="bar-pct" style="color:${barColor(ds.work)}">${ds.work}%</div>
-      </div>
-      ${gap >= 15 ? `<div class="gap-note ${gapClass}">${gap}% gap — ${gapDir}</div>` : ''}
-    </div>`;
-  });
-
-  let patternHtml = patterns.map(p =>
-    `<div class="pattern-card ${p.type}"><div class="pattern-title">${p.title}</div><div class="pattern-body">${p.body}</div></div>`
-  ).join('');
-  if(!patternHtml) patternHtml = '<div class="pattern-card"><div class="pattern-title">No significant patterns flagged</div><div class="pattern-body">Your scores are relatively balanced across both axes. There are no urgent patterns to surface — though there may still be growth edges worth exploring in a conversation.</div></div>';
-
-  const html = `
-  <div class="results-wrap">
-    <div class="results-header">
-      <div class="results-name">${userName}</div>
-      <div class="results-sub">${userOrg ? userOrg + ' &nbsp;&middot;&nbsp; ' : ''}Leadership Health Assessment &nbsp;&middot;&nbsp; ${new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-    </div>
-    <div class="results-overall">
-      <div class="overall-card">
-        <div class="overall-label team-label">Team Culture Score</div>
-        <div class="overall-score ${teamTag.cls}">${scores.teamOverall}%</div>
-        <div class="overall-tag ${teamTag.cls}">${teamTag.label}</div>
-      </div>
-      <div class="overall-card">
-        <div class="overall-label work-label">Work Experience Score</div>
-        <div class="overall-score ${workTag.cls}">${scores.workOverall}%</div>
-        <div class="overall-tag ${workTag.cls}">${workTag.label}</div>
-      </div>
-    </div>
-    <div style="margin-top:3rem">
-      <div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:1.5rem">Scores by Dimension</div>
-      ${dimHtml}
-    </div>
-    <div class="pattern-section">
-      <div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem">Patterns in Your Data</div>
-      ${patternHtml}
-    </div>
-    <div class="deepdive-card">
-      <h3>Want to understand what this means for you?</h3>
-      <p>A 15-minute conversation with Steve can help you understand what these patterns are pointing toward — and what, if anything, is worth doing about them.</p>
-      <a href="mailto:admin@boldhearts.org?subject=Leadership Assessment — ${encodeURIComponent(userName)}" class="deepdive-btn">Request a Conversation</a>
-      <div class="submit-note" style="margin-top:1rem">Your results have been sent to ${userEmail}</div>
-    </div>
-  </div>`;
-
-  const rs = document.getElementById('results-section');
-  rs.innerHTML = html;
-  rs.style.display = 'block';
-  rs.scrollIntoView({behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── EMAIL HTML ────────────────────────────────────────────────────────────────
-function buildEmailHtml(scores) {
-  function dc(p){return p>=70?'#7aad6a':p>=50?'#c4a882':'#c97a5a';}
-  function tag(p){return p>=70?'Flowing Freely':p>=50?'Meeting Resistance':p>=35?'Running Low':'Dammed Up';}
+// ── REFLECTION NUGGET — removed in v1.5 (replaced by inline writeup in renderResults) ──
+function buildReflection(scores){
+  const circles = [
+    {label:'Relationships', ...scores.relationships},
+    {label:'Values', ...scores.values},
+    {label:'Calling', ...scores.calling}
+  ];
 
-  const dimRows = DIMS.map(dim => {
-    const ds = scores.dims[dim.id];
-    return `<tr>
-      <td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">${dim.name}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #2a2825;text-align:center"><span style="color:${dc(ds.team)};font-size:12px;font-weight:500">${ds.team}%</span></td>
-      <td style="padding:8px 12px;border-bottom:1px solid #2a2825;text-align:center"><span style="color:${dc(ds.work)};font-size:12px;font-weight:500">${ds.work}%</span></td>
-    </tr>`;
-  }).join('');
+  const paragraphs = [];
 
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head>
-<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
-<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">
-<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#c4a882">Hearts</span></p>
-<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Leadership Health Assessment</p></td></tr>
-<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">
-<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">${userName}, here are your Leadership Health Assessment results${userOrg ? ' for ' + userOrg : ''}.</p>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px">
-<tr><td style="padding:14px 16px;text-align:center;border-right:1px solid #2a2825;width:50%">
-<p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7aaac8;margin:0 0 4px">Team Culture</p>
-<p style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:${dc(scores.teamOverall)};margin:0">${scores.teamOverall}%</p>
-<p style="font-size:11px;color:${dc(scores.teamOverall)};margin:4px 0 0">${tag(scores.teamOverall)}</p></td>
-<td style="padding:14px 16px;text-align:center;width:50%">
-<p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;margin:0 0 4px">The Work</p>
-<p style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:${dc(scores.workOverall)};margin:0">${scores.workOverall}%</p>
-<p style="font-size:11px;color:${dc(scores.workOverall)};margin:4px 0 0">${tag(scores.workOverall)}</p></td></tr></table>
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px">
-<thead><tr>
-<th style="padding:8px 12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;text-align:left;border-bottom:1px solid #2a2825">Dimension</th>
-<th style="padding:8px 12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7aaac8;text-align:center;border-bottom:1px solid #2a2825">Team</th>
-<th style="padding:8px 12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;text-align:center;border-bottom:1px solid #2a2825">Work</th>
-</tr></thead><tbody>${dimRows}</tbody></table>
-<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#c4a882">Steve Forney</strong><br>
-<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; Spiritual Direction · Pastoral Counseling · Leadership Soul Care</span></p>
-</td></tr>
-<tr><td style="padding:20px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 The BoldHearts Group LLC &nbsp;·&nbsp; Sedalia, Colorado. All Rights Reserved.</p></td></tr>
-</table></td></tr></table></body></html>`;
+  // 1. Give/Receive imbalance — averaged across all 3 circles
+  const avgOutCur = Math.round((scores.relationships.outwardCurrent + scores.values.outwardCurrent + scores.calling.outwardCurrent) / 3);
+  const avgSelfCur = Math.round((scores.relationships.selfCurrent + scores.values.selfCurrent + scores.calling.selfCurrent) / 3);
+  const giveReceiveGap = avgOutCur - avgSelfCur;
+
+  if(giveReceiveGap >= 15){
+    paragraphs.push('Across all three areas, what you receive from this team currently outpaces what you actively give to it. That isn\'t a verdict &mdash; but it is worth sitting with. You may be benefiting from a culture you haven\'t yet fully invested back into.');
+  } else if(giveReceiveGap <= -15){
+    paragraphs.push('Across all three areas, what you give to this team currently outpaces what you feel you receive back. You may be one of the people quietly carrying this team\'s culture &mdash; worth naming in the group conversation rather than carrying alone.');
+  } else {
+    paragraphs.push('What you give to this team and what you receive from it are fairly balanced right now &mdash; that mutuality is worth noticing and protecting.');
+  }
+
+  // 2. Biggest current-vs-ideal gap
+  const gaps = circles.map(c => ({label:c.label, gap: c.ideal - c.current}))
+    .sort((a,b) => b.gap - a.gap);
+  const biggestGap = gaps[0];
+
+  if(biggestGap.gap >= 20){
+    paragraphs.push('Your biggest gap between where this team is and where you believe it should be is in <strong style="color:#e8d7a0">'+biggestGap.label+'</strong>. That is worth bringing into the room when the team looks at this together.');
+  } else if(biggestGap.gap <= 5 && Math.max(...circles.map(c=>c.current)) >= 70){
+    paragraphs.push('You don\'t see a major gap between where this team is and where it should be &mdash; which suggests real contentment with the current culture, not just low expectations.');
+  }
+
+  // 3. Lowest current score
+  const lowest = [...circles].sort((a,b) => a.current - b.current)[0];
+  if(lowest.current < 55){
+    paragraphs.push('<strong style="color:#e8d7a0">'+lowest.label+'</strong> is currently your lowest-scoring area for this team. That doesn\'t mean something is broken &mdash; but it is the area most worth exploring together.');
+  }
+
+  return paragraphs;
 }
 
-// ── NAV ───────────────────────────────────────────────────────────────────────
-const navToggle = document.getElementById('nav-toggle');
-const navLinksEl = document.getElementById('nav-links');
-navToggle.addEventListener('click', function() {
-  const open = navLinksEl.classList.toggle('open');
-  navToggle.classList.toggle('open', open);
-});
-navLinksEl.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    navLinksEl.classList.remove('open');
-    navToggle.classList.remove('open');
-  });
-});
-document.querySelectorAll('.nav-dropdown > a').forEach(a => {
-  a.addEventListener('click', function(e) {
-    if(window.innerWidth <= 768) {
-      e.preventDefault();
-      this.parentElement.classList.toggle('open');
-    }
-  });
-});
+function renderResults(scores){
+  const rel=scores.relationships, val=scores.values, cal=scores.calling;
 
-// Auto-start in test mode
-if(isTestMode) {
-  document.getElementById('gate-section').style.display='none';
-  document.getElementById('progress-section').style.display='block';
-  document.getElementById('app').style.display='block';
-  renderApp();
-  setTimeout(autoFillAnswers, 100);
+  function tierLabel(pct){ return pct>=80?"Thriving":pct>=60?"Healthy":pct>=40?"Developing":pct>=20?"Struggling":"Critical"; }
+  function barColor(pct){ return pct>=80?"#C4A055":pct>=60?"#B8AA7A":pct>=40?"#8AACCB":pct>=20?"#5B8DB0":"#3A6D94"; }
+  function agreePhrase(pct){
+    if(pct>=80) return "with most of your answers strongly agreeing";
+    if(pct>=60) return "with your answers leaning toward agreement";
+    if(pct>=40) return "with your answers closer to the middle";
+    if(pct>=20) return "with most of your answers leaning toward disagreement";
+    return "with most of your answers strongly disagreeing";
+  }
+
+  const circleDescs = {
+    "Relationships": "How well this team knows, trusts, and actually enjoys each other — not just works together.",
+    "Values": "Whether this team's convictions are real and lived, or just stated on paper.",
+    "Calling": "Whether there is a shared, owned, energizing sense of where this team is headed."
+  };
+
+  // Find biggest gap circle for greatest desire tag
+  const allGaps = [
+    {id:"Relationships", gap: rel.ideal - rel.current},
+    {id:"Values", gap: val.ideal - val.current},
+    {id:"Calling", gap: cal.ideal - cal.current}
+  ];
+  const biggestGapCircle = [...allGaps].sort((a,b)=>b.gap-a.gap)[0].id;
+
+  // Find biggest give/receive imbalance
+  const giveReceiveGaps = [
+    {label:"Relationships", give:rel.selfCurrent, receive:rel.outwardCurrent, gap:rel.selfCurrent - rel.outwardCurrent},
+    {label:"Values", give:val.selfCurrent, receive:val.outwardCurrent, gap:val.selfCurrent - val.outwardCurrent},
+    {label:"Calling", give:cal.selfCurrent, receive:cal.outwardCurrent, gap:cal.selfCurrent - cal.outwardCurrent}
+  ];
+  const bigImbalance = [...giveReceiveGaps].sort((a,b)=>Math.abs(b.gap)-Math.abs(a.gap))[0];
+
+  function reflectionCard(eyebrow, paras){
+    let html = "<div style=\"background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:2rem;margin-top:1.5rem\">";
+    html += "<div style=\"font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.85rem;font-weight:500\">" + eyebrow + "</div>";
+    paras.forEach(p=>{ html += "<p style=\"font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.85rem\">" + p + "</p>"; });
+    html += "</div>";
+    return html;
+  }
+
+  function barPair(label, curPct, idealPct){
+    const curCol = barColor(curPct);
+    const idealCol = barColor(idealPct);
+    const desc = circleDescs[label] || "";
+    return "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem\">"
+      + "<div style=\"margin-bottom:.85rem\">"
+      + "<div style=\"font-size:.88rem;font-weight:500;color:#f0e8df;letter-spacing:.04em;margin-bottom:.35rem\">" + label + "</div>"
+      + "<div style=\"font-size:.8rem;color:#6a6258;line-height:1.6\">" + desc + "</div>"
+      + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem\">"
+      + "<div style=\"width:90px;flex-shrink:0;font-size:.68rem;color:#6a6258\">Current</div>"
+      + "<div style=\"flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + curPct + "%;height:100%;background:" + curCol + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:70px;text-align:right;font-size:.68rem;font-weight:500;color:" + curCol + "\">" + tierLabel(curPct) + "</div>"
+      + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.75rem\">"
+      + "<div style=\"width:90px;flex-shrink:0;font-size:.68rem;color:#6a6258\">Ideal</div>"
+      + "<div style=\"flex:1;height:10px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + idealPct + "%;height:100%;background:" + idealCol + ";border-radius:3px;opacity:.45;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:70px;text-align:right;font-size:.68rem;font-weight:500;color:" + idealCol + ";opacity:.7\">" + tierLabel(idealPct) + "</div>"
+      + "</div>"
+      + (label === biggestGapCircle && (idealPct - curPct) >= 15
+          ? "<div style=\"margin-top:.75rem;font-size:.72rem;color:#c4a882;font-style:italic;display:flex;align-items:center;gap:6px\"><span>&#9733;</span> Your greatest desire for change on this team.</div>"
+          : "")
+      + "</div>";
+  }
+
+  function giveReceiveRow(label, receivePct, givePct){
+    const recCol = barColor(receivePct||0);
+    const giveCol = barColor(givePct||0);
+    return "<div style=\"padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(232,215,160,.06)\">"
+      + "<div style=\"font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem\">" + label + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.75rem;margin-bottom:.35rem\">"
+      + "<div style=\"width:90px;flex-shrink:0;font-size:.65rem;color:#6a6258\">I receive</div>"
+      + "<div style=\"flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (receivePct||0) + "%;height:100%;background:" + recCol + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:60px;text-align:right;font-size:.68rem;font-weight:500;color:" + recCol + "\">" + tierLabel(receivePct||0) + "</div>"
+      + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.75rem\">"
+      + "<div style=\"width:90px;flex-shrink:0;font-size:.65rem;color:#6a6258\">I give</div>"
+      + "<div style=\"flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (givePct||0) + "%;height:100%;background:" + giveCol + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div>"
+      + "<div style=\"width:60px;text-align:right;font-size:.68rem;font-weight:500;color:" + giveCol + "\">" + tierLabel(givePct||0) + "</div>"
+      + "</div>"
+      + "</div>";
+  }
+
+  // ── Things to Consider (dynamic writeup) ──────────────────
+  const circles = [
+    {label:"Relationships", current:rel.current, ideal:rel.ideal},
+    {label:"Values", current:val.current, ideal:val.ideal},
+    {label:"Calling", current:cal.current, ideal:cal.ideal}
+  ];
+  const strongest = [...circles].sort((a,b)=>b.current-a.current)[0];
+  const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.current)-(a.ideal-a.current))[0];
+
+  const thingsParas = [];
+  thingsParas.push("Based on your responses, your strongest area for <strong style=\"color:#f0e8df\">" + teamName + "</strong> is <strong style=\"color:#f0e8df\">" + strongest.label + "</strong> — " + agreePhrase(strongest.current) + ". That is worth naming.");
+  if(biggestGap.label !== strongest.label && (biggestGap.ideal - biggestGap.current) >= 15){
+    thingsParas.push("Your biggest opportunity is in <strong style=\"color:#f0e8df\">" + biggestGap.label + "</strong> — " + agreePhrase(biggestGap.current) + " on where the team is now, but pointing toward a higher bar on where it should be. That gap is worth exploring.");
+  }
+  thingsParas.push("<span style=\"font-style:italic;color:#a09890\">Before the group conversation: what is your read on why those areas scored the way they did?</span>");
+
+  // ── Worth Naming (give/receive imbalance) ─────────────────
+  const worthNamingParas = [];
+  if(Math.abs(bigImbalance.gap) >= 15){
+    const dir = bigImbalance.gap > 0
+      ? "giving significantly more than you are receiving"
+      : "receiving significantly more than you are giving";
+    const note = bigImbalance.gap > 0
+      ? "That kind of imbalance can be energizing for a season, but it has a cost over time."
+      : "That is worth noticing — it may be worth asking what is keeping you from investing more fully.";
+    worthNamingParas.push("In <strong style=\"color:#f0e8df\">" + bigImbalance.label + "</strong>, you are " + dir + ". " + note);
+  }
+
+  // ── Build HTML ────────────────────────────────────────────
+  let html = "<div class=\"main\"><div class=\"results-page\">";
+  html += "<div style=\"padding:1.5rem 0 1rem;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:1.5rem\"><p style=\"font-size:.95rem;color:#a09890;font-family:Cormorant Garamond,serif;font-style:italic;margin:0\">Thank you, " + userName + ". Here is how you see " + teamName + " at this point in time.</p></div>";
+  html += "<div style=\"text-align:center;padding:2rem 0;border-bottom:1px solid rgba(232,215,160,.1);margin-bottom:2rem\"><h2>Your View of " + teamName + "</h2><p style=\"color:#6a6258;font-size:.85rem;max-width:none\">This is your perspective only. Once the full team has responded, Steve will bring all perspectives together.</p></div>";
+
+  // Section 1 — How You See the Team
+  html += "<div class=\"section-label\">How You See the Team Right Now</div>";
+  html += barPair("Relationships", rel.current, rel.ideal);
+  html += barPair("Values", val.current, val.ideal);
+  html += barPair("Calling", cal.current, cal.ideal);
+
+  // Section 2 — Things to Consider
+  html += reflectionCard("Things to Consider", thingsParas);
+
+  // Section 3 — Your Relationship With This Team
+  html += "<div class=\"section-label\" style=\"margin-top:2.5rem\">Your Relationship With This Team</div>";
+  html += "<p style=\"font-size:.85rem;color:#6a6258;line-height:1.7;margin-bottom:1rem\">Both sides matter — what you draw from this team and what you put back into it.</p>";
+  html += "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:.5rem 0;margin-bottom:.75rem\">";
+  html += giveReceiveRow("Relationships", rel.outwardCurrent, rel.selfCurrent);
+  html += giveReceiveRow("Values", val.outwardCurrent, val.selfCurrent);
+  html += giveReceiveRow("Calling", cal.outwardCurrent, cal.selfCurrent);
+  html += "</div>";
+  if(worthNamingParas.length > 0){
+    html += reflectionCard("Worth Naming", worthNamingParas);
+  } else {
+    // Scores are balanced — still surface an observation
+    const avgGive = Math.round((rel.selfCurrent + val.selfCurrent + cal.selfCurrent) / 3);
+    const avgReceive = Math.round((rel.outwardCurrent + val.outwardCurrent + cal.outwardCurrent) / 3);
+    const balancePara = avgGive > avgReceive
+      ? "Across all three areas, what you give to this team is running slightly ahead of what you receive. That generosity is worth naming — and worth protecting."
+      : avgReceive > avgGive
+      ? "Across all three areas, what you receive from this team is running slightly ahead of what you give. That is not a verdict — but it is worth sitting with before the group conversation."
+      : "Your give and receive scores are closely matched across all three areas. That kind of balance is genuinely worth noticing — it suggests a real mutuality in how you are experiencing this team.";
+    html += reflectionCard("Worth Naming", [balancePara]);
+  }
+
+  // Section 4 — Before the Debrief + CTA
+  html += "<div style=\"margin-top:3rem;padding:2.5rem;background:#1a1714;border:1px solid rgba(232,215,160,.15);border-radius:4px\">";
+  html += "<h3 style=\"margin-bottom:.5rem\">Before the Debrief</h3>";
+  html += "<p style=\"font-size:.88rem;color:#6a6258;line-height:1.7;margin-bottom:1.75rem\">Take a few minutes to sit with these questions before the group conversation. Your honest reflection will make the debrief richer for everyone.</p>";
+  html += "<div style=\"display:flex;flex-direction:column;gap:1.25rem;margin-bottom:2rem\">";
+  html += "<div style=\"padding:1.25rem 1.5rem;background:#111111;border:1px solid rgba(232,215,160,.08);border-radius:4px\">"
+    + "<div style=\"font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#D85A30;margin-bottom:.5rem;font-weight:500\">Relationships</div>"
+    + "<p style=\"font-size:.88rem;color:#c0b8b0;line-height:1.7;margin:0\">Who on this team do you know least well? What would it take to change that?</p>"
+    + "</div>";
+  html += "<div style=\"padding:1.25rem 1.5rem;background:#111111;border:1px solid rgba(232,215,160,.08);border-radius:4px\">"
+    + "<div style=\"font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#185FA5;margin-bottom:.5rem;font-weight:500\">Values</div>"
+    + "<p style=\"font-size:.88rem;color:#c0b8b0;line-height:1.7;margin:0\">Is there a conviction you have seen this team compromise on recently? What kept you from naming it?</p>"
+    + "</div>";
+  html += "<div style=\"padding:1.25rem 1.5rem;background:#111111;border:1px solid rgba(232,215,160,.08);border-radius:4px\">"
+    + "<div style=\"font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:.5rem;font-weight:500\">Calling</div>"
+    + "<p style=\"font-size:.88rem;color:#c0b8b0;line-height:1.7;margin:0\">Could you articulate where this team is headed to someone outside it — and do you feel personally part of that direction?</p>"
+    + "</div>";
+  html += "</div>";
+  html += "<div style=\"border-top:1px solid rgba(232,215,160,.1);padding-top:2rem;text-align:center\">";
+  html += "<h3 style=\"margin-bottom:.75rem\">Ready to bring the team together?</h3>";
+  html += "<p style=\"color:#6a6258;font-size:.88rem;margin-bottom:1.5rem\">Once everyone has completed this assessment, Steve will compile all perspectives into a Team Culture Report and facilitate a 90-minute debrief.</p>";
+  html += "<a href=\"mailto:admin@boldhearts.org?subject=Leadership Team Culture - Assessment Complete\" style=\"display:inline-block;background:#e8d7a0;color:#111;padding:.85rem 2rem;border-radius:4px;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500\">Schedule a Debrief &rarr;</a>";
+  html += "</div></div>";
+  html += "<button class=\"retake-btn\" onclick=\"retake()\">&#8592; Retake Assessment</button>";
+  html += "</div></div>";
+  document.getElementById("app").innerHTML = html;
+}
+
+
+function retake(){
+  answers={};userName='';userEmail='';teamName='';
+  document.getElementById('progress-section').style.display='none';
+  renderIntroGate();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function checkTestMode(){
+  const params = new URLSearchParams(window.location.search);
+  const testParam = params.get('test');
+  if(testParam !== 'true' && testParam !== 'write') return false;
+
+  // 'test=true' previews results WITHOUT writing to the sheet
+  // 'test=write' fills random answers AND writes to the sheet (for testing the Apps Script connection)
+  isTestMode = (testParam === 'true');
+
+  userName = 'Test Leader'; userEmail = 'test@example.com'; teamName = 'Test Team'; assessmentRound = 'Initial Assessment';
+  CIRCLES.forEach(c=>{
+    ['outward','self'].forEach(grp=>{
+      c[grp].forEach((_,i)=>{
+        answers[c.id+'_'+grp+'_'+i+'_cur'] = Math.round((2 + Math.random()*4)*100)/100;
+        answers[c.id+'_'+grp+'_'+i+'_ideal'] = Math.round((5 + Math.random()*2)*100)/100;
+      });
+    });
+  });
+  return true;
+}
+
+if(checkTestMode()){
+  finalizeSubmission();
+} else {
+  renderIntroGate();
 }
 </script>
 </body>
