@@ -91,6 +91,38 @@ a{color:#e8d7a0;text-decoration:none}
   .table-wrap{padding:0 1rem 2rem}
   .topbar{padding:.75rem 1rem}
 }
+
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(232,215,160,.15);margin:0 0 1.5rem}
+.tab-btn{padding:.65rem 1.5rem;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.tab-btn.active{color:#e8d7a0;border-bottom-color:#e8d7a0}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.lt-search{display:flex;gap:1rem;align-items:center;margin-bottom:1.5rem}
+.lt-search input{flex:1;padding:.85rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.9rem}
+.lt-search button{padding:.85rem 1.5rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;white-space:nowrap}
+.lt-member-card{background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1rem 1.25rem;margin-bottom:.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.lt-member-name{font-size:.88rem;color:#f0e8df;width:100px;flex-shrink:0}
+.lt-bar-wrap{flex:1;min-width:200px;display:flex;flex-direction:column;gap:4px}
+.lt-bar-row{display:flex;align-items:center;gap:.5rem}
+.lt-bar-label{width:90px;font-size:.62rem;color:#6a6258;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.lt-bar-track{flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.lt-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.lt-bar-val{width:30px;text-align:right;font-size:.62rem;font-weight:500}
+.lt-avg-row{background:#1e1c1a;border:1px solid rgba(232,215,160,.2);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.lt-avg-label{font-size:.72rem;color:#e8d7a0;letter-spacing:.08em;text-transform:uppercase;width:100px;flex-shrink:0}
+.report-section{background:#1a1816;border:1px solid rgba(232,215,160,.12);border-radius:4px;padding:1.75rem;margin-bottom:1rem}
+.report-section h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#f0e8df;margin-bottom:.75rem}
+.report-section p{font-size:.88rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem}
+.report-section p:last-child{margin:0}
+.gen-btn{display:inline-block;padding:.75rem 1.75rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;margin-right:.5rem;margin-top:.5rem}
+.gen-btn.secondary{background:transparent;border:1px solid rgba(232,215,160,.3);color:#e8d7a0}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed}
+.indiv-tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.indiv-tab-btn{padding:.4rem .9rem;font-size:.72rem;background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:3px;color:#6a6258;cursor:pointer}
+.indiv-tab-btn.active{border-color:#e8d7a0;color:#e8d7a0}
+.spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(232,215,160,.2);border-top-color:#e8d7a0;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gold-card{background:#1a1714;border:1px solid rgba(196,168,130,.25);border-left:4px solid #c4a882;border-radius:4px;padding:1.5rem;margin:.75rem 0}
+.gold-card-eyebrow{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.65rem;font-weight:500}
 </style>
 </head>
 <body>
@@ -108,7 +140,7 @@ a{color:#e8d7a0;text-decoration:none}
 
 <div class="dashboard" id="dashboard">
   <div class="topbar">
-    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span> <span style="font-size:.65rem;color:#3a3530;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;margin-left:.75rem">v1.7</span></div>
+    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Admin</span> <span style="font-size:.65rem;color:#3a3530;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;margin-left:.75rem">v1.8</span></div>
     <div class="topbar-right">
       <span class="topbar-label" id="last-updated"></span>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
@@ -122,33 +154,57 @@ a{color:#e8d7a0;text-decoration:none}
     <div class="stat-card"><div class="stat-label">Follow-up Requested</div><div class="stat-val" id="stat-followup">—</div></div>
   </div>
 
-  <div class="controls">
-    <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
-    <button class="refresh-btn" onclick="loadData()">↺ Refresh</button>
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-btn-individuals" onclick="switchTab('individuals')">Individual Assessments</button>
+    <button class="tab-btn" id="tab-btn-leadership" onclick="switchTab('leadership')">Leadership Teams</button>
   </div>
 
-  <div class="table-wrap">
-    <div class="loading" id="table-loading">Loading data...</div>
-    <div class="empty" id="empty-state" style="display:none">No submissions yet.</div>
-    <table class="pipeline-table" id="results-table" style="display:none">
-      <thead>
-        <tr>
-          <th style="min-width:160px">Person</th>
-          <th>Relational<br>Assessment</th>
-          <th>Relational<br>Email</th>
-          <th>Interior<br>Assessment</th>
-          <th>Interior<br>Email</th>
-          <th>Follow-up<br>Requested</th>
-          <th>Request<br>Date</th>
-          <th>Guide<br>Created</th>
-          <th>Guide<br>Sent</th>
-          <th>Scores</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="table-body"></tbody>
-    </table>
+  <div id="tab-individuals" class="tab-panel active">
+    <div class="controls">
+      <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
+      <button class="refresh-btn" onclick="loadData()">↺ Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <div class="loading" id="table-loading">Loading data...</div>
+      <div class="empty" id="empty-state" style="display:none">No submissions yet.</div>
+      <table class="pipeline-table" id="results-table" style="display:none">
+        <thead>
+          <tr>
+            <th style="min-width:160px">Person</th>
+            <th>Relational<br>Assessment</th>
+            <th>Relational<br>Email</th>
+            <th>Interior<br>Assessment</th>
+            <th>Interior<br>Email</th>
+            <th>Follow-up<br>Requested</th>
+            <th>Request<br>Date</th>
+            <th>Guide<br>Created</th>
+            <th>Guide<br>Sent</th>
+            <th>Scores</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
   </div>
+
+  <div id="tab-leadership" class="tab-panel">
+    <div class="lt-search">
+      <input type="text" id="lt-team-input" placeholder="Enter exact team name (e.g. Test Team)" onkeydown="if(event.key==='Enter')loadTeamData()">
+      <button onclick="loadTeamData()">Load Team Data</button>
+    </div>
+    <div id="lt-status" style="font-size:.85rem;color:#6a6258;margin-bottom:1rem"></div>
+    <div id="lt-members" style="display:none">
+      <div id="lt-avg-section"></div>
+      <div id="lt-member-list"></div>
+      <div style="display:flex;gap:.75rem;margin:1.5rem 0;flex-wrap:wrap">
+        <button class="gen-btn" id="btn-team-report" onclick="generateTeamReport()">Generate Team Culture Report</button>
+        <button class="gen-btn secondary" id="btn-indiv-summaries" onclick="generateAllIndividuals()">Generate Individual Summaries</button>
+      </div>
+      <div id="lt-report-area"></div>
+    </div>
+  </div>
+
 </div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
@@ -736,6 +792,346 @@ async function loadData(){
     document.getElementById('empty-state').textContent = 'Error loading data.';
     document.getElementById('empty-state').style.display = 'block';
   }
+}
+
+
+
+// ── LEADERSHIP TEAM ──────────────────────────────────────────
+
+const LT_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
+let ltTeamData = [];
+
+function switchTab(tab){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('tab-btn-'+tab).classList.add('active');
+}
+
+function barColor(pct){ return pct>=80?'#C4A055':pct>=60?'#B8AA7A':pct>=40?'#8AACCB':pct>=20?'#5B8DB0':'#3A6D94'; }
+function tierLabel(pct){ return pct>=80?'Strong':pct>=60?'Present':pct>=40?'Thin':pct>=20?'Quiet':'Barely There'; }
+function pctVal(str){ return str ? parseInt(str.replace('%','')) : 0; }
+
+function avg(arr){ return arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0; }
+
+function loadTeamData(){
+  const team = document.getElementById('lt-team-input').value.trim();
+  if(!team){ document.getElementById('lt-status').textContent = 'Please enter a team name.'; return; }
+  document.getElementById('lt-status').textContent = 'Loading...';
+  document.getElementById('lt-members').style.display = 'none';
+  document.getElementById('lt-report-area').innerHTML = '';
+
+  const cbName = '_lt_read_' + Date.now();
+  const script = document.createElement('script');
+  const timeout = setTimeout(()=>{
+    document.getElementById('lt-status').textContent = 'Timeout — check team name and try again.';
+    try{ delete window[cbName]; script.remove(); }catch(e){}
+  }, 12000);
+
+  window[cbName] = (data) => {
+    clearTimeout(timeout);
+    try{ delete window[cbName]; script.remove(); }catch(e){}
+    if(!data.rows || data.rows.length === 0){
+      document.getElementById('lt-status').textContent = 'No data found for "'+team+'". Check the exact team name.';
+      return;
+    }
+    // Filter rows for this team
+    ltTeamData = data.rows.filter(r => r[3] === team);
+    if(ltTeamData.length === 0){
+      document.getElementById('lt-status').textContent = 'No submissions found for "'+team+'".';
+      return;
+    }
+    document.getElementById('lt-status').textContent = ltTeamData.length + ' team member' + (ltTeamData.length>1?'s':'') + ' found for "'+team+'".';
+    renderTeamMembers(ltTeamData);
+    document.getElementById('lt-members').style.display = 'block';
+  };
+
+  script.src = LT_SHEETS_URL + '?action=getteamdata&callback=' + cbName;
+  document.head.appendChild(script);
+}
+
+function renderTeamMembers(rows){
+  // Compute team averages
+  const relCur = avg(rows.map(r=>pctVal(r[4])));
+  const relIdeal = avg(rows.map(r=>pctVal(r[5])));
+  const valCur = avg(rows.map(r=>pctVal(r[10])));
+  const valIdeal = avg(rows.map(r=>pctVal(r[11])));
+  const calCur = avg(rows.map(r=>pctVal(r[16])));
+  const calIdeal = avg(rows.map(r=>pctVal(r[17])));
+
+  // Team average bar
+  let avgHtml = '<div class="lt-avg-row">';
+  avgHtml += '<div class="lt-avg-label">Team Average</div>';
+  avgHtml += '<div class="lt-bar-wrap">';
+  for(const [label, cur, ideal, col] of [
+    ['Relationships', relCur, relIdeal, '#D85A30'],
+    ['Values', valCur, valIdeal, '#185FA5'],
+    ['Calling', calCur, calIdeal, '#534AB7']
+  ]){
+    avgHtml += '<div class="lt-bar-row">';
+    avgHtml += '<div class="lt-bar-label">'+label+'</div>';
+    avgHtml += '<div class="lt-bar-track"><div class="lt-bar-fill" style="width:'+cur+'%;background:'+barColor(cur)+'"></div></div>';
+    avgHtml += '<div class="lt-bar-val" style="color:'+barColor(cur)+'">'+cur+'%</div>';
+    avgHtml += '<div style="width:6px"></div>';
+    avgHtml += '<div class="lt-bar-track" style="opacity:.45"><div class="lt-bar-fill" style="width:'+ideal+'%;background:'+barColor(ideal)+'"></div></div>';
+    avgHtml += '<div class="lt-bar-val" style="color:'+barColor(ideal)+';opacity:.6">'+ideal+'%</div>';
+    avgHtml += '</div>';
+  }
+  avgHtml += '</div><div style="font-size:.6rem;color:#5a5550;margin-left:.5rem">Current / Ideal</div></div>';
+  document.getElementById('lt-avg-section').innerHTML = avgHtml;
+
+  // Individual member cards
+  let html = '';
+  rows.forEach((r,i)=>{
+    const name = r[1] || 'Unknown';
+    const rc = pctVal(r[4]), vi = pctVal(r[10]), cc = pctVal(r[16]);
+    html += '<div class="lt-member-card">';
+    html += '<div class="lt-member-name">'+name+'</div>';
+    html += '<div class="lt-bar-wrap">';
+    for(const [label, pct, color] of [['Rel',rc,'#D85A30'],['Val',vi,'#185FA5'],['Cal',cc,'#534AB7']]){
+      html += '<div class="lt-bar-row">';
+      html += '<div class="lt-bar-label">'+label+'</div>';
+      html += '<div class="lt-bar-track"><div class="lt-bar-fill" style="width:'+pct+'%;background:'+barColor(pct)+'"></div></div>';
+      html += '<div class="lt-bar-val" style="color:'+barColor(pct)+'">'+pct+'%</div>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  });
+  document.getElementById('lt-member-list').innerHTML = html;
+}
+
+function buildTeamPrompt(rows){
+  const n = rows.length;
+  const relCurs = rows.map(r=>pctVal(r[4]));
+  const valCurs = rows.map(r=>pctVal(r[10]));
+  const calCurs = rows.map(r=>pctVal(r[16]));
+  const relIdeals = rows.map(r=>pctVal(r[5]));
+  const valIdeals = rows.map(r=>pctVal(r[11]));
+  const calIdeals = rows.map(r=>pctVal(r[17]));
+  const relOutCurs = rows.map(r=>pctVal(r[6]));
+  const relSelfCurs = rows.map(r=>pctVal(r[8]));
+  const valOutCurs = rows.map(r=>pctVal(r[12]));
+  const valSelfCurs = rows.map(r=>pctVal(r[14]));
+  const calOutCurs = rows.map(r=>pctVal(r[18]));
+  const calSelfCurs = rows.map(r=>pctVal(r[20]));
+
+  const teamName = rows[0][3];
+  const relCur=avg(relCurs), relIdeal=avg(relIdeals);
+  const valCur=avg(valCurs), valIdeal=avg(valIdeals);
+  const calCur=avg(calCurs), calIdeal=avg(calIdeals);
+  const relOut=avg(relOutCurs), relSelf=avg(relSelfCurs);
+  const valOut=avg(valOutCurs), valSelf=avg(valSelfCurs);
+  const calOut=avg(calOutCurs), calSelf=avg(calSelfCurs);
+
+  const individuals = rows.map(r=>`${r[1]}: Rel=${pctVal(r[4])}% Val=${pctVal(r[10])}% Cal=${pctVal(r[16])}%`).join(', ');
+
+  return `You are an experienced spiritual director and leadership formation practitioner preparing a Team Culture Report for a pastoral leadership team. Your language should carry the weight of deep formation wisdom — drawing from frameworks of team health, emotional intelligence, soul care, and leadership accountability — without citing specific authors or frameworks by name. Write as a seasoned practitioner who has absorbed these voices deeply.
+
+TEAM: ${teamName}
+TEAM SIZE: ${n} leaders
+
+TEAM AVERAGE SCORES (Current % → Ideal %):
+- Relationships: ${relCur}% current → ${relIdeal}% ideal (${relIdeal-relCur} point gap)
+- Values: ${valCur}% current → ${valIdeal}% ideal (${valIdeal-valCur} point gap)
+- Calling: ${calCur}% current → ${calIdeal}% ideal (${calIdeal-calCur} point gap)
+
+GIVE / RECEIVE BREAKDOWN (Current):
+- Relationships: Receive ${relOut}%, Give ${relSelf}% (${relOut-relSelf > 0 ? 'receiving more than giving by ' + (relOut-relSelf) + 'pts' : 'giving more than receiving by ' + (relSelf-relOut) + 'pts'})
+- Values: Receive ${valOut}%, Give ${valSelf}% (${valOut-valSelf > 0 ? 'receiving more than giving by ' + (valOut-valSelf) + 'pts' : 'giving more than receiving by ' + (valSelf-valOut) + 'pts'})
+- Calling: Receive ${calOut}%, Give ${calSelf}% (${calOut-calSelf > 0 ? 'receiving more than giving by ' + (calOut-calSelf) + 'pts' : 'giving more than receiving by ' + (calSelf-calOut) + 'pts'})
+
+INDIVIDUAL VARIANCE:
+- Relationships: min=${Math.min(...relCurs)}%, max=${Math.max(...relCurs)}%, range=${Math.max(...relCurs)-Math.min(...relCurs)}pts
+- Values: min=${Math.min(...valCurs)}%, max=${Math.max(...valCurs)}%, range=${Math.max(...valCurs)-Math.min(...valCurs)}pts
+- Calling: min=${Math.min(...calCurs)}%, max=${Math.max(...calCurs)}%, range=${Math.max(...calCurs)-Math.min(...calCurs)}pts
+
+INDIVIDUAL SCORES: ${individuals}
+
+SCORING KEY:
+- 80%+ = Strong (soul is alive here, integrated, working)
+- 60-79% = Present (functional but not flourishing)
+- 40-59% = Thin (present but underdeveloped, needs attention)
+- 20-39% = Quiet (largely absent or stuck)
+- Below 20% = Barely There
+
+Write a Team Culture Report with these sections. Use pastoral, direct, practitioner language — not corporate, not clinical:
+
+1. OVERALL PICTURE (2-3 paragraphs)
+The opening statement of where this team is right now. Name the pattern honestly. Draw out what's most significant about the combination of scores across all three circles. Name what the consistency (or inconsistency) between scores means. Note whether the high ideal scores suggest aspiration or anxiety.
+
+2. CIRCLE BY CIRCLE (one paragraph each for Relationships, Values, Calling)
+For each circle: name what the score reveals, what the gap between current and ideal means, what the give/receive split suggests about how this team functions, and what the individual variance tells you about whether this is a shared experience or a divided one.
+
+3. THINGS TO CONSIDER (3-4 specific observations)
+The things that deserve a direct conversation in the room. Not generic advice — specific observations drawn from this team's specific data. Include at least one that names the thing nobody has probably said out loud yet.
+
+4. QUESTIONS FOR THE DEBRIEF (3-4 questions)
+Questions Steve can bring into the room. They should be specific enough to feel personal, open enough to generate real conversation. They should make people lean in, not brace.
+
+5. A CLOSING INVITATION (1 paragraph)
+What this team is being invited into. Hopeful but honest. Not a pep talk — a genuine naming of what's possible if this team chooses to move toward it.`;
+}
+
+function buildIndividualPrompt(row, rows){
+  const teamName = row[3];
+  const name = row[1];
+  const n = rows.length;
+
+  const relCur=pctVal(row[4]), relIdeal=pctVal(row[5]);
+  const valCur=pctVal(row[10]), valIdeal=pctVal(row[11]);
+  const calCur=pctVal(row[16]), calIdeal=pctVal(row[17]);
+  const relOut=pctVal(row[6]), relSelf=pctVal(row[8]);
+  const valOut=pctVal(row[12]), valSelf=pctVal(row[14]);
+  const calOut=pctVal(row[18]), calSelf=pctVal(row[20]);
+
+  const teamRelCur=avg(rows.map(r=>pctVal(r[4])));
+  const teamValCur=avg(rows.map(r=>pctVal(r[10])));
+  const teamCalCur=avg(rows.map(r=>pctVal(r[16])));
+
+  return `You are an experienced spiritual director preparing a personal pre-debrief summary for one leader on a pastoral leadership team. This summary is for ${name} only — it is private, personal, and pastoral. Write directly to ${name} in second person. Your tone should be warm, honest, and direct — not clinical, not corporate.
+
+TEAM: ${teamName} (${n} leaders total)
+
+${name.toUpperCase()}'S SCORES vs TEAM AVERAGE:
+- Relationships: ${name} ${relCur}% (team avg ${avg(rows.map(r=>pctVal(r[4])))}%) — ideal ${relIdeal}%
+- Values: ${name} ${valCur}% (team avg ${teamValCur}%) — ideal ${valIdeal}%
+- Calling: ${name} ${calCur}% (team avg ${teamCalCur}%) — ideal ${calIdeal}%
+
+${name.toUpperCase()}'S GIVE / RECEIVE:
+- Relationships: Receive ${relOut}%, Give ${relSelf}%
+- Values: Receive ${valOut}%, Give ${valSelf}%
+- Calling: Receive ${calOut}%, Give ${calSelf}%
+
+SCORING KEY: 80%+=Strong, 60-79%=Present, 40-59%=Thin, 20-39%=Quiet, Below 20%=Barely There
+
+Write a personal pre-debrief summary with these sections:
+
+1. WHERE YOU SIT (1-2 paragraphs)
+Name ${name}'s overall picture honestly. Where are they relative to the team? What stands out about their specific combination of scores? What might this say about how they are experiencing this team right now?
+
+2. YOUR GIVE AND RECEIVE (1 paragraph)
+Name the give/receive pattern specifically. If they are giving more than receiving in any circle, name it and what it might cost over time. If they are receiving more than giving, name that honestly without shaming. If balanced, name the mutuality.
+
+3. ONE THING TO BRING INTO THE ROOM (1 paragraph)
+One specific, personal observation drawn from their data that ${name} might want to hold going into the debrief. Not advice — a question or a naming of something worth sitting with. End with a direct question for ${name} to reflect on before the session.`;
+}
+
+async function callClaude(prompt){
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1500,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await response.json();
+  return data.content?.[0]?.text || 'No response generated.';
+}
+
+function formatReport(text){
+  // Convert markdown-style headings and paragraphs to HTML
+  return text
+    .split('\n\n')
+    .map(para=>{
+      if(para.startsWith('# ') || para.startsWith('## ') || para.startsWith('### ')){
+        const level = para.startsWith('### ') ? 4 : para.startsWith('## ') ? 3 : 3;
+        const text = para.replace(/^#+\s/, '');
+        return `<h${level} style="font-family:'Cormorant Garamond',serif;color:#f0e8df;margin:1.25rem 0 .5rem">${text}</h${level}>`;
+      }
+      if(para.startsWith('**') && para.endsWith('**')){
+        return `<p style="font-size:.88rem;color:#e8d7a0;font-weight:500;margin-bottom:.5rem">${para.replace(/\*\*/g,'')}</p>`;
+      }
+      return `<p style="font-size:.88rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">${para.replace(/\*\*([^*]+)\*\*/g,'<strong style="color:#f0e8df">$1</strong>').replace(/\n/g,'<br>')}</p>`;
+    })
+    .join('');
+}
+
+async function generateTeamReport(){
+  const btn = document.getElementById('btn-team-report');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Generating...';
+  document.getElementById('lt-report-area').innerHTML = '<div style="color:#6a6258;font-size:.85rem;padding:1rem 0">Generating Team Culture Report — this takes about 15 seconds...</div>';
+
+  try {
+    const prompt = buildTeamPrompt(ltTeamData);
+    const text = await callClaude(prompt);
+
+    let html = '<div class="report-section">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">';
+    html += '<h3 style="margin:0">Team Culture Report</h3>';
+    html += '<span style="font-size:.7rem;color:#6a6258;letter-spacing:.08em;text-transform:uppercase">'+ltTeamData[0][3]+' &middot; '+ltTeamData.length+' leaders</span>';
+    html += '</div>';
+    html += formatReport(text);
+    html += '</div>';
+
+    const existing = document.getElementById('lt-report-area').innerHTML;
+    document.getElementById('lt-report-area').innerHTML = html + (existing.includes('Individual') ? existing.substring(existing.indexOf('<div id="indiv')) : '');
+  } catch(e){
+    document.getElementById('lt-report-area').innerHTML = '<div style="color:#c97a5a;font-size:.85rem">Error generating report: '+e.message+'</div>';
+  }
+  btn.disabled = false;
+  btn.innerHTML = 'Generate Team Culture Report';
+}
+
+let individualReports = {};
+let currentIndivTab = null;
+
+async function generateAllIndividuals(){
+  const btn = document.getElementById('btn-indiv-summaries');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Generating '+ltTeamData.length+' summaries...';
+  individualReports = {};
+  currentIndivTab = null;
+
+  const tabBar = '<div class="indiv-tabs" id="indiv-tab-bar">' +
+    ltTeamData.map((r,i)=>`<button class="indiv-tab-btn" id="itab-${i}" onclick="showIndivReport(${i})">${r[1]||'Member '+(i+1)}</button>`).join('') +
+    '</div><div id="indiv-report-content"></div>';
+
+  const existing = document.getElementById('lt-report-area').innerHTML;
+  const teamPart = existing.includes('Team Culture Report') ? existing.substring(0, existing.indexOf('<div id="indiv')) || existing : '';
+  document.getElementById('lt-report-area').innerHTML = teamPart + '<div id="indiv-section"><div class="report-section"><h3>Individual Summaries</h3>' + tabBar + '</div></div>';
+
+  // Generate all summaries sequentially
+  for(let i = 0; i < ltTeamData.length; i++){
+    const r = ltTeamData[i];
+    const name = r[1] || 'Member '+(i+1);
+    document.getElementById('itab-'+i).textContent = name + ' ⟳';
+    try {
+      const text = await callClaude(buildIndividualPrompt(r, ltTeamData));
+      individualReports[i] = text;
+      document.getElementById('itab-'+i).textContent = name + ' ✓';
+      document.getElementById('itab-'+i).style.borderColor = 'rgba(196,168,130,.4)';
+      document.getElementById('itab-'+i).style.color = '#c4a882';
+    } catch(e) {
+      individualReports[i] = 'Error generating summary for '+name+'.';
+      document.getElementById('itab-'+i).textContent = name + ' ✗';
+    }
+    if(i === 0) showIndivReport(0);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = 'Generate Individual Summaries';
+}
+
+function showIndivReport(idx){
+  if(currentIndivTab !== null){
+    const prev = document.getElementById('itab-'+currentIndivTab);
+    if(prev) prev.classList.remove('active');
+  }
+  currentIndivTab = idx;
+  const btn = document.getElementById('itab-'+idx);
+  if(btn) btn.classList.add('active');
+
+  const text = individualReports[idx];
+  if(!text){
+    document.getElementById('indiv-report-content').innerHTML = '<p style="color:#6a6258;font-size:.85rem;padding:.5rem 0">Still generating...</p>';
+    return;
+  }
+  const name = ltTeamData[idx][1] || 'Member '+(idx+1);
+  document.getElementById('indiv-report-content').innerHTML =
+    '<div class="gold-card"><div class="gold-card-eyebrow">Personal Pre-Debrief Summary &mdash; '+name+'</div>' + formatReport(text) + '</div>';
 }
 
 document.getElementById('pw-input').addEventListener('keydown', function(e){
