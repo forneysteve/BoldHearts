@@ -1016,18 +1016,19 @@ Name the give/receive pattern specifically. If they are giving more than receivi
 One specific, personal observation drawn from their data that ${name} might want to hold going into the debrief. Not advice — a question or a naming of something worth sitting with. End with a direct question for ${name} to reflect on before the session.`;
 }
 
+const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
+
 async function callClaude(prompt){
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch(WORKER_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }]
+      action: 'teamreport',
+      prompt: prompt
     })
   });
   const data = await response.json();
-  return data.content?.[0]?.text || 'No response generated.';
+  return data.text || 'No response generated.';
 }
 
 function formatReport(text){
