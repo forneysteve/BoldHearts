@@ -2,7 +2,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v3.2
+  Version: v3.3
   Last updated: 2026-07-03
 
   CHANGELOG:
@@ -125,6 +125,22 @@
       ongoing-influence question instead of one requiring a discrete
       instance, and narrowed from a three-part list (decisions/
       meetings/impacts) to one clean construct.
+
+  v2.0 — Removed "What I Receive From This Team" / "What I Give To
+         This Team" subgroup headers
+    - These labels sat directly above each group of questions and
+      risked cueing respondents to consciously perform or rate
+      themselves generously on the "Giving" half specifically, since
+      the label made it explicit they were now being asked to grade
+      their own contribution rather than the team's
+    - Question order is unchanged (outward/receiving questions still
+      render before self/giving questions within each circle) — only
+      the visible header text announcing the split was removed
+    - The general receiving/giving explanation in the intro paragraph
+      above the survey (in the "A Few Things Before You Start" block)
+      was left in place, since it's positioned before any individual
+      question and doesn't sit directly over a specific rating the
+      way the removed subgroup headers did
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -229,7 +245,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v3.2</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v3.3</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -361,9 +377,7 @@ function renderSurvey(){
   html += '</div>';
   CIRCLES.forEach(c=>{
     html += '<div class="realm-hdr"><div class="realm-icon" style="color:'+c.color+'"><i class="ti '+c.icon+'"></i></div><div class="realm-hdr-text"><h2>'+c.label+'</h2><p>'+c.desc+'</p></div></div>';
-    html += '<div class="subgroup-label">What I Receive From This Team</div>';
     c.outward.forEach((q,i)=>{ html += renderQuestionBlock(c,'outward',q,i); });
-    html += '<div class="subgroup-label">What I Give To This Team</div>';
     c.self.forEach((q,i)=>{ html += renderQuestionBlock(c,'self',q,i); });
   });
   html += '<div class="submit-section"><div class="submit-meta">Move every slider to answer &mdash; your honest perspective matters more than a flattering score</div><button class="sub-btn" onclick="trySubmit()">Submit My Responses &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
