@@ -1,8 +1,9 @@
 
+
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v2.8
-  Last updated: 2026-06-30
+  Version: v3.2
+  Last updated: 2026-07-03
 
   CHANGELOG:
   v1.0 — Initial build
@@ -59,6 +60,71 @@
       agreePhrase language, names biggest current-vs-ideal gap circle
     - Removed Venn, radar, give/receive bars, buildReflection function,
       starPath, computeVennPos -- all replaced by simpler barPair format
+
+  v1.6 — Relationships circle rewritten to match 8-dimension framework
+    - Previous Relationships questions used abstract identity language
+      ("who I am," "who they are," "friends") that different respondents
+      would resolve differently before answering, and had unintentional
+      overlap (two questions both testing general connection/inclusion,
+      four of the eight core relational dimensions unused entirely)
+    - Rewritten against the same 8-dimension model used in the personal
+      Relationship-with-Self / Relationship-with-Others assessments:
+      Being Seen, Being Known, Trust & Safety, Receiving Support (Receiving)
+      and Having a Voice, Belonging, Freedom, Being Chosen (Giving)
+    - Each question now names a concrete, checkable behavior or fact
+      instead of an abstract identity claim, and each dimension appears
+      exactly once — no overlap, no gaps
+
+  v1.7 — Values circle rewritten against 8-realm lifecycle model
+    - Previous Values questions had double-barreled items (two claims
+      in one sentence), items that assumed an unwitnessed event had
+      occurred (a concern being raised, a costly moment happening),
+      and framing language that shifted the actual construct being
+      measured ("I am the one who raises it" implying uniqueness)
+    - Rewritten against a new 8-realm model specific to values/conviction
+      (distinct from the relational 8-dimension model used in
+      Relationships): Known, Communicated, Integrated, Defended
+      (Receiving) and Agreed Upon, Acted Upon, Costly, Sustained (Giving)
+    - Each realm appears exactly once; belief/confidence framing used
+      in place of event-conditional framing where an assumed event
+      would otherwise leave some respondents with nothing to answer
+
+  v1.8 — Calling circle replaced with gifting/utilization realm model
+    - Previous Calling questions tested only team-level mission clarity
+      and direction ("do we know where we're headed") — none of them
+      measured whether an individual's specific gifting was recognized,
+      well-placed, or actually being used, which is a separate and
+      more predictive driver of a leader's satisfaction on a team
+    - Replaced entirely with an 8-realm gifting model: Recognized,
+      Positioned, Utilized, Growing (Receiving) and Known, Aligned,
+      Contributing, Energized (Giving)
+    - Circle description updated to match; "Before the Debrief" Calling
+      prompt updated from mission-articulation framing to a
+      gifting/fit framing to stay consistent with the new questions
+
+  v1.9 — Calling questions refined for trait-vs-environment and
+         event-conditional issues
+    - "Known" (I know what my strongest gifts actually are) replaced —
+      it was a pure self-knowledge trait question disconnected from
+      the team, meaning the "should" side reliably ceilings near-max
+      for every respondent regardless of team quality, making the
+      current/ideal gap add little real insight. Replaced with a
+      team-context version: "I understand why I was chosen for this
+      team — how my specific gifting and calling fit into what we're
+      doing" — now the "should" side genuinely varies based on whether
+      the team has actually communicated that fit.
+    - "Aligned" reworded from "connects directly to where this team is
+      headed" (depends on the team having an articulated forward
+      direction) to "aligns well with the intent and purpose of this
+      team" — purpose is more foundational than direction and doesn't
+      require the team to have done separate mission-clarity work.
+    - "Contributing" reworded from "I can point to something specific
+      my gifts have produced" (event-conditional — a respondent with
+      no single visible win has nothing honest to report) to "My gifts
+      and calling actually shape the decisions this team makes" — an
+      ongoing-influence question instead of one requiring a discrete
+      instance, and narrowed from a three-part list (decisions/
+      meetings/impacts) to one clean construct.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -163,7 +229,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v2.8</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v3.2</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -172,44 +238,44 @@ const CIRCLES = [
   {id:'relationships', label:'Relationships', color:'#D85A30', icon:'ti-users',
    desc:"Does this team genuinely know, trust, and enjoy each other — not just work well together?",
    outward:[
-    "The other leaders on this team know me — not just my role, but who I am.",
-    "I trust the people on this team enough to be honest when something is wrong.",
-    "If I were struggling personally, I believe this team would notice and show up for me.",
-    "This team has been through hard things together and come out more connected, not less."
+    "People on this team notice when something's going on with me, even before I say anything.",
+    "The people on this team know what actually drives me — not just what I do, but why I do it.",
+    "I feel safe being honest with this team when something is wrong.",
+    "If I were struggling personally, I believe this team would show up for me."
    ],
    self:[
-    "I genuinely know the other leaders on this team — not just their roles, but who they are.",
     "When I disagree with someone on this team, I initiate the conversation rather than letting distance grow.",
-    "I am the kind of person on this team who notices when someone else is struggling and shows up for them.",
-    "I would call the people on this team friends, not just colleagues — and I act like it."
+    "When this team has gone through something hard together, it's made me more invested in these people, not less.",
+    "I show up as the same person in front of this team as I am anywhere else — no performing, no hiding.",
+    "There are people on this team I actively seek out — not because I have to work with them, but because I want to."
    ]},
   {id:'values', label:'Values', color:'#185FA5', icon:'ti-compass',
    desc:"Does this team share real, lived convictions — not just stated principles?",
    outward:[
-    "I know what this team actually believes is non-negotiable — not just what's written down, but what's lived out.",
-    "When this team makes a hard decision, I trust the reasoning reflects what we say we value.",
-    "When someone on this team raises a moral or ethical concern, it gets taken seriously, not dismissed.",
-    "This team's values shape how I am treated — not just what gets preached to others."
+    "I could list this team's core values without having to stop and think.",
+    "This team talks about its values regularly — not just once a year or when something goes wrong.",
+    "This team's values show up in how we actually make decisions — hiring, priorities, who gets held accountable — not just in what we say.",
+    "I believe someone on this team would speak up if one of our values were being violated."
    ],
    self:[
-    "I have held this team's convictions even when it was costly for me personally to do so.",
-    "When I see something on this team that doesn't reflect our stated values, I am the one who raises it.",
-    "I hold myself to the same convictions I expect from this team, even when no one would notice if I didn't.",
-    "If I strongly disagreed with a decision on values grounds, I would actually say so — not just believe I'd be heard."
+    "I genuinely believe in this team's stated values — I'm not just going along with them.",
+    "My day-to-day decisions on this team actually reflect our stated values, not just my convenience.",
+    "I am willing to pay a real personal cost — time, comfort, a relationship — to stay true to this team's values.",
+    "I actively work to keep this team's values alive, rather than assuming they'll hold on their own."
    ]},
   {id:'calling', label:'Calling', color:'#534AB7', icon:'ti-flag',
-   desc:"Is there a shared, owned, energizing sense of where this team is headed?",
+   desc:"Are people on this team actually known for their gifting, positioned to use it, and growing because of it — not just busy?",
    outward:[
-    "I have a clear and shared understanding of where this team believes God is leading us.",
-    "The mission of this team feels like something I am personally part of, not just something leadership decided.",
-    "Decisions on this team are generally made with our shared calling in mind, not just convenience or urgency.",
-    "This team revisits and re-clarifies our calling regularly — it isn't something decided once and forgotten."
+    "The people on this team recognize and name my specific gifts, not just what I get done.",
+    "I am in a role on this team that actually fits how I'm wired.",
+    "I get to use my strongest gifts regularly on this team, not just occasionally.",
+    "My gifts are developing because of my time on this team, not stagnating."
    ],
    self:[
-    "I actively help cast and clarify this team's calling for others — I don't just wait to be told where we're headed.",
-    "When the mission gets hard or unclear, I am one of the people who keeps it alive for the team.",
-    "My own sense of personal calling feels aligned with where this team is headed, and I bring that energy into the room.",
-    "I could articulate this team's calling to someone outside the team, and I actually do this — not just could."
+    "I understand why I was chosen for this team — how my specific gifting and calling fit into what we're doing.",
+    "My calling aligns well with the intent and purpose of this team.",
+    "My gifts and calling actually shape the decisions this team makes.",
+    "Using my gifts on this team gives me energy more than it drains me."
    ]}
 ];
 
@@ -274,7 +340,6 @@ function renderQuestionBlock(c, groupKey, q, idx){
   const curHas = answers[curK]!==undefined;
   const idealHas = answers[idealK]!==undefined;
   let html = '<div class="qblock'+((curHas&&idealHas)?' answered':'')+'" id="q_'+c.id+'_'+groupKey+'_'+idx+'">';
-  html += '<div class="qnum">'+c.label+' &mdash; '+(groupKey==='outward'?'Receiving':'Giving')+'</div>';
   html += '<div class="qlabel">'+q+'</div>';
   html += '<div class="rating-row"><div class="rating-label">How true is this right now?</div>';
   html += '<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
@@ -459,7 +524,7 @@ function renderResults(scores){
   const circleDescs = {
     "Relationships": "How well this team knows, trusts, and actually enjoys each other — not just works together.",
     "Values": "Whether this team's convictions are real and lived, or just stated on paper.",
-    "Calling": "Whether there is a shared, owned, energizing sense of where this team is headed."
+    "Calling": "Whether people on this team are known for their gifting, well-placed to use it, and growing because of it."
   };
 
   // Find biggest gap circle for greatest desire tag
@@ -616,7 +681,7 @@ function renderResults(scores){
     + "</div>";
   html += "<div style=\"padding:1.25rem 1.5rem;background:#111111;border:1px solid rgba(232,215,160,.08);border-radius:4px\">"
     + "<div style=\"font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:.5rem;font-weight:500\">Calling</div>"
-    + "<p style=\"font-size:.88rem;color:#c0b8b0;line-height:1.7;margin:0\">Could you articulate where this team is headed to someone outside it — and do you feel personally part of that direction?</p>"
+    + "<p style=\"font-size:.88rem;color:#c0b8b0;line-height:1.7;margin:0\">Are you being used according to your actual gifting on this team — and if not, what would it take to change that?</p>"
     + "</div>";
   html += "</div>";
   html += "<div style=\"border-top:1px solid rgba(232,215,160,.1);padding-top:2rem;text-align:center\">";
