@@ -2,7 +2,7 @@
 
 <!--
   BoldHearts Leadership Team Culture Assessment
-  Version: v3.3
+  Version: v4.1
   Last updated: 2026-07-03
 
   CHANGELOG:
@@ -141,6 +141,133 @@
       was left in place, since it's positioned before any individual
       question and doesn't sit directly over a specific rating the
       way the removed subgroup headers did
+
+  v2.1 — Removed tier-label text (Thriving/Healthy/Developing/etc.)
+         from the give/receive rows in the results page
+    - Current/Ideal bar pairs still show tier labels since those
+      describe the team's overall state, which is an appropriate
+      thing to label
+    - Give/receive rows describe an individual's personal giving and
+      receiving pattern, and a label like "Developing" sitting next to
+      a personal score reads as a judgment on the person rather than
+      a description of the team, so it was removed. The bars and
+      colors still convey relative strength without the added label.
+
+  v2.2 — Values "Known" and "Integrated" questions rewritten to be
+         team-directed rather than self- or structure-focused
+    - "Known" changed from "I could list this team's core values
+      without having to stop and think" (a self-recall trait question
+      with the same weak "should" signal issue found elsewhere) to
+      "The team has shared its core values with me clearly enough
+      that I didn't have to guess or piece them together on my own" —
+      now describes an action the team took toward the respondent
+    - "Integrated" changed from "This team's values show up in how we
+      actually make decisions" (a structural/collective claim not
+      about the respondent specifically) to "I trust that if a
+      decision affected me personally, this team's values would
+      actually shape how it was handled" — a belief-based, personal
+      version that avoids the event-conditional trap (no requirement
+      that such a decision has actually happened yet)
+    - Both changes support relabeling Values' Receiving group as "the
+      team initiated with me" instead of "I receive" going forward
+
+  v2.3 — Calling's Receiving questions rewritten to be team-directed,
+         matching the same fix applied to Values
+    - "Positioned" changed from "I am in a role on this team that
+      actually fits how I'm wired" (a state, no clear actor) to
+      "This team has me in a role that actually fits how I'm wired" —
+      present-tense so it doesn't hinge on who made a past placement
+      decision, only who's responsible for it now
+    - "Utilized" changed from "I get to use my strongest gifts
+      regularly on this team" to "This team gives me regular
+      opportunities to use my strongest gifts, not just occasionally"
+    - "Growing" changed from "My gifts are developing because of my
+      time on this team, not stagnating" to "This team actively
+      invests in growing my gifts, rather than leaving me to develop
+      them on my own"
+    - "Recognized" was already team-directed and left unchanged
+    - All four Receiving questions across both Values and Calling now
+      consistently name the team as the actor, supporting a uniform
+      "the team initiated with me" / "I initiate with the team" label
+      pair across all three circles (Relationships keeps its own
+      relationship-specific initiating language)
+
+  v2.4 — Results page "Your Relationship With This Team" section
+         overhauled: current+ideal added, Worth Naming expanded
+    - Replaced giveReceiveRow (2 bars: I receive / I give, current
+      only) with initiateRow (4 bars: I initiate current+ideal, The
+      team initiates current+ideal), using per-circle label wording —
+      "I initiate with team" / "The team initiates with me" for
+      Relationships, "I initiate with the team" / "The team initiated
+      with me" for Values and Calling
+    - Removed tier-label text from these rows in v2.1 remains in
+      effect; only bar length/color now convey relative strength
+    - Worth Naming reflection expanded from a single imbalance-only
+      paragraph to three: (1) the respondent's strongest circle for
+      self-initiated engagement, (2) the circle where the team has
+      initiated with the respondent the most, (3) the circle with the
+      widest gap between the two, when that gap is meaningful (>=15
+      points) — surfacing personal strength, team strength, and the
+      biggest opportunity in one card instead of only imbalance
+    - Removed the old balanced-scores fallback branch since the first
+      two Worth Naming paragraphs are now always populated regardless
+      of imbalance, making the fallback unreachable dead code
+    - Section intro line reworded from "what you draw from this team
+      and what you put back into it" to "what you initiate toward
+      this team, and what this team initiates toward you" to match
+      the new framing throughout
+
+  v2.5 — "Things to Consider" reworded: removed agreePhrase language,
+         which produced a self-contradicting sentence
+    - Old wording called the top-scoring circle "your strongest area"
+      and then described its score using agreePhrase(), which for a
+      middling score (40-59%) reads as "closer to the middle" —
+      producing an incoherent sentence that praised an area while
+      simultaneously describing it as mediocre
+    - Replaced with direct, plain naming: "Your strongest area
+      currently is within X. The biggest disconnect between your
+      current state and your ideal state is in Y. Both of these are
+      worth naming with your team." No score-intensity language, no
+      risk of contradiction — states the two facts and stops
+    - agreePhrase() function itself left in place (unused) rather than
+      deleted, consistent with how other now-unused code (qnum CSS
+      class, subgroup-label CSS class) was left rather than pulled,
+      since removing dead code carries edit risk for no behavior gain
+
+  v2.6 — Worth Naming expanded from 2-3 paragraphs to up to 5,
+         covering growth gaps in both directions; threshold lowered
+    - Added "my biggest growth gap" — the circle with the widest
+      current-vs-ideal gap specifically within the respondent's own
+      initiating (self current vs self ideal), separate from the
+      circle-level current/ideal gap already shown in "Things to
+      Consider" (which is the blended current/ideal, not self-only)
+    - Added "the team's biggest growth gap" — same computation using
+      the team's outward current vs outward ideal, surfacing where the
+      team most needs to grow in initiating toward the respondent
+    - Imbalance threshold (self vs outward current, within a circle)
+      lowered from 15 points to 10, and extracted into a named
+      IMBALANCE_THRESHOLD constant reused by all three gap checks
+      (personal growth, team growth, imbalance) for consistency
+    - Existing two strength paragraphs (myStrongest, teamStrongest)
+      left unconditional as before; the three gap paragraphs are each
+      independently gated behind the 10-point threshold, so a
+      respondent with no meaningful gaps still sees the two strength
+      paragraphs without empty or forced gap commentary
+
+  v2.7 — "Things to Consider" and "Worth Naming" reworded to read as
+         the respondent's perception, not stated fact about the team
+    - Every declarative claim ("X is your strongest area", "the team's
+      biggest strength is X") replaced with perception-framed language
+      ("based on how you answered, X feels like...", "your answers
+      suggest...", "you feel...") so the results page consistently
+      reads as a reflection of one person's self-report rather than an
+      objective verdict on the team
+    - Applies to all 5 Worth Naming paragraphs and both Things to
+      Consider branches (with-gap and no-gap versions)
+    - Bar labels (Current/Ideal, tier labels like Developing/Healthy/
+      Thriving) were left unchanged — those are direct restatements of
+      the respondent's own slider positions, not interpretive claims,
+      so they don't carry the same fact-vs-perception ambiguity
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -245,7 +372,7 @@ footer p{color:#5a5550;font-size:.8rem;max-width:none;margin:0 auto .4rem}
 <div id="app"></div>
 <div class="divider"></div>
 <footer>
-  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v3.3</span></p>
+  <p>&copy; 2026 The BoldHearts Group LLC &mdash; Sedalia, Colorado &nbsp;|&nbsp; All Rights Reserved &nbsp;&middot;&nbsp; <span style="color:#3a3530">v4.1</span></p>
 </footer>
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAyuLIUf-wpSdNzFla_Uf72UsgytUrSXSWcw55Lspi7az2ypZlhZNyR4O6ED80SMGsJA/exec';
@@ -268,9 +395,9 @@ const CIRCLES = [
   {id:'values', label:'Values', color:'#185FA5', icon:'ti-compass',
    desc:"Does this team share real, lived convictions — not just stated principles?",
    outward:[
-    "I could list this team's core values without having to stop and think.",
+    "The team has shared its core values with me clearly enough that I didn't have to guess or piece them together on my own.",
     "This team talks about its values regularly — not just once a year or when something goes wrong.",
-    "This team's values show up in how we actually make decisions — hiring, priorities, who gets held accountable — not just in what we say.",
+    "I trust that if a decision affected me personally, this team's values would actually shape how it was handled.",
     "I believe someone on this team would speak up if one of our values were being violated."
    ],
    self:[
@@ -283,9 +410,9 @@ const CIRCLES = [
    desc:"Are people on this team actually known for their gifting, positioned to use it, and growing because of it — not just busy?",
    outward:[
     "The people on this team recognize and name my specific gifts, not just what I get done.",
-    "I am in a role on this team that actually fits how I'm wired.",
-    "I get to use my strongest gifts regularly on this team, not just occasionally.",
-    "My gifts are developing because of my time on this team, not stagnating."
+    "This team has me in a role that actually fits how I'm wired.",
+    "This team gives me regular opportunities to use my strongest gifts, not just occasionally.",
+    "This team actively invests in growing my gifts, rather than leaving me to develop them on my own."
    ],
    self:[
     "I understand why I was chosen for this team — how my specific gifting and calling fit into what we're doing.",
@@ -594,25 +721,42 @@ function renderResults(scores){
       + "</div>";
   }
 
-  function giveReceiveRow(label, receivePct, givePct){
-    const recCol = barColor(receivePct||0);
-    const giveCol = barColor(givePct||0);
-    return "<div style=\"padding:.75rem .75rem .25rem;border-bottom:1px solid rgba(232,215,160,.06)\">"
-      + "<div style=\"font-size:.78rem;color:#c0b8b0;margin-bottom:.5rem\">" + label + "</div>"
-      + "<div style=\"display:flex;align-items:center;gap:.75rem;margin-bottom:.35rem\">"
-      + "<div style=\"width:90px;flex-shrink:0;font-size:.65rem;color:#6a6258\">I receive</div>"
-      + "<div style=\"flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
-      + "<div style=\"width:" + (receivePct||0) + "%;height:100%;background:" + recCol + ";border-radius:3px;transition:width .8s ease\"></div>"
-      + "</div>"
-      + "<div style=\"width:60px;text-align:right;font-size:.68rem;font-weight:500;color:" + recCol + "\">" + tierLabel(receivePct||0) + "</div>"
-      + "</div>"
-      + "<div style=\"display:flex;align-items:center;gap:.75rem\">"
-      + "<div style=\"width:90px;flex-shrink:0;font-size:.65rem;color:#6a6258\">I give</div>"
-      + "<div style=\"flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
-      + "<div style=\"width:" + (givePct||0) + "%;height:100%;background:" + giveCol + ";border-radius:3px;transition:width .8s ease\"></div>"
-      + "</div>"
-      + "<div style=\"width:60px;text-align:right;font-size:.68rem;font-weight:500;color:" + giveCol + "\">" + tierLabel(givePct||0) + "</div>"
-      + "</div>"
+  const initiateLabels = {
+    "Relationships": {mine:"I initiate with team", theirs:"The team initiates with me"},
+    "Values": {mine:"I initiate with the team", theirs:"The team initiated with me"},
+    "Calling": {mine:"I initiate with the team", theirs:"The team initiated with me"}
+  };
+
+  function initiateRow(label, outCur, outIdeal, selfCur, selfIdeal){
+    const labels = initiateLabels[label];
+    const selfCurCol = barColor(selfCur||0);
+    const selfIdealCol = barColor(selfIdeal||0);
+    const outCurCol = barColor(outCur||0);
+    const outIdealCol = barColor(outIdeal||0);
+    return "<div style=\"padding:.9rem .9rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)\">"
+      + "<div style=\"font-size:.82rem;font-weight:500;color:#f0e8df;margin-bottom:.75rem\">" + label + "</div>"
+      + "<div style=\"font-size:.68rem;color:#6a6258;margin-bottom:.35rem\">" + labels.mine + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem\">"
+      + "<div style=\"width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550\">Current</div>"
+      + "<div style=\"flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (selfCur||0) + "%;height:100%;background:" + selfCurCol + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div></div>"
+      + "<div style=\"display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem\">"
+      + "<div style=\"width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550\">Ideal</div>"
+      + "<div style=\"flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (selfIdeal||0) + "%;height:100%;background:" + selfIdealCol + ";border-radius:3px;opacity:.5;transition:width .8s ease\"></div>"
+      + "</div></div>"
+      + "<div style=\"font-size:.68rem;color:#6a6258;margin-bottom:.35rem\">" + labels.theirs + "</div>"
+      + "<div style=\"display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem\">"
+      + "<div style=\"width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550\">Current</div>"
+      + "<div style=\"flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (outCur||0) + "%;height:100%;background:" + outCurCol + ";border-radius:3px;transition:width .8s ease\"></div>"
+      + "</div></div>"
+      + "<div style=\"display:flex;align-items:center;gap:.6rem\">"
+      + "<div style=\"width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550\">Ideal</div>"
+      + "<div style=\"flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden\">"
+      + "<div style=\"width:" + (outIdeal||0) + "%;height:100%;background:" + outIdealCol + ";border-radius:3px;opacity:.5;transition:width .8s ease\"></div>"
+      + "</div></div>"
       + "</div>";
   }
 
@@ -626,23 +770,60 @@ function renderResults(scores){
   const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.current)-(a.ideal-a.current))[0];
 
   const thingsParas = [];
-  thingsParas.push("Based on your responses, your strongest area for <strong style=\"color:#f0e8df\">" + teamName + "</strong> is <strong style=\"color:#f0e8df\">" + strongest.label + "</strong> — " + agreePhrase(strongest.current) + ". That is worth naming.");
   if(biggestGap.label !== strongest.label && (biggestGap.ideal - biggestGap.current) >= 15){
-    thingsParas.push("Your biggest opportunity is in <strong style=\"color:#f0e8df\">" + biggestGap.label + "</strong> — " + agreePhrase(biggestGap.current) + " on where the team is now, but pointing toward a higher bar on where it should be. That gap is worth exploring.");
+    thingsParas.push("Based on how you answered, <strong style=\"color:#f0e8df\">" + strongest.label + "</strong> feels like your strongest area right now. The biggest disconnect between where you see the team today and where you believe it should be shows up in <strong style=\"color:#f0e8df\">" + biggestGap.label + "</strong>. Both are worth naming with your team.");
+  } else {
+    thingsParas.push("Based on how you answered, <strong style=\"color:#f0e8df\">" + strongest.label + "</strong> feels like your strongest area right now. That's worth naming with your team.");
   }
   thingsParas.push("<span style=\"font-style:italic;color:#a09890\">Before the group conversation: what is your read on why those areas scored the way they did?</span>");
 
-  // ── Worth Naming (give/receive imbalance) ─────────────────
+  // ── Worth Naming (strengths, growth gaps, and imbalance) ───────
+  const initiateMineStrength = [
+    {label:"Relationships", val:rel.selfCurrent},
+    {label:"Values", val:val.selfCurrent},
+    {label:"Calling", val:cal.selfCurrent}
+  ];
+  const myStrongest = [...initiateMineStrength].sort((a,b)=>b.val-a.val)[0];
+
+  const initiateTheirsStrength = [
+    {label:"Relationships", val:rel.outwardCurrent},
+    {label:"Values", val:val.outwardCurrent},
+    {label:"Calling", val:cal.outwardCurrent}
+  ];
+  const teamStrongest = [...initiateTheirsStrength].sort((a,b)=>b.val-a.val)[0];
+
+  const myGrowthGaps = [
+    {label:"Relationships", gap: rel.selfIdeal - rel.selfCurrent},
+    {label:"Values", gap: val.selfIdeal - val.selfCurrent},
+    {label:"Calling", gap: cal.selfIdeal - cal.selfCurrent}
+  ];
+  const myBiggestGrowthGap = [...myGrowthGaps].sort((a,b)=>b.gap-a.gap)[0];
+
+  const teamGrowthGaps = [
+    {label:"Relationships", gap: rel.outwardIdeal - rel.outwardCurrent},
+    {label:"Values", gap: val.outwardIdeal - val.outwardCurrent},
+    {label:"Calling", gap: cal.outwardIdeal - cal.outwardCurrent}
+  ];
+  const teamBiggestGrowthGap = [...teamGrowthGaps].sort((a,b)=>b.gap-a.gap)[0];
+
+  const IMBALANCE_THRESHOLD = 10;
+
   const worthNamingParas = [];
-  if(Math.abs(bigImbalance.gap) >= 15){
-    const dir = bigImbalance.gap > 0
-      ? "giving significantly more than you are receiving"
-      : "receiving significantly more than you are giving";
-    const note = bigImbalance.gap > 0
-      ? "That kind of imbalance can be energizing for a season, but it has a cost over time."
-      : "That is worth noticing — it may be worth asking what is keeping you from investing more fully.";
-    worthNamingParas.push("In <strong style=\"color:#f0e8df\">" + bigImbalance.label + "</strong>, you are " + dir + ". " + note);
+  worthNamingParas.push("Based on your answers, your biggest strength seems to be <strong style=\"color:#f0e8df\">" + myStrongest.label + "</strong> — you feel you initiate with this team a great deal there.");
+  worthNamingParas.push("Your answers also suggest the team's biggest strength is <strong style=\"color:#f0e8df\">" + teamStrongest.label + "</strong>, where you feel they've initiated with you the most.");
+  if(myBiggestGrowthGap.gap >= IMBALANCE_THRESHOLD){
+    worthNamingParas.push("Your biggest personal growth gap, based on how you responded, is in <strong style=\"color:#f0e8df\">" + myBiggestGrowthGap.label + "</strong> — there's a real distance between how much you feel you currently initiate there and how much you believe you should.");
   }
+  if(teamBiggestGrowthGap.gap >= IMBALANCE_THRESHOLD){
+    worthNamingParas.push("You also indicated the team's biggest growth gap is in <strong style=\"color:#f0e8df\">" + teamBiggestGrowthGap.label + "</strong> — a real distance between how much you feel they currently initiate with you there and how much you believe they should.");
+  }
+  if(Math.abs(bigImbalance.gap) >= IMBALANCE_THRESHOLD){
+    const dir = bigImbalance.gap > 0
+      ? "you are initiating with the team more than they are initiating with you"
+      : "the team is initiating with you more than you are initiating with them";
+    worthNamingParas.push("As for imbalance, your answers point to <strong style=\"color:#f0e8df\">" + bigImbalance.label + "</strong> as the widest gap between what you feel you put in and what you feel you get back — it seems " + dir + ". That's worth naming before the group conversation.");
+  }
+
 
   // ── Build HTML ────────────────────────────────────────────
   let html = "<div class=\"main\"><div class=\"results-page\">";
@@ -660,25 +841,13 @@ function renderResults(scores){
 
   // Section 3 — Your Relationship With This Team
   html += "<div class=\"section-label\" style=\"margin-top:2.5rem\">Your Relationship With This Team</div>";
-  html += "<p style=\"font-size:.85rem;color:#6a6258;line-height:1.7;margin-bottom:1rem\">Both sides matter — what you draw from this team and what you put back into it.</p>";
+  html += "<p style=\"font-size:.85rem;color:#6a6258;line-height:1.7;margin-bottom:1rem\">Both sides matter — what you initiate toward this team, and what this team initiates toward you.</p>";
   html += "<div style=\"background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:.5rem 0;margin-bottom:.75rem\">";
-  html += giveReceiveRow("Relationships", rel.outwardCurrent, rel.selfCurrent);
-  html += giveReceiveRow("Values", val.outwardCurrent, val.selfCurrent);
-  html += giveReceiveRow("Calling", cal.outwardCurrent, cal.selfCurrent);
+  html += initiateRow("Relationships", rel.outwardCurrent, rel.outwardIdeal, rel.selfCurrent, rel.selfIdeal);
+  html += initiateRow("Values", val.outwardCurrent, val.outwardIdeal, val.selfCurrent, val.selfIdeal);
+  html += initiateRow("Calling", cal.outwardCurrent, cal.outwardIdeal, cal.selfCurrent, cal.selfIdeal);
   html += "</div>";
-  if(worthNamingParas.length > 0){
-    html += reflectionCard("Worth Naming", worthNamingParas);
-  } else {
-    // Scores are balanced — still surface an observation
-    const avgGive = Math.round((rel.selfCurrent + val.selfCurrent + cal.selfCurrent) / 3);
-    const avgReceive = Math.round((rel.outwardCurrent + val.outwardCurrent + cal.outwardCurrent) / 3);
-    const balancePara = avgGive > avgReceive
-      ? "Across all three areas, what you give to this team is running slightly ahead of what you receive. That generosity is worth naming — and worth protecting."
-      : avgReceive > avgGive
-      ? "Across all three areas, what you receive from this team is running slightly ahead of what you give. That is not a verdict — but it is worth sitting with before the group conversation."
-      : "Your give and receive scores are closely matched across all three areas. That kind of balance is genuinely worth noticing — it suggests a real mutuality in how you are experiencing this team.";
-    html += reflectionCard("Worth Naming", [balancePara]);
-  }
+  html += reflectionCard("Worth Naming", worthNamingParas);
 
   // Section 4 — Before the Debrief + CTA
   html += "<div style=\"margin-top:3rem;padding:2.5rem;background:#1a1714;border:1px solid rgba(232,215,160,.15);border-radius:4px\">";
