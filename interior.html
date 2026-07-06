@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -234,17 +235,17 @@ const THEMES = [
     {t:"Others who know me well would say I don't reach for much anymore — that hope has gone quiet in me.",dim:'identity_other',reverse:true},
     {t:"I don't consider myself a very hopeful person — wanting things feels risky or pointless.",dim:'identity_self',reverse:true}
   ]},
-  {id:'joy',label:'Joy & Delight',icon:'ti-sun',color:'#6bc45e',
-   desc:"Answer from your actual experience of the last few weeks, not your best days or your worst. If joy feels thin right now, that's worth naming — not hiding.",
+  {id:'joy',label:'Loved & Delighted In (by God)',icon:'ti-heart',color:'#d98a9a',
+   desc:"This one is about whether you know yourself as loved and delighted in by God — not just believed as doctrine, but actually felt. Answer from your real experience, not what you think a mature faith should say.",
    questions:[
-    {t:"When I look at my life right now, I can point to specific things that genuinely bring me delight — not vague contentment, actual delight.",dim:'awareness'},
-    {t:"When something good happens, I let it land — I don't immediately brace for it to end or find a reason it doesn't count.",dim:'honesty'},
-    {t:"When I compare now to a year ago, my capacity for joy and delight has not shrunk — if anything it has grown.",dim:'movement'},
-    {t:"When something delights me, I don't have to immediately minimize it or brace for it to end — I can just receive it.",dim:'safety'},
-    {t:"When I pay attention to what delights me, it tells me something true about how I'm wired — I take it seriously as a signal.",dim:'direction'},
-    {t:"When life is hard, there's still something underneath that holds — a quiet that doesn't depend on circumstances being right.",dim:'peace'},
-    {t:"Others who know me well would say I don't have much joy — that lightness is hard to find in me.",dim:'identity_other',reverse:true},
-    {t:"I don't consider myself a joyful person — real delight is rare for me.",dim:'identity_self',reverse:true}
+    {t:"I can point to specific moments where I've felt God delighting in me — not just tolerating me, but actually delighting in me.",dim:'awareness'},
+    {t:"When I sense God's love or delight toward me, I let it register — I don't deflect it, minimize it, or explain it away.",dim:'honesty'},
+    {t:"I don't sense that my capacity to feel and receive God's love has grown much over the past year — it feels largely the same as it's always been.",dim:'movement',reverse:true},
+    {t:"When I sense God delighting in me, I don't have to immediately earn it or perform for it — I can simply receive it.",dim:'safety'},
+    {t:"When I look back, I can trace how different experiences — even hard ones — have led me toward a deeper sense that I am loved and delighted in by God.",dim:'direction'},
+    {t:"Even when I feel distant from God, there's a settledness underneath — a sense that His delight in me doesn't depend on my performance.",dim:'peace'},
+    {t:"Others who know me well would say I carry myself like someone who knows he is loved — that being God's beloved has become part of who I am.",dim:'identity_other'},
+    {t:"I think of myself as God's beloved — someone He delights in, not someone who has to earn His love.",dim:'identity_self'}
   ]}
 ];
 
@@ -497,7 +498,7 @@ function renderResults(scores,prevRow){
   const extAvg=Math.round(extIds.reduce((a,id)=>a+(theme[id]?theme[id].overall:0),0)/extIds.length);
   const intCol=dcolor(intAvg);const extCol=dcolor(extAvg);
   const intText=intAvg<40?'There is significant weight here — grief, shame, fear, and anger that hasn\'t fully found a place to land.':intAvg<55?'Some of what you carry has been named and moved through. Some of it is still sitting underneath, not yet processed.':'You have done real work with what you carry. The weight is present but not running the show.';
-  const extText=extAvg<40?'The heart has gone quiet in these areas. Desire and joy have dimmed — that is worth noticing, not judging.':extAvg<55?'There is still some life here — desire and joy that haven\'t been fully extinguished, even in a hard season.':'The heart is still alive and receiving. That is not nothing — it is actually where movement begins.';
+  const extText=extAvg<40?'The heart has gone quiet in these areas. Desire and a felt sense of God\'s love have dimmed — that is worth noticing, not judging.':extAvg<55?'There is still some life here — desire and a sense of being loved by God that haven\'t been fully extinguished, even in a hard season.':'The heart is still alive and receiving. That is not nothing — it is actually where movement begins.';
   const splitCards='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem">'
     +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-left:3px solid '+intCol+';border-radius:4px;padding:1.25rem 1.5rem"><div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.6rem">What You Carry</div><p style="font-size:.88rem;color:#c0b8b0;line-height:1.85;margin:0">'+intText+'</p></div>'
     +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-left:3px solid '+extCol+';border-radius:4px;padding:1.25rem 1.5rem"><div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.6rem">What Opens You</div><p style="font-size:.88rem;color:#c0b8b0;line-height:1.85;margin:0">'+extText+'</p></div>'
