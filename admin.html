@@ -692,7 +692,7 @@ async function buildGuide(idx, event){
       fear:   {others: identityScore(row[147], true), self: identityScore(row[148], true), gap: Math.abs((identityScore(row[147],true)||0)-(identityScore(row[148],true)||0))},
       anger:  {others: identityScore(row[149], true), self: identityScore(row[150], true), gap: Math.abs((identityScore(row[149],true)||0)-(identityScore(row[150],true)||0))},
       desire: {others: identityScore(row[151], true), self: identityScore(row[152], true), gap: Math.abs((identityScore(row[151],true)||0)-(identityScore(row[152],true)||0))},
-      joy:    {others: identityScore(row[153], true), self: identityScore(row[154], true), gap: Math.abs((identityScore(row[153],true)||0)-(identityScore(row[154],true)||0))}
+      joy:    {others: identityScore(row[153], false), self: identityScore(row[154], false), gap: Math.abs((identityScore(row[153],false)||0)-(identityScore(row[154],false)||0))}
     }
   };
 
