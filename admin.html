@@ -1204,7 +1204,7 @@ function viewMemberSummary(idx){
   ];
   const biggestGapCircle = [...circleGapList].sort((a,b)=>b.gap-a.gap)[0];
 
-  function bRow(label, cur, ideal, outC, selfC){
+  function bRow(label, cur, ideal){
     const cc = bc(cur), ic = bc(ideal);
     const isBiggestGap = label === biggestGapCircle.label && biggestGapCircle.gap >= 15;
     return '<div style="background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem">'
@@ -1214,27 +1214,49 @@ function viewMemberSummary(idx){
       + '<div style="width:90px;font-size:.65rem;color:#6a6258">Current</div>'
       + '<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+cur+'%;height:100%;background:'+cc+'"></div></div>'
       + '<div style="width:65px;text-align:right;font-size:.65rem;color:'+cc+'">'+tl(cur)+'</div></div>'
-      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">'
+      + '<div style="display:flex;align-items:center;gap:.75rem">'
       + '<div style="width:90px;font-size:.65rem;color:#6a6258">Ideal</div>'
       + '<div style="flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+ideal+'%;height:100%;background:'+ic+';opacity:.45"></div></div>'
       + '<div style="width:65px;text-align:right;font-size:.65rem;color:'+ic+';opacity:.7">'+tl(ideal)+'</div></div>'
-      + '<div style="border-top:1px solid rgba(232,215,160,.08);padding-top:.65rem">'
-      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.3rem">'
-      + '<div style="width:90px;font-size:.62rem;color:#5a5550">I receive</div>'
-      + '<div style="flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+outC+'%;height:100%;background:'+bc(outC)+'"></div></div>'
-      + '<div style="width:65px;text-align:right;font-size:.62rem;color:'+bc(outC)+'">'+tl(outC)+'</div></div>'
-      + '<div style="display:flex;align-items:center;gap:.75rem">'
-      + '<div style="width:90px;font-size:.62rem;color:#5a5550">I give</div>'
-      + '<div style="flex:1;height:6px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+selfC+'%;height:100%;background:'+bc(selfC)+'"></div></div>'
-      + '<div style="width:65px;text-align:right;font-size:.62rem;color:'+bc(selfC)+'">'+tl(selfC)+'</div></div>'
-      + '</div></div>';
+      + '</div>';
+  }
+
+  const initiateLabels = {
+    'Relationships': {mine:'I initiate with team', theirs:'The team initiates with me'},
+    'Values': {mine:'I initiate with the team', theirs:'The team initiated with me'},
+    'Calling': {mine:'I initiate with the team', theirs:'The team initiated with me'}
+  };
+
+  function initiateRow(label, outC, outIdeal, selfC, selfIdeal){
+    const labels = initiateLabels[label];
+    return '<div style="padding:.9rem .9rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)">'
+      + '<div style="font-size:.82rem;font-weight:500;color:#f0e8df;margin-bottom:.75rem">'+label+'</div>'
+      + '<div style="font-size:.68rem;color:#6a6258;margin-bottom:.35rem">'+labels.mine+'</div>'
+      + '<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem">'
+      + '<div style="width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550">Current</div>'
+      + '<div style="flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+selfC+'%;height:100%;background:'+bc(selfC)+';border-radius:3px"></div></div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem">'
+      + '<div style="width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550">Ideal</div>'
+      + '<div style="flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+selfIdeal+'%;height:100%;background:'+bc(selfIdeal)+';border-radius:3px;opacity:.5"></div></div>'
+      + '</div>'
+      + '<div style="font-size:.68rem;color:#6a6258;margin-bottom:.35rem">'+labels.theirs+'</div>'
+      + '<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem">'
+      + '<div style="width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550">Current</div>'
+      + '<div style="flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+outC+'%;height:100%;background:'+bc(outC)+';border-radius:3px"></div></div>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:.6rem">'
+      + '<div style="width:44px;flex-shrink:0;font-size:.62rem;color:#5a5550">Ideal</div>'
+      + '<div style="flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:'+outIdeal+'%;height:100%;background:'+bc(outIdeal)+';border-radius:3px;opacity:.5"></div></div>'
+      + '</div>'
+      + '</div>';
   }
 
   let html = '<h3 style="font-family:Cormorant Garamond,serif;margin-bottom:.25rem">'+name+'</h3>';
   html += '<p style="font-size:.78rem;color:#6a6258;margin-bottom:1.5rem">'+r[3]+' &mdash; Individual Assessment Results</p>';
-  html += bRow('Relationships', scores.relationships.current, scores.relationships.ideal, scores.relationships.outwardCurrent, scores.relationships.selfCurrent);
-  html += bRow('Values', scores.values.current, scores.values.ideal, scores.values.outwardCurrent, scores.values.selfCurrent);
-  html += bRow('Calling', scores.calling.current, scores.calling.ideal, scores.calling.outwardCurrent, scores.calling.selfCurrent);
+  html += bRow('Relationships', scores.relationships.current, scores.relationships.ideal);
+  html += bRow('Values', scores.values.current, scores.values.ideal);
+  html += bRow('Calling', scores.calling.current, scores.calling.ideal);
 
   const circles = [
     {label:'Relationships', current:scores.relationships.current, ideal:scores.relationships.ideal},
@@ -1252,6 +1274,14 @@ function viewMemberSummary(idx){
     html += '<p style="font-size:.85rem;color:#c0b8b0;line-height:1.9;margin-bottom:.65rem">Based on how '+name+' answered, <strong style="color:#f0e8df">'+strongest.label+'</strong> feels like their strongest area right now. That\'s worth naming with the team.</p>';
   }
   html += '<p style="font-size:.85rem;color:#a09890;line-height:1.9;font-style:italic;margin:0">Before the group conversation: what is '+name+'\'s read on why those areas scored the way they did?</p>';
+  html += '</div>';
+
+  html += '<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:1.5rem 0 .5rem">Your Relationship With This Team</div>';
+  html += '<p style="font-size:.78rem;color:#6a6258;line-height:1.7;margin-bottom:.75rem">Both sides matter — what '+name+' initiates toward this team, and what this team initiates toward '+name+'.</p>';
+  html += '<div style="background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;padding:.5rem 0;margin-bottom:.75rem">';
+  html += initiateRow('Relationships', scores.relationships.outwardCurrent, scores.relationships.outwardIdeal, scores.relationships.selfCurrent, scores.relationships.selfIdeal);
+  html += initiateRow('Values', scores.values.outwardCurrent, scores.values.outwardIdeal, scores.values.selfCurrent, scores.values.selfIdeal);
+  html += initiateRow('Calling', scores.calling.outwardCurrent, scores.calling.outwardIdeal, scores.calling.selfCurrent, scores.calling.selfIdeal);
   html += '</div>';
 
   const initiateMineStrength = [
