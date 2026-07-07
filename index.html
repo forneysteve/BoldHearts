@@ -46,6 +46,23 @@
     .bh-float-cta svg{width:12px;height:12px;transition:transform .3s ease}
     .bh-float-cta:hover svg{transform:translateX(3px)}
     .bh-float-meta{margin-top:.75rem;font-size:.65rem;letter-spacing:.04em;color:#5a5550;text-transform:uppercase;text-align:center}
+    .bh-float-bars{margin-bottom:1.1rem}
+    .bh-float-bar-row{display:flex;align-items:center;gap:.55rem;margin-bottom:.55rem}
+    .bh-float-bar-row:last-child{margin-bottom:0}
+    .bh-float-bar-name{width:98px;flex-shrink:0;font-size:.65rem;color:#8a8078}
+    .bh-float-bar-track{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}
+    .bh-float-bar-fill{height:100%;border-radius:3px;background:#8AACCB;animation:bh-bar-width 6.5s ease-in-out infinite, bh-bar-color 6.5s ease-in-out infinite}
+    .bh-float-bar-fill.bh-bar-2{animation-duration:7.8s, 7.8s;animation-delay:-1.6s,-1.6s}
+    .bh-float-bar-fill.bh-bar-3{animation-duration:9.1s, 9.1s;animation-delay:-3.4s,-3.4s}
+    @keyframes bh-bar-width{
+      0%{width:38%} 25%{width:72%} 50%{width:52%} 75%{width:86%} 100%{width:38%}
+    }
+    @keyframes bh-bar-color{
+      0%{background:#8AACCB} 33%{background:#C4A055} 66%{background:#B8AA7A} 100%{background:#8AACCB}
+    }
+    @media(prefers-reduced-motion: reduce){
+      .bh-float-bar-fill{animation:none !important;width:60% !important;background:#B8AA7A !important}
+    }
     @media(max-width:520px){
       .bh-float{right:.75rem;left:.75rem;bottom:.75rem;width:auto}
     }
@@ -223,8 +240,22 @@
       <button class="bh-float-close" id="bh-float-close" aria-label="Dismiss">&times;</button>
       <div class="bh-float-body">
         <div class="bh-float-eyebrow">Free &middot; 10 Minutes</div>
-        <h3>How connected are you, really?</h3>
-        <p>A short, honest look at how seen, known, and supported you are — across work, family, friendship, and your relationship with God.</p>
+        <h3>How&rsquo;s life? Honestly&hellip;</h3>
+        <p>A short, honest look at your satisfaction in relationships and inner world.</p>
+        <div class="bh-float-bars">
+          <div class="bh-float-bar-row">
+            <div class="bh-float-bar-name">Being Known</div>
+            <div class="bh-float-bar-track"><div class="bh-float-bar-fill"></div></div>
+          </div>
+          <div class="bh-float-bar-row">
+            <div class="bh-float-bar-name">Receiving Support</div>
+            <div class="bh-float-bar-track"><div class="bh-float-bar-fill bh-bar-2"></div></div>
+          </div>
+          <div class="bh-float-bar-row">
+            <div class="bh-float-bar-name">Belonging</div>
+            <div class="bh-float-bar-track"><div class="bh-float-bar-fill bh-bar-3"></div></div>
+          </div>
+        </div>
         <a href="relational.html" class="bh-float-cta">
           Take the Assessment
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
