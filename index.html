@@ -317,8 +317,8 @@
                 if(pct >= 0.25) maybeShow();
             }
 
-            // Fallback for short pages / low scroll: show after 12s regardless
-            const fallbackTimer = setTimeout(maybeShow, 12000);
+            // Fallback for short pages / low scroll: show after 4s regardless
+            const fallbackTimer = setTimeout(maybeShow, 4000);
             window.addEventListener('scroll', onScroll, {passive:true});
 
             closeBtn.addEventListener('click', function(){
