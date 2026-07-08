@@ -948,6 +948,26 @@ function fetchSavedIndividualStatus(team){
   });
 }
 
+function miniRealmChart(cur, ideal){
+  return '<div title="Current: '+cur+'% &middot; Ideal: '+ideal+'%" style="width:110px">'
+    + '<div style="height:7px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:3px"><div style="width:'+cur+'%;height:100%;background:'+barColor(cur)+';border-radius:3px"></div></div>'
+    + '<div style="height:5px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden"><div style="width:'+ideal+'%;height:100%;background:rgba(232,215,160,.4);border-radius:3px"></div></div>'
+    + '</div>';
+}
+
+const REALM_CAPTIONS = {
+  relationships: 'Trust, safety, honesty',
+  values: 'Shared, lived conviction',
+  calling: 'Shared purpose &amp; direction'
+};
+
+function realmHeaderHtml(label, key){
+  return '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1);white-space:nowrap">'
+    + '<div>'+label+'</div>'
+    + '<div style="font-size:.56rem;color:#6a6258;font-weight:400;text-transform:none;letter-spacing:normal;margin-top:2px">'+REALM_CAPTIONS[key]+'</div>'
+    + '</th>';
+}
+
 function renderTeamMembers(rows){
   const relCur = avg(rows.map(r=>pctVal(r[4])));
   const relIdeal = avg(rows.map(r=>pctVal(r[5])));
@@ -960,21 +980,22 @@ function renderTeamMembers(rows){
 
   let html = '<table style="width:100%;border-collapse:collapse">';
   html += '<thead><tr>';
-  ['Name','Date Taken','Current Rel.','Ideal Rel.','Current Values','Ideal Values','Current Calling','Ideal Calling','Individual Summary',''].forEach(h=>{
-    html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1);white-space:nowrap">'+h+'</th>';
-  });
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1);white-space:nowrap">Name</th>';
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1);white-space:nowrap">Date Taken</th>';
+  html += realmHeaderHtml('Relationships', 'relationships');
+  html += realmHeaderHtml('Values', 'values');
+  html += realmHeaderHtml('Calling/Direction', 'calling');
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1);white-space:nowrap">Individual Summary</th>';
+  html += '<th style="border-bottom:1px solid rgba(232,215,160,.1)"></th>';
   html += '</tr></thead><tbody>';
 
   // Team Average — first row
   html += '<tr style="border-bottom:1px solid rgba(232,215,160,.15);background:rgba(232,215,160,.04)">';
   html += '<td style="padding:.6rem;font-size:.85rem;color:#e8d7a0;font-weight:500;white-space:nowrap">Team Average</td>';
   html += '<td style="padding:.6rem;font-size:.78rem;color:#5a5550">&mdash;</td>';
-  html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(relCur)+'">'+relCur+'%</td>';
-  html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(relIdeal)+'">'+relIdeal+'%</td>';
-  html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(valCur)+'">'+valCur+'%</td>';
-  html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(valIdeal)+'">'+valIdeal+'%</td>';
-  html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(calCur)+'">'+calCur+'%</td>';
-  html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(calIdeal)+'">'+calIdeal+'%</td>';
+  html += '<td style="padding:.6rem">'+miniRealmChart(relCur, relIdeal)+'</td>';
+  html += '<td style="padding:.6rem">'+miniRealmChart(valCur, valIdeal)+'</td>';
+  html += '<td style="padding:.6rem">'+miniRealmChart(calCur, calIdeal)+'</td>';
   html += '<td style="padding:.6rem;font-size:.78rem;color:#5a5550">&mdash;</td>';
   html += '<td style="padding:.6rem"></td>';
   html += '</tr>';
@@ -994,18 +1015,16 @@ function renderTeamMembers(rows){
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,.03)">';
     html += '<td style="padding:.6rem;font-size:.85rem;color:#f0e8df;white-space:nowrap">'+name+'</td>';
     html += '<td style="padding:.6rem;font-size:.78rem;color:#a09890;white-space:nowrap">'+dateTaken+'</td>';
-    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(rc)+'">'+rc+'%</td>';
-    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(ri)+'">'+ri+'%</td>';
-    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(vc)+'">'+vc+'%</td>';
-    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(vi)+'">'+vi+'%</td>';
-    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(cc)+'">'+cc+'%</td>';
-    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(ci)+'">'+ci+'%</td>';
+    html += '<td style="padding:.6rem">'+miniRealmChart(rc, ri)+'</td>';
+    html += '<td style="padding:.6rem">'+miniRealmChart(vc, vi)+'</td>';
+    html += '<td style="padding:.6rem">'+miniRealmChart(cc, ci)+'</td>';
     html += '<td style="padding:.6rem">'+summaryHtml+'</td>';
     html += '<td style="padding:.6rem;text-align:right"><button onclick="viewMemberSummary('+i+')" style="padding:.35rem .8rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:3px;color:#6a6258;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap">View Scores</button></td>';
     html += '</tr>';
   });
 
   html += '</tbody></table>';
+  html += '<div style="font-size:.62rem;color:#5a5550;margin-top:.5rem">Top bar = Current &middot; Bottom bar = Ideal &middot; hover a chart for exact percentages</div>';
   document.getElementById('lt-member-list').innerHTML = html;
 }
 
@@ -1058,10 +1077,12 @@ INDIVIDUAL SCORES: ${individuals}
 
 SCORING KEY:
 - 80%+ = Strong (soul is alive here, integrated, working)
-- 60-79% = Present (functional but not flourishing)
+- 60-79% = Functioning (functional but not flourishing)
 - 40-59% = Thin (present but underdeveloped, needs attention)
-- 20-39% = Quiet (largely absent or stuck)
-- Below 20% = Barely There
+- 20-39% = Weak (largely absent or stuck)
+- Below 20% = Absent
+
+SIGNIFICANCE THRESHOLD: Only treat a difference between two circles' current scores as meaningful if it is 10 percentage points or more. If Relationships, Values, and Calling are all within 10 points of each other, do not describe one as "the strongest" and another as "the weakest" or "needing the most attention" — instead name that the three circles are roughly even right now and focus the analysis on what they share in common. This same 10-point threshold applies anywhere else you're tempted to declare one number meaningfully higher or lower than another (e.g. individual scores, give/receive splits) — small gaps are noise, not signal, and calling them out as if they matter undermines the parts of the report that do.
 
 Write a Team Culture Report with these sections. Use pastoral, direct, practitioner language — not corporate, not clinical:
 
@@ -1111,7 +1132,9 @@ ${name.toUpperCase()}'S GIVE / RECEIVE:
 - Values: Receive ${valOut}%, Give ${valSelf}%
 - Calling: Receive ${calOut}%, Give ${calSelf}%
 
-SCORING KEY: 80%+=Strong, 60-79%=Present, 40-59%=Thin, 20-39%=Quiet, Below 20%=Barely There
+SCORING KEY: 80%+=Strong, 60-79%=Functioning, 40-59%=Thin, 20-39%=Weak, Below 20%=Absent
+
+SIGNIFICANCE THRESHOLD: Only treat a difference between two numbers (circle vs circle, give vs receive, ${name} vs team average) as meaningful if it is 10 percentage points or more. Don't describe a 3-6 point difference as if it reveals something — that's noise, not signal.
 
 Write a personal pre-debrief summary with these sections:
 
@@ -1168,7 +1191,7 @@ function reportParagraphs(text){
 function reportColor(pct){ return pct>=70?'#4a7c59':pct>=45?'#8a6f4a':'#c97a5a'; }
 function reportPillClass(pct){ return pct>=70?'pill-high':pct>=45?'pill-mid':'pill-low'; }
 function reportScoreClass(pct){ return pct>=70?'score-high':pct>=45?'score-mid':'score-low'; }
-function reportTier(pct){ return pct>=80?'Strong':pct>=60?'Present':pct>=40?'Thin':pct>=20?'Quiet':'Barely There'; }
+function reportTier(pct){ return pct>=80?'Strong':pct>=60?'Functioning':pct>=40?'Thin':pct>=20?'Weak':'Absent'; }
 
 function reportCleanBlock(s){
   return (s||'').replace(/^[#\-\s]+/,'').replace(/[\-\s]+$/,'').trim();
@@ -1624,7 +1647,10 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.cur)-(a.ideal-a.cur))[0];
 
   const sentence1 = teamName+"'s three circles average "+avgCur+"% current against a shared "+avgIdeal+"% ideal — a team that has real clarity about what it wants to become, and hasn't fully become it yet.";
-  const sentence2 = strongest.label+' is the clearest strength right now at '+strongest.cur+'%, while '+weakest.label+' needs the most attention at '+weakest.cur+'%.';
+  const strongWeakDiff = strongest.cur - weakest.cur;
+  const sentence2 = strongWeakDiff >= 10
+    ? strongest.label+' is the clearest strength right now at '+strongest.cur+'%, while '+weakest.label+' needs the most attention at '+weakest.cur+'%.'
+    : 'All three circles are close together right now — '+relCur+'% Relationships, '+valCur+'% Values, '+calCur+'% Calling — with no single circle standing out as notably stronger or weaker than the others.';
   const sentence3 = 'The widest distance between where this team is and where it wants to be shows up in '+biggestGap.label+' — a '+(biggestGap.ideal-biggestGap.cur)+'-point gap worth naming early in the debrief.';
 
   function implication(c){
@@ -1653,11 +1679,11 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   }
 
   return '<div class="section-label">Executive Summary</div>'
-    + '<div class="section-title">The One-Page Version</div>'
-    + '<div class="section-body"><p>'+sentence1+' '+sentence2+' '+sentence3+'</p></div>'
+    + '<div class="section-body"><p>The following assessment results are curated from the answers revolving around Relationships, Values, and Calling/Direction. Answers were given as to the effectiveness of a point in time (current) in comparison to the respondent\'s desire for the ideal. To that effect, here are some preliminary numbers.</p></div>'
     + '<div class="score-overview">'
     + circles.map(c => '<div class="score-card"><div class="score-card-label">'+c.label+'</div><div class="score-card-val '+reportScoreClass(c.cur)+'">'+c.cur+'%</div><div class="score-card-tag">'+reportTier(c.cur)+' &middot; Ideal '+c.ideal+'%</div></div>').join('')
     + '</div>'
+    + '<div class="section-body" style="margin-top:1.25rem"><p>'+sentence1+' '+sentence2+' '+sentence3+'</p></div>'
     + '<div class="finding-card" style="margin-top:1rem"><div class="finding-title">Team Profile</div><div class="finding-body">This team\'s current profile: <strong>'+profileLine+'</strong>.</div></div>'
     + '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div><div class="finding-body">'+archetypeDesc+'</div></div>'
     + '<div class="section-label" style="margin-top:1.5rem">Three Implications</div>'
@@ -1896,7 +1922,8 @@ ${WHY_THREE_CIRCLES_HTML}
 
 <div class="section-label">Section 1 — Team Scores</div>
 <div class="section-title">How Your Team Scored</div>
-<div class="section-body"><p>Before the numbers: these scores are relational, not abstract. They reflect ${memberCount} people's honest read of trust, conviction, and direction inside this specific team. What follows starts with the big picture, then goes deep into each circle — Relationships, then Values, then Calling — one at a time.</p></div>
+<div class="section-body"><p>Before the numbers: these scores are relational, not abstract. They reflect ${memberCount} people's honest read of trust, conviction, and direction inside this specific team. What follows starts with the big picture, then goes deep into each circle — Relationships, then Values, then Calling — one at a time.</p>
+<p>A note on what these percentages actually mean: this isn't a satisfaction score. Each question is a specific statement — like &ldquo;I feel safe being honest with this team when something is wrong&rdquo; — that leaders rated from Strongly Disagree to Strongly Agree on a 1&ndash;7 scale. The percentage shown is the average agreement level across every statement in that circle, expressed as a share of full agreement. A 58% doesn't mean 58% satisfied — it means the team's honest agreement with these specific claims about their relational life together landed, on average, a little over halfway to &ldquo;strongly agree.&rdquo;</p></div>
 
 <div class="score-overview">${scoreOverviewHtml}</div>
 <div class="bar-section">${barSectionHtml}</div>
