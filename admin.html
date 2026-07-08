@@ -1160,7 +1160,7 @@ function formatReport(text){
 // ── Standalone Team Culture Report page builder ──────────────
 
 function mdEmphasis(text){
-  return (text||'').replace(/\*([^*]+)\*/g,'<em>$1</em>');
+  return (text||'').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>');
 }
 function reportParagraphs(text){
   return (text||'').split(/\n\n+/).map(p=>p.trim()).filter(Boolean).map(p=>'<p>'+mdEmphasis(p)+'</p>').join('');
@@ -1170,30 +1170,50 @@ function reportPillClass(pct){ return pct>=70?'pill-high':pct>=45?'pill-mid':'pi
 function reportScoreClass(pct){ return pct>=70?'score-high':pct>=45?'score-mid':'score-low'; }
 function reportTier(pct){ return pct>=80?'Strong':pct>=60?'Present':pct>=40?'Thin':pct>=20?'Quiet':'Barely There'; }
 
+function reportCleanBlock(s){
+  return (s||'').replace(/^[#\-\s]+/,'').replace(/[\-\s]+$/,'').trim();
+}
+
+// Tolerant of both "1. TITLE" and "## 1. TITLE" markdown-prefixed headers.
 function parseReportSections(text){
-  const headerRe = /^\d+\.\s+([A-Z][A-Z \/&'\-]{3,60})\s*$/gm;
+  const headerRe = /^#{0,4}\s*\d+\.\s+([A-Z][A-Z \/&'\-]{3,60})\s*$/gm;
   let match; const marks = [];
   while((match = headerRe.exec(text)) !== null) marks.push({title: match[1].trim(), index: match.index, headerLen: match[0].length});
   const sections = {};
   for(let i=0;i<marks.length;i++){
     const start = marks[i].index + marks[i].headerLen;
     const end = i+1<marks.length ? marks[i+1].index : text.length;
-    sections[marks[i].title] = text.slice(start, end).replace(/^-{2,}\s*/,'').replace(/-{2,}\s*$/,'').trim();
+    sections[marks[i].title] = reportCleanBlock(text.slice(start, end));
   }
   return sections;
 }
+// Tolerant of "Label — Current: N% | Ideal: N% | Gap: N points" and "### Label — N% Current / N% Ideal (N-point gap)".
+// Requires BOTH "Current" and "Ideal" on the line so body prose that happens to start with the
+// circle's name (e.g. "Values represent...") never gets mistaken for another header.
 function parseReportCircles(body){
-  const re = /^(Relationships|Values|Calling)\s*—\s*Current:\s*(\d+)%\s*\|\s*Ideal:\s*(\d+)%\s*\|\s*Gap:\s*(\d+)\s*points?/gm;
+  const lineRe = /^#{0,4}\s*(Relationships|Values|Calling)\b(?=[^\n]*[Cc]urrent)(?=[^\n]*[Ii]deal)[^\n]*$/gm;
   let m; const marks = [];
-  while((m = re.exec(body)) !== null) marks.push({label:m[1], current:+m[2], ideal:+m[3], gap:+m[4], index:m.index, len:m[0].length});
+  while((m = lineRe.exec(body)) !== null) marks.push({label:m[1], line:m[0], index:m.index, len:m[0].length});
   const circles = [];
   for(let i=0;i<marks.length;i++){
+    const line = marks[i].line;
+    let current, ideal, gap;
+    let mm = /Current:?\s*(\d+)%/i.exec(line); if(mm) current = +mm[1];
+    if(current===undefined){ mm = /(\d+)%\s*Current/i.exec(line); if(mm) current = +mm[1]; }
+    mm = /Ideal:?\s*(\d+)%/i.exec(line); if(mm) ideal = +mm[1];
+    if(ideal===undefined){ mm = /(\d+)%\s*Ideal/i.exec(line); if(mm) ideal = +mm[1]; }
+    mm = /Gap:?\s*(\d+)/i.exec(line); if(mm) gap = +mm[1];
+    if(gap===undefined && current!==undefined && ideal!==undefined) gap = Math.abs(ideal-current);
+    if(current===undefined || ideal===undefined) continue;
     const start = marks[i].index + marks[i].len;
     const end = i+1<marks.length ? marks[i+1].index : body.length;
-    circles.push({...marks[i], body: body.slice(start,end).replace(/^-{2,}\s*/,'').replace(/-{2,}\s*$/,'').trim()});
+    circles.push({label:marks[i].label, current, ideal, gap:gap||0, body: reportCleanBlock(body.slice(start,end))});
   }
   return circles;
 }
+// Returns the full raw text of each numbered item (title+body combined) — some AI runs put the
+// item on one continuous line, others break a headline onto its own line. splitHeadline() below
+// handles presenting either shape.
 function parseReportNumberedItems(body){
   const re = /^\d+\.\s+(.+)$/gm;
   let m; const marks = [];
@@ -1202,11 +1222,48 @@ function parseReportNumberedItems(body){
   for(let i=0;i<marks.length;i++){
     const start = marks[i].index + marks[i].len;
     const end = i+1<marks.length ? marks[i+1].index : body.length;
-    const rest = body.slice(start,end).replace(/^-{2,}\s*/,'').replace(/-{2,}\s*$/,'').trim();
-    items.push({title: marks[i].firstLine.trim(), body: rest});
+    const rest = reportCleanBlock(body.slice(start,end));
+    items.push((marks[i].firstLine.trim() + (rest ? ' ' + rest : '')).trim());
   }
   return items;
 }
+// Splits a numbered item into a short headline + remaining prose when a natural early sentence
+// break exists; otherwise returns no headline so the caller can render it as plain prose.
+function splitHeadline(text){
+  const stripped = (text||'').trim();
+  const m = /^(.{10,100}?[.!?])\s+(\S.*)$/s.exec(stripped);
+  if(m) return {title: m[1].trim(), body: m[2].trim()};
+  return {title: '', body: stripped};
+}
+
+// Static explanatory section — why Relationships, Values, and Calling are the three things measured.
+const WHY_THREE_CIRCLES_HTML = `
+<div class="section-label">About This Assessment</div>
+<div class="section-title">Why Relationships, Values, and Calling</div>
+<div class="section-body">
+<p>Every healthy team — a leadership team especially — is held together by three things: how well its people actually know and care for one another, what they hold as true and non-negotiable, and where they believe they're headed together. Most teams have some version of all three. What matters is whether all three are alive at once, or whether the team has quietly settled for two.</p>
+<p>Each pairing, missing its third circle, produces a recognizable and incomplete kind of team:</p>
+</div>
+<div class="pattern-grid">
+<div class="pattern-card flag">
+<div class="pattern-name">Relationships + Calling, without Values</div>
+<div class="pattern-desc">High loyalty and high energy — people deeply committed to a mission and to each other — but without a shared ethical compass governing how that commitment gets lived out. Without values anchoring it, devotion can curdle into something unhealthy, even exploitative, without anyone quite noticing when it crossed a line.</div>
+</div>
+<div class="pattern-card flag">
+<div class="pattern-name">Calling + Values, without Relationships</div>
+<div class="pattern-desc">Principled and purposeful, but transactional. The work gets done, and done with integrity — but there's no real belonging underneath it. Like a highly capable contractor: excellent, ethical, and never truly invested in the people around them.</div>
+</div>
+<div class="pattern-card watch">
+<div class="pattern-name">Relationships + Values, without Calling</div>
+<div class="pattern-desc">Warm, trustworthy, genuinely enjoyable company — but ultimately just people who like each other, with no shared mission pulling them forward together. Pleasant, but not particularly purposeful. A team can have real affection and real integrity and still have no idea, collectively, where it's going.</div>
+</div>
+</div>
+<div class="section-body">
+<p>That third pattern is worth sitting with directly, because it's the easiest one to mistake for health. A team can feel good — safe, kind, values-aligned — and still be quietly directionless, because good relationships and shared values are not the same thing as a shared destination. Calling is what turns a group of people who like and respect each other into a team that is actually going somewhere on purpose. Without it, warmth has nowhere to point.</p>
+<p>The convergence of all three — genuine care for each other, held to a shared standard of conduct, moving toward something they believe matters — is what's usually called a vocation, or a community with a cause. That convergence is what this assessment is measuring, and it's almost always the real growth edge for any team: not fixing one broken circle in isolation, but letting all three overlap more fully.</p>
+</div>
+<div class="divider"></div>
+`;
 
 function buildTeamReportPageHtml(rawText, rows){
   const teamName = rows[0][3] || 'Team';
@@ -1222,8 +1279,8 @@ function buildTeamReportPageHtml(rawText, rows){
 
   const sections = parseReportSections(rawText);
   const circles = parseReportCircles(sections['CIRCLE BY CIRCLE'] || '');
-  const things = parseReportNumberedItems(sections['THINGS TO CONSIDER'] || '');
-  const questions = parseReportNumberedItems(sections['QUESTIONS FOR THE DEBRIEF'] || '');
+  const thingsRaw = parseReportNumberedItems(sections['THINGS TO CONSIDER'] || '');
+  const questionsRaw = parseReportNumberedItems(sections['QUESTIONS FOR THE DEBRIEF'] || '');
   const overallHtml = sections['OVERALL PICTURE'] ? reportParagraphs(sections['OVERALL PICTURE']) : '';
   const closingText = sections['A CLOSING INVITATION'] || '';
   const parseOk = Object.keys(sections).length >= 3;
@@ -1283,15 +1340,16 @@ function buildTeamReportPageHtml(rawText, rows){
     + '</div>'
   )).join('');
 
-  const thingsHtml = things.map((t,i) => (
-    '<div class="finding-card alert">'
-    + '<div class="finding-title">'+(i+1)+'. '+mdEmphasis(t.title)+'</div>'
-    + '<div class="finding-body">'+mdEmphasis(t.body)+'</div>'
-    + '</div>'
-  )).join('');
+  const thingsHtml = thingsRaw.map((raw,i) => {
+    const {title, body} = splitHeadline(raw);
+    return '<div class="finding-card alert">'
+      + '<div class="finding-title">'+(i+1)+'. '+(title ? mdEmphasis(title) : 'Consideration')+'</div>'
+      + '<div class="finding-body">'+mdEmphasis(body)+'</div>'
+      + '</div>';
+  }).join('');
 
-  const questionsHtml = questions.map((q,i) => (
-    '<div class="plan-item"><div class="plan-num">'+(i+1)+'</div><div class="plan-content"><div class="plan-body">'+mdEmphasis(q.title)+'</div></div></div>'
+  const questionsHtml = questionsRaw.map((raw,i) => (
+    '<div class="plan-item"><div class="plan-num">'+(i+1)+'</div><div class="plan-content"><div class="plan-body">'+mdEmphasis(raw)+'</div></div></div>'
   )).join('');
 
   const fallbackBodyHtml = !parseOk ? '<div class="section-body">' + reportParagraphs(rawText) + '</div>' : '';
@@ -1380,6 +1438,8 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
   <div class="doc-subtitle">${teamName}</div>
   <div class="doc-meta">${memberCount} Leaders &nbsp;&middot;&nbsp; Prepared by Steve Forney &nbsp;&middot;&nbsp; ${today} &nbsp;&middot;&nbsp; Confidential</div>
 </div>
+
+${WHY_THREE_CIRCLES_HTML}
 
 <div class="section-label">Section 1 — Team Scores</div>
 <div class="section-title">How Your Team Scored</div>
