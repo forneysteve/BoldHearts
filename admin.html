@@ -1237,30 +1237,67 @@ function splitHeadline(text){
 }
 
 // Static explanatory section — why Relationships, Values, and Calling are the three things measured.
+const CIRCLE_INTRO = {
+  relationships: {
+    alignmentLabel: 'Relational Alignment',
+    question: 'Do we trust each other enough to work honestly?',
+    measures: ['Trust','Safety','Honesty','Conflict patterns','Communication','Willingness to speak up','Willingness to disagree','Willingness to ask for help'],
+    whyItMatters: "You cannot share values with people you don't trust. You cannot pursue a calling with people you cannot be honest with. Relationships are the relational operating system of a team — if it's broken, everything built on top of it is unstable."
+  },
+  values: {
+    alignmentLabel: 'Moral Alignment',
+    question: 'Do we agree on what is non-negotiable?',
+    measures: ['What we reward','What we tolerate','What we protect','What we sacrifice for','What guides decisions','What shapes behavior under pressure'],
+    whyItMatters: "Shared values are the moral operating system of a team — they determine how decisions are made, how conflict is resolved, how people are treated, and how tradeoffs are handled. If values aren't truly shared, the team will fracture under pressure, because people end up making decisions from different internal compasses."
+  },
+  calling: {
+    alignmentLabel: 'Purpose Alignment',
+    question: 'Are we moving toward the same purpose?',
+    measures: ['Shared mission','Shared direction','Shared purpose','Shared expectations','Shared meaning','Shared commitment'],
+    whyItMatters: "A team can have strong relationships and shared values and still fail if it isn't aligned on where it's going. Calling is the purpose operating system of a team — without shared direction, people pull in different directions, even if they like each other and share values."
+  }
+};
+
 const WHY_THREE_CIRCLES_HTML = `
 <div class="section-label">About This Assessment</div>
 <div class="section-title">Why Relationships, Values, and Calling</div>
 <div class="section-body">
-<p>Every healthy team — a leadership team especially — is held together by three things: how well its people actually know and care for one another, what they hold as true and non-negotiable, and where they believe they're headed together. Most teams have some version of all three. What matters is whether all three are alive at once, or whether the team has quietly settled for two.</p>
-<p>Each pairing, missing its third circle, produces a recognizable and incomplete kind of team:</p>
+<p>Relationships, Values, and Calling are the three things that determine whether a team is actually aligned — not just functioning, but healthy, resilient, and trustworthy. If you want to know whether a team is truly unified, these three dimensions are the ones that reliably reveal it, because each one measures a different layer of alignment.</p>
 </div>
 <div class="pattern-grid">
-<div class="pattern-card flag">
-<div class="pattern-name">Relationships + Calling, without Values</div>
-<div class="pattern-desc">High loyalty and high energy — people deeply committed to a mission and to each other — but without a shared ethical compass governing how that commitment gets lived out. Without values anchoring it, devotion can curdle into something unhealthy, even exploitative, without anyone quite noticing when it crossed a line.</div>
-</div>
-<div class="pattern-card flag">
-<div class="pattern-name">Calling + Values, without Relationships</div>
-<div class="pattern-desc">Principled and purposeful, but transactional. The work gets done, and done with integrity — but there's no real belonging underneath it. Like a highly capable contractor: excellent, ethical, and never truly invested in the people around them.</div>
+<div class="pattern-card watch">
+<div class="pattern-name">Relationships — Relational Alignment</div>
+<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.relationships.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.relationships.measures.join(', ')}.<br><br>${CIRCLE_INTRO.relationships.whyItMatters}</div>
 </div>
 <div class="pattern-card watch">
-<div class="pattern-name">Relationships + Values, without Calling</div>
-<div class="pattern-desc">Warm, trustworthy, genuinely enjoyable company — but ultimately just people who like each other, with no shared mission pulling them forward together. Pleasant, but not particularly purposeful. A team can have real affection and real integrity and still have no idea, collectively, where it's going.</div>
+<div class="pattern-name">Values — Moral Alignment</div>
+<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.values.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.values.measures.join(', ')}.<br><br>${CIRCLE_INTRO.values.whyItMatters}</div>
+</div>
+<div class="pattern-card watch">
+<div class="pattern-name">Calling — Purpose Alignment</div>
+<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.calling.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.calling.measures.join(', ')}.<br><br>${CIRCLE_INTRO.calling.whyItMatters}</div>
 </div>
 </div>
 <div class="section-body">
-<p>That third pattern is worth sitting with directly, because it's the easiest one to mistake for health. A team can feel good — safe, kind, values-aligned — and still be quietly directionless, because good relationships and shared values are not the same thing as a shared destination. Calling is what turns a group of people who like and respect each other into a team that is actually going somewhere on purpose. Without it, warmth has nowhere to point.</p>
-<p>The convergence of all three — genuine care for each other, held to a shared standard of conduct, moving toward something they believe matters — is what's usually called a vocation, or a community with a cause. That convergence is what this assessment is measuring, and it's almost always the real growth edge for any team: not fixing one broken circle in isolation, but letting all three overlap more fully.</p>
+<p>If any one of these is missing, the team will struggle in a predictable, specific way:</p>
+</div>
+<div class="pattern-grid">
+<div class="pattern-card flag">
+<div class="pattern-name">Strong Relationships + Calling, without Values</div>
+<div class="pattern-desc">Nice people who make inconsistent decisions — high loyalty and energy, but no shared compass for what's non-negotiable when it counts.</div>
+</div>
+<div class="pattern-card flag">
+<div class="pattern-name">Values + Calling, without Relationships</div>
+<div class="pattern-desc">A brittle team that collapses under conflict — principled and purposeful, but without the relational trust to survive real disagreement.</div>
+</div>
+<div class="pattern-card flag">
+<div class="pattern-name">Relationships + Values, without Calling</div>
+<div class="pattern-desc">A harmonious team that drifts and never achieves anything meaningful — warm and trustworthy, but with no shared destination pulling it forward.</div>
+</div>
+</div>
+<div class="closing-card" style="margin-top:1.5rem;padding:2rem">
+<h3 style="font-size:1.4rem">The Simplest Explanation</h3>
+<p>A team is healthy when Relationships give it trust, Values give it integrity, and Calling gives it direction. Together, these three tell you whether a team is truly aligned — not just functioning, but healthy, resilient, and capable of meaningful work.</p>
 </div>
 <div class="divider"></div>
 `;
@@ -1367,9 +1404,24 @@ function questionInsight(stats){
   return base+extra;
 }
 
+function gapLabel(gap){
+  const g = Math.abs(gap);
+  if(g <= 5) return 'No Gap';
+  if(g <= 15) return 'Slight Gap';
+  if(g <= 25) return 'Large Gap';
+  return 'Significant Gap';
+}
+function gapColor(gap){
+  const g = Math.abs(gap);
+  if(g <= 5) return '#4a7c59';
+  if(g <= 15) return '#8a6f4a';
+  if(g <= 25) return '#c97a5a';
+  return '#8a2a2a';
+}
+
 function buildQuestionCardHtml(q, stats){
   return '<div class="qcard">'
-    + '<div class="qcard-head"><span class="qcard-short">'+q.short+'</span><span class="qcard-pct" style="color:'+reportColor(stats.avgCur)+'">'+stats.avgCur+'%</span></div>'
+    + '<div class="qcard-head"><span class="qcard-short">'+q.short+'</span><span class="qcard-gap" style="color:'+gapColor(stats.gap)+'">'+gapLabel(stats.gap)+'</span></div>'
     + '<div class="qcard-text">&ldquo;'+q.text+'&rdquo;</div>'
     + '<div class="bar-row" style="margin-top:.6rem"><div class="bar-label" style="width:70px">Current</div><div class="bar-track"><div class="bar-fill" style="width:'+stats.avgCur+'%;background:'+reportColor(stats.avgCur)+'"></div></div><div class="bar-pct" style="width:36px">'+stats.avgCur+'%</div></div>'
     + '<div class="bar-row"><div class="bar-label" style="width:70px;color:#9a9088">Ideal</div><div class="bar-track"><div class="bar-fill" style="width:'+stats.avgIdeal+'%;background:#d8c8a8;opacity:.6"></div></div><div class="bar-pct" style="width:36px;color:#9a9088">'+stats.avgIdeal+'%</div></div>'
@@ -1378,9 +1430,8 @@ function buildQuestionCardHtml(q, stats){
     + '</div>';
 }
 
-function buildCircleDeepDiveHtml(circleId, rows, sectionNum){
+function buildCircleQuestionsHtml(circleId, rows){
   const model = QUESTION_MODEL[circleId];
-
   const outwardStats = model.outward.map((q,i) => ({q, stats: questionStats(rows, circleId, 'outward', i)}));
   const selfStats = model.self.map((q,i) => ({q, stats: questionStats(rows, circleId, 'self', i)}));
   const all = [...outwardStats, ...selfStats];
@@ -1394,7 +1445,7 @@ function buildCircleDeepDiveHtml(circleId, rows, sectionNum){
   const selfHtml = selfStats.map(({q,stats}) => buildQuestionCardHtml(q,stats)).join('');
 
   const patternsHtml = '<div class="pattern-card flag">'
-    + '<div class="pattern-name">Patterns Worth Naming — '+model.label+'</div>'
+    + '<div class="pattern-name">Patterns Worth Naming</div>'
     + '<div class="pattern-desc">'
     + '<strong>Strongest:</strong> '+strongest.q.short+' at '+strongest.stats.avgCur+'% &mdash; this is where the team is doing well.<br>'
     + '<strong>Weakest:</strong> '+weakest.q.short+' at '+weakest.stats.avgCur+'% &mdash; this is where the team is struggling most.<br>'
@@ -1425,14 +1476,74 @@ function buildCircleDeepDiveHtml(circleId, rows, sectionNum){
     specialNarrativeHtml += '<div class="pattern-card watch"><div class="pattern-name">Highs and Lows of Calling</div><div class="pattern-desc">'+callingText+'</div></div>';
   }
 
-  return '<div class="section-label" style="margin-top:3rem">Section '+sectionNum+' — '+model.label+' in Depth</div>'
-    + '<div class="section-title">Question by Question</div>'
-    + '<div class="section-body"><p>Every question below was asked twice — how true it is for this team right now, and how true it should be. What follows is every individual question in the '+model.label+' circle, not just the rolled-up average, so the specific places of strength and struggle are visible rather than smoothed over.</p></div>'
+  return { outwardHtml, selfHtml, patternsHtml, specialNarrativeHtml };
+}
+
+const GIVE_RECEIVE_LABELS = {
+  relationships: {mine:'I initiate with the team', theirs:'The team initiates with me'},
+  values: {mine:'I initiate with the team', theirs:'The team initiated with me'},
+  calling: {mine:'I initiate with the team', theirs:'The team initiated with me'}
+};
+
+function buildGiveReceiveHtml(circleId, outCur, outIdeal, selfCur, selfIdeal){
+  const labels = GIVE_RECEIVE_LABELS[circleId];
+  function pairRow(label, cur, ideal){
+    return '<div class="bar-row"><div class="bar-label" style="width:190px">'+label+' (Current)</div><div class="bar-track"><div class="bar-fill" style="width:'+cur+'%;background:'+reportColor(cur)+'"></div></div><div class="bar-pct" style="width:36px">'+cur+'%</div></div>'
+      + '<div class="bar-row"><div class="bar-label" style="width:190px;color:#9a9088">'+label+' (Ideal)</div><div class="bar-track"><div class="bar-fill" style="width:'+ideal+'%;background:#d8c8a8;opacity:.6"></div></div><div class="bar-pct" style="width:36px;color:#9a9088">'+ideal+'%</div></div>';
+  }
+  return '<div class="section-body"><p>Both directions matter — what this team receives, and what it gives back.</p></div>'
+    + '<div class="bar-section">'
+    + pairRow(labels.theirs, outCur, outIdeal)
+    + pairRow(labels.mine, selfCur, selfIdeal)
+    + '</div>';
+}
+
+// Assembles one circle's complete story in order: intro -> score summary -> give/receive ->
+// question-by-question -> call-outs. aiCircleParagraph is that circle's write-up pulled from
+// the AI-generated executive summary, when available, to add qualitative voice to the callouts.
+function buildFullCircleSectionHtml(circleId, sectionNum, rows, aiCircleParagraph){
+  const model = QUESTION_MODEL[circleId];
+  const intro = CIRCLE_INTRO[circleId];
+  const prefix = circleId === 'relationships' ? 'rel' : circleId;
+
+  const cur = avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_current']])));
+  const ideal = avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_ideal']])));
+  const outCur = avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_out_current']])));
+  const outIdeal = avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_out_ideal']])));
+  const selfCur = avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_self_current']])));
+  const selfIdeal = avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_self_ideal']])));
+
+  const measuresLine = intro.measures.join(' &middot; ');
+
+  const introHtml = '<div class="section-label" style="margin-top:3rem">Section '+sectionNum+' — '+model.label+'</div>'
+    + '<div class="section-title">'+intro.alignmentLabel+'</div>'
+    + '<div class="section-body"><p><em>&ldquo;'+intro.question+'&rdquo;</em></p>'
+    + '<p style="font-size:.78rem;color:#9a9088;margin-bottom:.75rem">Measures: '+measuresLine+'</p>'
+    + '<p>'+intro.whyItMatters+'</p></div>';
+
+  const summaryHtml = '<div class="score-overview" style="grid-template-columns:1fr">'
+    + '<div class="score-card" style="text-align:left;padding:1.25rem 1.5rem">'
+    + '<div class="score-card-label">'+model.label+' — Team Average</div>'
+    + '<div class="score-card-val '+reportScoreClass(cur)+'">'+cur+'%</div>'
+    + '<div class="score-card-tag">'+reportTier(cur)+' &middot; Ideal '+ideal+'%</div>'
+    + '</div></div>';
+
+  const giveReceiveHtml = '<div class="section-label" style="margin-top:2rem">Give and Receive</div>'
+    + buildGiveReceiveHtml(circleId, outCur, outIdeal, selfCur, selfIdeal);
+
+  const qParts = buildCircleQuestionsHtml(circleId, rows);
+  const questionsHtml = '<div class="section-label" style="margin-top:2rem">Question by Question</div>'
+    + '<div class="section-body"><p>Every question below was asked twice — how true it is for this team right now, and how true it should be.</p></div>'
     + '<div class="qgroup-label">Receiving From the Team</div>'
-    + '<div class="qgrid">'+outwardHtml+'</div>'
+    + '<div class="qgrid">'+qParts.outwardHtml+'</div>'
     + '<div class="qgroup-label">Giving to the Team</div>'
-    + '<div class="qgrid">'+selfHtml+'</div>'
-    + '<div class="pattern-grid" style="margin-top:1.5rem">'+patternsHtml+specialNarrativeHtml+'</div>';
+    + '<div class="qgrid">'+qParts.selfHtml+'</div>';
+
+  const calloutsHtml = '<div class="section-label" style="margin-top:2rem">Call-Outs on '+model.label+' Health</div>'
+    + (aiCircleParagraph ? '<div class="section-body">'+aiCircleParagraph+'</div>' : '')
+    + '<div class="pattern-grid">'+qParts.patternsHtml+qParts.specialNarrativeHtml+'</div>';
+
+  return introHtml + summaryHtml + giveReceiveHtml + questionsHtml + calloutsHtml + '<div class="divider"></div>';
 }
 
 function buildTeamReportPageHtml(rawText, rows){
@@ -1503,13 +1614,6 @@ function buildTeamReportPageHtml(rawText, rows){
     + '<td><span class="pill '+reportPillClass(teamAvgOverall)+'">'+teamAvgOverall+'%</span></td></tr>'
     + '</tbody></table>';
 
-  const circlesHtml = circles.map(c => (
-    '<div class="pattern-card '+(c.gap>=25?'flag':'watch')+'">'
-    + '<div class="pattern-name">'+c.label+' &mdash; '+c.current+'% current, '+c.ideal+'% ideal ('+c.gap+' pt gap)</div>'
-    + '<div class="pattern-desc">'+mdEmphasis(c.body.split(/\n\n+/)[0]||'')+'</div>'
-    + '</div>'
-  )).join('');
-
   const thingsHtml = thingsRaw.map((raw,i) => {
     const {title, body} = splitHeadline(raw);
     return '<div class="finding-card alert">'
@@ -1524,9 +1628,15 @@ function buildTeamReportPageHtml(rawText, rows){
 
   const fallbackBodyHtml = !parseOk ? '<div class="section-body">' + reportParagraphs(rawText) + '</div>' : '';
 
-  const deepDiveHtml = buildCircleDeepDiveHtml('relationships', rows, 5)
-    + buildCircleDeepDiveHtml('values', rows, 6)
-    + buildCircleDeepDiveHtml('calling', rows, 7);
+  const circleAiText = {};
+  circles.forEach(c => {
+    const key = c.label.toLowerCase();
+    circleAiText[key] = mdEmphasis(c.body.split(/\n\n+/)[0]||'');
+  });
+
+  const deepDiveHtml = buildFullCircleSectionHtml('relationships', 3, rows, circleAiText['relationships'])
+    + buildFullCircleSectionHtml('values', 4, rows, circleAiText['values'])
+    + buildFullCircleSectionHtml('calling', 5, rows, circleAiText['calling']);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1590,7 +1700,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
 .qcard{background:#faf8f5;border:1px solid rgba(196,168,130,.2);border-radius:4px;padding:1rem 1.15rem;break-inside:avoid}
 .qcard-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem}
 .qcard-short{font-size:.82rem;font-weight:600;color:#1a1816}
-.qcard-pct{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700}
+.qcard-gap{font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .qcard-text{font-size:.74rem;color:#6a6258;font-style:italic;line-height:1.6;margin-bottom:.25rem}
 .qcard-range{font-size:.66rem;color:#9a9088;margin-top:.4rem}
 .qcard-insight{font-size:.76rem;color:#5a5550;line-height:1.6;margin-top:.5rem;padding-top:.5rem;border-top:1px solid rgba(196,168,130,.15)}
@@ -1627,7 +1737,7 @@ ${WHY_THREE_CIRCLES_HTML}
 
 <div class="section-label">Section 1 — Team Scores</div>
 <div class="section-title">How Your Team Scored</div>
-<div class="section-body"><p>The following scores represent the average response across all ${memberCount} participants for each circle. 70%+ is Strong, 45–69% is Present/Thin, below 45% is Quiet or Barely There.</p></div>
+<div class="section-body"><p>Before the numbers: these scores are relational, not abstract. They reflect ${memberCount} people's honest read of trust, conviction, and direction inside this specific team. What follows starts with the big picture, then goes deep into each circle — Relationships, then Values, then Calling — one at a time.</p></div>
 
 <div class="score-overview">${scoreOverviewHtml}</div>
 <div class="bar-section">${barSectionHtml}</div>
@@ -1641,26 +1751,21 @@ ${tableHtml}
 <div class="section-title">Overall Picture</div>
 <div class="section-body">${overallHtml}</div>
 
-<div class="section-label" style="margin-top:2rem">Circle by Circle</div>
-<div class="pattern-grid">${circlesHtml}</div>
-
 <div class="divider"></div>
 
-<div class="section-label">Section 3 — Things to Consider</div>
+${deepDiveHtml}
+
+<div class="section-label">Section 6 — Things to Consider</div>
 <div class="section-title">What's Worth a Direct Conversation</div>
 ${thingsHtml}
 
 <div class="divider"></div>
 
-<div class="section-label">Section 4 — For the Debrief</div>
+<div class="section-label">Section 7 — For the Debrief</div>
 <div class="section-title">Questions to Bring Into the Room</div>
 ${questionsHtml}
 
 ${fallbackBodyHtml}
-
-<div class="divider"></div>
-
-${deepDiveHtml}
 
 <div class="closing-card">
   <h3>A Closing Invitation</h3>
