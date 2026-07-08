@@ -1237,74 +1237,8 @@ function splitHeadline(text){
 }
 
 // Static explanatory section — why Relationships, Values, and Calling are the three things measured.
-const CIRCLE_INTRO = {
-  relationships: {
-    alignmentLabel: 'Relational Alignment',
-    question: 'Do we trust each other enough to work honestly?',
-    measures: ['Trust','Safety','Honesty','Conflict patterns','Communication','Willingness to speak up','Willingness to disagree','Willingness to ask for help'],
-    whyItMatters: "You cannot share values with people you don't trust. You cannot pursue a calling with people you cannot be honest with. Relationships are the relational operating system of a team — if it's broken, everything built on top of it is unstable."
-  },
-  values: {
-    alignmentLabel: 'Moral Alignment',
-    question: 'Do we agree on what is non-negotiable?',
-    measures: ['What we reward','What we tolerate','What we protect','What we sacrifice for','What guides decisions','What shapes behavior under pressure'],
-    whyItMatters: "Shared values are the moral operating system of a team — they determine how decisions are made, how conflict is resolved, how people are treated, and how tradeoffs are handled. If values aren't truly shared, the team will fracture under pressure, because people end up making decisions from different internal compasses."
-  },
-  calling: {
-    alignmentLabel: 'Purpose Alignment',
-    question: 'Are we moving toward the same purpose?',
-    measures: ['Shared mission','Shared direction','Shared purpose','Shared expectations','Shared meaning','Shared commitment'],
-    whyItMatters: "A team can have strong relationships and shared values and still fail if it isn't aligned on where it's going. Calling is the purpose operating system of a team — without shared direction, people pull in different directions, even if they like each other and share values."
-  }
-};
-
-const WHY_THREE_CIRCLES_HTML = `
-<div class="section-label">About This Assessment</div>
-<div class="section-title">Why Relationships, Values, and Calling</div>
-<div class="section-body">
-<p>Relationships, Values, and Calling are the three things that determine whether a team is actually aligned — not just functioning, but healthy, resilient, and trustworthy. If you want to know whether a team is truly unified, these three dimensions are the ones that reliably reveal it, because each one measures a different layer of alignment.</p>
-</div>
-<div class="pattern-grid">
-<div class="pattern-card watch">
-<div class="pattern-name">Relationships — Relational Alignment</div>
-<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.relationships.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.relationships.measures.join(', ')}.<br><br>${CIRCLE_INTRO.relationships.whyItMatters}</div>
-</div>
-<div class="pattern-card watch">
-<div class="pattern-name">Values — Moral Alignment</div>
-<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.values.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.values.measures.join(', ')}.<br><br>${CIRCLE_INTRO.values.whyItMatters}</div>
-</div>
-<div class="pattern-card watch">
-<div class="pattern-name">Calling — Purpose Alignment</div>
-<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.calling.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.calling.measures.join(', ')}.<br><br>${CIRCLE_INTRO.calling.whyItMatters}</div>
-</div>
-</div>
-<div class="section-body">
-<p>If any one of these is missing, the team will struggle in a predictable, specific way:</p>
-</div>
-<div class="pattern-grid">
-<div class="pattern-card flag">
-<div class="pattern-name">Strong Relationships + Calling, without Values</div>
-<div class="pattern-desc">Nice people who make inconsistent decisions — high loyalty and energy, but no shared compass for what's non-negotiable when it counts.</div>
-</div>
-<div class="pattern-card flag">
-<div class="pattern-name">Values + Calling, without Relationships</div>
-<div class="pattern-desc">A brittle team that collapses under conflict — principled and purposeful, but without the relational trust to survive real disagreement.</div>
-</div>
-<div class="pattern-card flag">
-<div class="pattern-name">Relationships + Values, without Calling</div>
-<div class="pattern-desc">A harmonious team that drifts and never achieves anything meaningful — warm and trustworthy, but with no shared destination pulling it forward.</div>
-</div>
-</div>
-<div class="closing-card" style="margin-top:1.5rem;padding:2rem">
-<h3 style="font-size:1.4rem">The Simplest Explanation</h3>
-<p>A team is healthy when Relationships give it trust, Values give it integrity, and Calling gives it direction. Together, these three tell you whether a team is truly aligned — not just functioning, but healthy, resilient, and capable of meaningful work.</p>
-</div>
-<div class="divider"></div>
-`;
-
-// ── Question-by-question deep dive ──────────────────────────
-// Exact question text from leadership.html, with short labels matching the realm model
-// documented in that file's changelog (v1.6-v1.9).
+// Question-by-question deep dive: exact question text from leadership.html, with short
+// labels matching the realm model documented in that file's changelog (v1.6-v1.9).
 const QUESTION_MODEL = {
   relationships: {
     label: 'Relationships',
@@ -1353,6 +1287,95 @@ const QUESTION_MODEL = {
   }
 };
 
+function circleMeasures(circleId){
+  const m = QUESTION_MODEL[circleId];
+  return [...m.outward, ...m.self].map(q => q.short);
+}
+
+const CIRCLE_INTRO = {
+  relationships: {
+    alignmentLabel: 'Relational Alignment',
+    question: 'Do we trust each other enough to work honestly?',
+    measures: circleMeasures('relationships'),
+    whyItMatters: "You cannot share values with people you don't trust. You cannot pursue a calling with people you cannot be honest with. Relationships are the relational operating system of a team — if it's broken, everything built on top of it is unstable."
+  },
+  values: {
+    alignmentLabel: 'Moral Alignment',
+    question: 'Do we agree on what is non-negotiable?',
+    measures: circleMeasures('values'),
+    whyItMatters: "Shared values are the moral operating system of a team — they determine how decisions are made, how conflict is resolved, how people are treated, and how tradeoffs are handled. If values aren't truly shared, the team will fracture under pressure, because people end up making decisions from different internal compasses."
+  },
+  calling: {
+    alignmentLabel: 'Purpose Alignment',
+    question: 'Are we moving toward the same purpose?',
+    measures: circleMeasures('calling'),
+    whyItMatters: "A team can have strong relationships and shared values and still fail if it isn't aligned on where it's going. Calling is the purpose operating system of a team — without shared direction, people pull in different directions, even if they like each other and share values."
+  }
+};
+
+function buildVennDiagramSvg(){
+  return `<div style="text-align:center;margin:2rem 0">
+<svg viewBox="0 0 420 340" style="width:100%;max-width:420px" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="170" cy="140" r="110" fill="#D85A30" fill-opacity="0.35"/>
+  <circle cx="250" cy="140" r="110" fill="#185FA5" fill-opacity="0.35"/>
+  <circle cx="210" cy="220" r="110" fill="#534AB7" fill-opacity="0.35"/>
+  <text x="95" y="100" font-family="Inter,sans-serif" font-size="15" font-weight="600" fill="#8a3018">Relationships</text>
+  <text x="270" y="100" font-family="Inter,sans-serif" font-size="15" font-weight="600" fill="#0e3a68">Values</text>
+  <text x="185" y="295" font-family="Inter,sans-serif" font-size="15" font-weight="600" fill="#332a70">Calling</text>
+  <text x="210" y="195" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" font-style="italic" fill="#2a2a2a">Vocation —</text>
+  <text x="210" y="212" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="14" font-style="italic" fill="#2a2a2a">Community With a Cause</text>
+</svg>
+</div>`;
+}
+
+const WHY_THREE_CIRCLES_HTML = `
+<div class="section-label">About This Assessment</div>
+<div class="section-title">Why Relationships, Values, and Calling</div>
+<div class="section-body">
+<p>Relationships, Values, and Calling are the three things that determine whether a team is actually aligned — not just functioning, but healthy, resilient, and trustworthy. If you want to know whether a team is truly unified, these three dimensions are the ones that reliably reveal it, because each one measures a different layer of alignment.</p>
+</div>
+${buildVennDiagramSvg()}
+<div class="pattern-grid">
+<div class="pattern-card watch">
+<div class="pattern-name">Relationships — Relational Alignment</div>
+<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.relationships.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.relationships.measures.join(', ')}.<br><br>${CIRCLE_INTRO.relationships.whyItMatters}</div>
+</div>
+<div class="pattern-card watch">
+<div class="pattern-name">Values — Moral Alignment</div>
+<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.values.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.values.measures.join(', ')}.<br><br>${CIRCLE_INTRO.values.whyItMatters}</div>
+</div>
+<div class="pattern-card watch">
+<div class="pattern-name">Calling — Purpose Alignment</div>
+<div class="pattern-desc"><em>&ldquo;${CIRCLE_INTRO.calling.question}&rdquo;</em><br><br>Measures: ${CIRCLE_INTRO.calling.measures.join(', ')}.<br><br>${CIRCLE_INTRO.calling.whyItMatters}</div>
+</div>
+</div>
+<div class="section-body">
+<p>If any one of these is missing, the team will struggle in a predictable, specific way:</p>
+</div>
+<div class="pattern-grid">
+<div class="pattern-card flag">
+<div class="pattern-name">Strong Relationships + Calling, without Values</div>
+<div class="pattern-desc">Nice people who make inconsistent decisions — high loyalty and energy, but no shared compass for what's non-negotiable when it counts.</div>
+</div>
+<div class="pattern-card flag">
+<div class="pattern-name">Values + Calling, without Relationships</div>
+<div class="pattern-desc">A brittle team that collapses under conflict — principled and purposeful, but without the relational trust to survive real disagreement.</div>
+</div>
+<div class="pattern-card flag">
+<div class="pattern-name">Relationships + Values, without Calling</div>
+<div class="pattern-desc">A harmonious team that drifts and never achieves anything meaningful — warm and trustworthy, but with no shared destination pulling it forward.</div>
+</div>
+</div>
+<div class="closing-card" style="margin-top:1.5rem;padding:2rem">
+<h3 style="font-size:1.4rem">The Simplest Explanation</h3>
+<p>A team is healthy when Relationships give it trust, Values give it integrity, and Calling gives it direction. Together, these three tell you whether a team is truly aligned — not just functioning, but healthy, resilient, and capable of meaningful work.</p>
+</div>
+<div class="divider"></div>
+`;
+
+// ── Question-by-question deep dive ──────────────────────────
+// Exact question text from leadership.html, with short labels matching the realm model
+// documented in that file's changelog (v1.6-v1.9).
 // Mirrors the Apps Script's header-building order exactly (see handleLeadershipTeam) so
 // column indices always match, even if the sheet schema shifts in the future.
 function buildLTHeaderList(){
@@ -1463,7 +1486,7 @@ function buildCircleQuestionsHtml(circleId, rows){
     const arcGap = recognitionAvg - livedAvg;
     let arcText;
     if(arcGap >= 15){
-      arcText = 'There\'s a real arc in this data worth naming directly: the team <em>knows</em> its values clearly — Known scores '+known.avgCur+'% — but that recognition isn\'t showing up in the room the same way. Integrated sits at '+integrated.avgCur+'% and Acted Upon at '+actedUpon.avgCur+'%, a drop of '+arcGap+' points from simple awareness to lived practice. This is the classic pattern of values on the wall rather than values in the room: everyone can name what the team stands for, but fewer people feel those convictions actually shaping decisions day to day.';
+      arcText = 'There\'s a real arc in this data worth naming directly: the team <em>knows</em> its values clearly — Known scores '+known.avgCur+'% — but that recognition isn\'t showing up in the room the same way. Integrated sits at '+integrated.avgCur+'% and Acted Upon at '+actedUpon.avgCur+'%, a drop of '+arcGap+' points from simple awareness to lived practice. This is a common pattern: the team can clearly state what it values, but that awareness isn\'t yet shaping how decisions actually get made day to day — people can name the values without feeling that those values are the thing actually steering the room.';
     } else if(livedAvg >= recognitionAvg){
       arcText = 'Unlike many teams, this one doesn\'t show a gap between knowing its values and living them — Integrated and Acted Upon (averaging '+livedAvg+'%) score as high or higher than simple awareness (Known at '+known.avgCur+'%). That\'s worth naming as a genuine strength: these values aren\'t just known, they\'re operating.';
     } else {
@@ -1487,14 +1510,19 @@ const GIVE_RECEIVE_LABELS = {
 
 function buildGiveReceiveHtml(circleId, outCur, outIdeal, selfCur, selfIdeal){
   const labels = GIVE_RECEIVE_LABELS[circleId];
-  function pairRow(label, cur, ideal){
-    return '<div class="bar-row"><div class="bar-label" style="width:190px">'+label+' (Current)</div><div class="bar-track"><div class="bar-fill" style="width:'+cur+'%;background:'+reportColor(cur)+'"></div></div><div class="bar-pct" style="width:36px">'+cur+'%</div></div>'
-      + '<div class="bar-row"><div class="bar-label" style="width:190px;color:#9a9088">'+label+' (Ideal)</div><div class="bar-track"><div class="bar-fill" style="width:'+ideal+'%;background:#d8c8a8;opacity:.6"></div></div><div class="bar-pct" style="width:36px;color:#9a9088">'+ideal+'%</div></div>';
+  function row(label, val, isIdeal){
+    const color = isIdeal ? '#d8c8a8' : reportColor(val);
+    const opacity = isIdeal ? ';opacity:.6' : '';
+    const labelColor = isIdeal ? 'color:#9a9088;' : '';
+    const pctColor = isIdeal ? 'color:#9a9088;' : '';
+    return '<div class="bar-row"><div class="bar-label" style="width:190px;'+labelColor+'">'+label+' ('+(isIdeal?'Ideal':'Current')+')</div><div class="bar-track"><div class="bar-fill" style="width:'+val+'%;background:'+color+opacity+'"></div></div><div class="bar-pct" style="width:36px;'+pctColor+'">'+val+'%</div></div>';
   }
   return '<div class="section-body"><p>Both directions matter — what this team receives, and what it gives back.</p></div>'
     + '<div class="bar-section">'
-    + pairRow(labels.theirs, outCur, outIdeal)
-    + pairRow(labels.mine, selfCur, selfIdeal)
+    + row(labels.theirs, outCur, false)
+    + row(labels.mine, selfCur, false)
+    + row(labels.theirs, outIdeal, true)
+    + row(labels.mine, selfIdeal, true)
     + '</div>';
 }
 
@@ -1544,6 +1572,117 @@ function buildFullCircleSectionHtml(circleId, sectionNum, rows, aiCircleParagrap
     + '<div class="pattern-grid">'+qParts.patternsHtml+qParts.specialNarrativeHtml+'</div>';
 
   return introHtml + summaryHtml + giveReceiveHtml + questionsHtml + calloutsHtml + '<div class="divider"></div>';
+}
+
+// Static closing call-to-action: reframes the report from "here's the data" to "now what do
+// we do about it" — personal reflection questions first, then concrete categories for change.
+const CALL_TO_ACTION_HTML = `
+<div class="section-label">Section 8 — A Call to the Team</div>
+<div class="section-title">Where Do We Go From Here?</div>
+<div class="section-body">
+<p>Here's what this data is showing. Before moving to solutions, the first and most useful question to ask each other in the room is simple: <em>Are you seeing the same thing?</em> Sit with the scores and the patterns together before deciding what to do about them — agreement on what's true has to come before agreement on what to change.</p>
+</div>
+
+<div class="section-label" style="margin-top:2rem">The Big Questions in the Room</div>
+<div class="section-body"><p>Before this becomes a conversation about the team, it's worth becoming a private conversation with yourself. These aren't questions to answer out loud right away — they're questions to sit with first.</p></div>
+<div class="plan-item"><div class="plan-num">1</div><div class="plan-content"><div class="plan-body">Do I have what it takes to make change — to myself, and to my actual contribution to this team?</div></div></div>
+<div class="plan-item"><div class="plan-num">2</div><div class="plan-content"><div class="plan-body">Do I want to see change, or am I comfortable enough with things as they are?</div></div></div>
+<div class="plan-item"><div class="plan-num">3</div><div class="plan-content"><div class="plan-body">Do I actually think it will make a difference — or does part of me expect nothing to change either way?</div></div></div>
+<div class="plan-item"><div class="plan-num">4</div><div class="plan-content"><div class="plan-body">What do I want for this team? Not what I think I should say, but what I actually want.</div></div></div>
+<div class="section-body" style="margin-top:1rem"><p>Whatever comes up in answer to that last question is usually the most honest starting point for everything that follows.</p></div>
+
+<div class="section-label" style="margin-top:2.5rem">Where Real Change Starts</div>
+<div class="section-body"><p>Once the room has named what it's seeing and each person has sat with those questions, the conversation can move toward action. These are the three places that tend to move the needle most:</p></div>
+<div class="pattern-grid">
+<div class="pattern-card watch">
+<div class="pattern-name">1. Communicating Vision</div>
+<div class="pattern-desc">A team can't align around a direction it only hears about once a year. Leaders should be able to say, in a sentence or two, where this team is headed and why — and that sentence needs to be repeated often enough that it becomes shared language, not just something leadership privately understands.</div>
+</div>
+<div class="pattern-card watch">
+<div class="pattern-name">2. Communicating Value for One Another</div>
+<div class="pattern-desc">Specific, regular practices where people name what they see and appreciate in each other — not generic praise, but naming someone's actual gifting, effort, or character. This is often the fastest way to move both Relationships and Calling at once, since being genuinely seen and having your gifts named touch both circles.</div>
+</div>
+<div class="pattern-card watch">
+<div class="pattern-name">3. Small Team Habits Worth Building</div>
+<div class="pattern-desc">Brief opening check-ins that ask something more personal than a project update. A regular rhythm — even quarterly — of naming what's working and what isn't. One person modeling honesty or vulnerability first, so it becomes safer for everyone else to follow.</div>
+</div>
+</div>
+<div class="divider"></div>
+`;
+
+// ── Executive Summary: one-page skimmable entry point (3 sentences, 3 numbers, 3 implications) ──
+function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal){
+  const circles = [
+    {label:'Relationships', cur:relCur, ideal:relIdeal},
+    {label:'Values', cur:valCur, ideal:valIdeal},
+    {label:'Calling', cur:calCur, ideal:calIdeal}
+  ];
+  const avgCur = avg([relCur,valCur,calCur]);
+  const avgIdeal = avg([relIdeal,valIdeal,calIdeal]);
+  const strongest = [...circles].sort((a,b)=>b.cur-a.cur)[0];
+  const weakest = [...circles].sort((a,b)=>a.cur-b.cur)[0];
+  const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.cur)-(a.ideal-a.cur))[0];
+
+  const sentence1 = teamName+"'s three circles average "+avgCur+"% current against a shared "+avgIdeal+"% ideal — a team that has real clarity about what it wants to become, and hasn't fully become it yet.";
+  const sentence2 = strongest.label+' is the clearest strength right now at '+strongest.cur+'%, while '+weakest.label+' needs the most attention at '+weakest.cur+'%.';
+  const sentence3 = 'The widest distance between where this team is and where it wants to be shows up in '+biggestGap.label+' — a '+(biggestGap.ideal-biggestGap.cur)+'-point gap worth naming early in the debrief.';
+
+  function implication(c){
+    if(c.cur>=70) return c.label+' is a genuine asset right now — worth protecting and naming explicitly so it doesn\'t quietly erode.';
+    if(c.cur>=45) return c.label+' is present but not yet load-bearing — it will likely hold under normal conditions, but may not hold under real pressure.';
+    return c.label+' is thin enough that it is probably already limiting what this team can do together.';
+  }
+
+  const profileLine = circles.map(c => reportTier(c.cur)+' '+c.label).join(', ');
+
+  const spread = Math.max(relCur,valCur,calCur) - Math.min(relCur,valCur,calCur);
+  const gapAll = avgIdeal - avgCur;
+  let archetypeName, archetypeDesc;
+  if(spread >= 20){
+    archetypeName = 'Lopsided Strength';
+    archetypeDesc = 'A team strong in '+strongest.label+' but notably thinner in '+weakest.label+' — the unevenness between circles is itself the most important thing in this data.';
+  } else if(gapAll >= 25 && spread <= 12){
+    archetypeName = 'High Aspiration, Thin Depth';
+    archetypeDesc = 'A team aligned in desire but not yet aligned in experience — everyone wants roughly the same healthy team, and no one yet feels they\'re fully living in it.';
+  } else if(avgCur >= 65 && gapAll <= 15){
+    archetypeName = 'Steady and Grounded';
+    archetypeDesc = 'A team whose current experience is already close to what it believes a healthy team looks like — the growth edge here is refinement, not repair.';
+  } else {
+    archetypeName = 'A Team in Progress';
+    archetypeDesc = 'A team with real strengths and real growth edges, without one dominant pattern defining the whole picture — worth reading circle by circle rather than in one broad stroke.';
+  }
+
+  return '<div class="section-label">Executive Summary</div>'
+    + '<div class="section-title">The One-Page Version</div>'
+    + '<div class="section-body"><p>'+sentence1+' '+sentence2+' '+sentence3+'</p></div>'
+    + '<div class="score-overview">'
+    + circles.map(c => '<div class="score-card"><div class="score-card-label">'+c.label+'</div><div class="score-card-val '+reportScoreClass(c.cur)+'">'+c.cur+'%</div><div class="score-card-tag">'+reportTier(c.cur)+' &middot; Ideal '+c.ideal+'%</div></div>').join('')
+    + '</div>'
+    + '<div class="finding-card" style="margin-top:1rem"><div class="finding-title">Team Profile</div><div class="finding-body">This team\'s current profile: <strong>'+profileLine+'</strong>.</div></div>'
+    + '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div><div class="finding-body">'+archetypeDesc+'</div></div>'
+    + '<div class="section-label" style="margin-top:1.5rem">Three Implications</div>'
+    + circles.map(c => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+implication(c)+'</div></div></div>').join('')
+    + '<div class="divider"></div>';
+}
+
+function buildLeadershipImplicationsHtml(weakestLabel, weakestCur, biggestGapLabel, biggestGapPts, strongestLabel, strongestCur){
+  return '<div class="section-label">Section 9 — Leadership Implications</div>'
+    + '<div class="section-title">What This Means for This Team</div>'
+    + '<div class="pattern-grid">'
+    + '<div class="pattern-card watch"><div class="pattern-name">What does this mean for us?</div><div class="pattern-desc">Right now, '+weakestLabel.toLowerCase()+' is the circle most likely to quietly shape everything else — at '+weakestCur+'%, it\'s thin enough to limit how far the team\'s other strengths can carry it. '+strongestLabel+' is real capital, sitting at '+strongestCur+'%, and worth protecting deliberately rather than assuming it will hold on its own.</div></div>'
+    + '<div class="pattern-card flag"><div class="pattern-name">What happens if we don\'t address it?</div><div class="pattern-desc">The '+biggestGapPts+'-point gap in '+biggestGapLabel.toLowerCase()+' doesn\'t tend to close on its own — left alone, gaps like this usually calcify into low-grade normalcy: something everyone privately notices and no one names, until it surfaces as conflict, quiet disengagement, or turnover at the moment the team can least afford it.</div></div>'
+    + '<div class="pattern-card watch"><div class="pattern-name">What becomes possible if we do?</div><div class="pattern-desc">A team that closes even part of this gap doesn\'t just score better on a future assessment — it becomes a team that can be honest under pressure, make decisions from a shared center, and move toward something together instead of merely alongside each other. That\'s the actual prize being measured here.</div></div>'
+    + '</div><div class="divider"></div>';
+}
+
+function buildNextStepsHtml(){
+  return '<div class="section-label">Section 10 — Recommended Next Steps</div>'
+    + '<div class="section-title">A 90-Day Path Forward</div>'
+    + '<div class="section-body"><p>Real culture change happens in a sequence, not all at once. This path moves through the same order the rest of this report does — Relationships first, then Values, then Calling — because each one is easier to build once the one before it has some footing.</p></div>'
+    + '<div class="plan-item"><div class="plan-num">30</div><div class="plan-content"><div class="plan-title">Days 1&ndash;30 — Relational Practices</div><div class="plan-body">Start meetings with a five-minute personal check-in that isn\'t about the project. Identify one person on this team you know least well and get time with them one-on-one before day 30. Practice naming a disagreement out loud instead of letting distance quietly grow.</div></div></div>'
+    + '<div class="plan-item"><div class="plan-num">60</div><div class="plan-content"><div class="plan-title">Days 31&ndash;60 — Values Alignment Practices</div><div class="plan-body">Give one full team meeting to walking through this team\'s stated values and asking, honestly, where they\'ve actually shaped a recent decision. Write one sentence everyone can repeat without looking it up. Name, as a group, one moment the team drifted from a value under pressure — without assigning blame.</div></div></div>'
+    + '<div class="plan-item"><div class="plan-num">90</div><div class="plan-content"><div class="plan-title">Days 61&ndash;90 — Calling Recalibration Practices</div><div class="plan-body">Have each person share what they believe their specific gifting contributes to this team\'s purpose — and have the team respond to whether that matches how they see it too. Revisit and re-articulate the team\'s shared direction together, out loud, until it sounds like something the whole room actually believes, not just something leadership repeats.</div></div></div>'
+    + '<div class="divider"></div>';
 }
 
 function buildTeamReportPageHtml(rawText, rows){
@@ -1637,6 +1776,24 @@ function buildTeamReportPageHtml(rawText, rows){
   const deepDiveHtml = buildFullCircleSectionHtml('relationships', 3, rows, circleAiText['relationships'])
     + buildFullCircleSectionHtml('values', 4, rows, circleAiText['values'])
     + buildFullCircleSectionHtml('calling', 5, rows, circleAiText['calling']);
+
+  const executiveSummaryHtml = buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal);
+
+  const implicationCircles = [
+    {label:'Relationships', cur:relCur, ideal:relIdeal},
+    {label:'Values', cur:valCur, ideal:valIdeal},
+    {label:'Calling', cur:calCur, ideal:calIdeal}
+  ];
+  const implWeakest = [...implicationCircles].sort((a,b)=>a.cur-b.cur)[0];
+  const implStrongest = [...implicationCircles].sort((a,b)=>b.cur-a.cur)[0];
+  const implBiggestGap = [...implicationCircles].sort((a,b)=>(b.ideal-b.cur)-(a.ideal-a.cur))[0];
+  const leadershipImplicationsHtml = buildLeadershipImplicationsHtml(
+    implWeakest.label, implWeakest.cur,
+    implBiggestGap.label, (implBiggestGap.ideal-implBiggestGap.cur),
+    implStrongest.label, implStrongest.cur
+  );
+
+  const nextStepsHtml = buildNextStepsHtml();
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -1733,6 +1890,8 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
   <div class="doc-meta">${memberCount} Leaders &nbsp;&middot;&nbsp; Prepared by Steve Forney &nbsp;&middot;&nbsp; ${today} &nbsp;&middot;&nbsp; Confidential</div>
 </div>
 
+${executiveSummaryHtml}
+
 ${WHY_THREE_CIRCLES_HTML}
 
 <div class="section-label">Section 1 — Team Scores</div>
@@ -1766,6 +1925,14 @@ ${thingsHtml}
 ${questionsHtml}
 
 ${fallbackBodyHtml}
+
+<div class="divider"></div>
+
+${CALL_TO_ACTION_HTML}
+
+${leadershipImplicationsHtml}
+
+${nextStepsHtml}
 
 <div class="closing-card">
   <h3>A Closing Invitation</h3>
