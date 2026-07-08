@@ -902,7 +902,7 @@ function loadTeamData(team){
     try{ delete window[cbName]; script.remove(); }catch(e){}
   }, 12000);
 
-  window[cbName] = (data) => {
+  window[cbName] = async (data) => {
     clearTimeout(timeout);
     try{ delete window[cbName]; script.remove(); }catch(e){}
     if(!data.rows || data.rows.length === 0){
@@ -915,12 +915,37 @@ function loadTeamData(team){
       return;
     }
     document.getElementById('lt-status').textContent = ltTeamData.length + ' team member' + (ltTeamData.length>1?'s':'') + ' found for "'+team+'".';
+    savedIndividualStatus = await fetchSavedIndividualStatus(team);
     renderTeamMembers(ltTeamData);
     document.getElementById('lt-members').style.display = 'block';
   };
 
   script.src = LT_SHEETS_URL + '?action=getteamdata&callback=' + cbName;
   document.head.appendChild(script);
+}
+
+let savedIndividualStatus = {}; // { memberName: timestamp string }
+
+function fetchSavedIndividualStatus(team){
+  return new Promise((resolve)=>{
+    const cbName = '_lt_indivstatus_' + Date.now();
+    const script = document.createElement('script');
+    const timeout = setTimeout(()=>{
+      try{ delete window[cbName]; script.remove(); }catch(e){}
+      resolve({});
+    }, 10000);
+
+    window[cbName] = (data) => {
+      clearTimeout(timeout);
+      try{ delete window[cbName]; script.remove(); }catch(e){}
+      const status = {};
+      (data.reports || []).forEach(r => { status[r.name] = r.timestamp; });
+      resolve(status);
+    };
+
+    script.src = LT_SHEETS_URL + '?action=getindividualreports&team=' + encodeURIComponent(team) + '&callback=' + cbName;
+    document.head.appendChild(script);
+  });
 }
 
 function renderTeamMembers(rows){
@@ -955,49 +980,37 @@ function renderTeamMembers(rows){
   avgHtml += '</div><div style="font-size:.6rem;color:#5a5550;margin-left:.5rem">Current / Ideal</div></div>';
   document.getElementById('lt-avg-section').innerHTML = avgHtml;
 
-  let html = '';
+  let html = '<table style="width:100%;border-collapse:collapse">';
+  html += '<thead><tr>';
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1)">Name</th>';
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1)">Relationships</th>';
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1)">Values</th>';
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1)">Calling</th>';
+  html += '<th style="text-align:left;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550;padding:.5rem .6rem;border-bottom:1px solid rgba(232,215,160,.1)">Individual Summary</th>';
+  html += '<th style="border-bottom:1px solid rgba(232,215,160,.1)"></th>';
+  html += '</tr></thead><tbody>';
+
   rows.forEach((r,i)=>{
     const name = r[1] || 'Unknown';
-    const rc = pctVal(r[4]), ri = pctVal(r[5]);
-    const vc = pctVal(r[10]), vi = pctVal(r[11]);
-    const cc = pctVal(r[16]), ci = pctVal(r[17]);
-    const relOut = pctVal(r[6]), relSelf = pctVal(r[8]);
-    const valOut = pctVal(r[12]), valSelf = pctVal(r[14]);
-    const calOut = pctVal(r[18]), calSelf = pctVal(r[20]);
+    const rc = pctVal(r[4]);
+    const vc = pctVal(r[10]);
+    const cc = pctVal(r[16]);
+    const summarySaved = savedIndividualStatus[name];
+    const summaryHtml = summarySaved
+      ? '<span style="color:#b5c4a0;font-size:.75rem">&#10003; Saved &mdash; '+summarySaved.split(',')[0]+'</span>'
+      : '<span style="color:#5a5550;font-size:.75rem">&#10007; Not done</span>';
 
-    html += '<div class="lt-member-card">';
-    html += '<div class="lt-member-name">'+name+'</div>';
-    html += '<div class="lt-bar-wrap">';
-
-    for(const [label, cur, ideal, col] of [
-      ['Relationships', rc, ri, '#D85A30'],
-      ['Values', vc, vi, '#185FA5'],
-      ['Calling', cc, ci, '#534AB7']
-    ]){
-      html += '<div class="lt-bar-row" style="margin-bottom:5px;align-items:flex-start">';
-      html += '<div style="width:110px;flex-shrink:0">';
-      html += '<div style="font-size:.65rem;color:#6a6258;margin-bottom:2px">'+label+'</div>';
-      html += '<div style="font-size:.7rem;color:'+barColor(cur)+';font-weight:500">'+cur+'% <span style="color:#3a3530;font-weight:300">/ '+ideal+'%</span></div>';
-      html += '</div>';
-      html += '<div style="flex:1;display:flex;flex-direction:column;gap:2px;padding-top:2px">';
-      html += '<div style="width:100%;height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden"><div style="width:'+cur+'%;height:100%;background:'+barColor(cur)+';border-radius:2px"></div></div>';
-      html += '<div style="width:100%;height:5px;background:rgba(255,255,255,.03);border-radius:2px;overflow:hidden"><div style="width:'+ideal+'%;height:100%;background:repeating-linear-gradient(90deg,'+barColor(ideal)+'88 0px,'+barColor(ideal)+'88 4px,transparent 4px,transparent 8px)"></div></div>';
-      html += '</div>';
-      html += '</div>';
-    }
-
-    const avgGive = Math.round((relSelf+valSelf+calSelf)/3);
-    const avgReceive = Math.round((relOut+valOut+calOut)/3);
-    const giveReceiveDiff = avgGive - avgReceive;
-    html += '<div style="margin-top:5px;font-size:.62rem;color:#5a5550">';
-    html += Math.abs(giveReceiveDiff) >= 10
-      ? (giveReceiveDiff>0?'<span style="color:#c4a882">Gives more</span>':'<span style="color:#8AACCB">Receives more</span>')
-      : 'Balanced';
-    html += '</div>';
-    html += '</div>';
-    html += '<button onclick="viewMemberSummary('+i+')" style="padding:.4rem .9rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:3px;color:#6a6258;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap;flex-shrink:0">View Summary</button>';
-    html += '</div>';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.03)">';
+    html += '<td style="padding:.6rem;font-size:.85rem;color:#f0e8df;white-space:nowrap">'+name+'</td>';
+    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(rc)+'">'+rc+'%</td>';
+    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(vc)+'">'+vc+'%</td>';
+    html += '<td style="padding:.6rem;font-size:.8rem;color:'+barColor(cc)+'">'+cc+'%</td>';
+    html += '<td style="padding:.6rem">'+summaryHtml+'</td>';
+    html += '<td style="padding:.6rem;text-align:right"><button onclick="viewMemberSummary('+i+')" style="padding:.35rem .8rem;background:transparent;border:1px solid rgba(232,215,160,.2);border-radius:3px;color:#6a6258;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap">View Scores</button></td>';
+    html += '</tr>';
   });
+
+  html += '</tbody></table>';
   document.getElementById('lt-member-list').innerHTML = html;
 }
 
@@ -1263,13 +1276,23 @@ async function generateAllIndividuals(){
   for(let i = 0; i < ltTeamData.length; i++){
     const r = ltTeamData[i];
     const name = r[1] || 'Member '+(i+1);
+    const team = r[3];
     document.getElementById('itab-'+i).textContent = name + ' ⟳';
     try {
-      const text = await callClaude(buildIndividualPrompt(r, ltTeamData));
-      individualReports[i] = text;
-      document.getElementById('itab-'+i).textContent = name + ' ✓';
-      document.getElementById('itab-'+i).style.borderColor = 'rgba(196,168,130,.4)';
-      document.getElementById('itab-'+i).style.color = '#c4a882';
+      const saved = await fetchSavedIndividualReport(team, name);
+      if(saved){
+        individualReports[i] = saved.report_text;
+        document.getElementById('itab-'+i).textContent = name + ' ✓';
+        document.getElementById('itab-'+i).style.borderColor = 'rgba(196,168,130,.4)';
+        document.getElementById('itab-'+i).style.color = '#c4a882';
+      } else {
+        const text = await callClaude(buildIndividualPrompt(r, ltTeamData));
+        individualReports[i] = text;
+        document.getElementById('itab-'+i).textContent = name + ' ✓';
+        document.getElementById('itab-'+i).style.borderColor = 'rgba(196,168,130,.4)';
+        document.getElementById('itab-'+i).style.color = '#c4a882';
+        saveIndividualReportToSheet(team, name, text);
+      }
     } catch(e) {
       individualReports[i] = 'Error generating summary for '+name+'.';
       document.getElementById('itab-'+i).textContent = name + ' ✗';
@@ -1279,6 +1302,41 @@ async function generateAllIndividuals(){
 
   btn.disabled = false;
   btn.innerHTML = 'Generate Individual Summaries';
+  savedIndividualStatus = await fetchSavedIndividualStatus(ltTeamData[0][3]);
+  renderTeamMembers(ltTeamData);
+}
+
+function fetchSavedIndividualReport(team, name){
+  return new Promise((resolve)=>{
+    const cbName = '_lt_getindiv_' + Date.now();
+    const script = document.createElement('script');
+    const timeout = setTimeout(()=>{
+      try{ delete window[cbName]; script.remove(); }catch(e){}
+      resolve(null);
+    }, 10000);
+
+    window[cbName] = (data) => {
+      clearTimeout(timeout);
+      try{ delete window[cbName]; script.remove(); }catch(e){}
+      resolve(data && data.found ? data : null);
+    };
+
+    script.src = LT_SHEETS_URL + '?action=getindividualreport&team=' + encodeURIComponent(team) + '&name=' + encodeURIComponent(name) + '&callback=' + cbName;
+    document.head.appendChild(script);
+  });
+}
+
+async function saveIndividualReportToSheet(team, name, text){
+  try {
+    await fetch(LT_SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'saveindividualreport', team: team, name: name, report_text: text })
+    });
+  } catch(e){
+    console.error('Failed to save individual report for '+name+':', e);
+  }
 }
 
 function viewMemberSummary(idx){
