@@ -1092,8 +1092,8 @@ The opening statement of where this team is right now. Name the pattern honestly
 2. CIRCLE BY CIRCLE (one paragraph each for Relationships, Values, Calling)
 For each circle: name what the score reveals, what the gap between current and ideal means, what the give/receive split suggests about how this team functions, and what the individual variance tells you about whether this is a shared experience or a divided one.
 
-3. THE PATTERN BETWEEN THE CIRCLES (2-3 paragraphs)
-Beyond each circle's own score, name what the relationship between the three circles reveals about this team. Don't lead with percentages here — the reader has already seen the numbers in the previous sections. Instead, interpret the shape: if one circle is meaningfully higher or lower than another (per the significance threshold above), explain what that specific combination tends to mean for how a team actually functions. For example: what does it mean when a team's sense of shared values or direction is running ahead of their relational trust? What does it mean when people feel close to each other but aren't yet aligned on where they're headed? Draw on this logic — relationships + calling without values tends to produce loyalty without an ethical compass; values + calling without relationships tends to produce a principled but transactional team; relationships and values high with calling/direction meaningfully lower tends to produce a warm group where everyone gets along and shares real convictions, but is unclear about why they're actually here and what they're trying to solve or build together over the long term — pleasant, trustworthy, well-intentioned, and still without a shared destination pulling them forward — and apply this logic to whichever partial pattern actually shows up in this team's specific data. If all three circles are roughly even instead, name what that evenness itself suggests about this team. This section should read as genuine interpretation a practitioner would offer out loud, not a restatement of numbers already shown elsewhere.
+3. THE PATTERN BETWEEN THE CIRCLES (exactly 3 bullet points, each 1-2 sentences — this is an executive-summary read, not an essay)
+Beyond each circle's own score, name what the relationship between the three circles reveals about this team — in three sharp, tight bullets, not paragraphs. Don't lead with percentages here — the reader has already seen the numbers in the previous sections. Each bullet should be a specific, genuine observation about the interplay between circles, not a restatement of individual scores. Draw on this logic — relationships + calling without values tends to produce loyalty without an ethical compass; values + calling without relationships tends to produce a principled but transactional team; relationships and values high with calling/direction meaningfully lower tends to produce a warm group where everyone gets along and shares real convictions, but is unclear about why they're actually here and what they're trying to solve or build together over the long term — pleasant, trustworthy, well-intentioned, and still without a shared destination pulling them forward — and apply this logic to whichever partial pattern actually shows up in this team's specific data. If all three circles are roughly even instead, name what that evenness itself suggests about this team. Format as three numbered items: "1. [bullet]", "2. [bullet]", "3. [bullet]".
 
 4. THINGS TO CONSIDER (3-4 specific observations)
 The things that deserve a direct conversation in the room. Not generic advice — specific observations drawn from this team's specific data. Include at least one that names the thing nobody has probably said out loud yet.
@@ -1101,8 +1101,8 @@ The things that deserve a direct conversation in the room. Not generic advice �
 5. QUESTIONS FOR THE DEBRIEF (3-4 questions)
 Questions Steve can bring into the room. They should be specific enough to feel personal, open enough to generate real conversation. They should make people lean in, not brace.
 
-6. IMPLICATIONS (exactly 3 items — one for Relationships, one for Values, one for Calling, in that order)
-For each circle, name the specific, practical consequence of where it actually sits for this team — not a generic tier description like "present but not yet load-bearing." Ground each one in this team's specific numbers, gaps, and patterns already described above. The three should read as genuinely different observations, not the same sentence with the circle name swapped. Format each as "Relationships — [implication]", "Values — [implication]", "Calling — [implication]" so each starts by naming its circle.
+6. THREE CALLS TO ACTION (exactly 3 items — one for Relationships, one for Values, one for Calling, in that order)
+Not descriptions of where each circle sits — actual calls to action. Each one should tell the team what to actually DO in response to that circle's specific data, phrased as a direct, energizing challenge rather than a passive observation. Avoid generic tier language like "is present but not yet load-bearing." At least one of the three should challenge the team toward its unrealized potential — something in the spirit of "This team could do so much more if challenged to..." — when the data supports that kind of aspirational push (for example, when ideal scores run well ahead of current ones, or when strength in two circles isn't yet being leveraged because a third is holding the team back). Format each as "Relationships — [CTA]", "Values — [CTA]", "Calling — [CTA]" so each starts by naming its circle.
 
 7. A CLOSING INVITATION (1 paragraph)
 What this team is being invited into. Hopeful but honest. Not a pep talk — a genuine naming of what's possible if this team chooses to move toward it.`;
@@ -1713,9 +1713,10 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.cur)-(a.ideal-a.cur))[0];
 
   function implication(c){
-    if(c.cur>=70) return c.label+' is a genuine asset right now — worth protecting and naming explicitly so it doesn\'t quietly erode.';
-    if(c.cur>=45) return c.label+' is present but not yet load-bearing — it will likely hold under normal conditions, but may not hold under real pressure.';
-    return c.label+' is thin enough that it is probably already limiting what this team can do together.';
+    if(c.cur>=70) return c.label+' — Protect this deliberately. Name it out loud with the team so it stays a strength instead of quietly eroding while attention goes elsewhere.';
+    if(c.cur>=45 && (c.ideal-c.cur)>=20) return c.label+' — This team could do so much more here if challenged to close the gap between what it wants and what it currently has, rather than settling for "good enough."';
+    if(c.cur>=45) return c.label+' — Don\'t wait for pressure to test this. Build the practice now, while conditions are still normal, so it holds when it matters most.';
+    return c.label+' — Make this the team\'s next real conversation, not a background concern. Left unaddressed, it will keep limiting what this team can do together.';
   }
 
   const profileLine = circles.map(c => reportTier(c.cur)+' '+c.label).join(', ');
@@ -1748,7 +1749,7 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
     + '<div style="text-align:center;font-size:.68rem;color:#9a9088;margin-bottom:1rem">Filled color = Current &middot; Hatched area = gap to Ideal &middot; needles mark exact position</div>'
     + (archetypeDesc ? '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div><div class="finding-body">'+archetypeDesc+'</div></div>' : '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div></div>')
     + (overallFullHtml ? '<div class="section-label" style="margin-top:1.5rem">What the Data Reveals</div><div class="section-body">'+overallFullHtml+'</div>' : '')
-    + '<div class="section-label" style="margin-top:1.5rem">Three Implications</div>'
+    + '<div class="section-label" style="margin-top:1.5rem">Three Calls to Action</div>'
     + (implicationsRaw && implicationsRaw.length >= 3
         ? implicationsRaw.slice(0,3).map(raw => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+mdEmphasis(raw)+'</div></div></div>').join('')
         : circles.map(c => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+implication(c)+'</div></div></div>').join(''))
@@ -1790,12 +1791,15 @@ function buildTeamReportPageHtml(rawText, rows){
 
   const sections = parseReportSections(rawText);
   const circles = parseReportCircles(sections['CIRCLE BY CIRCLE'] || '');
-  const patternHtml = sections['THE PATTERN BETWEEN THE CIRCLES'] ? reportParagraphs(sections['THE PATTERN BETWEEN THE CIRCLES']) : '';
+  const patternBulletsRaw = parseReportNumberedItems(sections['THE PATTERN BETWEEN THE CIRCLES'] || '');
+  const patternHtml = patternBulletsRaw.length
+    ? '<ul style="margin:0 0 0 1.1rem;padding:0">' + patternBulletsRaw.map(b => '<li style="margin-bottom:.5rem">'+mdEmphasis(b)+'</li>').join('') + '</ul>'
+    : '';
   const thingsRaw = parseReportNumberedItems(sections['THINGS TO CONSIDER'] || '');
   const questionsRaw = parseReportNumberedItems(sections['QUESTIONS FOR THE DEBRIEF'] || '');
   const overallHtml = sections['OVERALL PICTURE'] ? reportParagraphs(sections['OVERALL PICTURE']) : '';
   const closingText = sections['A CLOSING INVITATION'] || '';
-  const implicationsRaw = parseReportNumberedItems(sections['IMPLICATIONS'] || '');
+  const implicationsRaw = parseReportNumberedItems(sections['THREE CALLS TO ACTION'] || '');
   const parseOk = Object.keys(sections).length >= 3;
 
   const scoreOverviewHtml = [
