@@ -1086,8 +1086,11 @@ SIGNIFICANCE THRESHOLD: Only treat a difference between two circles' current sco
 
 Write a Team Culture Report with these sections. Use pastoral, direct, practitioner language — not corporate, not clinical:
 
-1. OVERALL PICTURE (2-3 paragraphs)
-The opening statement of where this team is right now. Name the pattern honestly. Draw out what's most significant about the combination of scores across all three circles. Name what the consistency (or inconsistency) between scores means. Note whether the high ideal scores suggest aspiration or anxiety.
+1. HIGH LEVEL ASSESSMENT SUMMARY (exactly 3 short paragraphs, one per question below — answer each directly, in order)
+- Look at the gap between the three CURRENT scores (Relationships, Values, Calling). What does the size and consistency of that gap indicate about this team? Is the team divided across circles, or is something systemic holding all three at a similar level?
+- Look at the IDEAL scores across all three circles. Name the actual level those ideal scores land in (for example, "in the 90s" or "the low 80s") and what that expresses about how much this team wants to give and receive from this experience — high ideals mean real desire, not just a survey formality. Then directly contrast that against the CURRENT reality: name plainly, in the same paragraph, that the team's actual day-to-day experience is falling short of that desire, and describe how far short it feels in plain language (not by repeating the exact gap number, which is shown elsewhere). The paragraph should read like: the team wants a great deal from this experience, and right now this experience is not yet delivering it.
+- Look specifically at the LOWEST-performing circle. What does that score most likely mean for how this team actually functions day to day?
+Write each as a short, direct paragraph that actually answers its question — don't just restate the numbers, interpret what they mean. Don't lead any paragraph with a percentage.
 
 2. CIRCLE BY CIRCLE (one paragraph each for Relationships, Values, Calling)
 For each circle: name what the score reveals, what the gap between current and ideal means, what the give/receive split suggests about how this team functions, and what the individual variance tells you about whether this is a shared experience or a divided one.
@@ -1101,8 +1104,11 @@ The things that deserve a direct conversation in the room. Not generic advice �
 5. QUESTIONS FOR THE DEBRIEF (3-4 questions)
 Questions Steve can bring into the room. They should be specific enough to feel personal, open enough to generate real conversation. They should make people lean in, not brace.
 
-6. THREE CALLS TO ACTION (exactly 3 items — one for Relationships, one for Values, one for Calling, in that order)
-Not descriptions of where each circle sits — actual calls to action. Each one should tell the team what to actually DO in response to that circle's specific data, phrased as a direct, energizing challenge rather than a passive observation. Avoid generic tier language like "is present but not yet load-bearing." At least one of the three should challenge the team toward its unrealized potential — something in the spirit of "This team could do so much more if challenged to..." — when the data supports that kind of aspirational push (for example, when ideal scores run well ahead of current ones, or when strength in two circles isn't yet being leveraged because a third is holding the team back). Format each as "Relationships — [CTA]", "Values — [CTA]", "Calling — [CTA]" so each starts by naming its circle.
+6. THREE CALLS TO ACTION (exactly 3 items, one per question below, in this order — NOT necessarily one per circle)
+- What is genuinely strong for this team right now, and how does the team keep that going?
+- What is one concrete way to help the team immediately with whatever is currently scoring lowest?
+- What is one way to challenge this team to reach further than where it currently is?
+Format each as a direct, energizing call to action — not a description. Answer each question specifically using this team's actual data (name the actual circle or pattern involved), not in the abstract. The third one especially should challenge the team toward unrealized potential — something in the spirit of "This team could do so much more if challenged to..." — when the data supports that kind of aspirational push. Number them 1-3, matching the order of the three questions above.
 
 7. A CLOSING INVITATION (1 paragraph)
 What this team is being invited into. Hopeful but honest. Not a pep talk — a genuine naming of what's possible if this team chooses to move toward it.`;
@@ -1641,7 +1647,7 @@ function buildFullCircleSectionHtml(circleId, sectionNum, rows, aiCircleParagrap
 
   const summaryHtml = '<div style="text-align:center;padding:1rem 0">'
     + buildGaugeSvg(GAUGE_SCORE_LABEL[model.label] || model.label, cur, ideal)
-    + '<div style="font-size:.85rem;color:#5a5550;margin-top:.35rem">'+(GAUGE_SCORE_LABEL[model.label]||model.label)+': <span style="color:'+gaugeTierColor(cur)+';font-weight:600">'+reportTier(cur)+'</span> (Current), <span style="color:'+gaugeTierColor(ideal)+';font-weight:600">'+reportTier(ideal)+'</span> (Ideal)</div>'
+    + '<div style="font-size:.85rem;color:#5a5550;margin-top:.4rem"><span style="color:'+gaugeTierColor(cur)+';font-weight:600">'+reportTier(cur)+'</span> (Current) &middot; <span style="color:'+gaugeTierColor(ideal)+';font-weight:600">'+reportTier(ideal)+'</span> (Ideal)</div>'
     + '<div style="font-size:.68rem;color:#9a9088;margin-top:.25rem">Filled color = Current &middot; Hatched area = gap to Ideal &middot; needles mark exact position</div>'
     + '</div>';
 
@@ -1700,7 +1706,7 @@ const CALL_TO_ACTION_HTML = `
 `;
 
 // ── Executive Summary: one-page skimmable entry point (3 sentences, 3 numbers, 3 implications) ──
-function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallFullHtml, implicationsRaw){
+function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallFullHtml, implicationsRaw, rows){
   const circles = [
     {label:'Relationships', cur:relCur, ideal:relIdeal},
     {label:'Values', cur:valCur, ideal:valIdeal},
@@ -1712,11 +1718,66 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   const weakest = [...circles].sort((a,b)=>a.cur-b.cur)[0];
   const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.cur)-(a.ideal-a.cur))[0];
 
+  // ── At a Glance: single most extreme question + most shared/divided circle ──
+  let atAGlanceHtml = '';
+  if(rows && rows.length){
+    const allQuestions = [];
+    ['relationships','values','calling'].forEach(circleId => {
+      const model = QUESTION_MODEL[circleId];
+      model.outward.forEach((q,i) => allQuestions.push({circleLabel: model.label, q, stats: questionStats(rows, circleId, 'outward', i)}));
+      model.self.forEach((q,i) => allQuestions.push({circleLabel: model.label, q, stats: questionStats(rows, circleId, 'self', i)}));
+    });
+    const lowestQ = [...allQuestions].sort((a,b)=>a.stats.avgCur-b.stats.avgCur)[0];
+    const highestQ = [...allQuestions].sort((a,b)=>b.stats.avgCur-a.stats.avgCur)[0];
+
+    const relCurArr = rows.map(r=>pctVal(r[4]));
+    const valCurArr = rows.map(r=>pctVal(r[10]));
+    const calCurArr = rows.map(r=>pctVal(r[16]));
+    const rangeOf = arr => Math.max(...arr) - Math.min(...arr);
+    const shareCircles = [
+      {label:'Relationships', range: rangeOf(relCurArr)},
+      {label:'Values', range: rangeOf(valCurArr)},
+      {label:'Calling', range: rangeOf(calCurArr)}
+    ];
+    const mostShared = [...shareCircles].sort((a,b)=>a.range-b.range)[0];
+    const mostDivided = [...shareCircles].sort((a,b)=>b.range-a.range)[0];
+
+    const anOrA = n => (n===8 || n===11 || n===18 || (n>=80 && n<=89)) ? 'an' : 'a';
+    atAGlanceHtml = '<div class="section-label" style="margin-top:1.5rem">At a Glance</div>'
+      + '<div class="pattern-grid">'
+      + '<div class="pattern-card flag"><div class="pattern-name">The Sharpest Point</div><div class="pattern-desc">The single lowest-scoring statement on the entire assessment is <strong>'+lowestQ.q.short+'</strong> ('+lowestQ.circleLabel+'), at just '+lowestQ.stats.avgCur+'%: &ldquo;'+lowestQ.q.text+'&rdquo;</div></div>'
+      + '<div class="pattern-card watch"><div class="pattern-name">The Brightest Spot</div><div class="pattern-desc">The single highest-scoring statement is <strong>'+highestQ.q.short+'</strong> ('+highestQ.circleLabel+'), at '+highestQ.stats.avgCur+'%: &ldquo;'+highestQ.q.text+'&rdquo;</div></div>'
+      + '<div class="pattern-card watch"><div class="pattern-name">Where the Team Agrees</div><div class="pattern-desc"><strong>'+mostShared.label+'</strong> is where individual leaders are most aligned in their experience — only '+anOrA(mostShared.range)+' '+mostShared.range+'-point spread between the highest and lowest individual score.</div></div>'
+      + '<div class="pattern-card flag"><div class="pattern-name">Where the Team Diverges</div><div class="pattern-desc"><strong>'+mostDivided.label+'</strong> is where the experience is least shared — '+anOrA(mostDivided.range)+' '+mostDivided.range+'-point spread between individual leaders, meaning this isn\'t one unified experience.</div></div>'
+      + '</div>';
+  }
+
+  const CIRCLE_ACTION_LANGUAGE = {
+    Relationships: {
+      protect: 'Protect the trust this team has built — name it explicitly so honesty doesn\'t quietly slide once real pressure shows up.',
+      challenge: 'This team could go so much deeper here if challenged to move past comfortable rapport into tested trust — the kind that holds under disagreement, not just around agreement.',
+      build: 'Don\'t wait for a hard season to test this. Build the habit of honest conversation now, while there\'s no urgent reason to.',
+      address: 'Make trust and honesty the team\'s next real conversation — left alone, thin relational trust tends to surface sideways, as tension or quiet withdrawal.'
+    },
+    Values: {
+      protect: 'Protect these convictions by naming them often — shared values that go unspoken have a way of quietly drifting.',
+      challenge: 'This team could do so much more here if challenged to let its convictions actually shape a hard decision, not just describe how the team likes to think of itself.',
+      build: 'Test these values now, in a low-stakes moment, so the team knows how they\'ll hold when a real cost shows up later.',
+      address: 'Make shared conviction the team\'s next real conversation — without it, decisions under pressure tend to default to whoever is loudest in the room.'
+    },
+    Calling: {
+      protect: 'Protect this sense of shared purpose — keep naming it out loud so it doesn\'t quietly fade into routine.',
+      challenge: 'This team could do so much more here if challenged to name, together and out loud, what it actually exists to build or solve.',
+      build: 'Don\'t leave direction implicit. Put words to where this team is headed before drift sets in.',
+      address: 'Make direction the team\'s next real conversation — without it, even strong relationships and shared values tend to turn inward instead of toward something.'
+    }
+  };
   function implication(c){
-    if(c.cur>=70) return c.label+' — Protect this deliberately. Name it out loud with the team so it stays a strength instead of quietly eroding while attention goes elsewhere.';
-    if(c.cur>=45 && (c.ideal-c.cur)>=20) return c.label+' — This team could do so much more here if challenged to close the gap between what it wants and what it currently has, rather than settling for "good enough."';
-    if(c.cur>=45) return c.label+' — Don\'t wait for pressure to test this. Build the practice now, while conditions are still normal, so it holds when it matters most.';
-    return c.label+' — Make this the team\'s next real conversation, not a background concern. Left unaddressed, it will keep limiting what this team can do together.';
+    const lang = CIRCLE_ACTION_LANGUAGE[c.label];
+    if(c.cur>=70) return c.label+' — '+lang.protect;
+    if(c.cur>=45 && (c.ideal-c.cur)>=20) return c.label+' — '+lang.challenge;
+    if(c.cur>=45) return c.label+' — '+lang.build;
+    return c.label+' — '+lang.address;
   }
 
   const profileLine = circles.map(c => reportTier(c.cur)+' '+c.label).join(', ');
@@ -1732,6 +1793,13 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   else if(avgCur >= 65 && gapAll <= 15) archetypeName = 'Steady and Grounded';
   else archetypeName = 'A Team in Progress';
 
+  const ARCHETYPE_DEFINITIONS = {
+    'Lopsided Strength': 'A team where one circle runs well ahead of another — the unevenness itself, not any single weak score, is the defining feature.',
+    'High Aspiration, Thin Depth': 'A team that wants roughly the same healthy culture across the board, and hasn\'t yet built the shared experience to match that shared desire.',
+    'Steady and Grounded': 'A team whose current experience already sits close to what it believes healthy looks like — this is refinement territory, not repair territory.',
+    'A Team in Progress': 'A team with real strengths and real growth edges that don\'t reduce to one dominant story — better read circle by circle than in one broad stroke.'
+  };
+
   const archetypeDesc = patternHtml || '';
 
   return '<div class="section-label">Executive Summary</div>'
@@ -1743,12 +1811,16 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
     + '</div>'
     + '<div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:1rem;margin:1.5rem 0;text-align:center">'
     + circles.map(c => '<div>'+buildGaugeSvg(GAUGE_SCORE_LABEL[c.label] || c.label, c.cur, c.ideal)
-        + '<div style="font-size:.72rem;color:#5a5550;margin-top:.35rem">'+(GAUGE_SCORE_LABEL[c.label]||c.label)+':<br><span style="color:'+gaugeTierColor(c.cur)+';font-weight:600">'+reportTier(c.cur)+'</span> (Current), <span style="color:'+gaugeTierColor(c.ideal)+';font-weight:600">'+reportTier(c.ideal)+'</span> (Ideal)</div>'
+        + '<div style="font-size:.74rem;color:#5a5550;margin-top:.4rem;line-height:1.5"><span style="color:'+gaugeTierColor(c.cur)+';font-weight:600">'+reportTier(c.cur)+'</span> (Current) &middot; <span style="color:'+gaugeTierColor(c.ideal)+';font-weight:600">'+reportTier(c.ideal)+'</span> (Ideal)</div>'
         + '</div>').join('')
     + '</div>'
     + '<div style="text-align:center;font-size:.68rem;color:#9a9088;margin-bottom:1rem">Filled color = Current &middot; Hatched area = gap to Ideal &middot; needles mark exact position</div>'
-    + (archetypeDesc ? '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div><div class="finding-body">'+archetypeDesc+'</div></div>' : '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div></div>')
-    + (overallFullHtml ? '<div class="section-label" style="margin-top:1.5rem">What the Data Reveals</div><div class="section-body">'+overallFullHtml+'</div>' : '')
+    + atAGlanceHtml
+    + '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div>'
+      + '<div style="font-size:.78rem;color:#8a6f4a;font-style:italic;margin:.3rem 0 .75rem">'+ARCHETYPE_DEFINITIONS[archetypeName]+'</div>'
+      + (archetypeDesc ? '<div class="finding-body">'+archetypeDesc+'</div>' : '')
+      + '</div>'
+    + (overallFullHtml ? '<div class="section-label" style="margin-top:1.5rem">High Level Assessment Summary</div><div class="section-body">'+overallFullHtml+'</div>' : '')
     + '<div class="section-label" style="margin-top:1.5rem">Three Calls to Action</div>'
     + (implicationsRaw && implicationsRaw.length >= 3
         ? implicationsRaw.slice(0,3).map(raw => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+mdEmphasis(raw)+'</div></div></div>').join('')
@@ -1797,7 +1869,7 @@ function buildTeamReportPageHtml(rawText, rows){
     : '';
   const thingsRaw = parseReportNumberedItems(sections['THINGS TO CONSIDER'] || '');
   const questionsRaw = parseReportNumberedItems(sections['QUESTIONS FOR THE DEBRIEF'] || '');
-  const overallHtml = sections['OVERALL PICTURE'] ? reportParagraphs(sections['OVERALL PICTURE']) : '';
+  const overallHtml = sections['HIGH LEVEL ASSESSMENT SUMMARY'] ? reportParagraphs(sections['HIGH LEVEL ASSESSMENT SUMMARY']) : '';
   const closingText = sections['A CLOSING INVITATION'] || '';
   const implicationsRaw = parseReportNumberedItems(sections['THREE CALLS TO ACTION'] || '');
   const parseOk = Object.keys(sections).length >= 3;
@@ -1874,7 +1946,7 @@ function buildTeamReportPageHtml(rawText, rows){
     + buildFullCircleSectionHtml('values', 4, rows, circleAiText['values'])
     + buildFullCircleSectionHtml('calling', 5, rows, circleAiText['calling']);
 
-  const executiveSummaryHtml = buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallHtml, implicationsRaw);
+  const executiveSummaryHtml = buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallHtml, implicationsRaw, rows);
 
   const implicationCircles = [
     {label:'Relationships', cur:relCur, ideal:relIdeal},
@@ -2004,8 +2076,8 @@ ${tableHtml}
 
 <div class="divider"></div>
 
-<div class="section-label">Section 2 — What the Data Reveals</div>
-<div class="section-title">Overall Picture</div>
+<div class="section-label">Section 2 — High Level Assessment Summary</div>
+<div class="section-title">What the Data Reveals</div>
 <div class="section-body">${overallHtml}</div>
 
 <div class="divider"></div>
