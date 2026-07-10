@@ -1401,6 +1401,10 @@ ${buildVennDiagramSvg()}
 <div class="pattern-desc">A harmonious team that drifts and never achieves anything meaningful — warm and trustworthy, but with no shared destination pulling it forward.</div>
 </div>
 </div>
+<div class="section-body">
+<p>One way to hold all of this together: think of this team like a car. Relationships are the car itself — the vehicle, the thing that has to exist before anything else works, the frame that holds everyone together and actually gets them somewhere as one unit. Values are the fuel — what actually powers the car forward, what it runs on underneath the hood. Calling is the steering — the direction someone's hands are turning the wheel toward.</p>
+<p>No car, and the best fuel and the clearest sense of direction still have nothing to drive. A car with fuel but no steering runs fine and goes nowhere in particular — pleasant, purposeless motion, burning good fuel in circles. A car with steering but the wrong fuel might get somewhere, but it won't be a smooth ride, and something under the hood eventually pays for it.</p>
+</div>
 <div class="closing-card" style="margin-top:1.5rem;padding:2rem">
 <h3 style="font-size:1.4rem">The Simplest Explanation</h3>
 <p>A team is healthy when Relationships give it trust, Values give it integrity, and Calling gives it direction. Together, these three tell you whether a team is truly aligned — not just functioning, but healthy, resilient, and capable of meaningful work.</p>
@@ -1802,9 +1806,8 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
 
   const archetypeDesc = patternHtml || '';
 
-  return '<div class="section-label">Executive Summary</div>'
-    + '<div class="section-body"><p>The following assessment results are curated from the answers revolving around Relationships, Values, and Calling/Direction. Answers were given as to the effectiveness of a point in time (current) in comparison to the respondent\'s desire for the ideal for this team. To that effect, here are some preliminary numbers.</p>'
-    + '<p style="font-size:.82rem;color:#6a6258">Each leader scored every question on a 1&ndash;7 scale (Strongly Disagree to Strongly Agree). Those individual scores were averaged and converted to a 0&ndash;100% scale to produce the ratings below: 0&ndash;20% = Absent, 20&ndash;40% = Weak, 40&ndash;60% = Thin, 60&ndash;80% = Functioning, 80&ndash;100% = Strong.</p></div>'
+  const execSummaryHtml = '<div class="section-label">Executive Summary</div>'
+    + '<div class="section-body"><p>The following assessment results are curated from the answers revolving around Relationships, Values, and Calling/Direction. Answers were given as to the effectiveness of a point in time (current) in comparison to the respondent\'s desire for the ideal for this team. To that effect, here are some preliminary numbers.</p></div>'
     + '<div style="background:#faf3e0;border:2px solid #c4a882;border-radius:6px;padding:1.5rem 2rem;margin:1.5rem 0;text-align:center">'
     + '<div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#8a6f4a;margin-bottom:.6rem;font-weight:600">Team Profile</div>'
     + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.35rem;color:#1a1816;font-weight:700;line-height:1.4">'+profileLine+'</div>'
@@ -1815,7 +1818,6 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
         + '</div>').join('')
     + '</div>'
     + '<div style="text-align:center;font-size:.68rem;color:#9a9088;margin-bottom:1rem">Filled color = Current &middot; Hatched area = gap to Ideal &middot; needles mark exact position</div>'
-    + atAGlanceHtml
     + '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div>'
       + '<div style="font-size:.78rem;color:#8a6f4a;font-style:italic;margin:.3rem 0 .75rem">'+ARCHETYPE_DEFINITIONS[archetypeName]+'</div>'
       + (archetypeDesc ? '<div class="finding-body">'+archetypeDesc+'</div>' : '')
@@ -1826,6 +1828,8 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
         ? implicationsRaw.slice(0,3).map(raw => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+mdEmphasis(raw)+'</div></div></div>').join('')
         : circles.map(c => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+implication(c)+'</div></div></div>').join(''))
     + '<div class="divider"></div>';
+
+  return { execSummaryHtml, atAGlanceHtml };
 }
 
 
@@ -1946,7 +1950,9 @@ function buildTeamReportPageHtml(rawText, rows){
     + buildFullCircleSectionHtml('values', 4, rows, circleAiText['values'])
     + buildFullCircleSectionHtml('calling', 5, rows, circleAiText['calling']);
 
-  const executiveSummaryHtml = buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallHtml, implicationsRaw, rows);
+  const execSummaryResult = buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallHtml, implicationsRaw, rows);
+  const executiveSummaryHtml = execSummaryResult.execSummaryHtml;
+  const atAGlanceHtml = execSummaryResult.atAGlanceHtml;
 
   const implicationCircles = [
     {label:'Relationships', cur:relCur, ideal:relIdeal},
@@ -2066,7 +2072,7 @@ ${WHY_THREE_CIRCLES_HTML}
 <div class="section-label">Section 1 — Team Scores</div>
 <div class="section-title">How Your Team Scored</div>
 <div class="section-body"><p>Before the numbers: these scores are relational, not abstract. They reflect ${memberCount} people's honest read of trust, conviction, and direction inside this specific team. What follows starts with the big picture, then goes deep into each circle — Relationships, then Values, then Calling — one at a time.</p>
-<p>A note on what these percentages actually mean: this isn't a satisfaction score. Each question is a specific statement — like &ldquo;I feel safe being honest with this team when something is wrong&rdquo; — that leaders rated from Strongly Disagree to Strongly Agree on a 1&ndash;7 scale. The percentage shown is the average agreement level across every statement in that circle, expressed as a share of full agreement. A 58% doesn't mean 58% satisfied — it means the team's honest agreement with these specific claims about their relational life together landed, on average, a little over halfway to &ldquo;strongly agree.&rdquo;</p></div>
+<p>A note on what these percentages actually mean: this isn't a satisfaction score. Each question is a specific statement — like &ldquo;I feel safe being honest with this team when something is wrong&rdquo; — that leaders rated on a scale from Strongly Disagree to Strongly Agree. The percentage shown is the average agreement level across every statement in that circle, expressed as a share of full agreement. A 58% doesn't mean 58% satisfied — it means the team's honest agreement with these specific claims about their relational life together landed, on average, a little over halfway to &ldquo;strongly agree.&rdquo; (The exact scoring mechanics are explained further in Section 2.)</p></div>
 
 <div class="score-overview">${scoreOverviewHtml}</div>
 <div class="bar-section">${barSectionHtml}</div>
@@ -2078,7 +2084,10 @@ ${tableHtml}
 
 <div class="section-label">Section 2 — High Level Assessment Summary</div>
 <div class="section-title">What the Data Reveals</div>
+<div class="section-body"><p style="font-size:.82rem;color:#6a6258">A note on how these numbers work: each leader scored every question on a 1&ndash;7 scale (Strongly Disagree to Strongly Agree). Those individual scores were averaged and converted to a 0&ndash;100% scale to produce the ratings in this report: 0&ndash;20% = Absent, 20&ndash;40% = Weak, 40&ndash;60% = Thin, 60&ndash;80% = Functioning, 80&ndash;100% = Strong.</p></div>
 <div class="section-body">${overallHtml}</div>
+
+${atAGlanceHtml}
 
 <div class="divider"></div>
 
