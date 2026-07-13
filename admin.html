@@ -1086,9 +1086,10 @@ SIGNIFICANCE THRESHOLD: Only treat a difference between two circles' current sco
 
 Write a Team Culture Report with these sections. Use pastoral, direct, practitioner language — not corporate, not clinical:
 
-1. HIGH LEVEL ASSESSMENT SUMMARY (exactly 3 short paragraphs, one per question below — answer each directly, in order)
+1. HIGH LEVEL ASSESSMENT SUMMARY (exactly 4 short paragraphs, one per question below — answer each directly, in order)
 - Look at the gap between the three CURRENT scores (Relationships, Values, Calling). What does the size and consistency of that gap indicate about this team? Is the team divided across circles, or is something systemic holding all three at a similar level?
 - Look at the IDEAL scores across all three circles. Name the actual level those ideal scores land in (for example, "in the 90s" or "the low 80s") and what that expresses about how much this team wants to give and receive from this experience — high ideals mean real desire, not just a survey formality. Then directly contrast that against the CURRENT reality: name plainly, in the same paragraph, that the team's actual day-to-day experience is falling short of that desire, and describe how far short it feels in plain language (not by repeating the exact gap number, which is shown elsewhere). The paragraph should read like: the team wants a great deal from this experience, and right now this experience is not yet delivering it.
+- Look specifically at the HIGHEST-performing circle. What does that strength most likely mean for how this team actually functions, and what is it making possible for the other two circles?
 - Look specifically at the LOWEST-performing circle. What does that score most likely mean for how this team actually functions day to day?
 Write each as a short, direct paragraph that actually answers its question — don't just restate the numbers, interpret what they mean. Don't lead any paragraph with a percentage.
 
@@ -1108,7 +1109,7 @@ Questions Steve can bring into the room. They should be specific enough to feel 
 - What is genuinely strong for this team right now, and how does the team keep that going?
 - What is one concrete way to help the team immediately with whatever is currently scoring lowest?
 - What is one way to challenge this team to reach further than where it currently is?
-Format each as a direct, energizing call to action — not a description. Answer each question specifically using this team's actual data (name the actual circle or pattern involved), not in the abstract. The third one especially should challenge the team toward unrealized potential — something in the spirit of "This team could do so much more if challenged to..." — when the data supports that kind of aspirational push. Number them 1-3, matching the order of the three questions above.
+Format each as a direct, energizing call to action — not a description. Answer each question specifically using this team's actual data (name the actual circle or pattern involved), not in the abstract. The third one especially should challenge the team toward unrealized potential — but "This team could do so much more if challenged to..." is one possible opening for that one item, not a template to reuse across all three. Each of the three should open differently and use a genuinely different sentence structure — vary between a direct command, a question, a short declarative statement, an image or analogy, whatever fits that specific item best. If all three start the same way or follow the same sentence shape, rewrite until they don't. Number them 1-3, matching the order of the three questions above.
 
 7. A CLOSING INVITATION (1 paragraph)
 What this team is being invited into. Hopeful but honest. Not a pep talk — a genuine naming of what's possible if this team chooses to move toward it.`;
@@ -1407,7 +1408,7 @@ ${buildVennDiagramSvg()}
 </div>
 <div class="closing-card" style="margin-top:1.5rem;padding:2rem">
 <h3 style="font-size:1.4rem">The Simplest Explanation</h3>
-<p>A team is healthy when Relationships give it trust, Values give it integrity, and Calling gives it direction. Together, these three tell you whether a team is truly aligned — not just functioning, but healthy, resilient, and capable of meaningful work.</p>
+<p>That's the simplest version of what this whole assessment is measuring: trust, integrity, and direction — and whether this team actually has all three together, not just one or two.</p>
 </div>
 <div class="divider"></div>
 `;
@@ -1547,8 +1548,46 @@ const GIVE_RECEIVE_LABELS = {
   calling: {mine:'I initiate with the team', theirs:'The team initiated with me'}
 };
 
+// Interprets the gap between what a circle gives and receives, distinguishing between the
+// scenarios that can produce the same number rather than defaulting to a blame-shaped label.
+// Tenure/trust-building can't be detected from current data, so it's named as an open question
+// rather than guessed at.
+//
+// IMPORTANT ASYMMETRY (by design, do not "balance" these two directions):
+// Receive > Give, averaged across a whole team, can be a genuinely good sign — if most people
+// independently report receiving more than they give, that's not explainable by any one
+// person's story. It's consistent with something generative in the shared culture itself
+// (contributions combining into more than any single input would predict), not one generous
+// actor and passive recipients. That's why "Team Driven Culture" gets a warm, positive read.
+//
+// Give > Receive has no equivalent positive read, at any level, regardless of which underlying
+// cause is true (structural reciprocity gap, a hard season, or a culture that has normalized
+// self-sacrifice). Even a leader should feel some energy return in some form. So Over-Giving is
+// always flagged as worth attention — never softened into a strength — even though it sits at
+// the same team-average level as the Receive-heavy case. Do not add a "team is just extra
+// committed" positive branch here; that would misapply the Receive-side reasoning to a pattern
+// where it doesn't hold.
+function giveReceiveRead(circleLabel, giveCur, receiveCur){
+  const gap = receiveCur - giveCur;
+  const lower = circleLabel.toLowerCase();
+  if(Math.abs(gap) < 10){
+    return '<div class="pattern-card watch"><div class="pattern-name">Reciprocal</div><div class="pattern-desc">What this team initiates and what people initiate back are roughly balanced in '+lower+' — a healthy sign of mutual investment, not a gap that needs closing.</div></div>';
+  }
+  if(gap >= 10){
+    if(receiveCur >= 65 && giveCur >= 50){
+      return '<div class="pattern-card watch"><div class="pattern-name">Team Driven Culture</div><div class="pattern-desc">The team is initiating strongly here ('+receiveCur+'%) — likely strong enough that even solid individual engagement ('+giveCur+'%) can\'t fully keep pace. This reads less like anyone falling short and more like a genuine team strength worth naming and protecting.</div></div>';
+    }
+    if(giveCur < 45){
+      return '<div class="pattern-card flag"><div class="pattern-name">Worth a Closer Look</div><div class="pattern-desc">Giving sits at '+giveCur+'%, which is low in its own right, not just relative to what the team offers ('+receiveCur+'%). That\'s worth naming directly — though worth asking rather than assuming why: is this about trust still being built, capacity, or something else being held back?</div></div>';
+    }
+    return '<div class="pattern-card watch"><div class="pattern-name">Not Yet Reciprocal</div><div class="pattern-desc">People are receiving more ('+receiveCur+'%) than they\'re giving back ('+giveCur+'%) here. That could mean a few different things — the team may simply be unusually generous, some leaders may still be earning enough trust to invest fully, or some may be genuinely holding back. The data alone can\'t tell you which; how long each person has been part of this team isn\'t something this assessment captures, so that\'s a real question worth asking directly in the debrief rather than assuming an answer.</div></div>';
+  }
+  return '<div class="pattern-card flag"><div class="pattern-name">Over-Giving</div><div class="pattern-desc">People are giving more ('+giveCur+'%) than they feel they receive back ('+receiveCur+'%) here. Unlike the reverse pattern, there is no version of this that reads as a strength — even a leader should feel some real energy return, in some form, from their investment here. Left unaddressed, this tends toward burnout or quiet resentment over time, whether the underlying cause is a structural gap in how the team initiates back toward people, a genuinely hard season, or a culture that has quietly normalized self-sacrifice. Worth naming directly rather than letting it continue unnoticed.</div></div>';
+}
+
 function buildGiveReceiveHtml(circleId, outCur, outIdeal, selfCur, selfIdeal){
   const labels = GIVE_RECEIVE_LABELS[circleId];
+  const circleLabel = QUESTION_MODEL[circleId].label;
   function row(label, val, isIdeal){
     const color = isIdeal ? '#d8c8a8' : reportColor(val);
     const opacity = isIdeal ? ';opacity:.6' : '';
@@ -1556,13 +1595,19 @@ function buildGiveReceiveHtml(circleId, outCur, outIdeal, selfCur, selfIdeal){
     const pctColor = isIdeal ? 'color:#9a9088;' : '';
     return '<div class="bar-row"><div class="bar-label" style="width:190px;'+labelColor+'">'+label+' ('+(isIdeal?'Ideal':'Current')+')</div><div class="bar-track"><div class="bar-fill" style="width:'+val+'%;background:'+color+opacity+'"></div></div><div class="bar-pct" style="width:36px;'+pctColor+'">'+val+'%</div></div>';
   }
-  return '<div class="section-body"><p>Both directions matter — what this team receives, and what it gives back.</p></div>'
+  const GIVE_RECEIVE_INTRO = {
+    relationships: 'Both directions matter — what this team receives, and what it gives back.',
+    values: 'Both directions matter here, but they\'re not quite symmetrical. What the team receives measures whether the team has genuinely institutionalized its values — communicated them, let them shape real decisions, defended them when challenged. What the team gives measures something more personal: whether that conviction is actually held individually, not just complied with — strong enough that someone would pay a real cost to stay faithful to it.',
+    calling: 'Both directions matter — what this team receives, and what it gives back.'
+  };
+  return '<div class="section-body"><p>'+(GIVE_RECEIVE_INTRO[circleId] || GIVE_RECEIVE_INTRO.relationships)+'</p></div>'
     + '<div class="bar-section">'
     + row(labels.theirs, outCur, false)
     + row(labels.mine, selfCur, false)
     + row(labels.theirs, outIdeal, true)
     + row(labels.mine, selfIdeal, true)
-    + '</div>';
+    + '</div>'
+    + '<div class="pattern-grid" style="margin-top:1rem">' + giveReceiveRead(circleLabel, selfCur, outCur) + '</div>';
 }
 
 // Assembles one circle's complete story in order: intro -> score summary -> give/receive ->
@@ -1581,6 +1626,7 @@ function gaugeTierColor(pct){
 let gaugePatternId = 0;
 function buildGaugeSvg(label, cur, ideal){
   const r = 68, cx = 90, cy = 92, strokeW = 20;
+  const outerR = r + 14;
   const clampedCur = Math.max(0.5, Math.min(99.5, cur));
   const clampedIdeal = Math.max(0.5, Math.min(99.5, ideal));
 
@@ -1596,13 +1642,23 @@ function buildGaugeSvg(label, cur, ideal){
   gaugePatternId++;
   const pid = 'gaugeHatch'+gaugePatternId;
   const color = gaugeTierColor(cur);
+  const idealColor = gaugeTierColor(ideal);
   const bg = arcPath(0, 100, r);
   const solidZone = clampedCur > 0.5 ? arcPath(0, clampedCur, r) : '';
   const hatchZone = (clampedIdeal - clampedCur) > 0.5 ? arcPath(clampedCur, clampedIdeal, r) : '';
 
+  const ZONE_BANDS = [
+    {from:0, to:20, color:'#a8453a'},
+    {from:20, to:40, color:'#c98a4b'},
+    {from:40, to:60, color:'#c4a882'},
+    {from:60, to:80, color:'#8faa6b'},
+    {from:80, to:100, color:'#3a6b4a'}
+  ];
+  const zoneRing = ZONE_BANDS.map(z => '<path d="'+arcPath(z.from,z.to,outerR)+'" fill="none" stroke="'+z.color+'" stroke-width="6" stroke-opacity="0.8"/>').join('');
+
   const defs = '<defs><pattern id="'+pid+'" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'
-    + '<rect width="5" height="5" fill="'+color+'" fill-opacity="0.15"/>'
-    + '<line x1="0" y1="0" x2="0" y2="5" stroke="'+color+'" stroke-width="2"/>'
+    + '<rect width="5" height="5" fill="'+idealColor+'" fill-opacity="0.18"/>'
+    + '<line x1="0" y1="0" x2="0" y2="5" stroke="'+idealColor+'" stroke-width="2"/>'
     + '</pattern></defs>';
 
   const ticks = [0,25,50,75,100].map(t => {
@@ -1614,8 +1670,9 @@ function buildGaugeSvg(label, cur, ideal){
   const curTip = pointAt(clampedCur, r-20);
   const idealTip = pointAt(clampedIdeal, r-20);
 
-  return '<svg viewBox="0 0 180 116" style="width:100%;max-width:160px" xmlns="http://www.w3.org/2000/svg">'
+  return '<svg viewBox="0 0 200 130" style="width:100%;max-width:190px" xmlns="http://www.w3.org/2000/svg">'
     + defs
+    + zoneRing
     + '<path d="'+bg+'" fill="none" stroke="#f0ece6" stroke-width="'+strokeW+'" stroke-linecap="round"/>'
     + (hatchZone ? '<path d="'+hatchZone+'" fill="none" stroke="url(#'+pid+')" stroke-width="'+strokeW+'"/>' : '')
     + (solidZone ? '<path d="'+solidZone+'" fill="none" stroke="'+color+'" stroke-width="'+strokeW+'" stroke-linecap="round"/>' : '')
@@ -1623,8 +1680,73 @@ function buildGaugeSvg(label, cur, ideal){
     + '<line x1="'+cx+'" y1="'+cy+'" x2="'+idealTip.x.toFixed(2)+'" y2="'+idealTip.y.toFixed(2)+'" stroke="#1a1816" stroke-width="2" stroke-dasharray="1,3" stroke-linecap="round"/>'
     + '<line x1="'+cx+'" y1="'+cy+'" x2="'+curTip.x.toFixed(2)+'" y2="'+curTip.y.toFixed(2)+'" stroke="'+color+'" stroke-width="3.5" stroke-linecap="round"/>'
     + '<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="'+color+'"/>'
-    + '<text x="90" y="112" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" letter-spacing="1" fill="#9a9088">'+label.toUpperCase()+'</text>'
+    + '<text x="90" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" letter-spacing="1" fill="#9a9088">'+label.toUpperCase()+'</text>'
     + '</svg>';
+}
+
+// Give/Receive arc — same visual grammar as the main score gauge: zone ring, solid fill up to
+// the lower of Give/Receive, hatched fill up to the higher value. Solid colored needle = Give,
+// dashed dark needle = Receive.
+function buildGiveReceiveArcSvg(label, giveCur, receiveCur){
+  const r = 68, cx = 90, cy = 92, giveStrokeW = 14, receiveStrokeW = 26, outerR = r + 18;
+  const clampedGive = Math.max(0.5, Math.min(99.5, giveCur));
+  const clampedReceive = Math.max(0.5, Math.min(99.5, receiveCur));
+
+  function pointAt(pct, radius){
+    const theta = Math.PI * (1 - pct/100);
+    return { x: cx + radius*Math.cos(theta), y: cy - radius*Math.sin(theta) };
+  }
+  function arcPath(from, to, radius){
+    const p1 = pointAt(from, radius), p2 = pointAt(to, radius);
+    return 'M '+p1.x.toFixed(2)+' '+p1.y.toFixed(2)+' A '+radius+' '+radius+' 0 0 1 '+p2.x.toFixed(2)+' '+p2.y.toFixed(2);
+  }
+
+  gaugePatternId++;
+  const pid = 'gaugeHatch'+gaugePatternId;
+  const giveColor = gaugeTierColor(giveCur);
+  const receiveColor = gaugeTierColor(receiveCur);
+  const bg = arcPath(0, 100, r);
+  // Receive — hatched fill, wider stroke, drawn first (behind) so it forms a visible border
+  // around Give wherever the two overlap, not just where Receive extends further.
+  // Give — solid fill, narrower stroke, drawn second (in front, centered within Receive's band).
+  const giveZone = clampedGive > 0.5 ? arcPath(0, clampedGive, r) : '';
+  const receiveZone = clampedReceive > 0.5 ? arcPath(0, clampedReceive, r) : '';
+
+  const ZONE_BANDS = [{from:0,to:20,color:'#a8453a'},{from:20,to:40,color:'#c98a4b'},{from:40,to:60,color:'#c4a882'},{from:60,to:80,color:'#8faa6b'},{from:80,to:100,color:'#3a6b4a'}];
+  const zoneRing = ZONE_BANDS.map(z => '<path d="'+arcPath(z.from,z.to,outerR)+'" fill="none" stroke="'+z.color+'" stroke-width="6" stroke-opacity="0.8"/>').join('');
+
+  const defs = '<defs><pattern id="'+pid+'" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'
+    + '<rect width="5" height="5" fill="'+receiveColor+'" fill-opacity="0.35"/>'
+    + '<line x1="0" y1="0" x2="0" y2="5" stroke="'+receiveColor+'" stroke-width="2.5"/>'
+    + '</pattern></defs>';
+
+  const ticks = [0,25,50,75,100].map(t => {
+    const inner = pointAt(t, r-14);
+    const outer = pointAt(t, r+6);
+    return '<line x1="'+inner.x.toFixed(2)+'" y1="'+inner.y.toFixed(2)+'" x2="'+outer.x.toFixed(2)+'" y2="'+outer.y.toFixed(2)+'" stroke="#786f5f" stroke-width="1.5"/>';
+  }).join('');
+
+  const giveTip = pointAt(clampedGive, r-24);
+  const receiveTip = pointAt(clampedReceive, r-24);
+
+  return '<svg viewBox="0 0 200 130" style="width:100%;max-width:190px" xmlns="http://www.w3.org/2000/svg">'
+    + defs + zoneRing
+    + '<path d="'+bg+'" fill="none" stroke="#f0ece6" stroke-width="'+receiveStrokeW+'" stroke-linecap="round"/>'
+    + (receiveZone ? '<path d="'+receiveZone+'" fill="none" stroke="url(#'+pid+')" stroke-width="'+receiveStrokeW+'" stroke-linecap="round"/>' : '')
+    + (giveZone ? '<path d="'+giveZone+'" fill="none" stroke="'+giveColor+'" stroke-width="'+giveStrokeW+'" stroke-linecap="round"/>' : '')
+    + ticks
+    + '<line x1="'+cx+'" y1="'+cy+'" x2="'+receiveTip.x.toFixed(2)+'" y2="'+receiveTip.y.toFixed(2)+'" stroke="#1a1816" stroke-width="2" stroke-dasharray="1,3" stroke-linecap="round"/>'
+    + '<line x1="'+cx+'" y1="'+cy+'" x2="'+giveTip.x.toFixed(2)+'" y2="'+giveTip.y.toFixed(2)+'" stroke="'+giveColor+'" stroke-width="3.5" stroke-linecap="round"/>'
+    + '<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="'+giveColor+'"/>'
+    + '<text x="90" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" letter-spacing="1" fill="#9a9088">'+label.toUpperCase()+'</text>'
+    + '</svg>';
+}
+
+function giveReceiveGapScoreLine(giveCur, receiveCur){
+  const gap = giveCur - receiveCur;
+  const label = Math.abs(gap) < 10 ? 'Balanced' : (gap > 0 ? 'Giving '+gap+' pts more than receiving' : 'Receiving '+Math.abs(gap)+' pts more than giving');
+  const color = Math.abs(gap) < 10 ? '#3a6b4a' : (gap > 0 ? '#8a6f4a' : '#5b8db0');
+  return '<div style="font-size:.75rem;color:'+color+';font-weight:600;margin-top:.35rem">'+label+'</div>';
 }
 
 const GAUGE_SCORE_LABEL = { Relationships: 'Relationship Score', Values: 'Value Score', Calling: 'Calling Score' };
@@ -1722,6 +1844,36 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   const weakest = [...circles].sort((a,b)=>a.cur-b.cur)[0];
   const biggestGap = [...circles].sort((a,b)=>(b.ideal-b.cur)-(a.ideal-a.cur))[0];
 
+  // ── Highest / Lowest circle callout — always renders, doesn't depend on AI output ──
+  const CIRCLE_MEANING = {
+    Relationships: {
+      strongest: 'This team\'s trust and honesty are its clearest asset — people feel safe being real with each other, which gives everything else room to grow from a stable base.',
+      weakest: 'Trust and honesty are the most limiting factor right now — without them, shared values and shared direction have less to stand on, since both eventually require people to be honest with each other under pressure.'
+    },
+    Values: {
+      strongest: 'This team\'s shared convictions are its clearest asset — there\'s real agreement about what matters, which gives decisions a steadier center than most teams have.',
+      weakest: 'Shared conviction is the most limiting factor right now — without a clear, lived sense of what this team actually stands for, decisions under pressure tend to default to whoever\'s loudest in the room.'
+    },
+    Calling: {
+      strongest: 'This team\'s sense of shared purpose is its clearest asset — people know why they\'re here, which gives relationships and values something to actually be aimed at.',
+      weakest: 'Shared direction is the most limiting factor right now — even strong relationships and real conviction tend to turn inward instead of forward without a clear sense of what this team is building toward.'
+    }
+  };
+  const strongWeakDiff = strongest.cur - weakest.cur;
+  let strongestWeakestHtml;
+  if(strongWeakDiff >= 10){
+    strongestWeakestHtml = '<div class="section-label" style="margin-top:1.5rem">Highest &amp; Lowest</div>'
+      + '<div class="pattern-grid">'
+      + '<div class="pattern-card watch"><div class="pattern-name">Highest — '+strongest.label+' ('+reportTier(strongest.cur)+')</div><div class="pattern-desc">'+CIRCLE_MEANING[strongest.label].strongest+'</div></div>'
+      + '<div class="pattern-card flag"><div class="pattern-name">Lowest — '+weakest.label+' ('+reportTier(weakest.cur)+')</div><div class="pattern-desc">'+CIRCLE_MEANING[weakest.label].weakest+'</div></div>'
+      + '</div>';
+  } else {
+    strongestWeakestHtml = '<div class="section-label" style="margin-top:1.5rem">Highest &amp; Lowest</div>'
+      + '<div class="pattern-grid">'
+      + '<div class="pattern-card watch"><div class="pattern-name">All Three Circles Are Close Together</div><div class="pattern-desc">No single circle stands out as notably stronger or weaker than the others right now — '+relCur+'% Relationships, '+valCur+'% Values, '+calCur+'% Calling. That evenness usually points to something systemic shaping all three at a similar level, rather than one broken relationship, one unclear value, or one unclear direction on its own.</div></div>'
+      + '</div>';
+  }
+
   // ── At a Glance: single most extreme question + most shared/divided circle ──
   let atAGlanceHtml = '';
   if(rows && rows.length){
@@ -1759,19 +1911,19 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   const CIRCLE_ACTION_LANGUAGE = {
     Relationships: {
       protect: 'Protect the trust this team has built — name it explicitly so honesty doesn\'t quietly slide once real pressure shows up.',
-      challenge: 'This team could go so much deeper here if challenged to move past comfortable rapport into tested trust — the kind that holds under disagreement, not just around agreement.',
+      challenge: 'Push past the comfortable version of this team\'s relationships. Real trust shows up in disagreement, not agreement — that\'s the next frontier here.',
       build: 'Don\'t wait for a hard season to test this. Build the habit of honest conversation now, while there\'s no urgent reason to.',
       address: 'Make trust and honesty the team\'s next real conversation — left alone, thin relational trust tends to surface sideways, as tension or quiet withdrawal.'
     },
     Values: {
       protect: 'Protect these convictions by naming them often — shared values that go unspoken have a way of quietly drifting.',
-      challenge: 'This team could do so much more here if challenged to let its convictions actually shape a hard decision, not just describe how the team likes to think of itself.',
+      challenge: 'Right now this team can describe its values more easily than it can prove them. Put that to the test: let conviction actually decide something hard.',
       build: 'Test these values now, in a low-stakes moment, so the team knows how they\'ll hold when a real cost shows up later.',
       address: 'Make shared conviction the team\'s next real conversation — without it, decisions under pressure tend to default to whoever is loudest in the room.'
     },
     Calling: {
       protect: 'Protect this sense of shared purpose — keep naming it out loud so it doesn\'t quietly fade into routine.',
-      challenge: 'This team could do so much more here if challenged to name, together and out loud, what it actually exists to build or solve.',
+      challenge: 'Name it — out loud, together. This team already has the relational and values foundation to carry real ambition; it just hasn\'t said yet, specifically, what it\'s actually building toward.',
       build: 'Don\'t leave direction implicit. Put words to where this team is headed before drift sets in.',
       address: 'Make direction the team\'s next real conversation — without it, even strong relationships and shared values tend to turn inward instead of toward something.'
     }
@@ -1785,6 +1937,73 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
   }
 
   const profileLine = circles.map(c => reportTier(c.cur)+' '+c.label).join(', ');
+  const idealTiers = circles.map(c => reportTier(c.ideal));
+  const idealProfileLine = (idealTiers[0] === idealTiers[1] && idealTiers[1] === idealTiers[2])
+    ? '<span style="color:'+gaugeTierColor(circles[0].ideal)+'">'+idealTiers[0]+' Aspiration Across Relationships, Values &amp; Calling</span>'
+    : circles.map(c => '<span style="color:'+gaugeTierColor(c.ideal)+'">'+reportTier(c.ideal)+' '+c.label+'</span>').join(', ');
+
+  // ── Memo cover page — a one-page executive read: hero image, verdict-free plain framing,
+  // three short lines (What's Working / What's Thin / What It Wants), Team Profile, footer.
+  // Fully algorithmic, reuses strongest/weakest/CIRCLE_MEANING already computed above.
+  function buildMemoCoverHtml(){
+    const sortedByStrength = [...circles].sort((a,b)=>b.cur-a.cur);
+    const top = sortedByStrength[0];
+    const lowerTwo = sortedByStrength.slice(1);
+    const spread = top.cur - sortedByStrength[2].cur;
+
+    let workingLine, thinLine;
+    if(spread < 10){
+      workingLine = 'All three circles — Relationships, Values, and Calling — are landing in a similar place right now, none carrying notably more weight than another. That evenness is itself worth naming before anything else.';
+      thinLine = 'Because the three circles are close together, this likely isn\'t one isolated weak spot — it\'s worth exploring what\'s shaping all three at a similar level, rather than treating them as three separate problems.';
+    } else {
+      workingLine = CIRCLE_MEANING[top.label].strongest;
+      const lowerNames = lowerTwo.map(c=>c.label).join(' and ');
+      thinLine = lowerNames+' are both still developing right now. '+CIRCLE_MEANING[lowerTwo[0].label].weakest;
+    }
+    const wantsLine = 'Every leader on this team is aiming for the same thing — a strong, fully lived culture across all three areas. The aspiration is shared; the depth isn\'t there yet.';
+
+    const heroSvg = '<svg viewBox="0 0 820 210" xmlns="http://www.w3.org/2000/svg">'
+      + '<defs>'
+      + '<radialGradient id="mcRel" cx="35%" cy="55%" r="55%"><stop offset="0%" stop-color="#D85A30" stop-opacity="0.85"/><stop offset="100%" stop-color="#D85A30" stop-opacity="0"/></radialGradient>'
+      + '<radialGradient id="mcVal" cx="65%" cy="35%" r="55%"><stop offset="0%" stop-color="#185FA5" stop-opacity="0.8"/><stop offset="100%" stop-color="#185FA5" stop-opacity="0"/></radialGradient>'
+      + '<radialGradient id="mcCal" cx="55%" cy="70%" r="55%"><stop offset="0%" stop-color="#534AB7" stop-opacity="0.85"/><stop offset="100%" stop-color="#534AB7" stop-opacity="0"/></radialGradient>'
+      + '<radialGradient id="mcGlow" cx="50%" cy="45%" r="60%"><stop offset="0%" stop-color="#e8d7a0" stop-opacity="0.25"/><stop offset="100%" stop-color="#e8d7a0" stop-opacity="0"/></radialGradient>'
+      + '</defs>'
+      + '<rect width="820" height="210" fill="#14110f"/>'
+      + '<circle cx="290" cy="122" r="176" fill="url(#mcRel)"/>'
+      + '<circle cx="540" cy="67" r="176" fill="url(#mcVal)"/>'
+      + '<circle cx="450" cy="160" r="176" fill="url(#mcCal)"/>'
+      + '<circle cx="410" cy="105" r="244" fill="url(#mcGlow)"/>'
+      + '<g opacity="0.35" stroke="#e8d7a0" stroke-width="1" fill="none"><circle cx="290" cy="122" r="113"/><circle cx="540" cy="67" r="113"/><circle cx="450" cy="160" r="113"/></g>'
+      + '<g opacity="0.5"><circle cx="120" cy="55" r="1.5" fill="#e8d7a0"/><circle cx="700" cy="35" r="1" fill="#e8d7a0"/><circle cx="760" cy="160" r="1.5" fill="#e8d7a0"/><circle cx="60" cy="200" r="1" fill="#e8d7a0"/><circle cx="620" cy="205" r="1" fill="#e8d7a0"/></g>'
+      + '</svg>';
+
+    return '<div class="memo-cover">'
+      + '<div class="memo-hero">'+heroSvg
+      + '<div class="memo-hero-text"><div class="memo-hero-eyebrow">Leadership Team Culture Report &middot; Executive Summary</div><h1 class="memo-hero-title">'+teamName+'</h1></div>'
+      + '</div>'
+      + '<div class="memo-body">'
+      + '<div class="memo-confidential">Confidential &middot; '+new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})+'</div>'
+      + '<p class="memo-intro">This assessment, measuring the '+teamName+', is based on three unique characteristics found in every team &mdash; Relationships, Values, and Calling. Relationships provide trust. Values provide integrity. Calling provides direction. Together, they reveal whether a team is truly aligned &mdash; not just functioning.</p>'
+      + '<div class="memo-ornament"><span class="memo-orn-line"></span><span class="memo-orn-dot" style="background:#D85A30"></span><span class="memo-orn-dot" style="background:#185FA5"></span><span class="memo-orn-dot" style="background:#534AB7"></span><span class="memo-orn-line"></span></div>'
+      + '<div class="memo-card"><div class="memo-card-bar" style="background:#3a6b4a"></div><div class="memo-card-content"><div class="memo-card-label" style="color:#3a6b4a">What&rsquo;s Working</div><p class="memo-card-text">'+workingLine+'</p></div></div>'
+      + '<div class="memo-card"><div class="memo-card-bar" style="background:#c4a882"></div><div class="memo-card-content"><div class="memo-card-label" style="color:#8a6f4a">What&rsquo;s Thin</div><p class="memo-card-text">'+thinLine+'</p></div></div>'
+      + '<div class="memo-card"><div class="memo-card-bar" style="background:#e8d7a0"></div><div class="memo-card-content"><div class="memo-card-label" style="color:#a68a4a">What It Wants</div><p class="memo-card-text">'+wantsLine+'</p></div></div>'
+      + '<div class="memo-profile"><div class="memo-profile-glow"></div>'
+      + '<div class="memo-profile-row"><div class="memo-profile-label">Current</div><div class="memo-profile-val">'+profileLine+'</div></div>'
+      + '<div class="memo-profile-row"><div class="memo-profile-label">Ideal</div><div class="memo-profile-val" style="color:#3a6b4a">'+idealProfileLine+'</div></div>'
+      + '</div>'
+      + '<p class="memo-next">Full scores, question-by-question detail, and recommended next steps begin on the following pages.</p>'
+      + '</div>'
+      + '<div class="memo-footer">'
+      + '<div class="memo-ornament"><span class="memo-orn-line" style="background:rgba(232,215,160,.25)"></span><span class="memo-orn-dot" style="background:#D85A30"></span><span class="memo-orn-dot" style="background:#185FA5"></span><span class="memo-orn-dot" style="background:#534AB7"></span><span class="memo-orn-line" style="background:rgba(232,215,160,.25)"></span></div>'
+      + '<div class="memo-footer-logo">Bold<span style="color:#e8d7a0">Hearts</span></div>'
+      + '<div class="memo-footer-url">boldhearts.org</div>'
+      + '<div class="memo-footer-tag">Spiritual Direction &middot; Pastoral Counseling &middot; Leadership Soul Care</div>'
+      + '</div>'
+      + '</div>';
+  }
+  const memoCoverHtml = buildMemoCoverHtml();
 
   // Archetype label is still a quick algorithmic tag — a short handle for the pattern.
   // The actual interpretation of what that pattern MEANS comes from the AI's own written
@@ -1806,22 +2025,69 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
 
   const archetypeDesc = patternHtml || '';
 
+  // Classifies the give/receive relationship for one circle — shared by the full interpretive
+  // card (giveReceiveRead) and the short Team Engagement label below.
+  function giveReceiveClassify(giveCur, receiveCur){
+    const gap = receiveCur - giveCur;
+    if(Math.abs(gap) < 10) return 'Reciprocal';
+    if(gap >= 10){
+      if(receiveCur >= 65 && giveCur >= 50) return 'Team Driven Culture';
+      if(giveCur < 45) return 'Worth a Closer Look';
+      return 'Not Yet Reciprocal';
+    }
+    return 'Over-Giving';
+  }
+
   const execSummaryHtml = '<div class="section-label">Executive Summary</div>'
-    + '<div class="section-body"><p>The following assessment results are curated from the answers revolving around Relationships, Values, and Calling/Direction. Answers were given as to the effectiveness of a point in time (current) in comparison to the respondent\'s desire for the ideal for this team. To that effect, here are some preliminary numbers.</p></div>'
-    + '<div style="background:#faf3e0;border:2px solid #c4a882;border-radius:6px;padding:1.5rem 2rem;margin:1.5rem 0;text-align:center">'
-    + '<div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#8a6f4a;margin-bottom:.6rem;font-weight:600">Team Profile</div>'
-    + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.35rem;color:#1a1816;font-weight:700;line-height:1.4">'+profileLine+'</div>'
+    + '<div class="section-body"><p>The following assessment results are curated from the answers revolving around Relationships, Values, and Calling/Direction — the three essential themes present in every team, without exception. Relationships provide trust. Values provide integrity. Calling provides direction. Together, they reveal whether this team is truly aligned, not just functioning. Answers were given as to the effectiveness of a point in time (current) in comparison to the respondent\'s desire for the ideal for this team. To that effect, here are some preliminary numbers.</p></div>'
+    + '<div class="section-label" style="margin-top:1.5rem">The Five Zones</div>'
+    + '<div class="section-body"><p style="font-size:.82rem">Every gauge below carries a thin outer ring showing these five zones, so you can see at a glance which range a score falls into before looking at the exact position of the needle.</p></div>'
+    + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1.25rem;margin:1rem 0 1.5rem">'
+    + [
+        {color:'#a8453a', label:'Absent', range:'0–20%'},
+        {color:'#c98a4b', label:'Weak', range:'20–40%'},
+        {color:'#c4a882', label:'Thin', range:'40–60%'},
+        {color:'#8faa6b', label:'Functioning', range:'60–80%'},
+        {color:'#3a6b4a', label:'Strong', range:'80–100%'}
+      ].map(z => '<div style="display:flex;align-items:center;gap:.4rem"><span style="width:14px;height:14px;border-radius:3px;background:'+z.color+';display:inline-block"></span><span style="font-size:.78rem;color:#3a2f28"><strong>'+z.label+'</strong> <span style="color:#8a8070">('+z.range+')</span></span></div>').join('')
     + '</div>'
     + '<div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:1rem;margin:1.5rem 0;text-align:center">'
     + circles.map(c => '<div>'+buildGaugeSvg(GAUGE_SCORE_LABEL[c.label] || c.label, c.cur, c.ideal)
         + '<div style="font-size:.74rem;color:#5a5550;margin-top:.4rem;line-height:1.5"><span style="color:'+gaugeTierColor(c.cur)+';font-weight:600">'+reportTier(c.cur)+'</span> (Current) &middot; <span style="color:'+gaugeTierColor(c.ideal)+';font-weight:600">'+reportTier(c.ideal)+'</span> (Ideal)</div>'
         + '</div>').join('')
     + '</div>'
-    + '<div style="text-align:center;font-size:.68rem;color:#9a9088;margin-bottom:1rem">Filled color = Current &middot; Hatched area = gap to Ideal &middot; needles mark exact position</div>'
-    + '<div class="finding-card"><div class="finding-title">Team Archetype — '+archetypeName+'</div>'
-      + '<div style="font-size:.78rem;color:#8a6f4a;font-style:italic;margin:.3rem 0 .75rem">'+ARCHETYPE_DEFINITIONS[archetypeName]+'</div>'
-      + (archetypeDesc ? '<div class="finding-body">'+archetypeDesc+'</div>' : '')
+    + '<div style="text-align:center;font-size:.68rem;color:#9a9088;margin-bottom:1.5rem">Filled color = Current &middot; Hatched area = gap to Ideal &middot; needles mark exact position</div>'
+    + '<div style="background:#faf3e0;border:2px solid #c4a882;border-radius:6px;padding:1.5rem 2rem;margin:0 0 1.5rem;text-align:center">'
+    + '<div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#8a6f4a;margin-bottom:.6rem;font-weight:600">Team Profile</div>'
+    + '<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#8a8070;margin-bottom:.2rem">Current</div>'
+    + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.35rem;color:#1a1816;font-weight:700;line-height:1.4;margin-bottom:.85rem">'+profileLine+'</div>'
+    + '<div style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#8a8070;margin-bottom:.2rem">Ideal</div>'
+    + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.35rem;color:#1a1816;font-weight:700;line-height:1.4">'+idealProfileLine+'</div>'
+    + '</div>'
+    + '<div style="border-top:1px solid rgba(196,168,130,.3);margin:0 0 1.5rem"></div>'
+    + '<div class="section-label">Give &amp; Receive</div>'
+    + '<div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:1rem;margin:1rem 0 1.5rem;text-align:center">'
+    + circles.map(c => {
+        const prefix = c.label === 'Relationships' ? 'rel' : (c.label === 'Values' ? 'values' : 'calling');
+        const receiveCur = rows && rows.length ? avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_out_current']]))) : 0;
+        const giveCur = rows && rows.length ? avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_self_current']]))) : 0;
+        return '<div>'+buildGiveReceiveArcSvg(c.label, giveCur, receiveCur)+giveReceiveGapScoreLine(giveCur, receiveCur)+'</div>';
+      }).join('')
+    + '</div>'
+    + '<div style="text-align:center;font-size:.68rem;color:#9a9088;margin-bottom:1.5rem">Solid fill &amp; needle = Give &middot; Hatched fill &amp; dashed needle = Receive &middot; both fills start from zero, so the longer one shows through</div>'
+    + '<div style="background:#faf3e0;border:2px solid #c4a882;border-radius:6px;padding:1.5rem 2rem;margin:0 0 1.5rem;text-align:center">'
+    + '<div style="font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#8a6f4a;margin-bottom:.6rem;font-weight:600">Team Engagement</div>'
+    + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.35rem;color:#1a1816;font-weight:700;line-height:1.4">'
+      + circles.map(c => {
+          const prefix = c.label === 'Relationships' ? 'rel' : (c.label === 'Values' ? 'values' : 'calling');
+          const receiveCur = rows && rows.length ? avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_out_current']]))) : 0;
+          const giveCur = rows && rows.length ? avg(rows.map(r=>pctVal(r[LT_COL_INDEX[prefix+'_self_current']]))) : 0;
+          return giveReceiveClassify(giveCur, receiveCur)+' '+c.label;
+        }).join(', ')
       + '</div>'
+    + '</div>'
+    + '<div class="divider"></div>'
+    + strongestWeakestHtml
     + (overallFullHtml ? '<div class="section-label" style="margin-top:1.5rem">High Level Assessment Summary</div><div class="section-body">'+overallFullHtml+'</div>' : '')
     + '<div class="section-label" style="margin-top:1.5rem">Three Calls to Action</div>'
     + (implicationsRaw && implicationsRaw.length >= 3
@@ -1829,7 +2095,7 @@ function buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal,
         : circles.map(c => '<div class="plan-item"><div class="plan-num">&bull;</div><div class="plan-content"><div class="plan-body">'+implication(c)+'</div></div></div>').join(''))
     + '<div class="divider"></div>';
 
-  return { execSummaryHtml, atAGlanceHtml };
+  return { execSummaryHtml, atAGlanceHtml, memoCoverHtml };
 }
 
 
@@ -1953,6 +2219,7 @@ function buildTeamReportPageHtml(rawText, rows){
   const execSummaryResult = buildExecutiveSummaryHtml(teamName, relCur, relIdeal, valCur, valIdeal, calCur, calIdeal, patternHtml, overallHtml, implicationsRaw, rows);
   const executiveSummaryHtml = execSummaryResult.execSummaryHtml;
   const atAGlanceHtml = execSummaryResult.atAGlanceHtml;
+  const memoCoverHtml = execSummaryResult.memoCoverHtml;
 
   const implicationCircles = [
     {label:'Relationships', cur:relCur, ideal:relIdeal},
@@ -2043,7 +2310,37 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
 .sig-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#1a1816}
 .sig-title{font-size:.8rem;color:#6a6258;margin-top:.2rem}
 .print-btn{position:fixed;bottom:2rem;right:2rem;background:#c4a882;color:#fff;border:none;border-radius:4px;padding:.85rem 1.5rem;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 2px 12px rgba(196,168,130,.4)}
-@media print{ body{padding:1.5rem} .closing-card{background:#1a1816 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact} .print-btn{display:none} }
+
+.memo-cover{max-width:100%;margin:0 auto 0}
+.memo-hero{position:relative;height:210px;overflow:hidden;background:linear-gradient(160deg,#1a1714,#161412);border-radius:4px 4px 0 0}
+.memo-hero svg{position:absolute;top:0;left:0;width:100%;height:100%}
+.memo-hero-text{position:absolute;bottom:0;left:0;right:0;padding:2rem 2.5rem}
+.memo-hero-eyebrow{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.5rem;font-weight:500;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.memo-hero-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;color:#fff;font-weight:700;line-height:1.15;margin:0;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.memo-body{background:#fff;padding:1.65rem 2.75rem}
+.memo-confidential{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#a09080;text-align:right;margin-bottom:1rem}
+.memo-intro{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:#3a352e;line-height:1.5;margin:0 0 1.1rem}
+.memo-ornament{display:flex;align-items:center;justify-content:center;gap:.5rem;margin:0 0 1.15rem}
+.memo-orn-dot{width:6px;height:6px;border-radius:50%}
+.memo-orn-line{width:60px;height:1px;background:#e0d5c0}
+.memo-card{display:flex;margin-bottom:.8rem;padding-left:.25rem}
+.memo-card-bar{width:4px;border-radius:2px;margin-right:1.5rem;flex-shrink:0}
+.memo-card-content{flex:1}
+.memo-card-label{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;margin-bottom:.35rem}
+.memo-card-text{font-size:.88rem;line-height:1.6;color:#3a352e;margin:0}
+.memo-profile{background:linear-gradient(135deg,#faf3e0,#f5ead2);border:1px solid #c4a882;border-radius:8px;padding:1.1rem 1.85rem;margin:1.25rem 0 .9rem;position:relative;overflow:hidden}
+.memo-profile-glow{position:absolute;top:-55px;right:-55px;width:110px;height:110px;border-radius:50%;background:#c4a882;opacity:.18;z-index:0;pointer-events:none}
+.memo-profile-row{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.memo-profile-row+.memo-profile-row{margin-top:.6rem;padding-top:.6rem;border-top:1px solid rgba(196,168,130,.35)}
+.memo-profile-label{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#8a6f4a;font-weight:700;white-space:nowrap;margin-right:1.5rem}
+.memo-profile-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#1a1714;text-align:right}
+.memo-next{font-size:.78rem;color:#7a7268;font-style:italic;margin-top:.9rem;padding-top:.8rem;border-top:1px solid #ece4d6;text-align:center}
+.memo-footer{background:#14110f;padding:1rem 2.75rem 1.15rem;text-align:center;border-radius:0 0 4px 4px}
+.memo-footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#f0e8df;margin-bottom:.4rem}
+.memo-footer-url{font-size:.7rem;color:#9a8f7f;letter-spacing:.08em;text-transform:uppercase}
+.memo-footer-tag{font-size:.68rem;color:#5a5248;margin-top:.5rem}
+
+@media print{ body{padding:1.5rem} .closing-card{background:#1a1816 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact} .print-btn{display:none} .memo-hero{-webkit-print-color-adjust:exact;print-color-adjust:exact} .memo-footer{-webkit-print-color-adjust:exact;print-color-adjust:exact} }
 @media(max-width:700px){
   body{padding:1.5rem 1.25rem 4rem}
   .doc-title{font-size:1.9rem}
@@ -2057,6 +2354,9 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a2a2
 <body>
 
 <button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+
+${memoCoverHtml}
+<div style="page-break-after:always"></div>
 
 <div class="doc-header">
   <div class="doc-logo">Bold<span>Hearts</span></div>
