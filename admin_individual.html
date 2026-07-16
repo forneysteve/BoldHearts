@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | BoldHearts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px}
+body{font-family:'Inter',sans-serif;font-weight:300;background:#0f0e0d;color:#d4ccc4;min-height:100vh}
+a{color:#e8d7a0;text-decoration:none}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f0e0d}
+.login-card{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:3rem;width:100%;max-width:400px;text-align:center}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.25rem}
+.login-logo span{color:#e8d7a0}
+.login-sub{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:2rem}
+.login-input{width:100%;padding:.85rem 1rem;background:#111;border:1px solid rgba(232,215,160,.12);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.9rem;margin-bottom:1rem;outline:none;transition:border-color .2s}
+.login-input:focus{border-color:#e8d7a0}
+.login-btn{width:100%;padding:.9rem;background:#e8d7a0;color:#111;border:none;border-radius:4px;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.login-btn:hover{background:#f5e8c8}
+.login-err{font-size:.8rem;color:#c97a5a;margin-top:.75rem;min-height:18px}
+.dashboard{display:none;min-height:100vh}
+.topbar{background:#1a1816;border-bottom:1px solid rgba(232,215,160,.1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#f0e8df;letter-spacing:.12em;text-transform:uppercase}
+.topbar-logo span{color:#e8d7a0}
+.topbar-right{display:flex;align-items:center;gap:1rem}
+.topbar-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#5a5550}
+.topbar-nav{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;border:1px solid rgba(196,168,130,.3);border-radius:3px;padding:.35rem .75rem;transition:all .2s}
+.topbar-nav:hover{background:rgba(196,168,130,.1);border-color:#c4a882}
+.logout-btn{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#6a6258;background:none;border:1px solid rgba(232,215,160,.12);border-radius:3px;padding:.35rem .75rem;cursor:pointer;transition:all .2s}
+.logout-btn:hover{color:#e8d7a0;border-color:rgba(232,215,160,.3)}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(232,215,160,.08);border-bottom:1px solid rgba(232,215,160,.08)}
+.stat-card{background:#161412;padding:1.25rem 1.75rem}
+.stat-label{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;margin-bottom:.4rem}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#f0e8df}
+.controls{padding:1rem 2rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid rgba(232,215,160,.06)}
+.search-input{flex:1;padding:.65rem 1rem;background:#1a1816;border:1px solid rgba(232,215,160,.1);border-radius:4px;color:#d4ccc4;font-family:'Inter',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:rgba(232,215,160,.3)}
+.search-input::placeholder{color:#4a4540}
+.refresh-btn{padding:.65rem 1.25rem;background:transparent;border:1px solid rgba(232,215,160,.15);border-radius:4px;color:#a09890;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.refresh-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
+.table-wrap{overflow-x:auto;padding:0 2rem 2rem}
+.pipeline-table{width:100%;border-collapse:collapse;min-width:900px;margin-top:1rem}
+.pipeline-table th{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#5a5550;padding:.6rem .75rem;text-align:left;border-bottom:1px solid rgba(232,215,160,.08);white-space:nowrap}
+.pipeline-table td{padding:.75rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.pipeline-table tr:hover td{background:rgba(232,215,160,.02)}
+.person-name{font-size:.9rem;font-weight:500;color:#f0e8df}
+.person-email{font-size:.72rem;color:#5a5550;margin-top:1px}
+.stage-date{font-size:.75rem;color:#a09890}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.badge-done{background:rgba(181,196,160,.12);color:#b5c4a0;border:1px solid rgba(181,196,160,.2)}
+.badge-pending{background:rgba(196,168,130,.08);color:#c4a882;border:1px solid rgba(196,168,130,.15)}
+.badge-no{background:rgba(90,85,80,.1);color:#5a5550;border:1px solid rgba(90,85,80,.15)}
+.badge-yes{background:rgba(181,196,160,.12);color:#b5c4a0;border:1px solid rgba(181,196,160,.2)}
+.score-pill{display:inline-block;font-size:.72rem;font-weight:500;padding:2px 8px;border-radius:3px;background:rgba(255,255,255,.05)}
+.score-high{color:#b5c4a0}
+.score-mid{color:#e8d7a0}
+.score-low{color:#c97a5a}
+.action-btn{font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:3px;cursor:pointer;border:1px solid rgba(232,215,160,.15);background:transparent;color:#a09890;transition:all .2s;white-space:nowrap;font-family:'Inter',sans-serif}
+.action-btn:hover{border-color:#e8d7a0;color:#e8d7a0}
+.action-btn+.action-btn{margin-top:4px}
+.action-btn-gold{border-color:rgba(196,168,130,.4);color:#c4a882}
+.action-btn-gold:hover{border-color:#c4a882;color:#f0e8df;background:rgba(196,168,130,.1)}
+.action-btn-blue{border-color:rgba(100,160,200,.3);color:#7aaac8}
+.action-btn-blue:hover{border-color:#7aaac8;color:#b0d4e8;background:rgba(100,160,200,.08)}
+.action-col{display:flex;flex-direction:column;gap:4px}
+.pipeline-bar{display:flex;gap:2px;align-items:center;margin-top:3px}
+.pip{width:10px;height:4px;border-radius:2px;background:rgba(255,255,255,.06)}
+.pip.done{background:#b5c4a0}
+.pip.active{background:#e8d7a0}
+.loading{text-align:center;padding:4rem;color:#5a5550;font-size:.85rem}
+.empty{text-align:center;padding:4rem;color:#5a5550;font-size:.85rem}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#1a1816;border:1px solid rgba(232,215,160,.15);border-radius:6px;padding:2rem;max-width:560px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#f0e8df;margin-bottom:.25rem}
+.modal-sub{font-size:.75rem;color:#5a5550;margin-bottom:1.5rem}
+.modal-section{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:.75rem 0 .4rem;padding-bottom:.3rem;border-bottom:1px solid rgba(232,215,160,.08)}
+.modal-row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.modal-row-label{font-size:.75rem;color:#6a6258}
+.modal-row-val{font-size:.75rem;color:#d4ccc4;text-align:right;font-weight:500}
+.modal-close{float:right;background:none;border:none;color:#6a6258;font-size:1.2rem;cursor:pointer;margin-top:-4px}
+@media(max-width:768px){
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .controls{padding:.75rem 1rem}
+  .table-wrap{padding:0 1rem 2rem}
+  .topbar{padding:.75rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">Bold<span>Hearts</span></div>
+    <div class="login-sub">Admin — Individual Assessments</div>
+    <div style="font-size:.65rem;color:#3a3530;letter-spacing:.06em;margin-top:-.5rem;margin-bottom:1.5rem">v4.0</div>
+    <input type="password" class="login-input" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">Bold<span>Hearts</span> <span style="font-size:.75rem;color:#5a5550;font-family:Inter,sans-serif;font-weight:300;letter-spacing:.05em;text-transform:none;margin-left:.5rem">Individual Assessments</span></div>
+    <div class="topbar-right">
+      <span class="topbar-label" id="last-updated"></span>
+      <a class="topbar-nav" href="admin_leadership.html">Leadership Teams →</a>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">Total People</div><div class="stat-val" id="stat-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">Relational Complete</div><div class="stat-val" id="stat-relational">—</div></div>
+    <div class="stat-card"><div class="stat-label">Interior Complete</div><div class="stat-val" id="stat-interior">—</div></div>
+    <div class="stat-card"><div class="stat-label">Follow-up Requested</div><div class="stat-val" id="stat-followup">—</div></div>
+  </div>
+  <div class="controls">
+    <input type="text" class="search-input" id="search-input" placeholder="Search by name or email..." oninput="filterTable()">
+    <button class="refresh-btn" onclick="loadData()">↺ Refresh</button>
+  </div>
+  <div class="table-wrap">
+    <div class="loading" id="table-loading">Loading data...</div>
+    <div class="empty" id="empty-state" style="display:none">No submissions yet.</div>
+    <table class="pipeline-table" id="results-table" style="display:none">
+      <thead>
+        <tr>
+          <th style="min-width:160px">Person</th>
+          <th>Relational<br>Assessment</th>
+          <th>Relational<br>Email</th>
+          <th>Interior<br>Assessment</th>
+          <th>Interior<br>Email</th>
+          <th>Follow-up<br>Requested</th>
+          <th>Request<br>Date</th>
+          <th>Guide<br>Created</th>
+          <th>Guide<br>Sent</th>
+          <th>Scores</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
+const WORKER_URL = 'https://snowy-queen-d35d.forney-steve.workers.dev';
+const PASSWORD = 'bh2026';
+let allRows = [];
+
+function doLogin(){
+  const pw = document.getElementById('pw-input').value;
+  if(pw === PASSWORD){
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('login-err').textContent = 'Incorrect password.';
+  }
+}
+
+function doLogout(){
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login-wrap').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+}
+
+function fmtDate(val){
+  if(!val) return null;
+  const s = val.toString().trim();
+  if(!s || s === '—') return null;
+  const d = new Date(s);
+  if(!isNaN(d)) return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return s.split(' ')[0];
+}
+
+function fmtScore(val){
+  if(val === null || val === undefined || val === '' || val === '—') return '—';
+  const s = val.toString().trim();
+  if(!s || s === '—') return '—';
+  if(s.endsWith('%')) return s;
+  const n = parseFloat(s);
+  if(isNaN(n)) return s;
+  if(n > 0 && n <= 1) return Math.round(n * 100) + '%';
+  return Math.round(n) + '%';
+}
+
+function scoreColor(val){
+  if(!val || val === '—') return '';
+  const s = val.toString().replace('%','');
+  const n = parseFloat(s);
+  if(isNaN(n)) return '';
+  const pct = n <= 1 ? n * 100 : n;
+  if(pct >= 70) return 'score-high';
+  if(pct >= 45) return 'score-mid';
+  return 'score-low';
+}
+
+function pill(val){
+  if(!val || val === '—' || val === '') return '<span style="color:#3a3530;font-size:.72rem">—</span>';
+  const formatted = fmtScore(val);
+  const cls = scoreColor(val);
+  return '<span class="score-pill '+cls+'">'+formatted+'</span>';
+}
+
+function badge(text, type){
+  return '<span class="badge badge-'+type+'">'+text+'</span>';
+}
+
+function pipelineProgress(row){
+  const hasRelational = !!fmtDate(row[0]);
+  const hasInterior = !!fmtDate(row[100]);
+  const hasFollowup = row[157] && row[157].toString().toLowerCase() === 'yes';
+  const hasGuideCreated = !!fmtDate(row[159]);
+  const hasGuideSent = !!fmtDate(row[160]);
+  const steps = [hasRelational, hasInterior, hasFollowup, hasGuideCreated, hasGuideSent];
+  const done = steps.filter(Boolean).length;
+  const pips = steps.map((s,i) => '<div class="pip'+(s?' done':i===done?' active':'')+'"></div>').join('');
+  return '<div class="pipeline-bar">'+pips+'</div>';
+}
+
+function renderTable(rows){
+  document.getElementById('table-loading').style.display = 'none';
+  if(!rows || rows.length === 0){
+    document.getElementById('empty-state').style.display = 'block';
+    return;
+  }
+  document.getElementById('results-table').style.display = 'table';
+
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = rows.map((row, idx) => {
+    const name = row[1] || '—';
+    const email = row[2] || '—';
+    const relDate = fmtDate(row[0]);
+    const relOverall = row[3] ? row[3].toString() : '';
+    const intDate = fmtDate(row[100]);
+    const intOverall = row[99] ? row[99].toString() : '';
+    const relEmailSent = row[155] ? row[155].toString() : '';
+    const intEmailSent = row[156] ? row[156].toString() : '';
+    const followupReq  = row[157] ? row[157].toString() : '';
+    const followupDate = fmtDate(row[158]);
+    const guideCreated = fmtDate(row[159]);
+    const guideSent    = fmtDate(row[160]);
+    const guideId      = row[161] ? row[161].toString().trim() : '';
+
+    const followupHtml = !followupReq || followupReq==='—'
+      ? '<span style="color:#3a3530;font-size:.72rem">—</span>'
+      : followupReq.toLowerCase()==='yes' ? badge('✓ Yes','yes') : badge('No','no');
+
+    const guideCreatedHtml = guideCreated
+      ? '<div class="stage-date">'+guideCreated+'</div>'
+      : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+
+    const guideSentHtml = guideSent
+      ? badge('✓ Sent','done')
+      : guideCreated ? badge('Pending','pending') : '<span style="color:#3a3530;font-size:.72rem">—</span>';
+
+    const scoresHtml = '<div style="display:flex;flex-direction:column;gap:2px">'
+      +(relOverall ? '<div style="font-size:.68rem;color:#6a6258">R: '+pill(relOverall)+'</div>' : '')
+      +(intOverall ? '<div style="font-size:.68rem;color:#6a6258">I: '+pill(intOverall)+'</div>' : '')
+      +'</div>';
+
+    const guideCellHtml = '<div class="action-col">'
+      +(row[100]&&fmtDate(row[100]) ? '<button class="action-btn action-btn-gold" onclick="buildGuide('+idx+', event)">Build Guide</button>' : guideCreatedHtml)
+      +(guideId ? '<button class="action-btn action-btn-blue" onclick="viewGuide('+idx+')">View Guide</button>' : '')
+      +'</div>';
+
+    return '<tr data-idx="'+idx+'">'
+      +'<td><div class="person-name">'+name+'</div><div class="person-email">'+email+'</div>'+pipelineProgress(row)+'</td>'
+      +'<td>'+(relDate ? '<div class="stage-date">'+relDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      +'<td>'+(relDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'relational\')">View Relational</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      +'<td>'+(intDate ? '<div class="stage-date">'+intDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      +'<td>'+(intDate ? '<button class="action-btn action-btn-blue" onclick="viewReport('+idx+',\'interior\')">View Interior</button>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      +'<td>'+followupHtml+'</td>'
+      +'<td>'+(followupDate ? '<div class="stage-date">'+followupDate+'</div>' : '<span style="color:#3a3530;font-size:.72rem">—</span>')+'</td>'
+      +'<td>'+guideCellHtml+'</td>'
+      +'<td>'+guideSentHtml+'</td>'
+      +'<td>'+scoresHtml+'</td>'
+      +'<td><div class="action-col">'
+      +'<button class="action-btn" onclick="viewScores('+idx+')">View Scores</button>'
+      +'<button class="action-btn" onclick="markFollowup('+idx+')">Mark Follow-up</button>'
+      +'</div></td>'
+      +'</tr>';
+  }).join('');
+
+  updateStats(rows);
+  document.getElementById('last-updated').textContent = 'Updated '+new Date().toLocaleTimeString();
+}
+
+function updateStats(rows){
+  document.getElementById('stat-total').textContent = rows.length;
+  document.getElementById('stat-relational').textContent = rows.filter(r => r[0] && fmtDate(r[0])).length;
+  document.getElementById('stat-interior').textContent = rows.filter(r => r[100] && fmtDate(r[100])).length;
+  document.getElementById('stat-followup').textContent = rows.filter(r => r[157] && r[157].toString().toLowerCase()==='yes').length;
+}
+
+function filterTable(){
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allRows.filter(r =>
+    (r[1]||'').toLowerCase().includes(q) || (r[2]||'').toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+}
+
+function viewGuide(idx){
+  const row = allRows[idx];
+  const guideId = row[161] ? row[161].toString().trim() : '';
+  if(guideId){
+    window.open('https://boldhearts.org/guide-print.html?id=' + guideId, '_blank');
+  } else {
+    alert('No guide has been built for this person yet.');
+  }
+}
+
+function viewScores(idx){
+  const row = allRows[idx];
+  const name = row[1] || '—';
+  const email = row[2] || '—';
+
+  function scoreRow(label, val){
+    const formatted = fmtScore(val);
+    if(formatted === '—') return '';
+    const cls = scoreColor(val);
+    return '<div class="modal-row"><span class="modal-row-label">'+label+'</span><span class="modal-row-val '+cls+'">'+formatted+'</span></div>';
+  }
+
+  document.getElementById('modal-body').innerHTML =
+    '<button class="modal-close" onclick="closeModal()">✕</button>'
+    +'<h3>'+name+'</h3>'
+    +'<div class="modal-sub">'+email+'</div>'
+    +'<div class="modal-section">Relational Health</div>'
+    +scoreRow('Overall', row[3])
+    +scoreRow('Work / School', row[4])
+    +scoreRow('Significant Other', row[5])
+    +scoreRow('Family', row[6])
+    +scoreRow('Friends', row[7])
+    +scoreRow('Community', row[8])
+    +scoreRow('Relationship with God', row[9])
+    +(row[18] ? '<div style="font-size:.72rem;color:#5a5550;margin-top:.5rem;padding:.35rem 0">Patterns: '+row[18]+'</div>' : '')
+    +'<div class="modal-section">Relational — Dimensions</div>'
+    +scoreRow('Being Seen', row[10])
+    +scoreRow('Being Known', row[11])
+    +scoreRow('Having a Voice', row[12])
+    +scoreRow('Belonging', row[13])
+    +scoreRow('Receiving Support', row[14])
+    +scoreRow('Trust & Safety', row[15])
+    +scoreRow('Calling / Purpose', row[16])
+    +scoreRow('Freedom to Be Myself', row[17])
+    +'<div class="modal-section">Interior Health — Themes</div>'
+    +scoreRow('Overall', row[99])
+    +scoreRow('Grief & Loss', row[93])
+    +scoreRow('Shame & Guilt', row[94])
+    +scoreRow('Fear & Anxiety', row[95])
+    +scoreRow('Anger', row[96])
+    +scoreRow('Desire & Hope', row[97])
+    +scoreRow('Loved & Delighted In (by God)', row[98])
+    +'<div class="modal-section">Interior Health — Dimensions</div>'
+    +scoreRow('Awareness', row[101])
+    +scoreRow('Honesty', row[102])
+    +scoreRow('Movement', row[103])
+    +scoreRow('Safety', row[104])
+    +scoreRow('Direction', row[105])
+    +scoreRow('Peace', row[106])
+    +(row[161] ? '<div class="modal-section">Guide</div><div class="modal-row"><span class="modal-row-label">Guide ID</span><span class="modal-row-val" style="font-size:.68rem;color:#6a6258">'+row[161]+'</span></div>' : '');
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function markFollowup(idx){
+  const row = allRows[idx];
+  const email = row[2] || '';
+  const current = row[157] ? row[157].toString().toLowerCase() : '';
+  const newVal = current === 'yes' ? 'No' : 'Yes';
+  const newDate = newVal === 'Yes' ? new Date().toLocaleString() : '';
+
+  const params = new URLSearchParams({
+    action: 'updatepipeline',
+    email: email,
+    followup_requested: newVal,
+    followup_date: newDate
+  });
+  new Image().src = SHEETS_URL + '?' + params.toString();
+
+  allRows[idx][157] = newVal;
+  allRows[idx][158] = newDate;
+  renderTable(allRows);
+}
+
+function identityScore(val, reverse) {
+  const v = parseFloat(val);
+  if(isNaN(v) || v===0) return null;
+  const scored = reverse ? (8-v) : v;
+  return Math.round((scored/7)*100);
+}
+
+function viewReport(idx, type) {
+  const row = allRows[idx];
+  const name = row[1] || '—';
+  const email = row[2] || '—';
+
+  function ps(val){
+    if(!val && val!==0) return '—';
+    const s = val.toString().trim();
+    if(!s || s==='—') return '—';
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(isNaN(n)) return s;
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+
+  function dc(p){const n=parseFloat(p);if(isNaN(n))return'#c4a882';const v=n<=1?n*100:n;return v>=80?'#6bc45e':v>=60?'#c4a882':v>=40?'#d4884a':v>=20?'#c97a5a':'#8a2a2a';}
+  function relTag(p){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;return v>=80?'Strong':v>=60?'Functioning':v>=40?'Weak':v>=20?'Dormant':'Dead';}
+  function needsTag(p){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;return v>=80?'Thriving':v>=60?'Healthy':v>=40?'Struggling':v>=20?'Weak':'Critical';}
+  function emotionTag(p){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;return v>=80?'Healthy Engagement':v>=60?'Room for Growth':v>=40?'Guarded':v>=20?'Suppressed':'Shut Down';}
+  function postureTag(p,label){const n=parseFloat(p);if(isNaN(n))return'—';const v=n<=1?n*100:n;const deg=v>=80?'Strong':v>=60?'Moderate':v>=40?'Mild':v>=20?'Faint':'No';return deg+' '+label;}
+  function dtag(p){return relTag(p);}
+
+  function bar(pct){
+    const n = parseFloat(pct);
+    const v = isNaN(n) ? 0 : (n<=1 ? Math.round(n*100) : Math.round(n));
+    const col = dc(v);
+    const filled = Math.round(v/10);
+    return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px">'+'█'.repeat(filled)+'░'.repeat(10-filled)+'</span>';
+  }
+
+  function row2(label, val, tagFn){
+    const formatted = ps(val);
+    if(formatted==='—') return '';
+    const col = dc(formatted);
+    const tag = tagFn ? tagFn(formatted) : dtag(formatted);
+    return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825">'+label+'</td>'
+      +'<td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+bar(formatted)+'</td>'
+      +'<td style="padding:8px 12px;font-size:12px;color:'+col+';border-bottom:1px solid #2a2825">'+tag+'</td></tr>';
+  }
+
+  let html = '';
+
+  if(type === 'relational') {
+    const realmRows = [
+      row2('Relationship with God', row[9], relTag),
+      row2('Significant Other', row[5], relTag),
+      row2('Family', row[6], relTag),
+      row2('Friends', row[7], relTag),
+      row2('Work / School', row[4], relTag),
+      row2('Community', row[8], relTag)
+    ].join('');
+    const dimRows = [
+      row2('Being Seen', row[10], needsTag),
+      row2('Being Known', row[11], needsTag),
+      row2('Having a Voice', row[12], needsTag),
+      row2('Belonging', row[13], needsTag),
+      row2('Receiving Support', row[14], needsTag),
+      row2('Trust & Safety', row[15], needsTag),
+      row2('Calling / Purpose', row[16], needsTag),
+      row2('Freedom to Be Myself', row[17], needsTag)
+    ].join('');
+
+    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Relational Health — '+name+'</title></head>'
+      +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
+      +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
+      +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
+      +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
+      +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr>'
+      +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
+      +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+name+', here are your Relational Health Assessment results.</p>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Relationships</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Needs</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+'</tbody></table>'
+      +(row[17] ? '<p style="font-size:12px;color:#6a6258;margin:0 0 20px">Patterns: '+row[17]+'</p>' : '')
+      +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
+      +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
+      +'</td></tr></table></td></tr></table></body></html>';
+  }
+
+  if(type === 'interior') {
+    const themeRows = [
+      row2('Grief & Loss', row[93], emotionTag),
+      row2('Shame & Guilt', row[94], emotionTag),
+      row2('Fear & Anxiety', row[95], emotionTag),
+      row2('Anger', row[96], emotionTag),
+      row2('Desire & Hope', row[97], emotionTag),
+      row2('Loved & Delighted In (by God)', row[98], emotionTag)
+    ].join('');
+    const dimRows = [
+      row2('Awareness', row[101], (p)=>postureTag(p,'Awareness')),
+      row2('Honesty', row[102], (p)=>postureTag(p,'Honesty')),
+      row2('Movement', row[103], (p)=>postureTag(p,'Movement')),
+      row2('Safety', row[104], (p)=>postureTag(p,'Safety')),
+      row2('Direction', row[105], (p)=>postureTag(p,'Direction')),
+      row2('Peace', row[106], (p)=>postureTag(p,'Peace'))
+    ].join('');
+
+    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Interior Health — '+name+'</title></head>'
+      +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
+      +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
+      +'<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
+      +'<tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center">'
+      +'<p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#c4a882">Hearts</span></p>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Interior Health Assessment</p></td></tr>'
+      +'<tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px">'
+      +'<p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+name+', here are your Interior Health Assessment results.</p>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Emotional Maturity Scores Across the Following Emotions</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+themeRows+'</tbody></table>'
+      +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Health Scores Across the Following Postures</p>'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+'</tbody></table>'
+      +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#c4a882">Steve Forney</strong><br>'
+      +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
+      +'</td></tr></table></td></tr></table></body></html>';
+  }
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+}
+
+async function buildGuide(idx, event){
+  const row = allRows[idx];
+  const name = row[1] || '';
+  const email = row[2] || '';
+
+  if(!row[100] || !fmtDate(row[100])){
+    alert(name + ' has not completed the Interior Health Assessment yet.');
+    return;
+  }
+
+  function ps(val){
+    if(!val && val!==0) return null;
+    const s = val.toString().trim();
+    if(!s || s==='—') return null;
+    if(s.endsWith('%')) return s;
+    const n = parseFloat(s);
+    if(isNaN(n)) return null;
+    if(n>0 && n<=1) return Math.round(n*100)+'%';
+    return Math.round(n)+'%';
+  }
+
+  const a1 = {
+    overall:   ps(row[3]),
+    work:      ps(row[4]),
+    partner:   ps(row[5]),
+    family:    ps(row[6]),
+    friends:   ps(row[7]),
+    community: ps(row[8]),
+    god:       ps(row[9]),
+    patterns:  row[18] || '',
+    warnings:  row[19] || '',
+    dim_seen:      ps(row[10]),
+    dim_known:     ps(row[11]),
+    dim_voice:     ps(row[12]),
+    dim_belonging: ps(row[13]),
+    dim_support:   ps(row[14]),
+    dim_trust:     ps(row[15]),
+    dim_calling:   ps(row[16]),
+    dim_freedom:   ps(row[17]),
+    work_outward:      ps(row[21]),
+    work_self:         ps(row[22]),
+    partner_outward:   ps(row[23]),
+    partner_self:      ps(row[24]),
+    family_outward:    ps(row[25]),
+    family_self:       ps(row[26]),
+    friends_outward:   ps(row[27]),
+    friends_self:      ps(row[28]),
+    community_outward: ps(row[29]),
+    community_self:    ps(row[30]),
+    god_outward:       ps(row[31]),
+    god_self:          ps(row[32]),
+    raw: {
+      work:      row.slice(33, 43),
+      partner:   row.slice(43, 53),
+      family:    row.slice(53, 63),
+      friends:   row.slice(63, 73),
+      community: row.slice(73, 83),
+      god:       row.slice(83, 93)
+    }
+  };
+
+  const hs = {
+    overall:   ps(row[99]),
+    grief:     ps(row[93]),
+    shame:     ps(row[94]),
+    fear:      ps(row[95]),
+    anger:     ps(row[96]),
+    desire:    ps(row[97]),
+    joy:       ps(row[98]),
+    awareness: ps(row[101]),
+    honesty:   ps(row[102]),
+    movement:  ps(row[103]),
+    safety:    ps(row[104]),
+    direction: ps(row[105]),
+    peace:     ps(row[106]),
+    raw: {
+      grief:   row.slice(107, 113),
+      shame:   row.slice(113, 119),
+      fear:    row.slice(119, 125),
+      anger:   row.slice(125, 131),
+      desire:  row.slice(131, 137),
+      joy:     row.slice(137, 143)
+    },
+    identity: {
+      grief:  {others: identityScore(row[143], true), self: identityScore(row[144], true), gap: Math.abs((identityScore(row[143],true)||0)-(identityScore(row[144],true)||0))},
+      shame:  {others: identityScore(row[145], true), self: identityScore(row[146], true), gap: Math.abs((identityScore(row[145],true)||0)-(identityScore(row[146],true)||0))},
+      fear:   {others: identityScore(row[147], true), self: identityScore(row[148], true), gap: Math.abs((identityScore(row[147],true)||0)-(identityScore(row[148],true)||0))},
+      anger:  {others: identityScore(row[149], true), self: identityScore(row[150], true), gap: Math.abs((identityScore(row[149],true)||0)-(identityScore(row[150],true)||0))},
+      desire: {others: identityScore(row[151], true), self: identityScore(row[152], true), gap: Math.abs((identityScore(row[151],true)||0)-(identityScore(row[152],true)||0))},
+      joy:    {others: identityScore(row[153], false), self: identityScore(row[154], false), gap: Math.abs((identityScore(row[153],false)||0)-(identityScore(row[154],false)||0))}
+    }
+  };
+
+  const guideData = {
+    name: name,
+    email: email,
+    a1: a1,
+    hs: hs,
+    date: new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})
+  };
+
+  const guideWin = window.open('', '_blank');
+  guideWin.document.write('<html><body style="background:#f5f0e8;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;color:#6a5a4a"><p>Building guide, please wait...</p></body></html>');
+
+  const btn = event?.target;
+  if(btn) { btn.textContent = 'Building...'; btn.disabled = true; }
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        assessment1: a1,
+        heartsoul: hs
+      })
+    });
+    const result = await res.json();
+    if(result.error) { alert('Guide generation failed: ' + result.error); return; }
+
+    guideData.guide = result.guide;
+    sessionStorage.setItem('boldhearts_guide_data', JSON.stringify(guideData));
+
+    const guideId = result.guideId;
+    const guideUrl = guideId
+      ? 'https://boldhearts.org/guide-print.html?id=' + guideId
+      : 'guide-print.html';
+
+    const params = new URLSearchParams({
+      action: 'updatepipeline',
+      email: email,
+      guide_created: new Date().toLocaleString(),
+      guide_id: guideId || ''
+    });
+    new Image().src = SHEETS_URL + '?' + params.toString();
+
+    if(guideId) allRows[idx][161] = guideId;
+    renderTable(allRows);
+
+    guideWin.location.href = guideUrl;
+
+  } catch(e) {
+    guideWin.close();
+    alert('Error building guide: ' + e.message);
+  } finally {
+    if(btn) { btn.textContent = 'Build Guide'; btn.disabled = false; }
+  }
+}
+
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+async function loadData(){
+  document.getElementById('table-loading').style.display = 'block';
+  document.getElementById('results-table').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'none';
+
+  try {
+    const data = await new Promise((resolve, reject) => {
+      const cbName = '_bh_read_' + Date.now();
+      const script = document.createElement('script');
+      const timeout = setTimeout(() => {
+        reject(new Error('Timeout'));
+        try{ delete window[cbName]; script.remove(); }catch(e){}
+      }, 10000);
+      window[cbName] = (data) => {
+        clearTimeout(timeout);
+        resolve(data);
+        try{ delete window[cbName]; script.remove(); }catch(e){}
+      };
+      script.src = SHEETS_URL + '?action=read&callback=' + cbName;
+      document.head.appendChild(script);
+    });
+
+    if(data.rows && data.rows.length > 0){
+      allRows = data.rows;
+      renderTable(allRows);
+    } else {
+      document.getElementById('table-loading').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'block';
+    }
+  } catch(e){
+    document.getElementById('table-loading').style.display = 'none';
+    document.getElementById('empty-state').textContent = 'Error loading data.';
+    document.getElementById('empty-state').style.display = 'block';
+  }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>
