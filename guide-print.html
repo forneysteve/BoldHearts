@@ -358,7 +358,7 @@ function renderGuide(data) {
   const aboutInteriorHtml = '<div class="section-header" style="break-before:page">About Your Interior Scores</div>'
     + '<div style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.5rem">'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart has substance — muscle, fiber, tissue, weight. The Interior Assessment measures what you are carrying. Not just whether an emotion is present, but how processed it is — how far it has moved through the natural arc that healthy emotional maturity follows.</p>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Grief, shame, fear, anger, desire, joy — each one is scored not for its presence or absence, but for the quality of your relationship with it. A high score does not mean you carry more. It means what you carry has more room to move. Each emotion is measured across six postures — six stages of the movement from raw experience toward integration.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Grief, shame, fear, anger, desire, love — each one is scored not for its presence or absence, but for the quality of your relationship with it. A high score does not mean you carry more. It means what you carry has more room to move. Each emotion is measured across six postures — six stages of the movement from raw experience toward integration.</p>'
     + '</div>'
     + '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.4rem;margin-bottom:1.25rem">'
     + intPostureCards.map(d =>
@@ -492,7 +492,7 @@ function renderGuide(data) {
     {label:'Fear & Anxiety', val:hs?.fear},
     {label:'Anger',          val:hs?.anger},
     {label:'Desire & Hope',  val:hs?.desire},
-    {label:'Joy & Delight',  val:hs?.joy},
+    {label:'Loved & Delighted In (by God)',  val:hs?.joy},
   ].filter(t => numVal(t.val) > 0);
   const themeCardHtml = themeItems.length > 0
     ? detailCard('Interior Themes', themeItems.map((t,i)=>detailRow(t.label,t.val,i===themeItems.length-1)).join(''))
@@ -593,7 +593,7 @@ function renderGuide(data) {
     {id:'fear',   label:'Fear & Anxiety'},
     {id:'anger',  label:'Anger'},
     {id:'desire', label:'Desire & Hope'},
-    {id:'joy',    label:'Joy & Delight'}
+    {id:'joy',    label:'Loved & Delighted In (by God)'}
   ];
   const intPostures = ['Awareness','Honesty','Movement','Safety','Direction','Peace'];
 
@@ -654,7 +654,7 @@ function renderGuide(data) {
     {id:'fear',   label:'Fear & Anxiety'},
     {id:'anger',  label:'Anger'},
     {id:'desire', label:'Desire & Hope'},
-    {id:'joy',    label:'Joy & Delight'},
+    {id:'joy',    label:'Loved & Delighted In (by God)'},
   ];
 
   let intMatrixHtml = '';
@@ -882,9 +882,9 @@ function renderGuide(data) {
     fear:   { high: "Fear and anxiety are well-integrated for you — present but not in charge. You can act in the presence of uncertainty without being paralyzed by it.", low: "Fear is elevated. That kind of anxiety tends to narrow the world — making risk feel more costly and safety feel more necessary than it actually is." },
     anger:  { high: "Anger is healthy and accessible — you can name it, work with it, and let it point toward what matters. Anger at this level is often clarity.", low: "Anger is low. Sometimes that means peace — and sometimes it means something has been buried. Worth sitting with which one it is." },
     desire: { high: "Desire and hope are alive in you. That matters more than it might seem — desire is what keeps a person reaching rather than just maintaining.", low: "Desire is low. When hope quiets down it often means something has been disappointed enough times that wanting has started to feel too costly." },
-    joy:    { high: "Joy is strong. There is still something in you that can receive what is good — that capacity is worth protecting.", low: "Joy is scoring low. Not absent — but muted. Something is keeping the good from landing fully." }
+    joy:    { high: "Your sense of being loved and delighted in by God is strong. There is a settled knowing in you — not earned, not performed — that God delights in you. That capacity is worth protecting.", low: "Your sense of being loved and delighted in by God is scoring low. Not absent — but muted. Something is keeping that love from fully landing, even if it is believed as doctrine." }
   };
-  const themeLabels = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Joy & Delight'};
+  const themeLabels = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Loved & Delighted In (by God)'};
   const themeKeys = ['grief','shame','fear','anger','desire','joy'];
   const themeScoresSorted = themeKeys
     .map(k => ({id:k, score: numVal(hs?.[k])}))
@@ -927,7 +927,7 @@ function renderGuide(data) {
     anger:'#5B8DB0', desire:'#c4a882', joy:'#C4A055'
   };
   const idThemeKeys = ['grief','shame','fear','anger','desire','joy'];
-  const idThemeLabels = {grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'};
+  const idThemeLabels = {grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Loved & Delighted In (by God)'};
 
   function idBar(pct) {
     const filled = Math.round(pct/10);
@@ -974,7 +974,7 @@ function renderGuide(data) {
     : '';
 
   // ── DISAMBIGUATION — written to client in Steve's voice ────
-  const negThemeNames = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Joy & Delight'};
+  const negThemeNames = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Loved & Delighted In (by God)'};
   const negThemeList = ['grief','shame','fear','anger','desire','joy'];
 
   const disCards = negThemeList.map(t => {
@@ -1013,7 +1013,7 @@ function renderGuide(data) {
         question = 'Is hope something that feels alive for you right now — or has it been harder to access lately?';
       }
     } else if(t === 'joy' && score < 60) {
-      observation = 'Your Joy & Delight score is low. Joy is not the same as happiness — it is the capacity to receive what is good, even in hard seasons. When it goes quiet, it is usually because something underneath has accumulated enough weight that the good things cannot fully land.';
+      observation = 'Your sense of being Loved & Delighted In (by God) is low. This is not the same as general happiness — it is the felt experience of being delighted in by God, not just tolerated or forgiven. When it goes quiet, it is usually because something underneath has accumulated enough weight that God\'s delight cannot fully land, even if it is believed as true.';
       question = 'Does that land — that there are good things present, but they are not quite making it through? Or has it been hard to find much that registers as genuinely good right now?';
     } else {
       return '';
@@ -1059,7 +1059,7 @@ function renderGuide(data) {
         {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
       ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
       const allInt = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'}[k], val:hs?.[k]}))
+        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Love'}[k], val:hs?.[k]}))
         .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
       const top = [...allRel.slice(0,2), ...allInt.slice(0,2)];
       const bot = [...allRel.slice(-2).reverse(), ...allInt.slice(-2).reverse()];
@@ -1078,7 +1078,7 @@ function renderGuide(data) {
       ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val)).slice(0,3);
       // Top interior themes
       const intSorted = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Joy'}[k], val:hs?.[k]}))
+        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Love'}[k], val:hs?.[k]}))
         .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val)).slice(0,2);
       const pills = [...relSorted, ...intSorted].map(i=>scorePill(i.label, i.val, '')).join('');
       sectionPillsHtml = pillRow(pills);
@@ -1091,7 +1091,7 @@ function renderGuide(data) {
         {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
       ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,3);
       const intSorted = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'}[k], val:hs?.[k]}))
+        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Loved & Delighted In (by God)'}[k], val:hs?.[k]}))
         .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,2);
       const pills = [...relSorted, ...intSorted].map(i=>scorePill(i.label, i.val, '')).join('');
       sectionPillsHtml = pillRow(pills);
@@ -1099,7 +1099,7 @@ function renderGuide(data) {
 
     if(s.id === 'interior') {
       const themeSorted = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Joy & Delight'}[k], val:hs?.[k]}))
+        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Loved & Delighted In (by God)'}[k], val:hs?.[k]}))
         .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val));
       const postureSorted = [
         {label:'Awareness', val:hs?.awareness},{label:'Honesty', val:hs?.honesty},
@@ -1343,7 +1343,7 @@ function renderGuide(data) {
     };
     if(document.getElementById('realmChart')) {
       new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['God','Significant Other','Family','Friends','Work','Community'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
-      new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Joy'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
+      new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Love'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
       new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling / Purpose','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
       new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts });
     }
