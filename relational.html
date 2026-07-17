@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,9 +56,14 @@ nav .nav-links a:hover{color:#e8d7a0}
 .realm-hdr{display:flex;align-items:flex-start;gap:1.25rem;margin:3rem 0 1.25rem;padding:1.5rem 2rem;background:#1e1c1a;border:1px solid rgba(232,215,160,.15);border-radius:4px}
 .realm-hdr:first-child{margin-top:1rem}
 .realm-icon{width:46px;height:46px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:rgba(232,215,160,.08);color:#e8d7a0}
+.realm-hdr-text{flex:1}
 .realm-hdr-text h2{font-size:1.5rem;margin-bottom:3px;color:#f0e8df}
 .realm-hdr-text h2::after{display:none}
-.realm-hdr-text p{font-size:.9rem;color:#6a6258;line-height:1.6;margin:0;max-width:none}
+.realm-hdr-text p{font-size:.9rem;color:#6a6258;line-height:1.6;margin:0 0 .85rem;max-width:none}
+.skip-toggle{display:flex;align-items:center;gap:8px;font-size:.78rem;color:#8a8078;cursor:pointer;user-select:none;padding-top:.5rem;border-top:1px solid rgba(232,215,160,.08)}
+.skip-toggle input[type=checkbox]{width:16px;height:16px;accent-color:#e8d7a0;cursor:pointer;flex-shrink:0}
+.skip-toggle:hover{color:#c0b8b0}
+.skip-note{font-size:.78rem;color:#6a6258;font-style:italic;padding:1rem 1.25rem;background:#1a1816;border:1px dashed rgba(232,215,160,.15);border-radius:4px;margin-bottom:.6rem}
 .qblock{background:#1a1816;border:1px solid rgba(232,215,160,.08);border-radius:4px;padding:1.5rem;margin-bottom:.6rem;transition:border-color .2s ease}
 .qblock.answered{border-color:rgba(232,215,160,.25)}
 .qnum{font-size:.7rem;color:#5a5550;font-weight:400;margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase}
@@ -297,8 +303,17 @@ const WARNINGS=[
 ];
 
 let answers={},userName='',userEmail='',isTestMode=false;
-function totalQs(){return REALMS.reduce((a,r)=>a+r.questions.length,0)}
-function totalAns(){return Object.keys(answers).length}
+let skippedRealms=new Set();
+
+function totalQs(){return REALMS.reduce((a,r)=>skippedRealms.has(r.id)?a:a+r.questions.length,0)}
+function totalAns(){
+  let n=0;
+  Object.keys(answers).forEach(k=>{
+    const realmId=k.substring(0,k.lastIndexOf('_'));
+    if(!skippedRealms.has(realmId))n++;
+  });
+  return n;
+}
 function dcolor(p){return p>=80?'#C4A055':p>=60?'#B8AA7A':p>=40?'#8AACCB':p>=20?'#5B8DB0':'#3A6D94'}
 function relTag(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'}
 function needsTag(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There'}
@@ -307,11 +322,13 @@ function calcScores(){
   const realm={};let allT=0,allN=0;
   REALMS.forEach(r=>{
     let rt=0,rn=0,st=0,sn=0,ot=0,on_=0;
-    r.questions.forEach((q,i)=>{
-      const v=answers[r.id+'_'+i];
-      if(v!==undefined){const rv=q.reverse?(8-v):v;rt+=rv;rn++;allT+=rv;allN++;
-        if(q.self){st+=rv;sn++;}else{ot+=rv;on_++;}}
-    });
+    if(!skippedRealms.has(r.id)){
+      r.questions.forEach((q,i)=>{
+        const v=answers[r.id+'_'+i];
+        if(v!==undefined){const rv=q.reverse?(8-v):v;rt+=rv;rn++;allT+=rv;allN++;
+          if(q.self){st+=rv;sn++;}else{ot+=rv;on_++;}}
+      });
+    }
     realm[r.id]={overall:rn>0?Math.round((rt/(rn*7))*100):0,
       outward:on_>0?Math.round((ot/(on_*7))*100):0,
       self:sn>0?Math.round((st/(sn*7))*100):0,answered:rn};
@@ -346,7 +363,7 @@ function getActionPlan(scores){
 const HASH_ROW='<div class="hash-row"><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div><div class="hash-mark"></div></div>';
 
 function updateProgress(){
-  const pct=Math.round((totalAns()/totalQs())*100);
+  const pct=totalQs()>0?Math.round((totalAns()/totalQs())*100):0;
   const pb=document.getElementById('progress-bar');
   const lbl=document.getElementById('progress-lbl');
   if(pb)pb.style.width=pct+'%';
@@ -359,11 +376,18 @@ function renderSurvey(){
   html+='<div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#e8d7a0;margin-bottom:.75rem;font-weight:500">Before You Begin</div>';
   html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">These questions are a snapshot — what is true for you on this specific day, in this specific season. What you\'re carrying right now, who you\'ve been thinking about, what happened this week — all of it will show up here. That\'s not a flaw. That\'s the point.</p>';
   html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin-bottom:.75rem">You are not trying to ace this. There is no right answer, no passing score, no version of yourself you should be performing. Your honesty is more valuable than a high number. An honest answer in the middle tells us more than a performed answer at the top.</p>';
-  html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin:0">These scores are not a judgment. They are a starting point for a conversation.</p>';
+  html+='<p style="font-size:.92rem;color:#c0b8b0;line-height:1.9;margin:0">These scores are not a judgment. They are a starting point for a conversation. If a section genuinely doesn\'t apply to your life right now, you can skip it using the checkbox at the top of that section.</p>';
   html+='</div>';
   let qNum=0;
   REALMS.forEach(r=>{
-    html+='<div class="realm-hdr"><div class="realm-icon"><i class="ti '+r.icon+'" style="color:'+r.color+'"></i></div><div class="realm-hdr-text"><h2>'+r.label+'</h2><p>'+r.desc+'</p></div></div>';
+    const isSkipped=skippedRealms.has(r.id);
+    html+='<div class="realm-hdr"><div class="realm-icon"><i class="ti '+r.icon+'" style="color:'+r.color+'"></i></div><div class="realm-hdr-text"><h2>'+r.label+'</h2><p>'+r.desc+'</p>';
+    html+='<label class="skip-toggle"><input type="checkbox" id="skip_'+r.id+'" '+(isSkipped?'checked':'')+' onchange="toggleSkip(\''+r.id+'\',this.checked)"> This section doesn\'t apply to me right now — skip it</label>';
+    html+='</div></div>';
+    html+='<div class="realm-questions" id="realm_q_'+r.id+'" style="'+(isSkipped?'display:none':'')+'">';
+    if(isSkipped){
+      html+='<div class="skip-note">This section has been skipped and won\'t be included in your results.</div>';
+    }
     r.questions.forEach((q,i)=>{
       const k=r.id+'_'+i;
       const cur=answers[k];
@@ -378,9 +402,47 @@ function renderSurvey(){
       html+='</div></div>';
       qNum++;
     });
+    html+='</div>';
   });
   html+='<div class="submit-section"><div class="submit-meta">Move each slider to answer — your honesty matters more than a high score</div><button class="sub-btn" onclick="trySubmit()">Get My Results &rarr;</button><div class="errmsg" id="errmsg"></div></div></div>';
   document.getElementById('app').innerHTML=html;
+  updateProgress();
+}
+
+function toggleSkip(realmId,checked){
+  if(checked){
+    skippedRealms.add(realmId);
+    const r=REALMS.find(r=>r.id===realmId);
+    r.questions.forEach((_,i)=>{delete answers[realmId+'_'+i];});
+  }else{
+    skippedRealms.delete(realmId);
+  }
+  const container=document.getElementById('realm_q_'+realmId);
+  if(container){
+    if(checked){
+      container.style.display='none';
+      container.innerHTML='<div class="skip-note">This section has been skipped and won\'t be included in your results.</div>';
+    }else{
+      container.style.display='';
+      // rebuild this realm's questions since we cleared its innerHTML when skipped
+      const r=REALMS.find(r=>r.id===realmId);
+      let qNumStart=0;
+      for(const rr of REALMS){if(rr.id===realmId)break;qNumStart+=rr.questions.length;}
+      let qh='';
+      r.questions.forEach((q,i)=>{
+        const k=realmId+'_'+i;
+        qh+='<div class="qblock" id="q_'+k+'">';
+        qh+='<div class="qnum">Question '+(qNumStart+i+1)+'</div>';
+        qh+='<div class="qlabel">'+q.t+'</div>';
+        qh+='<div class="scale-endlabels"><span class="scale-endlabel">Strongly disagree</span><span class="scale-endlabel">Strongly agree</span></div>';
+        qh+='<div class="slider-area">';
+        qh+='<input type="range" min="1" max="7" step="0.01" value="1" id="sl_'+k+'" style="opacity:0.4;transition:opacity .2s" oninput="onSlide(\''+k+'\',this.value)" onchange="onCommit(\''+k+'\',this.value)">';
+        qh+=HASH_ROW;
+        qh+='</div></div>';
+      });
+      container.innerHTML=qh;
+    }
+  }
   updateProgress();
 }
 
@@ -400,6 +462,7 @@ function trySubmit(){
   const unanswered=[];
   REALMS.forEach(r=>{
     if(r.id==='significant_other')return;
+    if(skippedRealms.has(r.id))return;
     r.questions.forEach((_,i)=>{if(answers[r.id+'_'+i]===undefined)unanswered.push(r.id+'_'+i);});
   });
   if(unanswered.length>0){
@@ -428,23 +491,24 @@ function saveToSheets(scores){
   const params=new URLSearchParams({
     action:'write',name:userName,email:userEmail,
     rel_overall:overall+'%',
-    work_overall:realm.work?realm.work.overall+'%':'',
-    partner_overall:realm.significant_other?realm.significant_other.overall+'%':'',
-    family_overall:realm.family?realm.family.overall+'%':'',
-    friends_overall:realm.friends?realm.friends.overall+'%':'',
-    community_overall:realm.community?realm.community.overall+'%':'',
-    god_overall:realm.god?realm.god.overall+'%':'',
+    work_overall:realm.work&&realm.work.answered>0?realm.work.overall+'%':'',
+    partner_overall:realm.significant_other&&realm.significant_other.answered>0?realm.significant_other.overall+'%':'',
+    family_overall:realm.family&&realm.family.answered>0?realm.family.overall+'%':'',
+    friends_overall:realm.friends&&realm.friends.answered>0?realm.friends.overall+'%':'',
+    community_overall:realm.community&&realm.community.answered>0?realm.community.overall+'%':'',
+    god_overall:realm.god&&realm.god.answered>0?realm.god.overall+'%':'',
     being_seen:getDim('seen'),being_known:getDim('known'),having_a_voice:getDim('voice'),
     belonging:getDim('belonging'),receiving_support:getDim('support'),trust_safety:getDim('trust'),
     calling:getDim('calling'),freedom:getDim('fullself'),
-    patterns:patterns,warnings:warningList,version:'v6.0',
-    work_outward:realm.work?realm.work.outward+'%':'',work_self:realm.work?realm.work.self+'%':'',
-    partner_outward:realm.significant_other?realm.significant_other.outward+'%':'',
-    partner_self:realm.significant_other?realm.significant_other.self+'%':'',
-    family_outward:realm.family?realm.family.outward+'%':'',family_self:realm.family?realm.family.self+'%':'',
-    friends_outward:realm.friends?realm.friends.outward+'%':'',friends_self:realm.friends?realm.friends.self+'%':'',
-    community_outward:realm.community?realm.community.outward+'%':'',community_self:realm.community?realm.community.self+'%':'',
-    god_outward:realm.god?realm.god.outward+'%':'',god_self:realm.god?realm.god.self+'%':'',
+    patterns:patterns,warnings:warningList,version:'v6.1',
+    skipped_sections:Array.from(skippedRealms).join(', ')||'None',
+    work_outward:realm.work&&realm.work.answered>0?realm.work.outward+'%':'',work_self:realm.work&&realm.work.answered>0?realm.work.self+'%':'',
+    partner_outward:realm.significant_other&&realm.significant_other.answered>0?realm.significant_other.outward+'%':'',
+    partner_self:realm.significant_other&&realm.significant_other.answered>0?realm.significant_other.self+'%':'',
+    family_outward:realm.family&&realm.family.answered>0?realm.family.outward+'%':'',family_self:realm.family&&realm.family.answered>0?realm.family.self+'%':'',
+    friends_outward:realm.friends&&realm.friends.answered>0?realm.friends.outward+'%':'',friends_self:realm.friends&&realm.friends.answered>0?realm.friends.self+'%':'',
+    community_outward:realm.community&&realm.community.answered>0?realm.community.outward+'%':'',community_self:realm.community&&realm.community.answered>0?realm.community.self+'%':'',
+    god_outward:realm.god&&realm.god.answered>0?realm.god.outward+'%':'',god_self:realm.god&&realm.god.answered>0?realm.god.self+'%':'',
     work_q1:answers['work_0']||'',work_q2:answers['work_1']||'',work_q3:answers['work_2']||'',work_q4:answers['work_3']||'',work_q5:answers['work_4']||'',
     work_q6:answers['work_5']||'',work_q7:answers['work_6']||'',work_q8:answers['work_7']||'',work_q9:answers['work_8']||'',work_q10:answers['work_9']||'',
     partner_q1:answers['significant_other_0']||'',partner_q2:answers['significant_other_1']||'',partner_q3:answers['significant_other_2']||'',partner_q4:answers['significant_other_3']||'',partner_q5:answers['significant_other_4']||'',
@@ -617,7 +681,7 @@ function renderResults(scores){
 }
 
 function retake(){
-  answers={};userName='';userEmail='';
+  answers={};userName='';userEmail='';skippedRealms=new Set();
   document.getElementById('progress-section').style.display='';
   const hero=document.querySelector('.hero');if(hero)hero.style.display='';
   const divider=document.querySelector('.divider');if(divider)divider.style.display='';
