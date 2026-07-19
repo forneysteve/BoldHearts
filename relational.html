@@ -198,19 +198,33 @@ const EJSPUB='h2oygZLNRmpwcz4wP',EJSSVC='service_0pg53bv',EJSTPL='template_m43lm
 const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkQHG-plPkD-5g-_8MngVe5P-lcYaxbMvJg0q3-4uUhegipWpr1N-6CWvui8gXH2FgpQ/exec';
 
 const REALMS=[
-  {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',bar:'#c4a882',
-   desc:"Answer based on what is actually true right now — not what it used to be, not what you think it should be. God already knows. Your honesty here is more useful than a polished answer.",
+  {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
+   desc:"If you're in a transition, between jobs, or in an unusually hard season at work, answer based on what's true right now. That context matters, and you can name it when you meet.",
    questions:[
-    {t:"I have a sense that God is personally watching the details of my life — like a good friend watching things unfold with great interest.",self:false},
-    {t:"God delights in who I am, beyond what I do or produce.",self:false},
-    {t:"When I pray, I believe God will answer and things will get better.",self:true},
-    {t:"There are moments in my day where I'm aware that I am God's — not performing for Him, just His.",self:false},
-    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, mentally, relationally, and financially.",self:true},
-    {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
-    {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
-    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true},
-    {t:"When I think about the last several weeks, I have been actively pursuing God in my spiritual walk.",self:true},
-    {t:"I feel free to be fully myself with God — I'm not managing what God sees or presenting a version of me that is more acceptable.",self:true}
+    {t:"My colleagues track how I'm actually doing — beyond what I produce.",self:false},
+    {t:"I make genuine effort to connect with the people I work with, beyond getting through the day.",self:true},
+    {t:"The people I work with know what drives me, what I care about, what I'm made of.",self:false},
+    {t:"I can push back or raise concerns at work without bracing for consequences.",self:false},
+    {t:"I show up for my colleagues when things are hard for them, even when it costs me something.",self:true},
+    {t:"At the end of the day, I genuinely belong in this place — I'm more than a body in a seat.",self:false},
+    {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
+    {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
+    {t:"The work I do connects to something I'm actually built for — it's more than a job I'm good at.",self:false},
+    {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
+  ]},
+  {id:'friends',label:'Friends',icon:'ti-users',color:'#6bc45e',bar:'#6bc45e',
+   desc:"You may find yourself thinking of one specific person as you answer these. Notice that — and bring it to your conversation with Steve. A single friendship can shape these scores significantly, and that's worth talking about.",
+   questions:[
+    {t:"My friends could tell something was off with me even if I showed up smiling.",self:false},
+    {t:"I pursue my friendships with intention — I don't just wait for things to happen.",self:true},
+    {t:"My friends could describe what makes me come alive — and they'd be right.",self:false},
+    {t:"I can disappoint my friends or disagree with them without fearing I'll lose them.",self:false},
+    {t:"I'm the kind of friend who shows up when things are hard, not only when it's easy.",self:true},
+    {t:"My friends genuinely choose to have me around — I'm sought out, not just included.",self:false},
+    {t:"My friends show up for me without being asked — they notice and respond without me having to explain.",self:false},
+    {t:"My friends actively encourage what I'm most passionate about — they don't just nod along.",self:false},
+    {t:"I show up in my friendships with intention — I have a sense of what I'm called to be for the people I care about.",self:false},
+    {t:"My friends are there for me as a person — for who I am, beyond what I bring to the group.",self:true}
   ]},
   {id:'significant_other',label:'Significant Other',icon:'ti-heart',color:'#c97a5a',bar:'#c97a5a',
    desc:"Think about your relationship as it actually is today. If things are in a hard season, that will show — and that's exactly the kind of information worth bringing to a conversation. There are no right answers here.",
@@ -240,34 +254,6 @@ const REALMS=[
     {t:"I have a sense of purpose within my family that goes beyond providing or showing up.",self:false},
     {t:"I feel free to be myself in my family — my value isn't tied to what I do or the role I fill.",self:true}
   ]},
-  {id:'friends',label:'Friends',icon:'ti-users',color:'#6bc45e',bar:'#6bc45e',
-   desc:"You may find yourself thinking of one specific person as you answer these. Notice that — and bring it to your conversation with Steve. A single friendship can shape these scores significantly, and that's worth talking about.",
-   questions:[
-    {t:"My friends could tell something was off with me even if I showed up smiling.",self:false},
-    {t:"I pursue my friendships with intention — I don't just wait for things to happen.",self:true},
-    {t:"My friends could describe what makes me come alive — and they'd be right.",self:false},
-    {t:"I can disappoint my friends or disagree with them without fearing I'll lose them.",self:false},
-    {t:"I'm the kind of friend who shows up when things are hard, not only when it's easy.",self:true},
-    {t:"My friends genuinely choose to have me around — I'm sought out, not just included.",self:false},
-    {t:"My friends show up for me without being asked — they notice and respond without me having to explain.",self:false},
-    {t:"My friends actively encourage what I'm most passionate about — they don't just nod along.",self:false},
-    {t:"I show up in my friendships with intention — I have a sense of what I'm called to be for the people I care about.",self:false},
-    {t:"My friends are there for me as a person — for who I am, beyond what I bring to the group.",self:true}
-  ]},
-  {id:'work',label:'Work / School',icon:'ti-briefcase',color:'#e8d7a0',bar:'#e8d7a0',
-   desc:"If you're in a transition, between jobs, or in an unusually hard season at work, answer based on what's true right now. That context matters, and you can name it when you meet.",
-   questions:[
-    {t:"My colleagues track how I'm actually doing — beyond what I produce.",self:false},
-    {t:"I make genuine effort to connect with the people I work with, beyond getting through the day.",self:true},
-    {t:"The people I work with know what drives me, what I care about, what I'm made of.",self:false},
-    {t:"I can push back or raise concerns at work without bracing for consequences.",self:false},
-    {t:"I show up for my colleagues when things are hard for them, even when it costs me something.",self:true},
-    {t:"At the end of the day, I genuinely belong in this place — I'm more than a body in a seat.",self:false},
-    {t:"Someone at work has gone out of their way for me — not because it was easy, but because they chose to.",self:false},
-    {t:"My colleagues know what I care about beyond this job — my bigger passions and sense of calling.",self:false},
-    {t:"The work I do connects to something I'm actually built for — it's more than a job I'm good at.",self:false},
-    {t:"I feel free to be myself at work — my value isn't tied to what I produce or perform.",self:true}
-  ]},
   {id:'community',label:'Community',icon:'ti-building-community',color:'#c4a882',bar:'#c4a882',
    desc:"If you don't feel strongly connected to a community right now, answer honestly from that place. Absence is information too — and it's not a verdict on you.",
    questions:[
@@ -281,7 +267,22 @@ const REALMS=[
     {t:"I could be vulnerable in this community — share something real — and be received with grace.",self:false},
     {t:"I have a contribution in this community that fits who I actually am — I'm here on purpose.",self:false},
     {t:"In this community, I don't have to perform to belong — I'm valued for who I am, not what I do.",self:true}
-  ]}
+  ]},
+  {id:'god',label:'Relationship with God',icon:'ti-star',color:'#c4a882',bar:'#c4a882',
+   desc:"Answer based on what is actually true right now — not what it used to be, not what you think it should be. God already knows. Your honesty here is more useful than a polished answer.",
+   questions:[
+    {t:"I have a sense that God is personally watching the details of my life — like a good friend watching things unfold with great interest.",self:false},
+    {t:"God delights in who I am, beyond what I do or produce.",self:false},
+    {t:"When I pray, I believe God will answer and things will get better.",self:true},
+    {t:"There are moments in my day where I'm aware that I am God's — not performing for Him, just His.",self:false},
+    {t:"I am always looking to God to provide for me emotionally, spiritually, physically, mentally, relationally, and financially.",self:true},
+    {t:"Even when things are hard or uncertain, I have a deep sense that God can be trusted — He is working something good.",self:false},
+    {t:"I am not burdened with guilt and shame — I experience great freedom in my relationship with God.",self:false},
+    {t:"God has called me to something — I know what it is, and I'm taking steps toward it.",self:true},
+    {t:"When I think about the last several weeks, I have been actively pursuing God in my spiritual walk.",self:true},
+    {t:"I feel free to be fully myself with God — I'm not managing what God sees or presenting a version of me that is more acceptable.",self:true}
+  ]},
+
 ];
 
 const WARNINGS=[
@@ -542,7 +543,7 @@ function submitGate(){
       function rt(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There';}
       function emailBar(pct){const col=dc(pct);const filled=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px;font-size:13px">'+'█'.repeat(filled)+'<span style="opacity:.2">'+'█'.repeat(10-filled)+'</span></span>';}
       function scoreRow(label,pct,tagFn){if(!pct&&pct!==0)return '';const col=dc(pct);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825;width:180px">'+label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+emailBar(pct)+'</td><td style="padding:8px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825;white-space:nowrap">'+tagFn(pct)+'</td></tr>';}
-      const realmOrder=['god','significant_other','family','friends','work','community'];
+      const realmOrder=['work','friends','significant_other','family','community','god'];
       const realmLabels={god:'Relationship with God',significant_other:'Significant Other',family:'Family',friends:'Friends',work:'Work / School',community:'Community'};
       const realm=scores.realm;
       const realmRows=realmOrder.filter(id=>realm[id]&&realm[id].answered>0).map(id=>scoreRow(realmLabels[id],realm[id].overall,rt)).join('');
