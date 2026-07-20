@@ -287,7 +287,7 @@ const REALMS=[
 
 const WARNINGS=[
   {id:'invisible',title:'Working in the Shadows',subtitle:"You're giving but not being seen",severity:'red',icon:'ti-eye-off',
-   trigger:(s)=>s.outward<60,
+   trigger:(s)=>s.outward<60&&s.self>s.outward,
    text:"You are giving more than you are being seen. Something in you is working hard — showing up, producing, serving — but the people around you aren't really noticing you in the process. Just your output. This is one of the quietest and most draining forms of invisibility, because it can go unnoticed for years. You may have started to wonder whether it's even worth trying to be known. It is. And it's not your fault this gap exists — but it does need attention."},
   {id:'surface',title:'The Familiar Stranger',subtitle:'Present but not truly known',severity:'red',icon:'ti-ripple',
    trigger:(s,realm)=>Object.values(realm).filter(r=>r.overall<60&&r.answered>0).length>=2,
