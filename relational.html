@@ -661,11 +661,40 @@ function renderResults(scores){
   const lowestRealm=realmsSorted[0];
   const lowestDim=dimScores.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
   const gapRealm=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).map(r=>({label:r.label,gap:Math.abs(realm[r.id].self-realm[r.id].outward)})).sort((a,b)=>b.gap-a.gap)[0];
-  const bullets=[];
-  if(lowestRealm)bullets.push('Your lowest relational score is <strong style="color:#e8d7a0">'+lowestRealm.label+'</strong>.');
-  if(lowestDim)bullets.push('Across all your relationship needs, your lowest need is <strong style="color:#e8d7a0">'+lowestDim.name+'</strong>.');
-  if(gapRealm&&gapRealm.gap>=10)bullets.push('For your relationship engagement, <strong style="color:#e8d7a0">'+gapRealm.label+'</strong> has the greatest gap between how you engage and how they engage you.');
-  const bulletHtml=bullets.map(b=>'<li style="font-size:.92rem;color:#a09890;line-height:1.9;margin-bottom:.5rem">'+b+'</li>').join('');
+
+  // ── WARNINGS — computed above, now actually rendered ──
+  const warningColors={red:'#c97a5a',amber:'#d4a35a'};
+  const warningsHtml=warnings.length?('<div class="section-label">Worth Naming</div>'
+    +'<div style="margin-bottom:1.5rem">'
+    +warnings.map(w=>'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.12);border-left:3px solid '+warningColors[w.severity]+';border-radius:4px;padding:1.5rem 1.75rem;margin-bottom:.85rem">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem"><i class="ti '+w.icon+'" style="color:'+warningColors[w.severity]+';font-size:18px"></i><h3 style="margin:0;color:#f0e8df;font-size:1.15rem">'+w.title+'</h3></div>'
+      +'<div style="font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:'+warningColors[w.severity]+';margin-bottom:.75rem">'+w.subtitle+'</div>'
+      +'<p style="font-size:.9rem;color:#c0b8b0;line-height:1.9;margin:0;max-width:none">'+w.text+'</p>'
+      +'</div>').join('')
+    +'</div>') : '';
+
+  // ── REALM PATTERNS — the specific Mutual/Disconnected/Giving More/Holding Back read per realm ──
+  const patternCards=ar.map(r=>{
+    const s=realm[r.id];
+    const p=getPattern(s.outward,s.self,r.id);
+    const patternColor={open:'#6bc45e',disconnected:'#c97a5a',giver:'#d4a35a',guarded:'#d4a35a',developing:'#8AACCB'}[p.key]||'#8AACCB';
+    return '<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:.75rem">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:8px">'
+      +'<div style="display:flex;align-items:center;gap:8px"><i class="ti '+r.icon+'" style="color:'+r.color+';font-size:16px"></i><strong style="color:#f0e8df;font-size:.95rem">'+r.label+'</strong></div>'
+      +'<span style="font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:'+patternColor+';background:rgba(255,255,255,.03);padding:3px 10px;border-radius:3px">'+p.name+'</span>'
+      +'</div>'
+      +'<p style="font-size:.85rem;color:#a09890;line-height:1.85;margin:0;max-width:none">'+p.desc+'</p>'
+      +'</div>';
+  }).join('');
+  const patternsHtml=patternCards?('<div class="section-label">Realm by Realm</div><div style="margin-bottom:1.5rem">'+patternCards+'</div>'):'';
+
+  // ── ACTION PLAN — upgraded from thin bullets to the full getActionPlan() output ──
+  const actionSteps=getActionPlan(scores);
+  const actionPlanHtml=actionSteps.map((step,i)=>'<div style="display:flex;gap:1.1rem;margin-bottom:1.1rem;align-items:flex-start;text-align:left">'
+    +'<div style="width:30px;height:30px;border-radius:50%;background:rgba(196,168,130,.12);border:1px solid rgba(196,168,130,.3);color:#c4a882;font-family:Cormorant Garamond,serif;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(i+1)+'</div>'
+    +'<div><div style="color:#e8d7a0;font-size:.95rem;font-weight:500;margin-bottom:.3rem">'+step.title+'</div><p style="font-size:.85rem;color:#a09890;line-height:1.85;margin:0;max-width:none">'+step.text+'</p></div>'
+    +'</div>').join('');
+
   document.getElementById('app').innerHTML='<div style="max-width:860px;margin:0 auto;padding:3rem 2rem 5rem"><div class="results-page">'
     +'<div style="padding:1.5rem 0 1rem;border-bottom:1px solid rgba(196,168,130,.1);margin-bottom:1.5rem"><p style="font-size:.95rem;color:#a09890;line-height:1.9;margin:0;font-family:Cormorant Garamond,serif;font-style:italic">Thank you, '+(userName||'friend')+'. These are your results at this point in time.</p></div>'
     +'<div class="results-hero"><h2>'+(userName?userName+"'s":'Your')+' Relational Results</h2><p>An honest picture of how you are connected to the people in your life.</p></div>'
@@ -675,7 +704,9 @@ function renderResults(scores){
     +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
     +'<div class="section-label">Heart Engagement Equity</div>'
     +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
-    +'<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3><ul style="text-align:left;max-width:520px;margin:0 auto 1.5rem;padding-left:1.25rem">'+bulletHtml+'</ul></div>'
+    +warningsHtml
+    +patternsHtml
+    +'<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3><div style="max-width:520px;margin:0 auto 1rem;text-align:left">'+actionPlanHtml+'</div></div>'
     +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 48 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
     +'<div class="discovery-card"><h3>Once you\'ve completed both assessments.</h3><p>When you\'ve finished the Interior Health Assessment, set up a Discovery Call. Steve will bring both sets of scores together and walk through the complete picture with you — no pressure, no agenda, just an honest conversation.</p><a href="mailto:admin@boldhearts.org?subject=Discovery Call — Assessments Complete&body=Hi Steve, I have completed both assessments and would love to schedule a Discovery Call." class="discovery-btn">Set Up a Discovery Call</a><div class="discovery-email">or email directly at <a href="mailto:admin@boldhearts.org">admin@boldhearts.org</a></div></div>'
     +'<button class="retake-btn" onclick="retake()">&#8592; Retake Assessment</button></div></div>';
