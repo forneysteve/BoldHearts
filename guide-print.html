@@ -150,12 +150,13 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
   .doc-title{font-size:1.5rem}
 }
 @media print{
-  body{padding:.5rem;max-width:none}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important}
+  body{padding:.5rem;max-width:none;background:#f5f0e8 !important}
   .no-print{display:none}
   .print-btn{display:none}
 
   /* Force page break after intro */
-  .purpose-block{break-after:page}
+  .purpose-block{break-inside:avoid}
 
   /* Keep together */
   .doc-header{break-inside:avoid}
@@ -329,7 +330,7 @@ function renderGuide(data) {
     {num:'07', name:'Calling / Purpose',    desc:'Relationships engage who you are built to be'},
     {num:'08', name:'Freedom to Be Myself', desc:'Valued for who you are, not what you produce'},
   ];
-  const aboutRelationalHtml = '<div class="section-header" style="break-before:page">About Your Relational Scores</div>'
+  const aboutRelationalHtml = '<div class="section-header">About Your Relational Scores</div>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart was made to pump — to move blood between cells and organs. Without that interaction between the heart and the rest of the body, there is death. Similarly, the Relational Assessment is built to understand our interactions within our spheres. It measures the interaction between you and God, you and your significant others, as well as others. It measures the quality of the flow in those relationships, whether something real is moving between you and those in your life.</p>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.25rem;max-width:none">Here are the needs within those relationships that were measured in the assessment.</p>'
     + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.25rem">'
@@ -355,7 +356,7 @@ function renderGuide(data) {
     {num:'05', name:'Direction',  desc:'Can I see where this emotion is pointing me?'},
     {num:'06', name:'Peace',      desc:'Can I let this emotion come and go without trying to control it?'},
   ];
-  const aboutInteriorHtml = '<div class="section-header" style="break-before:page">About Your Interior Scores</div>'
+  const aboutInteriorHtml = '<div class="section-header">About Your Interior Scores</div>'
     + '<div style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.5rem">'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart has substance — muscle, fiber, tissue, weight. The Interior Assessment measures what you are carrying. Not just whether an emotion is present, but how processed it is — how far it has moved through the natural arc that healthy emotional maturity follows.</p>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Grief, shame, fear, anger, desire, love — each one is scored not for its presence or absence, but for the quality of your relationship with it. A high score does not mean you carry more. It means what you carry has more room to move. Each emotion is measured across six postures — six stages of the movement from raw experience toward integration.</p>'
@@ -392,14 +393,14 @@ function renderGuide(data) {
   const summaryHtml = '';
 
   // ── RELATIONAL CHARTS ─────────────────────────────────────
-  const relChartsHtml = '<div class="section-header" style="break-before:page">Relational Engagement Scores</div>'
+  const relChartsHtml = '<div class="section-header">Relational Engagement Scores</div>'
     + '<div class="charts-grid">'
     + '<div class="chart-card"><div class="chart-label">By Relationship</div><div class="chart-wrap" style="height:160px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
     + '<div class="chart-card"><div class="chart-label">By Need</div><div class="chart-wrap" style="height:160px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
     + '</div>';
 
   // ── INTERIOR CHARTS ───────────────────────────────────────
-  const intChartsHtml = '<div class="section-header" style="break-before:page">Interior Health</div>'
+  const intChartsHtml = '<div class="section-header">Interior Health</div>'
     + '<div class="charts-grid">'
     + '<div class="chart-card"><div class="chart-label">By Emotion</div><div class="chart-wrap" style="height:160px"><canvas id="themeChart" role="img" aria-label="Interior scores by theme"></canvas></div></div>'
     + '<div class="chart-card"><div class="chart-label">By Posture</div><div class="chart-wrap" style="height:160px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
@@ -714,7 +715,7 @@ function renderGuide(data) {
         + '</tr>';
     }).join('');
 
-    relMatrixHtml = '<div class="section-header" style="break-before:page">Relational Scores at a Glance</div>'
+    relMatrixHtml = '<div class="section-header">Relational Scores at a Glance</div>'
       + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each cell shows how that relationship is scoring across each of the eight heart needs. Green is healthy, gold is developing, red is worth attention.</div>'
       + '<div style="overflow-x:auto;margin-bottom:2rem">'
       + '<table style="width:100%;border-collapse:collapse;font-size:.72rem"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>'
@@ -775,11 +776,11 @@ function renderGuide(data) {
     : '';
 
   const detailBreakdownHtml = (relDimCardHtml||themeCardHtml||postureCardHtml)
-    ? '<div class="section-header" style="break-before:page">Complete Score Breakdown</div>'
+    ? '<div class="section-header">Complete Score Breakdown</div>'
       +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.75rem;width:100%">'
       +realmCardsHtml
       +'</div>'
-      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem;break-before:page;width:100%">'
+      +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:2rem;width:100%">'
       +relDimCardHtml+themeCardHtml+postureCardHtml
       +'</div>'
     : '';
@@ -1046,7 +1047,7 @@ function renderGuide(data) {
       practices:        'assets/images/noverodus-climber-5051847_1920.jpg'
     };
 
-    const bigHeader = '<div class="section-header" style="break-before:page">' + (sectionHeaders[s.id] || s.label) + '</div>';
+    const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
 
     // ── SCORE PILLS per section ──────────────────────────────
     let sectionPillsHtml = '';
@@ -1342,14 +1343,32 @@ function renderGuide(data) {
       }
     };
     if(document.getElementById('realmChart')) {
-      new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['God','Significant Other','Family','Friends','Work','Community'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts });
-      new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Love'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts });
-      new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling / Purpose','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} });
-      new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts });
+      window.__bhCharts = [
+        new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['God','Significant Other','Family','Friends','Work','Community'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts }),
+        new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Love'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts }),
+        new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling / Purpose','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} }),
+        new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts })
+      ];
     }
   }, 100);
   // Auto-print removed — guide displays as HTML
 }
+
+// Chart.js draws its canvas based on screen dimensions at render time. When the browser
+// switches to print layout (different width due to print margins/paper size), the already-drawn
+// canvas doesn't reflow on its own — it just gets clipped by its container. Forcing a resize
+// right before printing makes each chart redraw to fit the actual print-page width.
+window.addEventListener('beforeprint', function(){
+  if(window.__bhCharts){
+    window.__bhCharts.forEach(function(chart){
+      if(chart && typeof chart.resize === 'function'){
+        chart.resize();
+        chart.update('none');
+      }
+    });
+  }
+});
+
 
 function showError(msg) {
   document.getElementById('content').innerHTML = '<div class="error"><p>' + msg + '</p></div>';
