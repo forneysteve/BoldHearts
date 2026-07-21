@@ -1354,6 +1354,28 @@ function renderGuide(data) {
 }
 
 
+function resizeAndCompressImage(blob, maxWidth, quality){
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxWidth / img.naturalWidth);
+        const w = Math.max(1, Math.round(img.naturalWidth * scale));
+        const h = Math.max(1, Math.round(img.naturalHeight * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(objectUrl);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      } catch(e){ URL.revokeObjectURL(objectUrl); reject(e); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Image failed to load')); };
+    img.src = objectUrl;
+  });
+}
+
 async function downloadStaticGuide(){
   const contentEl = document.getElementById('content');
   if(!contentEl || !contentEl.innerHTML.trim()){
@@ -1367,23 +1389,19 @@ async function downloadStaticGuide(){
   try {
     const imgs = Array.from(contentEl.querySelectorAll('img'));
     const originalSrcs = imgs.map(img => img.getAttribute('src'));
-    const srcCache = {}; // resolved absolute URL -> base64 data URI
+    const srcCache = {}; // resolved absolute URL -> resized/compressed base64 data URI
+    const uniqueSrcs = [...new Set(imgs.map(img => img.src))];
 
-    for(let i = 0; i < imgs.length; i++){
-      const img = imgs[i];
-      const resolvedSrc = img.src; // browser-resolved absolute URL
-      if(srcCache[resolvedSrc]) continue;
-      if(btn) btn.textContent = '⬇ Embedding images... (' + (i+1) + '/' + imgs.length + ')';
+    for(let i = 0; i < uniqueSrcs.length; i++){
+      const resolvedSrc = uniqueSrcs[i];
+      if(btn) btn.textContent = '⬇ Embedding images... (' + (i+1) + '/' + uniqueSrcs.length + ')';
       try {
         const res = await fetch(resolvedSrc);
         const blob = await res.blob();
-        const dataUri = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-        srcCache[resolvedSrc] = dataUri;
+        // Resize to a max of 900px wide and re-encode as JPEG at 78% quality — these images
+        // never display larger than ~340px tall in the guide, so this keeps them sharp while
+        // cutting typical file size by 70-90% compared to embedding full-resolution originals.
+        srcCache[resolvedSrc] = await resizeAndCompressImage(blob, 900, 0.78);
       } catch(imgErr) {
         console.warn('Could not embed image (kept as external link instead):', resolvedSrc, imgErr);
       }
@@ -1413,6 +1431,11 @@ async function downloadStaticGuide(){
     imgs.forEach((img, i) => { img.setAttribute('src', originalSrcs[i]); });
 
     const blob = new Blob([staticHtml], {type:'text/html'});
+    const sizeMB = (blob.size / (1024*1024)).toFixed(1);
+    console.log('Exported guide file size:', sizeMB + 'MB');
+    if(blob.size > 20*1024*1024){
+      alert('Heads up: this file is ' + sizeMB + 'MB, which is still large for most email attachment limits (commonly 20-25MB). You may need to share it via a link (Google Drive, Dropbox) instead of attaching it directly.');
+    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
