@@ -290,11 +290,14 @@ const WARNINGS=[
    trigger:(s)=>s.outward<60&&s.self>s.outward,
    text:"You are giving more than you are being seen. Something in you is working hard — showing up, producing, serving — but the people around you aren't really noticing you in the process. Just your output. This is one of the quietest and most draining forms of invisibility, because it can go unnoticed for years. You may have started to wonder whether it's even worth trying to be known. It is. And it's not your fault this gap exists — but it does need attention."},
   {id:'surface',title:'The Familiar Stranger',subtitle:'Present but not truly known',severity:'red',icon:'ti-ripple',
-   trigger:(s,realm)=>Object.values(realm).filter(r=>r.overall<60&&r.answered>0).length>=2,
+   trigger:(s,realm)=>Object.values(realm).filter(r=>r.overall<60&&r.answered>0).length>=3,
    text:"Across multiple areas of your life, you are present — but not really known. People know your name, your role, maybe your routine. But the deeper currents of who you are — your fears, your longings, your story — are mostly going unseen. Surface living looks safe, but over time it becomes its own kind of loneliness. You can be in a room full of people who know you and still be completely alone. That experience has a name, and it doesn't have to be permanent."},
   {id:'oneway',title:'Giving Without Return',subtitle:"Giving more than you're receiving",severity:'amber',icon:'ti-arrow-narrow-right',
    trigger:(s)=>s.self>s.outward+15,
    text:"Your results suggest you are putting more into your relationships than you are receiving back. You initiate. You show up. You invest. But reciprocity is thin. This pattern is quietly exhausting, and over time it can lead to a kind of resigned withdrawal — where you stop reaching out because you've learned not to expect much back. What you're experiencing is real. It is also workable."},
+  {id:'depleted',title:'Not Much Left to Give',subtitle:'Others are reaching further than you are right now',severity:'amber',icon:'ti-battery-1',
+   trigger:(s)=>s.outward>s.self+15,
+   text:"Across your relationships, the people in your life may be reaching toward you more than you're reaching back right now. That's worth naming honestly — not as a character flaw, but as real information. This might be a season where you're carrying something hard, or simply don't have much capacity left to give. That's not a permanent condition, and it's not something to feel guilty about. It is worth naming out loud, though, especially to the people who keep showing up anyway."},
   {id:'shallow',title:'Guarded and Distant',subtitle:'Keeping people at a careful distance',severity:'amber',icon:'ti-lock',
    trigger:(s)=>s.self<60,
    text:"Your results suggest you may be keeping people at a careful distance — not out of coldness, but out of self-protection. You've learned, somewhere along the way, that being fully known carries risk. So you offer people a curated version of yourself: warm enough to connect, guarded enough to stay safe. It works — until you realize the safety comes at the cost of the very thing you're longing for. Real connection requires real risk."},
@@ -337,6 +340,15 @@ function calcScores(){
   return{realm,overall:allN>0?Math.round((allT/(allN*7))*100):0};
 }
 
+function fractionPhrase(count,total){
+  const frac=total>0?count/total:0;
+  if(frac>=0.99)return'every part';
+  if(frac>=0.78)return'the vast majority';
+  if(frac>=0.63)return'two-thirds';
+  if(frac>=0.55)return'the majority';
+  return'half';
+}
+
 function getWarnings(scores){
   const{realm,overall}=scores;
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
@@ -344,7 +356,17 @@ function getWarnings(scores){
   const outAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].outward,0)/ar.length):0;
   const voiceAvg=ar.length>0?Math.round(ar.reduce((a,r)=>{const v=answers[r.id+'_3'];return a+(v!==undefined?v:4);},0)/ar.length*(100/7)):50;
   const comp={overall,outward:outAvg,self:selfAvg,voice:voiceAvg};
-  return WARNINGS.filter(w=>w.trigger(comp,realm)).slice(0,4);
+  const fired=WARNINGS.filter(w=>w.trigger(comp,realm)).slice(0,4);
+  return fired.map(w=>{
+    if(w.id==='surface'){
+      const lowRealms=ar.filter(r=>realm[r.id].overall<60);
+      const count=lowRealms.length,total=ar.length;
+      const phrase=fractionPhrase(count,total);
+      const dynText="About "+phrase+" of your relational world — "+count+" of the "+total+" areas we asked about — is scoring as thin right now. That doesn't erase the relationship or two where you may already feel genuinely known. It does mean that across most of your life, the deeper currents of who you are — your fears, your longings, your story — are mostly going unseen. Surface living looks safe, but over time it becomes its own kind of loneliness. That experience has a name, and it doesn't have to be permanent.";
+      return{...w,text:dynText};
+    }
+    return w;
+  });
 }
 
 function getActionPlan(scores){
@@ -353,7 +375,10 @@ function getActionPlan(scores){
   const low=[...Object.entries(realm)].filter(([,s])=>s.overall>0).sort((a,b)=>a[1].overall-b[1].overall).slice(0,2).map(([id])=>REALMS.find(r=>r.id===id));
   const selfAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].self,0)/ar.length):50;
   const outAvg=ar.length>0?Math.round(ar.reduce((a,r)=>a+realm[r.id].outward,0)/ar.length):50;
+  const dimScores=calcDimScores(realm);
+  const lowestDim=dimScores.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
   const steps=[];
+  if(lowestDim)steps.push({title:'Pay attention to '+lowestDim.name,text:lowestDim.desc(lowestDim.score)+" Of everything this assessment measured, this is where the gap is widest — worth naming specifically in your own words, not just as a number."});
   if(outAvg<50)steps.push({title:'Name the gap out loud',text:"Start by simply acknowledging to yourself — and perhaps to one trusted person — that you are not as seen or known as you would like to be. Naming it isn't weakness. It's the first honest step toward something different."});
   if(selfAvg<50)steps.push({title:'Practice one small disclosure',text:"Choose one relationship where you've been guarded and share something real — not everything, just something true. Watch what happens. Most people discover the risk was smaller than the fear."});
   if(low.length>0)steps.push({title:'Give focused attention to '+low[0].label,text:"Your lowest scoring area is "+low[0].label+". That's not a verdict — it's a place to begin. Consider what one small, specific step toward deeper connection in that context might look like for you this month."});
@@ -617,14 +642,18 @@ const REALM_PATTERNS={
 };
 
 function getPattern(outward,self_,realmId){
-  const hiOut=outward>=65,loOut=outward<50,hiSelf=self_>=65,loSelf=self_<50;
   const rp=REALM_PATTERNS[realmId]||REALM_PATTERNS.friends;
+  const gap=self_-outward;
   let key,name,cls;
-  if(hiOut&&hiSelf){key='open';name='Mutual';cls='open';}
-  else if(loOut&&loSelf){key='disconnected';name='Disconnected';cls='disconnected';}
-  else if(loOut&&hiSelf){key='giver';name='Giving More Than Receiving';cls='giver';}
-  else if(hiOut&&loSelf){key='guarded';name='Holding Back';cls='guarded';}
-  else{key='developing';name='Still Developing';cls='guarded';}
+  if(Math.abs(gap)>=15){
+    if(gap>0){key='giver';name='Giving More Than Receiving';cls='giver';}
+    else{key='guarded';name='Holding Back';cls='guarded';}
+  }else{
+    const avg=(outward+self_)/2;
+    if(avg>=65){key='open';name='Mutual';cls='open';}
+    else if(avg<50){key='disconnected';name='Disconnected';cls='disconnected';}
+    else{key='developing';name='Still Developing';cls='guarded';}
+  }
   return{key,name,cls,desc:rp[key]};
 }
 
