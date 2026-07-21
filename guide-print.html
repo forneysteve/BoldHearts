@@ -60,7 +60,7 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 .score-low{color:#5B8DB0}
 
 /* ── SECTIONS ── */
-.section{margin-bottom:1.75rem;break-inside:avoid}
+.section{margin-bottom:1.75rem}
 .section-eyebrow{display:flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#c4a882;margin-bottom:.6rem;font-weight:500}
 .section-icon{font-size:1rem;line-height:1}
 .section-body{font-size:.88rem;color:#2a2218;line-height:1.95}
@@ -156,13 +156,12 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
   .print-btn{display:none}
 
   /* Force page break after intro */
-  .purpose-block{break-inside:avoid}
+  .purpose-block{}
 
   /* Keep together */
   .doc-header{break-inside:avoid}
   .scores-wrap{break-inside:avoid}
   .score-block{break-inside:avoid}
-  .section{break-inside:avoid}
   .practice{break-inside:avoid}
   .practices-wrap{break-inside:avoid}
   .closing-block{break-inside:avoid}
@@ -178,11 +177,11 @@ body{font-family:'Inter',sans-serif;font-weight:300;line-height:1.8;color:#2a221
 }
 @page{margin:1.8cm 2cm}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
 
 <button class="print-btn" onclick="window.print()">⬇ Save as PDF</button>
+<button class="print-btn no-print" id="download-html-btn" style="right:11.5rem" onclick="downloadStaticGuide()">⬇ Download HTML</button>
 <div class="guide-wrap"><div id="content">
   <div class="loading">
     <div>Building your guide...</div>
@@ -233,6 +232,7 @@ function fmtScore(val) {
 
 function renderGuide(data) {
   const { name, guide, a1, hs, date } = data;
+  window.__bhCurrentName = name || 'Guide';
   const today = (function() {
     const d = date ? new Date(date) : new Date();
     if(isNaN(d.getTime())) return new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
@@ -254,6 +254,33 @@ function renderGuide(data) {
     return v >= 80 ? 'Strong' : v >= 60 ? 'Functioning' : v >= 40 ? 'Weak' : v >= 20 ? 'Dormant' : 'Dead';
   }
   function barColor(v) { return v >= 80 ? '#C4A055' : v >= 60 ? '#B8AA7A' : v >= 40 ? '#8AACCB' : v >= 20 ? '#5B8DB0' : '#3A6D94'; }
+
+  // ── CSS-based bar charts — replaces Chart.js canvas charts, which don't reflow reliably for print ──
+  function cssVerticalBars(labels, vals, height) {
+    height = height || 130;
+    const bars = labels.map((label, i) => {
+      const v = vals[i] || 0;
+      const h = Math.max(2, Math.round((v / 100) * height));
+      return '<div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0">'
+        + '<div style="font-size:.55rem;color:#7a6a5a;margin-bottom:2px">' + (v>0?v+'%':'') + '</div>'
+        + '<div style="width:70%;height:' + h + 'px;background:' + barColor(v) + ';border-radius:2px 2px 0 0"></div>'
+        + '<div style="font-size:.55rem;color:#6a5a4a;margin-top:4px;text-align:center;line-height:1.2;word-break:break-word">' + label + '</div>'
+        + '</div>';
+    }).join('');
+    return '<div style="display:flex;align-items:flex-end;height:' + (height + 30) + 'px;gap:4px;padding:0 2px;border-bottom:1px solid #e8d8c0">' + bars + '</div>';
+  }
+
+  function cssHorizontalBars(labels, vals) {
+    const rows = labels.map((label, i) => {
+      const v = vals[i] || 0;
+      return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">'
+        + '<div style="width:72px;flex-shrink:0;font-size:.55rem;color:#6a5a4a;text-align:right;line-height:1.2">' + label + '</div>'
+        + '<div style="flex:1;height:8px;background:#ede8e0;border-radius:2px;overflow:hidden"><div style="width:' + v + '%;height:100%;background:' + barColor(v) + '"></div></div>'
+        + '<div style="width:26px;flex-shrink:0;font-size:.55rem;color:' + barColor(v) + ';font-weight:500">' + (v>0?v+'%':'') + '</div>'
+        + '</div>';
+    }).join('');
+    return '<div style="padding:4px 2px">' + rows + '</div>';
+  }
   function makeColors(arr) { return arr.map(barColor); }
 
   function numVal(s) {
@@ -379,7 +406,7 @@ function renderGuide(data) {
 
 
   // ── OPENING INTRO BLOCK ──────────────────────────────────
-  const introHtml = '<div style="margin-bottom:2rem;break-inside:avoid">'
+  const introHtml = '<div style="margin-bottom:2rem">'
     + '<div class="section-header">Purpose of This Assessment</div>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">Thank you for taking the time to complete both assessments. What you have done here is not small — looking honestly at your own heart takes courage, and we do not take lightly that you gave it.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'
@@ -395,15 +422,15 @@ function renderGuide(data) {
   // ── RELATIONAL CHARTS ─────────────────────────────────────
   const relChartsHtml = '<div class="section-header">Relational Engagement Scores</div>'
     + '<div class="charts-grid">'
-    + '<div class="chart-card"><div class="chart-label">By Relationship</div><div class="chart-wrap" style="height:160px"><canvas id="realmChart" role="img" aria-label="Relational scores by realm"></canvas></div></div>'
-    + '<div class="chart-card"><div class="chart-label">By Need</div><div class="chart-wrap" style="height:160px"><canvas id="relDimChart" role="img" aria-label="Relational dimensions"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">By Relationship</div>' + cssVerticalBars(['God','Sig. Other','Family','Friends','Work','Community'], realmVals) + '</div>'
+    + '<div class="chart-card"><div class="chart-label">By Need</div>' + cssHorizontalBars(['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], relDimVals) + '</div>'
     + '</div>';
 
   // ── INTERIOR CHARTS ───────────────────────────────────────
   const intChartsHtml = '<div class="section-header">Interior Health</div>'
     + '<div class="charts-grid">'
-    + '<div class="chart-card"><div class="chart-label">By Emotion</div><div class="chart-wrap" style="height:160px"><canvas id="themeChart" role="img" aria-label="Interior scores by theme"></canvas></div></div>'
-    + '<div class="chart-card"><div class="chart-label">By Posture</div><div class="chart-wrap" style="height:160px"><canvas id="intDimChart" role="img" aria-label="Interior dimensions"></canvas></div></div>'
+    + '<div class="chart-card"><div class="chart-label">By Emotion</div>' + cssVerticalBars(['Grief','Shame','Fear','Anger','Desire','Love'], themeVals) + '</div>'
+    + '<div class="chart-card"><div class="chart-label">By Posture</div>' + cssHorizontalBars(['Awareness','Honesty','Movement','Safety','Direction','Peace'], intDimVals) + '</div>'
     + '</div>';
 
   const dashHtml = summaryHtml;
@@ -1323,52 +1350,39 @@ function renderGuide(data) {
     + '<p style="margin-top:.4rem">This document is the exclusive intellectual property of The BoldHearts Group LLC. It is prepared solely for the individual named herein and may not be reproduced, distributed, shared, or used in any form without the express written authorization of The BoldHearts Group LLC. Unauthorized use is strictly prohibited.</p>'
     + '<p style="margin-top:.4rem">Spiritual Direction &nbsp;·&nbsp; Pastoral Counseling &nbsp;·&nbsp; Leadership Soul Care &nbsp;·&nbsp; boldhearts.org</p>'
     + '</div>';
-
-  // Build charts after DOM is set
-  setTimeout(() => {
-    const baseOpts = {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw + '%' } } },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#7a6a5a' } },
-        y: { min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 }, color: '#7a6a5a', callback: v => v + '%' } }
-      }
-    };
-    const horizOpts = {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw + '%' } } },
-      scales: {
-        x: { min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 }, color: '#7a6a5a', callback: v => v + '%' } },
-        y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#7a6a5a' } }
-      }
-    };
-    if(document.getElementById('realmChart')) {
-      window.__bhCharts = [
-        new Chart(document.getElementById('realmChart'), { type:'bar', data:{ labels:['God','Significant Other','Family','Friends','Work','Community'], datasets:[{ data:realmVals, backgroundColor:makeColors(realmVals), borderRadius:3 }] }, options:baseOpts }),
-        new Chart(document.getElementById('themeChart'), { type:'bar', data:{ labels:['Grief','Shame','Fear','Anger','Desire','Love'], datasets:[{ data:themeVals, backgroundColor:makeColors(themeVals), borderRadius:3 }] }, options:baseOpts }),
-        new Chart(document.getElementById('relDimChart'), { type:'bar', data:{ labels:['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling / Purpose','Freedom'], datasets:[{ data:relDimVals, backgroundColor:makeColors(relDimVals), borderRadius:3 }] }, options:{...horizOpts, scales:{...horizOpts.scales, x:{...horizOpts.scales.x, ticks:{...horizOpts.scales.x.ticks, font:{size:8}}}, y:{...horizOpts.scales.y, ticks:{...horizOpts.scales.y.ticks, font:{size:8}}}}} }),
-        new Chart(document.getElementById('intDimChart'), { type:'bar', data:{ labels:['Awareness','Honesty','Movement','Safety','Direction','Peace'], datasets:[{ data:intDimVals, backgroundColor:makeColors(intDimVals), borderRadius:3 }] }, options: horizOpts })
-      ];
-    }
-  }, 100);
   // Auto-print removed — guide displays as HTML
 }
 
-// Chart.js draws its canvas based on screen dimensions at render time. When the browser
-// switches to print layout (different width due to print margins/paper size), the already-drawn
-// canvas doesn't reflow on its own — it just gets clipped by its container. Forcing a resize
-// right before printing makes each chart redraw to fit the actual print-page width.
-window.addEventListener('beforeprint', function(){
-  if(window.__bhCharts){
-    window.__bhCharts.forEach(function(chart){
-      if(chart && typeof chart.resize === 'function'){
-        chart.resize();
-        chart.update('none');
-      }
-    });
-  }
-});
 
+function downloadStaticGuide(){
+  const contentEl = document.getElementById('content');
+  if(!contentEl || !contentEl.innerHTML.trim()){
+    alert('No guide is currently displayed to download.');
+    return;
+  }
+  const styleEl = document.querySelector('style');
+  const styleBlock = styleEl ? styleEl.outerHTML : '';
+  const name = window.__bhCurrentName || 'Guide';
+  const staticHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n'
+    + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+    + '<title>Your Full Heart Report — ' + name + '</title>\n'
+    + '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+    + '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">\n'
+    + styleBlock + '\n'
+    + '<style>.print-btn{display:none !important}</style>\n'
+    + '</head>\n<body>\n'
+    + '<div class="guide-wrap"><div id="content">' + contentEl.innerHTML + '</div></div>\n'
+    + '</body>\n</html>';
+  const blob = new Blob([staticHtml], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'BoldHearts-Guide-' + name.replace(/[^a-zA-Z0-9]+/g,'-') + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 function showError(msg) {
   document.getElementById('content').innerHTML = '<div class="error"><p>' + msg + '</p></div>';
