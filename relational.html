@@ -122,6 +122,29 @@ footer p{color:#5a5550;font-size:.8rem;letter-spacing:.06em;max-width:none;margi
 footer a{color:#6a6258}
 footer a:hover{color:#e8d7a0}
 .divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,215,160,.15),transparent)}
+.bar-row-indent{display:grid;grid-template-columns:150px 1fr 100px;align-items:center;column-gap:.75rem;padding:.4rem .75rem .4rem 1.5rem;border-bottom:1px solid rgba(232,215,160,.04)}
+.bri-label{font-size:.75rem;color:#8a8078;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bri-tag{text-align:right;font-size:.72rem;font-weight:500;white-space:nowrap}
+.bar-row-main{display:grid;grid-template-columns:160px 1fr 140px;align-items:center;column-gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)}
+.brm-label{font-size:.82rem;color:#c0b8b0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brm-tag{text-align:right;font-size:.78rem;font-weight:500;white-space:nowrap}
+@media(max-width:600px){
+  .bar-row-indent,.bar-row-main{
+    grid-template-columns:1fr auto;
+    grid-template-areas:"label label" "track tag";
+    row-gap:.35rem;
+    padding:.5rem .5rem;
+  }
+  .bri-label,.brm-label{
+    grid-area:label;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+    line-height:1.3;
+  }
+  .bri-track,.brm-track{grid-area:track}
+  .bri-tag,.brm-tag{grid-area:tag;padding-left:.5rem}
+}
 .nav-dropdown{position:relative}
 .nav-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid rgba(232,215,160,.15);border-radius:4px;min-width:220px;padding:.5rem 0;z-index:1001;backdrop-filter:blur(12px)}
 .nav-dropdown>a{padding-bottom:12px;margin-bottom:-12px}
@@ -687,26 +710,26 @@ function calcDimScores(realm){
 function barRowIndent(label,pct,tag,col){
   const fillW=Math.round(pct);
   const ticks=[20,40,60,80].map(t=>'<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(232,215,160,.25);z-index:2"></div>').join('');
-  return '<div style="display:grid;grid-template-columns:150px 1fr 100px;align-items:center;column-gap:.75rem;padding:.4rem .75rem .4rem 1.5rem;border-bottom:1px solid rgba(232,215,160,.04)">'
-    +'<div style="font-size:.75rem;color:#8a8078;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+label+'</div>'
-    +'<div style="position:relative;height:10px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+  return '<div class="bar-row-indent">'
+    +'<div class="bri-label">'+label+'</div>'
+    +'<div class="bri-track" style="position:relative;height:10px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
     +ticks
     +'<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px"></div>'
     +'</div>'
-    +'<div style="text-align:right;font-size:.72rem;font-weight:500;color:'+col+'">'+tag+'</div>'
+    +'<div class="bri-tag" style="color:'+col+'">'+tag+'</div>'
     +'</div>';
 }
 
 function barRow(label,pct,tag,col){
   const fillW=Math.round(pct);
   const ticks=[20,40,60,80].map(t=>'<div style="position:absolute;left:'+t+'%;top:0;width:1px;height:100%;background:rgba(232,215,160,.25);z-index:2"></div>').join('');
-  return '<div style="display:grid;grid-template-columns:160px 1fr 140px;align-items:center;column-gap:.75rem;padding:.65rem .75rem;border-bottom:1px solid rgba(232,215,160,.06)">'
-    +'<div style="font-size:.82rem;color:#c0b8b0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+label+'</div>'
-    +'<div style="position:relative;height:14px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
+  return '<div class="bar-row-main">'
+    +'<div class="brm-label">'+label+'</div>'
+    +'<div class="brm-track" style="position:relative;height:14px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(45deg,#2a2520,#2a2520 3px,#1e1916 3px,#1e1916 8px)">'
     +ticks
     +'<div style="position:absolute;left:0;top:0;height:100%;width:'+fillW+'%;background:'+col+';border-radius:3px 0 0 3px;transition:width .8s ease"></div>'
     +'</div>'
-    +'<div style="text-align:right;font-size:.78rem;font-weight:500;color:'+col+'">'+tag+'</div>'
+    +'<div class="brm-tag" style="color:'+col+'">'+tag+'</div>'
     +'</div>';
 }
 
