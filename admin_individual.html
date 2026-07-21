@@ -408,6 +408,90 @@ function identityScore(val, reverse) {
   return Math.round((scored/7)*100);
 }
 
+const WARNINGS=[
+  {id:'invisible',title:'Working in the Shadows',subtitle:"You're giving but not being seen",severity:'red',
+   trigger:(s)=>s.outward<60&&s.self>s.outward,
+   text:"You are giving more than you are being seen. Something in you is working hard — showing up, producing, serving — but the people around you aren't really noticing you in the process. Just your output. This is one of the quietest and most draining forms of invisibility, because it can go unnoticed for years. You may have started to wonder whether it's even worth trying to be known. It is. And it's not your fault this gap exists — but it does need attention."},
+  {id:'surface',title:'The Familiar Stranger',subtitle:'Present but not truly known',severity:'red',
+   trigger:(s,realmArr)=>realmArr.filter(r=>r.overall<60).length>=3,
+   text:null},
+  {id:'oneway',title:'Giving Without Return',subtitle:"Giving more than you're receiving",severity:'amber',
+   trigger:(s)=>s.self>s.outward+15,
+   text:"Your results suggest you are putting more into your relationships than you are receiving back. You initiate. You show up. You invest. But reciprocity is thin. This pattern is quietly exhausting, and over time it can lead to a kind of resigned withdrawal — where you stop reaching out because you've learned not to expect much back. What you're experiencing is real. It is also workable."},
+  {id:'depleted',title:'Not Much Left to Give',subtitle:'Others are reaching further than you are right now',severity:'amber',
+   trigger:(s)=>s.outward>s.self+15,
+   text:"Across your relationships, the people in your life may be reaching toward you more than you're reaching back right now. That's worth naming honestly — not as a character flaw, but as real information. This might be a season where you're carrying something hard, or simply don't have much capacity left to give. That's not a permanent condition, and it's not something to feel guilty about. It is worth naming out loud, though, especially to the people who keep showing up anyway."},
+  {id:'shallow',title:'Guarded and Distant',subtitle:'Keeping people at a careful distance',severity:'amber',
+   trigger:(s)=>s.self<60,
+   text:"Your results suggest you may be keeping people at a careful distance — not out of coldness, but out of self-protection. You've learned, somewhere along the way, that being fully known carries risk. So you offer people a curated version of yourself: warm enough to connect, guarded enough to stay safe. It works — until you realize the safety comes at the cost of the very thing you're longing for. Real connection requires real risk."},
+  {id:'shrinking',title:'Swallowing Your Words',subtitle:'Holding back what you really think',severity:'amber',
+   trigger:(s)=>s.voice<45,
+   text:"In more than one area of your life, you may be holding back what you actually think and carry. Maybe you've learned that speaking up costs more than staying quiet. Maybe you've been dismissed enough times that you've stopped trying. Whatever the reason, the result is the same: a real part of you is going unheard, and over time that part gets quieter and quieter. A voice that goes unused doesn't just get ignored — it starts to disappear. That matters. You were made to speak."}
+];
+
+function fractionPhrase(count,total){
+  const frac=total>0?count/total:0;
+  if(frac>=0.99)return'every part';
+  if(frac>=0.78)return'the vast majority';
+  if(frac>=0.63)return'two-thirds';
+  if(frac>=0.55)return'the majority';
+  return'half';
+}
+
+const REALM_PATTERNS={
+  work:{open:"Your colleagues are engaging you and you are engaging them. There is genuine mutuality here — people know something of the real you, and you are invested in them. That is not common.",giver:"You are showing up for your colleagues more than they are showing up for you. You invest, you notice, you care — but it may not be coming back in equal measure. That imbalance is worth paying attention to.",guarded:"The people at work may be reaching toward you, but you may be holding something back. Connection is available here — but you may not be fully walking through the door.",disconnected:"There is significant distance on both sides at work. You may be more like a function than a person here — and you may also be keeping your distance in return. Something needs to shift.",developing:"There is some real engagement at work, but it hasn't found its depth yet. Something is present — and something is also holding back. There is more possible here than you're currently experiencing."},
+  partner:{open:"You and your partner are genuinely showing up for each other. There is real mutuality here — you know each other and you are both investing in being known. This is the kind of intimacy most people quietly long for.",giver:"You are investing deeply in this relationship, but may not be equally known or pursued in return. You may be carrying more of the emotional weight than your partner realizes.",guarded:"Your partner may be reaching toward you — but something in you may be holding back from being fully known. The love may be present, but full intimacy requires letting someone see the parts you haven't shown yet.",disconnected:"There is real distance in this relationship right now — on both sides. This doesn't have to be permanent, but it does need honest attention. Distance this deep rarely closes on its own.",developing:"There is connection in this relationship, but it hasn't reached the depth it could. Something is present — and something is also being held back. There is more available here."},
+  family:{open:"Your family knows you and you are genuinely present with them. There is real mutuality here — not just shared history, but actual engagement with who you each are becoming.",giver:"You may be more invested in your family relationships than they are in knowing you. You show up, you initiate, you care — but the depth may not always come back.",guarded:"Your family may be more available to you than you're allowing yourself to receive. Something may be keeping you from fully letting your family in — perhaps old roles or old wounds.",disconnected:"There is significant distance in your family relationships right now — felt on both sides. Family disconnection can run deep, but it is also workable with the right kind of attention.",developing:"There is some genuine connection in your family, but it hasn't settled into depth yet. Old patterns, roles, or distance may be keeping things from going further."},
+  friends:{open:"Your friends are showing up for you and you are showing up for them. There is real reciprocity here — you are known, pursued, and genuinely invested. This is rare and worth protecting.",giver:"You may be a better friend than your friends are to you right now. You initiate, you invest, you show up — but the energy isn't coming back in equal measure. You may be the one keeping these friendships alive, and that gets quietly exhausting.",guarded:"Your friends may be more available to you than you're letting yourself receive. You might be present in your friendships without being fully known in them.",disconnected:"There is real distance in your friendships right now — on both sides. You may be going through the motions of friendship without much depth underneath. That doesn't have to stay this way.",developing:"There is something real in your friendships, but it hasn't reached depth yet. Some friendships take longer to root — but this one has more possible than you're currently experiencing."},
+  community:{open:"You are genuinely present in your community and your community is genuinely present with you. You are known here — not just recognized — and that kind of belonging is worth protecting.",giver:"You may be investing more in your community than your community is investing in you. You show up, you serve, you engage — but you may be more contributor than member who is truly known.",guarded:"Your community may be more open to you than you're allowing yourself to receive. You may be participating without truly belonging.",disconnected:"There is significant distance between you and your community right now. You may be an attendee rather than a member. Something needs to shift here.",developing:"There is some real connection in your community, but it hasn't taken root yet. Belonging in community takes time — but there is more available here than you may be experiencing."},
+  god:{open:"There is real, mutual engagement in your relationship with God. You are bringing your honest self and experiencing genuine connection in return. That kind of spiritual intimacy is something many people long for and never quite find.",giver:"You may be showing up in your faith — praying, seeking, engaging — but not experiencing much sense of God's presence or response in return. That can be a profoundly isolating place to be.",guarded:"There may be more available to you in your relationship with God than you're currently allowing yourself to receive. Something is keeping you at a careful distance.",disconnected:"There is significant distance in your relationship with God right now — felt on both sides. You may be going through the motions of faith without much lived experience of connection.",developing:"There is something real in your relationship with God, but it hasn't reached the depth it could. You may be in a season of seeking — present, but not yet fully known or knowing."}
+};
+
+function getPattern(outward,self_,realmKey){
+  const rp=REALM_PATTERNS[realmKey]||REALM_PATTERNS.friends;
+  const gap=self_-outward;
+  let key,name;
+  if(Math.abs(gap)>=15){
+    if(gap>0){key='giver';name='Giving More Than Receiving';}
+    else{key='guarded';name='Holding Back';}
+  }else{
+    const avg=(outward+self_)/2;
+    if(avg>=65){key='open';name='Mutual';}
+    else if(avg<50){key='disconnected';name='Disconnected';}
+    else{key='developing';name='Still Developing';}
+  }
+  return{key,name,desc:rp[key]};
+}
+
+const DIMS_DESC={
+  seen:{name:'Being Seen',desc:(p)=>p>=70?'People around you notice you — not just your output — and track how you\'re doing.':p>=45?'You are noticed some of the time, but your presence doesn\'t always register with those around you.':'You may often blend into the background, even in familiar spaces. Your presence goes largely untracked.'},
+  known:{name:'Being Known',desc:(p)=>p>=70?'The people in your life have a real and current picture of who you are.':p>=45?'Some people know parts of you, but the full picture of who you are remains largely unseen.':'You are carrying more of yourself alone than anyone around you knows. The real you is mostly hidden.'},
+  voice:{name:'Having a Voice',desc:(p)=>p>=70?'You have freedom to speak up and your perspective is genuinely engaged.':p>=45?'Your voice is heard sometimes, but you may hold back more than you know.':'You may have learned that speaking up costs more than staying quiet. Your voice is shrinking.'},
+  belonging:{name:'Belonging',desc:(p)=>p>=70?'You are genuinely wanted and at home in the key relationships of your life.':p>=45?'You have access to your relationships, but may not always be truly inside them.':'You are often on the edges — present, but not really included. That gap is real.'},
+  support:{name:'Receiving Support',desc:(p)=>p>=70?'People in your life show up for you when things are hard — not just when it\'s easy.':p>=45?'Some support is present, but you may not be confident others will show up when it counts.':'You may be used to handling hard things largely alone. The support around you is thinner than it should be.'},
+  trust:{name:'Trust & Safety',desc:(p)=>p>=70?'There is emotional safety to be imperfect and honest in your key relationships.':p>=45?'Some safety is present, but you likely still manage your image more than you\'d like.':'You are protecting yourself — and for good reason. But the cost is that you can\'t fully exhale around people.'},
+  calling:{name:'Calling / Purpose',desc:(p)=>p>=70?'You know what you are built for and the people around you know it and engage it.':p>=45?'You have some sense of calling, but it may not be clearly named or actively supported by those around you.':'The connection between who you are and what you do is thin or absent. That gap has a cost.'},
+  freedom:{name:'Freedom to Be Myself',desc:(p)=>p>=70?'You are free to be yourself in your key relationships — your value isn\'t tied to what you produce or perform.':p>=45?'You have some freedom to be yourself, but in certain contexts there is still pressure to perform or prove your worth.':'Your place in relationships may be conditional on what you do or produce. The freedom to simply be yourself is thin or absent.'}
+};
+
+function buildActionPlan(realmArr,selfAvg,outAvg,needsScores){
+  const answered=realmArr.filter(r=>r.overall>0);
+  const low=[...answered].sort((a,b)=>a.overall-b.overall).slice(0,2);
+  const steps=[];
+  if(needsScores){
+    const lowestNeed=Object.entries(needsScores).filter(([,v])=>v>0).sort((a,b)=>a[1]-b[1])[0];
+    if(lowestNeed){
+      const d=DIMS_DESC[lowestNeed[0]];
+      if(d)steps.push({title:'Pay attention to '+d.name,text:d.desc(lowestNeed[1])+" Of everything this assessment measured, this is where the gap is widest — worth naming specifically in your own words, not just as a number."});
+    }
+  }
+  if(outAvg<50)steps.push({title:'Name the gap out loud',text:"Start by simply acknowledging to yourself — and perhaps to one trusted person — that you are not as seen or known as you would like to be. Naming it isn't weakness. It's the first honest step toward something different."});
+  if(selfAvg<50)steps.push({title:'Practice one small disclosure',text:"Choose one relationship where you've been guarded and share something real — not everything, just something true. Watch what happens. Most people discover the risk was smaller than the fear."});
+  if(low.length>0)steps.push({title:'Give focused attention to '+low[0].label,text:"Your lowest scoring area is "+low[0].label+". That's not a verdict — it's a place to begin. Consider what one small, specific step toward deeper connection in that context might look like for you this month."});
+  steps.push({title:'Consider working with a guide',text:"These patterns didn't form overnight and they won't shift overnight either. But they do shift — with the right kind of accompaniment. A guide who understands these dynamics can help you move much faster than you could alone."});
+  return steps.slice(0,4);
+}
+
 function viewReport(idx, type) {
   const row = allRows[idx];
   const name = row[1] || '—';
@@ -452,6 +536,14 @@ function viewReport(idx, type) {
   let html = '';
 
   if(type === 'relational') {
+    function psNum(val){
+      if(!val && val!==0) return 0;
+      const s = val.toString().trim();
+      if(!s || s==='—') return 0;
+      const n = parseFloat(s.endsWith('%') ? s.slice(0,-1) : s);
+      return isNaN(n) ? 0 : (n>0 && n<=1 ? Math.round(n*100) : Math.round(n));
+    }
+
     const realmRows = [
       row2('Relationship with God', row[9], relTag),
       row2('Significant Other', row[5], relTag),
@@ -471,6 +563,61 @@ function viewReport(idx, type) {
       row2('Freedom to Be Myself', row[17], needsTag)
     ].join('');
 
+    // ── Build a realm array (numeric) matching relational.html's shape, from stored columns ──
+    const REALM_DEFS = [
+      {key:'god',      label:'Relationship with God', overall:row[9], outward:row[31], self:row[32]},
+      {key:'partner',  label:'Significant Other',      overall:row[5], outward:row[23], self:row[24]},
+      {key:'family',   label:'Family',                 overall:row[6], outward:row[25], self:row[26]},
+      {key:'friends',  label:'Friends',                overall:row[7], outward:row[27], self:row[28]},
+      {key:'work',     label:'Work / School',          overall:row[4], outward:row[21], self:row[22]},
+      {key:'community',label:'Community',              overall:row[8], outward:row[29], self:row[30]}
+    ].map(d=>({...d, overall:psNum(d.overall), outward:psNum(d.outward), self:psNum(d.self)}))
+     .filter(d=>d.overall>0);
+
+    const selfAvg = REALM_DEFS.length ? Math.round(REALM_DEFS.reduce((a,d)=>a+d.self,0)/REALM_DEFS.length) : 0;
+    const outAvg  = REALM_DEFS.length ? Math.round(REALM_DEFS.reduce((a,d)=>a+d.outward,0)/REALM_DEFS.length) : 0;
+    const voiceAvg = psNum(row[12]); // Having a Voice, already computed and stored
+
+    // ── Engagement Equity ──
+    function equityRow(label,pct){if(!pct&&pct!==0)return'';const col=dc(pct);return '<tr><td style="padding:6px 12px 6px 24px;font-size:12px;color:#a09890;border-bottom:1px solid #241f1a">'+label+'</td><td style="padding:6px 12px;border-bottom:1px solid #241f1a">'+bar(pct)+'</td><td style="padding:6px 12px;font-size:10px;color:'+col+';border-bottom:1px solid #241f1a">'+relTag(pct)+'</td></tr>';}
+    const equityBlocks = REALM_DEFS.map(d=>{
+      const outLabel = d.key==='god'?'How I engage God':d.key==='partner'?'How I engage my partner':'How I engage them';
+      const inLabel = d.key==='god'?'How God engages me':d.key==='partner'?'How my partner engages me':'How they engage me';
+      const gap = Math.abs(d.self-d.outward);
+      const gapNote = gap>=15 ? ' <span style="color:#c97a5a;font-size:10px">('+gap+'% gap)</span>' : '';
+      return '<p style="font-size:12px;color:#c0b8b0;margin:14px 0 4px;font-weight:700">'+d.label+gapNote+'</p><table width="100%" cellpadding="0" cellspacing="0"><tbody>'+equityRow(outLabel,d.self)+equityRow(inLabel,d.outward)+'</tbody></table>';
+    }).join('');
+
+    // ── Warnings (dynamic, matching relational.html's logic) ──
+    const comp = {overall:psNum(row[3]), outward:outAvg, self:selfAvg, voice:voiceAvg};
+    const firedWarnings = WARNINGS.filter(w=>w.trigger(comp, REALM_DEFS)).slice(0,4).map(w=>{
+      if(w.id==='surface'){
+        const lowRealms = REALM_DEFS.filter(d=>d.overall<60);
+        const count=lowRealms.length, total=REALM_DEFS.length;
+        const phrase = fractionPhrase(count,total);
+        return {...w, text:"About "+phrase+" of your relational world — "+count+" of the "+total+" areas we asked about — is scoring as thin right now. That doesn't erase the relationship or two where you may already feel genuinely known. It does mean that across most of your life, the deeper currents of who you are — your fears, your longings, your story — are mostly going unseen. Surface living looks safe, but over time it becomes its own kind of loneliness. That experience has a name, and it doesn't have to be permanent."};
+      }
+      return w;
+    });
+    const warnColor={red:'#c97a5a',amber:'#d4a35a'};
+    const warningsHtml = firedWarnings.length ? ('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Worth Naming</p>'
+      + firedWarnings.map(w=>'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+warnColor[w.severity]+';border-radius:4px;margin:0 0 12px"><tr><td style="padding:16px 18px"><p style="font-size:14px;font-weight:700;color:#f0e8df;margin:0 0 4px">'+w.title+'</p><p style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:'+warnColor[w.severity]+';margin:0 0 10px">'+w.subtitle+'</p><p style="font-size:13px;color:#c0b8b0;line-height:1.8;margin:0">'+w.text+'</p></td></tr></table>').join('')
+      + '<div style="margin-bottom:8px"></div>') : '';
+
+    // ── Realm by Realm patterns ──
+    const patternBlocks = REALM_DEFS.map(d=>{
+      const p = getPattern(d.outward, d.self, d.key);
+      return '<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 10px"><tr><td style="padding:14px 18px"><p style="font-size:13px;font-weight:700;color:#f0e8df;margin:0 0 6px">'+d.label+' &nbsp;<span style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#c4a882;font-weight:400">'+p.name+'</span></p><p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+p.desc+'</p></td></tr></table>';
+    }).join('');
+    const patternsHtml = patternBlocks ? '<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Realm by Realm</p>'+patternBlocks+'<div style="margin-bottom:8px"></div>' : '';
+
+    // ── Action Plan ──
+    const needsScoresObj = {seen:psNum(row[10]), known:psNum(row[11]), voice:psNum(row[12]), belonging:psNum(row[13]), support:psNum(row[14]), trust:psNum(row[15]), calling:psNum(row[16]), freedom:psNum(row[17])};
+    const actionSteps = buildActionPlan(REALM_DEFS, selfAvg, outAvg, needsScoresObj);
+    const actionPlanHtml = actionSteps.length ? ('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Where to Start</p><table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px">'
+      + actionSteps.map((s,i)=>'<tr><td style="padding:8px 0;vertical-align:top;width:26px"><div style="width:22px;height:22px;border-radius:50%;background:#2a2520;border:1px solid #3a3530;color:#c4a882;font-size:12px;font-weight:700;text-align:center;line-height:22px">'+(i+1)+'</div></td><td style="padding:8px 0 8px 12px"><p style="font-size:13px;font-weight:700;color:#e8d7a0;margin:0 0 3px">'+s.title+'</p><p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+s.text+'</p></td></tr>').join('')
+      + '</table>') : '';
+
     html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Relational Health — '+name+'</title></head>'
       +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
       +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
@@ -484,8 +631,9 @@ function viewReport(idx, type) {
       +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Relationships</p>'
       +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'
       +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Needs</p>'
-      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 24px"><tbody>'+dimRows+'</tbody></table>'
-      +(row[17] ? '<p style="font-size:12px;color:#6a6258;margin:0 0 20px">Patterns: '+row[17]+'</p>' : '')
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+dimRows+'</tbody></table>'
+      +(equityBlocks?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px;padding:6px 0"><tbody><tr><td>'+equityBlocks+'</td></tr></tbody></table>'):'')
+      +warningsHtml+patternsHtml+actionPlanHtml
       +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
       +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
       +'</td></tr></table></td></tr></table></body></html>';
