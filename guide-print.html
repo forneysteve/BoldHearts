@@ -1354,34 +1354,78 @@ function renderGuide(data) {
 }
 
 
-function downloadStaticGuide(){
+async function downloadStaticGuide(){
   const contentEl = document.getElementById('content');
   if(!contentEl || !contentEl.innerHTML.trim()){
     alert('No guide is currently displayed to download.');
     return;
   }
-  const styleEl = document.querySelector('style');
-  const styleBlock = styleEl ? styleEl.outerHTML : '';
-  const name = window.__bhCurrentName || 'Guide';
-  const staticHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n'
-    + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-    + '<title>Your Full Heart Report — ' + name + '</title>\n'
-    + '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
-    + '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">\n'
-    + styleBlock + '\n'
-    + '<style>.print-btn{display:none !important}</style>\n'
-    + '</head>\n<body>\n'
-    + '<div class="guide-wrap"><div id="content">' + contentEl.innerHTML + '</div></div>\n'
-    + '</body>\n</html>';
-  const blob = new Blob([staticHtml], {type:'text/html'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'BoldHearts-Guide-' + name.replace(/[^a-zA-Z0-9]+/g,'-') + '.html';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const btn = document.getElementById('download-html-btn');
+  const originalBtnText = btn ? btn.textContent : '';
+  if(btn){ btn.textContent = '⬇ Embedding images...'; btn.disabled = true; }
+
+  try {
+    const imgs = Array.from(contentEl.querySelectorAll('img'));
+    const originalSrcs = imgs.map(img => img.getAttribute('src'));
+    const srcCache = {}; // resolved absolute URL -> base64 data URI
+
+    for(let i = 0; i < imgs.length; i++){
+      const img = imgs[i];
+      const resolvedSrc = img.src; // browser-resolved absolute URL
+      if(srcCache[resolvedSrc]) continue;
+      if(btn) btn.textContent = '⬇ Embedding images... (' + (i+1) + '/' + imgs.length + ')';
+      try {
+        const res = await fetch(resolvedSrc);
+        const blob = await res.blob();
+        const dataUri = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+        srcCache[resolvedSrc] = dataUri;
+      } catch(imgErr) {
+        console.warn('Could not embed image (kept as external link instead):', resolvedSrc, imgErr);
+      }
+    }
+
+    // Swap each img's src to its embedded data URI so it gets captured in innerHTML below
+    imgs.forEach(img => {
+      const resolvedSrc = img.src;
+      if(srcCache[resolvedSrc]) img.setAttribute('src', srcCache[resolvedSrc]);
+    });
+
+    const styleEl = document.querySelector('style');
+    const styleBlock = styleEl ? styleEl.outerHTML : '';
+    const name = window.__bhCurrentName || 'Guide';
+    const staticHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n'
+      + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+      + '<title>Your Full Heart Report — ' + name + '</title>\n'
+      + '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+      + '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">\n'
+      + styleBlock + '\n'
+      + '<style>.print-btn{display:none !important}</style>\n'
+      + '</head>\n<body>\n'
+      + '<div class="guide-wrap"><div id="content">' + contentEl.innerHTML + '</div></div>\n'
+      + '</body>\n</html>';
+
+    // Restore original src attributes on the live page so nothing looks broken for the current viewer
+    imgs.forEach((img, i) => { img.setAttribute('src', originalSrcs[i]); });
+
+    const blob = new Blob([staticHtml], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'BoldHearts-Guide-' + name.replace(/[^a-zA-Z0-9]+/g,'-') + '.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch(err) {
+    alert('Something went wrong while preparing the download: ' + err.message);
+  } finally {
+    if(btn){ btn.textContent = originalBtnText; btn.disabled = false; }
+  }
 }
 
 function showError(msg) {
