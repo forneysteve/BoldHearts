@@ -579,14 +579,15 @@ function viewReport(idx, type) {
     const voiceAvg = psNum(row[12]); // Having a Voice, already computed and stored
 
     // ── Engagement Equity ──
-    function equityRow(label,pct){if(!pct&&pct!==0)return'';const col=dc(pct);return '<tr><td style="padding:6px 12px 6px 24px;font-size:12px;color:#a09890;border-bottom:1px solid #241f1a">'+label+'</td><td style="padding:6px 12px;border-bottom:1px solid #241f1a">'+bar(pct)+'</td><td style="padding:6px 12px;font-size:10px;color:'+col+';border-bottom:1px solid #241f1a">'+relTag(pct)+'</td></tr>';}
-    const equityBlocks = REALM_DEFS.map(d=>{
+    function equityRow(label,pct){if(!pct&&pct!==0)return'';const col=dc(pct);return '<tr><td style="padding:6px 12px 6px 24px;font-size:12px;color:#a09890;border-bottom:1px solid #241f1a;white-space:normal">'+label+'</td><td style="padding:6px 12px;border-bottom:1px solid #241f1a">'+bar(pct)+'</td><td style="padding:6px 12px;font-size:10px;color:'+col+';border-bottom:1px solid #241f1a;white-space:nowrap">'+relTag(pct)+'</td></tr>';}
+    const equityRowsAll = REALM_DEFS.map(d=>{
       const outLabel = d.key==='god'?'How I engage God':d.key==='partner'?'How I engage my partner':'How I engage them';
       const inLabel = d.key==='god'?'How God engages me':d.key==='partner'?'How my partner engages me':'How they engage me';
       const gap = Math.abs(d.self-d.outward);
       const gapNote = gap>=15 ? ' <span style="color:#c97a5a;font-size:10px">('+gap+'% gap)</span>' : '';
-      return '<p style="font-size:12px;color:#c0b8b0;margin:14px 0 4px;font-weight:700">'+d.label+gapNote+'</p><table width="100%" cellpadding="0" cellspacing="0"><tbody>'+equityRow(outLabel,d.self)+equityRow(inLabel,d.outward)+'</tbody></table>';
+      return '<tr><td colspan="3" style="padding:14px 12px 4px;font-size:12px;color:#c0b8b0;font-weight:700">'+d.label+gapNote+'</td></tr>'+equityRow(outLabel,d.self)+equityRow(inLabel,d.outward);
     }).join('');
+    const equityBlocks = equityRowsAll; // kept name for the wrapper check below
 
     // ── Warnings (dynamic, matching relational.html's logic) ──
     const comp = {overall:psNum(row[3]), outward:outAvg, self:selfAvg, voice:voiceAvg};
@@ -618,7 +619,7 @@ function viewReport(idx, type) {
       + actionSteps.map((s,i)=>'<tr><td style="padding:8px 0;vertical-align:top;width:26px"><div style="width:22px;height:22px;border-radius:50%;background:#2a2520;border:1px solid #3a3530;color:#c4a882;font-size:12px;font-weight:700;text-align:center;line-height:22px">'+(i+1)+'</div></td><td style="padding:8px 0 8px 12px"><p style="font-size:13px;font-weight:700;color:#e8d7a0;margin:0 0 3px">'+s.title+'</p><p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+s.text+'</p></td></tr>').join('')
       + '</table>') : '';
 
-    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Relational Health — '+name+'</title></head>'
+    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Relational Health — '+name+'</title></head>'
       +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
       +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
       +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
@@ -632,7 +633,7 @@ function viewReport(idx, type) {
       +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'
       +'<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores Across the Following Needs</p>'
       +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+dimRows+'</tbody></table>'
-      +(equityBlocks?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px;padding:6px 0"><tbody><tr><td>'+equityBlocks+'</td></tr></tbody></table>'):'')
+      +(equityBlocks?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+equityBlocks+'</tbody></table>'):'')
       +warningsHtml+patternsHtml+actionPlanHtml
       +'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br>'
       +'<span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p>'
@@ -657,7 +658,7 @@ function viewReport(idx, type) {
       row2('Peace', row[106], (p)=>postureTag(p,'Peace'))
     ].join('');
 
-    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Interior Health — '+name+'</title></head>'
+    html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/x-icon" href="favicon.ico"><title>Interior Health — '+name+'</title></head>'
       +'<style>@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>'
       +'<body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif">'
       +'<table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center">'
