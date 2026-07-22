@@ -411,7 +411,7 @@ function renderGuide(data) {
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">Thank you for taking the time to complete both assessments. What you have done here is not small — looking honestly at your own heart takes courage, and we do not take lightly that you gave it.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">These scores are a reflection of the information you entered — honest self-assessment on a specific day. They are not a verdict. They may not capture everything that is true about you, and some of what you read here may land differently than intended.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">What matters most is what resonates with you. Sit with these scores. Notice what sticks and what doesn\'t. The number is less important than the conversation it opens — what you think about it, what you push back on, what you recognize.</p>'
-    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:0;max-width:none">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — reach out. That conversation is what this is really for.</p>'
+    + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">We are more concerned about you than about labeling you with a number. If any of this opens a door worth walking through — reach out. That conversation is what this is really for.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">The Scriptures speak of the heart as something worth tending. In Jeremiah 31 and Ezekiel 36, God promises a new heart — not a fixed version of the old one, but something genuinely transformed. That promise assumes the heart matters. That what happens inside you has weight. That taking inventory of it is not self-indulgence — it is stewardship.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:.9rem;max-width:none">At BoldHearts, we believe that out of our hearts grow enormous dreams for the Kingdom of God. The heart was made for more than survival — it was made to reach, to hope, to love, to lead. But emotions can be distracting. They can pull us away from trusting what our hearts most deeply know. They can cloud the signal with noise — fear dressed as wisdom, anger posing as conviction, desire mistaken for selfishness.</p>'
     + '<p style="font-size:.88rem;color:#2a2218;line-height:1.95;margin-bottom:0;max-width:none">Proverbs 4:23 says that everything flows from the heart. If that is true — and we believe it is — then it is worth being wise about what the heart is actually saying. Not reactive. Not dismissive. Wise. These scores are a tool for that kind of wisdom. So with that, let\'s look at what yours are telling us.</p>'
@@ -820,8 +820,6 @@ function renderGuide(data) {
   // Map section ids to big header labels
   const sectionHeaders = {
     picture:          'What Your Scores Are Saying',
-    scored_well:      'What Is Working',
-    could_be_stronger:'Where There Is Room to Grow',
     interior:         "What's Happening Underneath",
     invitation:       'Where God Seems to Be Moving',
     soulcare:         'What Soul Care Offers You',
@@ -1065,8 +1063,6 @@ function renderGuide(data) {
   const sectionsHtml = (guide.sections || []).map((s, idx) => {
     const sectionImages = {
       picture:          'assets/images/aatlas-peak-299014_1920.jpg',
-      scored_well:      'assets/images/emphyrio-waterfall-4610084_1920.jpg',
-      could_be_stronger:'assets/images/bluesnap-plant-234493_1920.jpg',
       interior:         'assets/images/blackpowder75-saxon-switzerland-539418_1920.jpg',
       invitation:       'assets/images/pexels-josh-willink-11499-93858.jpg',
       soulcare:         'assets/images/pexels-clement-proust-363898785-35541665.jpg',
@@ -1094,34 +1090,6 @@ function renderGuide(data) {
       const pills = top.map(i=>scorePill(i.label, i.val, '')).join('')
         + '<span style="display:inline-flex;align-items:center;padding:4px 6px;font-size:.6rem;color:#c4a882;font-family:sans-serif;opacity:.6">·</span>'
         + bot.map(i=>scorePill(i.label, i.val, '')).join('');
-      sectionPillsHtml = pillRow(pills);
-    }
-
-    if(s.id === 'scored_well') {
-      // Top relational realms
-      const relSorted = [
-        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
-        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
-        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
-      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val)).slice(0,3);
-      // Top interior themes
-      const intSorted = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Love'}[k], val:hs?.[k]}))
-        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val)).slice(0,2);
-      const pills = [...relSorted, ...intSorted].map(i=>scorePill(i.label, i.val, '')).join('');
-      sectionPillsHtml = pillRow(pills);
-    }
-
-    if(s.id === 'could_be_stronger') {
-      const relSorted = [
-        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
-        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
-        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
-      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,3);
-      const intSorted = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Loved & Delighted In (by God)'}[k], val:hs?.[k]}))
-        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,2);
-      const pills = [...relSorted, ...intSorted].map(i=>scorePill(i.label, i.val, '')).join('');
       sectionPillsHtml = pillRow(pills);
     }
 
@@ -1270,7 +1238,6 @@ function renderGuide(data) {
     }).filter(Boolean).join('');
     const sectionQuotes = {
       'picture': '<div class="pull-quote-right"><p>“The widest thing in the universe is not space — it is the potential capacity of the human heart. Being made in the image of God, it is capable of almost unlimited extension in all directions.”</p><cite>— A.W. Tozer</cite></div>',
-      'scored_well': '',
       'interior': '<div class="pull-quote-right"><p>“The hidden dimension of each human life is not visible to others, nor fully graspable even by ourselves. We usually know very little about the things that move in our own soul. Only God knows our depths.”</p><cite>— Dallas Willard</cite></div>',
       'invitation': '',
       'soulcare': '',
