@@ -45,6 +45,7 @@ nav .nav-links a:hover{color:#e8d7a0}
 .hero-tagline{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#e8d7a0;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
 .hero-content h1{margin-bottom:1.25rem;text-shadow:0 4px 24px rgba(0,0,0,.8)}
 .hero-content p{font-size:1.1rem;color:#b0a898;max-width:580px;margin:0 auto 2rem;line-height:1.9;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.hero-content p+p{margin-top:-1.1rem}
 .hero-meta{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;font-size:.85rem;color:#6a6258;letter-spacing:.06em;text-transform:uppercase}
 .hero-meta span{display:flex;align-items:center;gap:6px}
 .progress-wrap{background:rgba(17,17,17,.95);border-bottom:1px solid rgba(232,215,160,.1);padding:.75rem 2rem;position:sticky;top:73px;z-index:99;backdrop-filter:blur(8px)}
@@ -194,7 +195,9 @@ footer a:hover{color:#e8d7a0}
   <div class="hero-content">
     <div class="hero-tagline">Relational Health Assessment</div>
     <h1>Relational Health Assessment</h1>
-    <p>How seen, known, and connected are you across the relationships and contexts that shape your life — including your relationship with God?</p>
+    <p>Thank you for being here. This is meant to be the start of something — a small first step toward healing, not a test to pass or a score to chase.</p>
+    <p>You might be in a hurting place right now. That's okay — that's exactly who this is for. This assessment looks closely at whether you feel truly seen, whether you belong, whether you feel safe — across every relationship that shapes your life, including your relationship with God.</p>
+    <p>Welcome to this space. The people at BoldHearts are genuinely glad you're here, and we're honored to walk with you through what comes next.</p>
     <div class="hero-meta">
       <span><i class="ti ti-clock"></i> About 10 minutes</span>
       <span><i class="ti ti-lock"></i> Private &amp; confidential</span>
@@ -589,7 +592,7 @@ function submitGate(){
     if(!isTestMode){
       function dc(p){return p>=80?'#C4A055':p>=60?'#B8AA7A':p>=40?'#8AACCB':p>=20?'#5B8DB0':'#3A6D94';}
       function rt(p){return p>=80?'Strong':p>=60?'Present':p>=40?'Thin':p>=20?'Quiet':'Barely There';}
-      function emailBar(pct){const col=dc(pct);const filled=Math.round(pct/10);return '<span style="color:'+col+';font-family:monospace;letter-spacing:1px;font-size:13px">'+'█'.repeat(filled)+'<span style="opacity:.2">'+'█'.repeat(10-filled)+'</span></span>';}
+      function emailBar(pct){const col=dc(pct);const p=Math.max(0,Math.min(100,Math.round(pct)));return '<table cellpadding="0" cellspacing="0" style="width:120px;border-collapse:collapse"><tr>'+(p>0?'<td style="width:'+p+'%;background-color:'+col+';height:10px;font-size:1px;line-height:1px">&nbsp;</td>':'')+(p<100?'<td style="width:'+(100-p)+'%;background-color:#2a2520;height:10px;font-size:1px;line-height:1px">&nbsp;</td>':'')+'</tr></table>';}
       function scoreRow(label,pct,tagFn){if(!pct&&pct!==0)return '';const col=dc(pct);return '<tr><td style="padding:8px 12px;font-size:13px;color:#c8c0b8;border-bottom:1px solid #2a2825;width:180px">'+label+'</td><td style="padding:8px 12px;border-bottom:1px solid #2a2825">'+emailBar(pct)+'</td><td style="padding:8px 12px;font-size:11px;color:'+col+';border-bottom:1px solid #2a2825;white-space:nowrap">'+tagFn(pct)+'</td></tr>';}
       const realmOrder=['work','friends','significant_other','family','community','god'];
       const realmLabels={god:'Relationship with God',significant_other:'Significant Other',family:'Family',friends:'Friends',work:'Work / School',community:'Community'};
@@ -609,10 +612,9 @@ function submitGate(){
         const inLabel=id==='god'?'How God engages me':id==='significant_other'?'How my partner engages me':'How they engage me';
         const gap=Math.abs(s.self-s.outward);
         const gapNote=gap>=15?' <span style="color:#c97a5a;font-size:10px">('+gap+'% gap)</span>':'';
-        return '<p style="font-size:12px;color:#c0b8b0;margin:14px 0 4px;font-weight:700">'+realmLabels[id]+gapNote+'</p>'
-          +'<table width="100%" cellpadding="0" cellspacing="0"><tbody>'+equityRowEmail(outLabel,s.self,rt)+equityRowEmail(inLabel,s.outward,rt)+'</tbody></table>';
+        return '<tr><td colspan="3" style="padding:14px 12px 4px;font-size:12px;color:#c0b8b0;font-weight:700">'+realmLabels[id]+gapNote+'</td></tr>'+equityRowEmail(outLabel,s.self,rt)+equityRowEmail(inLabel,s.outward,rt);
       }).join('');
-      const equityEmailHtml=equityBlocksEmail?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px;padding:6px 0"><tbody><tr><td>'+equityBlocksEmail+'</td></tr></tbody></table>') : '';
+      const equityEmailHtml=equityBlocksEmail?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+equityBlocksEmail+'</tbody></table>') : '';
 
       // ── Email versions of Worth Naming / Realm by Realm / Where to Start — table-based for email client safety ──
       const emailWarnings=getWarnings(scores);
