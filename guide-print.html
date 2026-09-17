@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -584,10 +585,10 @@ function renderGuide(data) {
     {id:'freedom',   label:'Freedom'}
   ];
 
-  // Reverse-scored questions (0-indexed within each theme's/realm's raw answers):
-  // Interior: grief[2] and desire[2] are reverse-scored
-  // Relational: god[9] is reverse-scored ("I feel directionless in my walk with God")
-  const REVERSE_SCORED = { grief: [2], desire: [2] };
+  // Reverse-scored questions (0-indexed within each theme's raw answers), matching the
+  // reverse:true flags on the negatively-worded questions in interior.html's THEMES array:
+  // grief[2], desire[2], and joy[2] (movement questions phrased as "hasn't changed/grown").
+  const REVERSE_SCORED = { grief: [2], desire: [2], joy: [2] };
 
   function calcCellScore(rawArr, qIndices, themeId) {
     if(!rawArr || !rawArr.length) return 0;
@@ -831,8 +832,27 @@ function renderGuide(data) {
   };
 
   // Sections
-  // ── THEME INSIGHTS ────────────────────────────────────────
-  // ── RELATIONAL NOTES — dynamically generated from score data ───
+  // ── SHARED "WORTH A DISCUSSION" CARD RENDERER (relational + interior) ──
+  function discussionCard(title, badge, bodyHtml) {
+    return '<div style="background:#faf6f0;border:1px solid #e8d8c0;border-left:3px solid #C4A055;border-radius:4px;padding:.9rem 1.1rem;break-inside:avoid">'
+      + '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid #ede8e0">'
+      + '<div style="font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:#c4a882;font-weight:600">'+title+'</div>'
+      + (badge ? '<div style="font-size:.62rem;font-weight:600;color:#C4A055;white-space:nowrap;margin-left:.75rem">'+badge+'</div>' : '')
+      + '</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.85">'+bodyHtml+'</div>'
+      + '</div>';
+  }
+  function discussionSection(cardsArr) {
+    if(!cardsArr.length) return '';
+    return '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;align-items:start">'
+      + cardsArr.join('')
+      + '</div>'
+      + '</div>';
+  }
+
+  // ── RELATIONAL "WORTH A DISCUSSION" — fixed 4-card structure ───
   function realmLabel(id) {
     return {work:'Work / School',partner:'Significant Other',family:'Family',
             friends:'Friends',community:'Community',god:'Relationship with God'}[id] || id;
@@ -840,110 +860,208 @@ function renderGuide(data) {
   function realmScore(id) { return numVal(a1?.[id]); }
   function realmOut(id)   { return numVal(a1?.[id+'_outward']); }
   function realmSelf(id)  { return numVal(a1?.[id+'_self']); }
-  function tierLabel(n)   { return n>=80?'Strong':n>=60?'Functioning':n>=40?'Developing':'Disconnected'; }
+  function realmGap(r)    { return Math.abs(r.out - r.self); }
 
   const realmIds = ['god','partner','family','friends','work','community'];
-  const realmsSorted = realmIds
-    .map(id => ({ id, score: realmScore(id), out: realmOut(id), self: realmSelf(id) }))
-    .filter(r => r.score > 0)
-    .sort((a,b) => b.score - a.score);
+  const realmsAll = realmIds
+    .map(id => ({ id, score: realmScore(id), out: realmOut(id), self: realmSelf(id), raw: a1?.raw?.[id] }))
+    .filter(r => r.score > 0);
 
-  const dynamicNotes = [];
-
-  // 1. Highest realm — celebrate it
-  const topRealm = realmsSorted[0];
-  if(topRealm) {
-    const gap = Math.abs(topRealm.out - topRealm.self);
-    const mutualNote = gap < 10 ? ' with genuine mutuality on both sides' : '';
-    dynamicNotes.push(realmLabel(topRealm.id) + ' scored ' + topRealm.score + '%' + mutualNote + ' — ' + tierLabel(topRealm.score).toLowerCase() + ' engagement. That is worth naming and protecting.');
+  function realmNeeds(r) {
+    if(!r.raw) return [];
+    return needKeys.map((k, i) => ({
+      key: k,
+      label: needLabels[i],
+      score: calcCellScore(r.raw, REL_DIM_MAP[k] || [], r.id)
+    })).filter(n => n.score > 0);
+  }
+  function bestWorstLine(items) {
+    if(!items.length) return '';
+    const max = Math.max(...items.map(n => n.score));
+    const min = Math.min(...items.map(n => n.score));
+    const bestArr = items.filter(n => n.score === max).map(n => n.label);
+    const worstArr = items.filter(n => n.score === min).map(n => n.label);
+    const joinList = arr => arr.length > 1 ? arr.slice(0,-1).join(', ') + ' and ' + arr.slice(-1) : arr[0];
+    return 'Strongest: ' + joinList(bestArr) + ', at ' + max + '%. Lowest: ' + joinList(worstArr) + ', at ' + min + '%.';
   }
 
-  // 2. Lowest realm — name it
-  const botRealm = realmsSorted[realmsSorted.length - 1];
-  if(botRealm && botRealm.id !== topRealm?.id) {
-    const gap = Math.abs(botRealm.out - botRealm.self);
-    let note = realmLabel(botRealm.id) + ' scored lowest at ' + botRealm.score + '%.';
-    if(botRealm.out < 50 && botRealm.self < 50) note += ' Both sides are low — something systemic rather than personal may be at work.';
-    else if(gap >= 15 && botRealm.out > botRealm.self) note += ' There is a ' + gap + '% gap — more engagement coming toward you than you are giving back.';
-    else if(gap >= 15 && botRealm.self > botRealm.out) note += ' There is a ' + gap + '% gap — you are giving more than you are receiving.';
-    dynamicNotes.push(note);
+  const relCards = [];
+
+  // Card 1 — Relationship with God, always shown first
+  const godRealm = realmsAll.find(r => r.id === 'god');
+  if(godRealm) {
+    const needs = realmNeeds(godRealm);
+    relCards.push(discussionCard('Relationship with God', godRealm.score + '%',
+      'Your relationship with God scored ' + godRealm.score + '%. ' + bestWorstLine(needs)));
   }
 
-  // 3. God gap if significant
-  const godData = realmsSorted.find(r => r.id === 'god');
-  if(godData && godData.id !== topRealm?.id && godData.id !== botRealm?.id) {
-    const godGap = Math.abs(godData.out - godData.self);
-    if(godGap >= 15) {
-      const dir = godData.out > godData.self ? 'God is engaging toward you more than you are engaging back' : 'You are engaging toward God more than you are receiving back';
-      dynamicNotes.push('Relationship with God scored ' + godData.score + '% with a ' + godGap + '% gap — ' + dir + '. Worth sitting with what that means.');
+  // Card 2 — your lowest-scoring other relationship
+  const otherRealms = realmsAll.filter(r => r.id !== 'god');
+  if(otherRealms.length) {
+    const lowestRealm = otherRealms.reduce((a,b) => b.score < a.score ? b : a);
+    const needs = realmNeeds(lowestRealm);
+    relCards.push(discussionCard(realmLabel(lowestRealm.id) + ' — Your Lowest-Scoring Relationship', lowestRealm.score + '%',
+      realmLabel(lowestRealm.id) + ' scored ' + lowestRealm.score + '%, your lowest-rated relationship. ' + bestWorstLine(needs)));
+  }
+
+  // Card 3 — Relationship Dynamics: widest giving/receiving gap, and whether there's a trend
+  if(realmsAll.length) {
+    const withGaps = realmsAll.filter(r => r.out > 0 || r.self > 0).map(r => ({ ...r, gap: realmGap(r) }));
+    if(withGaps.length) {
+      const widestRealm = withGaps.reduce((a,b) => b.gap > a.gap ? b : a);
+      let dynamicsBody;
+      if(widestRealm.gap >= 5) {
+        const dir = widestRealm.out > widestRealm.self ? 'more is coming toward you than you are giving back' : 'you are giving more than you are receiving back';
+        dynamicsBody = 'The widest gap between giving and receiving is in ' + realmLabel(widestRealm.id) + ', at ' + widestRealm.gap + '% — ' + dir + '.';
+      } else {
+        dynamicsBody = 'Giving and receiving are closely balanced across your relationships — no gap wider than ' + widestRealm.gap + '%.';
+      }
+      const givingMore = withGaps.filter(r => r.gap >= 5 && r.out > r.self).length;
+      const receivingMore = withGaps.filter(r => r.gap >= 5 && r.self > r.out).length;
+      if(givingMore >= 2 && givingMore > receivingMore) {
+        dynamicsBody += ' Across your relationships, there is a consistent trend of giving more than you receive back.';
+      } else if(receivingMore >= 2 && receivingMore > givingMore) {
+        dynamicsBody += ' Across your relationships, there is a consistent trend of receiving more than you give.';
+      } else if(givingMore > 0 && receivingMore > 0) {
+        dynamicsBody += ' The direction varies by relationship rather than following one consistent pattern.';
+      }
+      relCards.push(discussionCard('Relationship Dynamics', null, dynamicsBody));
     }
   }
 
-  // 4. Lowest dimension
-  const dims = [
-    {label:'Being Seen', val: numVal(a1?.dim_seen)},
-    {label:'Being Known', val: numVal(a1?.dim_known)},
-    {label:'Having a Voice', val: numVal(a1?.dim_voice)},
-    {label:'Belonging', val: numVal(a1?.dim_belonging)},
-    {label:'Receiving Support', val: numVal(a1?.dim_support)},
-    {label:'Trust & Safety', val: numVal(a1?.dim_trust)},
-    {label:'Calling / Purpose', val: numVal(a1?.dim_calling)},
-    {label:'Freedom to Be Myself', val: numVal(a1?.dim_freedom)},
-  ].filter(d => d.val > 0).sort((a,b) => a.val - b.val);
-
-  if(dims.length > 0 && dims[0].val < 70) {
-    dynamicNotes.push(dims[0].label + ' scored ' + dims[0].val + '% — the lowest relational dimension. Worth exploring what is keeping that need from being more fully met across your relationships.');
+  // Card 4 — open scan: a need that recurs as the lowest-scoring one across relationships
+  if(realmsAll.length >= 2) {
+    const recurrence = {};
+    realmsAll.forEach(r => {
+      const needs = realmNeeds(r);
+      if(!needs.length) return;
+      const min = Math.min(...needs.map(n => n.score));
+      needs.filter(n => n.score === min).forEach(n => {
+        if(!recurrence[n.key]) recurrence[n.key] = { label: n.label, hits: [] };
+        recurrence[n.key].hits.push({ realm: realmLabel(r.id), score: min });
+      });
+    });
+    const recurring = Object.values(recurrence).filter(r => r.hits.length >= 2);
+    if(recurring.length) {
+      recurring.sort((a,b) => {
+        const avgA = a.hits.reduce((s,h)=>s+h.score,0)/a.hits.length;
+        const avgB = b.hits.reduce((s,h)=>s+h.score,0)/b.hits.length;
+        return avgA - avgB;
+      });
+      const topRecurring = recurring[0];
+      const hitList = topRecurring.hits.map(h => h.realm + ' (' + h.score + '%)').join(' and ');
+      relCards.push(discussionCard('Worth Noticing', null,
+        topRecurring.label + ' comes up again as your most vulnerable need — it is the lowest-scoring need in ' + topRecurring.hits.length + ' of your relationships: ' + hitList + '.'));
+    }
   }
 
-  const notesToShow = dynamicNotes.length >= 2 ? dynamicNotes : dynamicNotes;
-
-  const relationalNotesHtml = '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
-    + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:.75rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
-    + '<ul style="margin:0;padding-left:1.25rem">'
-    + notesToShow.map(b => '<li style="font-size:.85rem;color:#4a3a2a;line-height:1.85;margin-bottom:.5rem">'+b+'</li>').join('')
-    + '</ul>'
-    + '</div>';
+  const relationalNotesHtml = discussionSection(relCards);
 
   // ── INTERIOR CHARTS ───────────────────────────────────────
-  const themeComments = {
-    grief:  { high: "Your grief score reflects real access — you can name loss and let it move through you rather than around you. That is not weakness; it is one of the harder forms of strength.", low: "Grief is scoring low. Unprocessed loss has a way of going quiet rather than going away — it shows up sideways in anger, numbness, or disconnection." },
-    shame:  { high: "Shame is at a healthy level — you can hold imperfection without it defining you. That kind of self-compassion is harder to build than most people realize.", low: "Shame is your lowest score here. Shame at this level tends to run quietly beneath everything — shaping how safe it feels to be known, to fail, to need. It does not announce itself. It just makes certain things feel too risky." },
-    fear:   { high: "Fear and anxiety are well-integrated for you — present but not in charge. You can act in the presence of uncertainty without being paralyzed by it.", low: "Fear is elevated. That kind of anxiety tends to narrow the world — making risk feel more costly and safety feel more necessary than it actually is." },
-    anger:  { high: "Anger is healthy and accessible — you can name it, work with it, and let it point toward what matters. Anger at this level is often clarity.", low: "Anger is low. Sometimes that means peace — and sometimes it means something has been buried. Worth sitting with which one it is." },
-    desire: { high: "Desire and hope are alive in you. That matters more than it might seem — desire is what keeps a person reaching rather than just maintaining.", low: "Desire is low. When hope quiets down it often means something has been disappointed enough times that wanting has started to feel too costly." },
-    joy:    { high: "Your sense of being loved and delighted in by God is strong. There is a settled knowing in you — not earned, not performed — that God delights in you. That capacity is worth protecting.", low: "Your sense of being loved and delighted in by God is scoring low. Not absent — but muted. Something is keeping that love from fully landing, even if it is believed as doctrine." }
-  };
-  const themeLabels = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Loved & Delighted In (by God)'};
-  const themeKeys = ['grief','shame','fear','anger','desire','joy'];
-  const themeScoresSorted = themeKeys
-    .map(k => ({id:k, score: numVal(hs?.[k])}))
-    .filter(t => t.score > 0)
-    .sort((a,b) => b.score - a.score);
+  // ── INTERIOR "WORTH A DISCUSSION" — fixed 4-card structure (mirrors relational) ──
+  const idDataForNotes = hs?.identity || {};
+  const emotionLabels = {grief:'Grief & Loss', shame:'Shame & Guilt', fear:'Fear & Anxiety', anger:'Anger', desire:'Desire & Hope', joy:'Loved & Delighted In (by God)'};
 
-  const insightCards = themeScoresSorted.map(t => {
-    const isHigh = t.score >= 70;
-    const isLow = t.score < 55;
-    if(!isHigh && !isLow) return '';
-    const comment = isHigh ? themeComments[t.id]?.high : themeComments[t.id]?.low;
-    if(!comment) return '';
-    const col = isHigh ? '#C4A055' : '#5B8DB0';
-    const borderCol = isHigh ? '#b5d4a0' : '#e8c0b0';
-    return '<div style="background:#faf6f0;border:1px solid '+borderCol+';border-left:3px solid '+col+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
-      + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500;min-height:2.4rem;display:flex;align-items:flex-end">'+themeLabels[t.id]+' &nbsp;<span style="color:'+col+';font-size:.58rem">'+t.score+'%</span></div>'
-      + '<p style="font-size:.78rem;color:#4a3a2a;line-height:1.8;margin:0">'+comment+'</p>'
-      + '</div>';
-  }).filter(Boolean);
+  function posturesForTheme(themeId) {
+    const rawArr = hs?.raw?.[themeId];
+    if(!rawArr) return [];
+    const reverseIdx = REVERSE_SCORED[themeId] || [];
+    return postureLabels.map((label, pi) => {
+      const rawV = parseFloat(rawArr[pi]);
+      if(isNaN(rawV) || rawV === 0) return null;
+      const v = reverseIdx.includes(pi) ? (8 - rawV) : rawV;
+      return { label, score: Math.round(v/7*100) };
+    }).filter(Boolean);
+  }
+  function postureBestWorstLine(items) {
+    if(!items.length) return '';
+    const max = Math.max(...items.map(p => p.score));
+    const min = Math.min(...items.map(p => p.score));
+    const bestArr = items.filter(p => p.score === max).map(p => p.label);
+    const worstArr = items.filter(p => p.score === min).map(p => p.label);
+    const joinList = arr => arr.length > 1 ? arr.slice(0,-1).join(', ') + ' and ' + arr.slice(-1) : arr[0];
+    return 'Strongest: ' + joinList(bestArr) + ', at ' + max + '%. Lowest: ' + joinList(worstArr) + ', at ' + min + '%.';
+  }
 
-  const themeInsightsCols = insightCards.length <= 2 ? 2 : insightCards.length === 3 ? 3 : insightCards.length === 4 ? 2 : insightCards.length === 5 ? 3 : 3;
-  const themeInsightsHtml = insightCards.length
-    ? '<div class="section-header">Interior Score Breakdown</div>'
-      + '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
-      + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
-      + '<div style="display:grid;grid-template-columns:repeat('+themeInsightsCols+',1fr);gap:.6rem;align-items:start">'
-      + insightCards.join('')
-      + '</div>'
-      + '</div>'
-    : '';
+  const intCards = [];
+
+  // Card 1 — Loved & Delighted In (by God), always shown first
+  const joyScore = numVal(hs?.joy);
+  if(joyScore > 0) {
+    const joyPostures = posturesForTheme('joy');
+    intCards.push(discussionCard('Loved & Delighted In (by God)', joyScore + '%',
+      'Your sense of being loved and delighted in by God scored ' + joyScore + '%. ' + postureBestWorstLine(joyPostures)));
+  }
+
+  // Card 2 — your lowest-scoring other emotion
+  const emotionKeys = ['grief','shame','fear','anger','desire'];
+  const otherEmotions = emotionKeys.map(k => ({ id: k, score: numVal(hs?.[k]) })).filter(e => e.score > 0);
+  if(otherEmotions.length) {
+    const lowestEmotion = otherEmotions.reduce((a,b) => b.score < a.score ? b : a);
+    const lowPostures = posturesForTheme(lowestEmotion.id);
+    intCards.push(discussionCard(emotionLabels[lowestEmotion.id] + ' — Your Lowest-Scoring Emotion', lowestEmotion.score + '%',
+      emotionLabels[lowestEmotion.id] + ' scored ' + lowestEmotion.score + '%, your lowest-rated emotion. ' + postureBestWorstLine(lowPostures)));
+  }
+
+  // Card 3 — Identity Dynamics: widest others-vs-self gap, and whether there's a trend
+  const idThemesAll = ['grief','shame','fear','anger','desire','joy']
+    .map(k => ({ id: k, others: idDataForNotes[k]?.others, self: idDataForNotes[k]?.self, gap: idDataForNotes[k]?.gap }))
+    .filter(t => t.gap !== undefined);
+  if(idThemesAll.length) {
+    const widestId = idThemesAll.reduce((a,b) => (b.gap||0) > (a.gap||0) ? b : a);
+    let dynamicsBody;
+    if((widestId.gap||0) >= 5) {
+      const dir = (widestId.others||0) > (widestId.self||0) ? 'others see you as healthier here than you experience yourself' : 'you experience yourself as healthier here than others perceive';
+      dynamicsBody = 'The widest others-vs-self gap is in ' + emotionLabels[widestId.id] + ', at ' + widestId.gap + '% — ' + dir + '.';
+    } else {
+      dynamicsBody = 'How others see you and how you see yourself are closely aligned across your emotions — no gap wider than ' + (widestId.gap||0) + '%.';
+    }
+    const othersHigherCount = idThemesAll.filter(t => (t.gap||0) >= 5 && (t.others||0) > (t.self||0)).length;
+    const selfHigherCount = idThemesAll.filter(t => (t.gap||0) >= 5 && (t.self||0) > (t.others||0)).length;
+    if(othersHigherCount >= 2 && othersHigherCount > selfHigherCount) {
+      dynamicsBody += ' Across most emotions, others tend to rate your maturity higher than you rate it yourself.';
+    } else if(selfHigherCount >= 2 && selfHigherCount > othersHigherCount) {
+      dynamicsBody += ' Across most emotions, you tend to rate your own maturity higher than others perceive it.';
+    } else if(othersHigherCount > 0 && selfHigherCount > 0) {
+      dynamicsBody += ' The direction varies by emotion rather than following one consistent pattern.';
+    }
+    intCards.push(discussionCard('Identity Dynamics', null, dynamicsBody));
+  }
+
+  // Card 4 — open scan: a posture that consistently lags in the harder, more vulnerable emotions
+  const HARD_EMOTIONS = ['grief','shame','fear','anger'];
+  const POSITIVE_EMOTIONS = ['desire','joy'];
+  const postureRows = postureLabels.map(label => {
+    const scores = {};
+    ['grief','shame','fear','anger','desire','joy'].forEach(t => {
+      const found = posturesForTheme(t).find(x => x.label === label);
+      if(found) scores[t] = found.score;
+    });
+    return { label, scores };
+  });
+  const postureGaps = postureRows.map(row => {
+    const hardVals = HARD_EMOTIONS.filter(t => row.scores[t] !== undefined);
+    const posVals = POSITIVE_EMOTIONS.filter(t => row.scores[t] !== undefined);
+    if(!hardVals.length || !posVals.length) return null;
+    const hardAvg = hardVals.reduce((s,t)=>s+row.scores[t],0)/hardVals.length;
+    const posAvg = posVals.reduce((s,t)=>s+row.scores[t],0)/posVals.length;
+    return {
+      label: row.label,
+      gap: posAvg - hardAvg,
+      hardVals: hardVals.map(t => ({ t, score: row.scores[t] })),
+      posVals: posVals.map(t => ({ t, score: row.scores[t] }))
+    };
+  }).filter(g => g && g.gap >= 15);
+  if(postureGaps.length) {
+    postureGaps.sort((a,b) => b.gap - a.gap);
+    const topGap = postureGaps[0];
+    const hardList = topGap.hardVals.map(h => emotionLabels[h.t] + ' (' + h.score + '%)').join(', ');
+    const posList = topGap.posVals.map(p => emotionLabels[p.t] + ' (' + p.score + '%)').join(' and ');
+    intCards.push(discussionCard('Worth Noticing', null,
+      topGap.label + ' is notably weaker in your harder, more vulnerable emotions than in your more hopeful ones — ' + hardList + ', versus ' + posList + '.'));
+  }
+
+  const themeInsightsHtml = discussionSection(intCards);
 
   // ── IDENTITY INSIGHTS ────────────────────────────────────
   const identityData = hs?.identity || {};
