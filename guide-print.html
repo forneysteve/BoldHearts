@@ -420,9 +420,12 @@ function renderGuide(data) {
   const summaryHtml = '';
 
   // ── RELATIONAL CHARTS ─────────────────────────────────────
+  const realmLabelsAll = ['God','Sig. Other','Family','Friends','Work','Community'];
+  const realmChartPairs = realmLabelsAll.map((label, i) => ({label, val: realmVals[i]})).filter(r => r.val > 0);
+
   const relChartsHtml = '<div class="section-header">Relational Engagement Scores</div>'
     + '<div class="charts-grid">'
-    + '<div class="chart-card"><div class="chart-label">By Relationship</div>' + cssVerticalBars(['God','Sig. Other','Family','Friends','Work','Community'], realmVals) + '</div>'
+    + '<div class="chart-card"><div class="chart-label">By Relationship</div>' + cssVerticalBars(realmChartPairs.map(r=>r.label), realmChartPairs.map(r=>r.val)) + '</div>'
     + '<div class="chart-card"><div class="chart-label">By Need</div>' + cssHorizontalBars(['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], relDimVals) + '</div>'
     + '</div>';
 
@@ -726,7 +729,7 @@ function renderGuide(data) {
       + needLabels.map(n => '<th style="padding:.4rem .3rem;height:90px;vertical-align:bottom;font-size:.55rem;letter-spacing:.04em;text-transform:uppercase;color:#6a5a4a;font-weight:500;text-align:center;border-bottom:2px solid #c4a882"><div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding-bottom:6px;margin:0 auto">'+n+'</div></th>').join('')
       + '</tr>';
 
-    const tbody = matrixRealms.map(r => {
+        const tbody = matrixRealms.filter(r => numVal(a1?.[r.id]) > 0).map(r => {
       const overall = numVal(a1?.[r.id]);
       const raw = a1?.raw?.[r.id] || [];
       const needScores = needKeys.map((k, ki) => {
