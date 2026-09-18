@@ -851,6 +851,14 @@ function renderGuide(data) {
       + '</div>'
       + '</div>';
   }
+  // Glosses a need/posture term with its plain-language definition (reusing the same
+  // descriptions already shown in "About Your Relational/Interior Scores"), so a card
+  // that names "Safety" or "Being Known" doesn't rely on the reader remembering an
+  // earlier section. Only applied to a single, unambiguous term — not a tied list.
+  function glossed(term, map) {
+    const desc = map[term];
+    return desc ? term + ' (' + desc + ')' : term;
+  }
 
   // ── RELATIONAL "WORTH A DISCUSSION" — fixed 4-card structure ───
   function realmLabel(id) {
@@ -875,6 +883,7 @@ function renderGuide(data) {
       score: calcCellScore(r.raw, REL_DIM_MAP[k] || [], r.id)
     })).filter(n => n.score > 0);
   }
+  const needGlossMap = Object.fromEntries(relDimCards.map(d => [d.name, d.desc]));
   function bestWorstLine(items) {
     if(!items.length) return '';
     const max = Math.max(...items.map(n => n.score));
@@ -882,7 +891,8 @@ function renderGuide(data) {
     const bestArr = items.filter(n => n.score === max).map(n => n.label);
     const worstArr = items.filter(n => n.score === min).map(n => n.label);
     const joinList = arr => arr.length > 1 ? arr.slice(0,-1).join(', ') + ' and ' + arr.slice(-1) : arr[0];
-    return 'Strongest: ' + joinList(bestArr) + ', at ' + max + '%. Lowest: ' + joinList(worstArr) + ', at ' + min + '%.';
+    const worstText = worstArr.length === 1 ? glossed(worstArr[0], needGlossMap) : joinList(worstArr);
+    return 'Strongest: ' + joinList(bestArr) + ', at ' + max + '%. Lowest: ' + worstText + ', at ' + min + '%.';
   }
 
   const relCards = [];
@@ -951,7 +961,7 @@ function renderGuide(data) {
       const topRecurring = recurring[0];
       const hitList = topRecurring.hits.map(h => h.realm + ' (' + h.score + '%)').join(' and ');
       relCards.push(discussionCard('Worth Noticing', null,
-        topRecurring.label + ' comes up again as your most vulnerable need — it is the lowest-scoring need in ' + topRecurring.hits.length + ' of your relationships: ' + hitList + '.'));
+        glossed(topRecurring.label, needGlossMap) + ' comes up again as your most vulnerable need — it is the lowest-scoring need in ' + topRecurring.hits.length + ' of your relationships: ' + hitList + '.'));
     }
   }
 
@@ -973,6 +983,7 @@ function renderGuide(data) {
       return { label, score: Math.round(v/7*100) };
     }).filter(Boolean);
   }
+  const postureGlossMap = Object.fromEntries(intPostureCards.map(p => [p.name, p.desc]));
   function postureBestWorstLine(items) {
     if(!items.length) return '';
     const max = Math.max(...items.map(p => p.score));
@@ -980,7 +991,8 @@ function renderGuide(data) {
     const bestArr = items.filter(p => p.score === max).map(p => p.label);
     const worstArr = items.filter(p => p.score === min).map(p => p.label);
     const joinList = arr => arr.length > 1 ? arr.slice(0,-1).join(', ') + ' and ' + arr.slice(-1) : arr[0];
-    return 'Strongest: ' + joinList(bestArr) + ', at ' + max + '%. Lowest: ' + joinList(worstArr) + ', at ' + min + '%.';
+    const worstText = worstArr.length === 1 ? glossed(worstArr[0], postureGlossMap) : joinList(worstArr);
+    return 'Strongest: ' + joinList(bestArr) + ', at ' + max + '%. Lowest: ' + worstText + ', at ' + min + '%.';
   }
 
   const intCards = [];
@@ -1003,7 +1015,8 @@ function renderGuide(data) {
       emotionLabels[lowestEmotion.id] + ' scored ' + lowestEmotion.score + '%, your lowest-rated emotion. ' + postureBestWorstLine(lowPostures)));
   }
 
-  // Card 3 — Identity Dynamics: widest others-vs-self gap, and whether there's a trend
+  // Card 3 — Identity Dynamics: the biggest gap between how others perceive an emotion
+  // and how you perceive it yourself, and whether there's a trend
   const idThemesAll = ['grief','shame','fear','anger','desire','joy']
     .map(k => ({ id: k, others: idDataForNotes[k]?.others, self: idDataForNotes[k]?.self, gap: idDataForNotes[k]?.gap }))
     .filter(t => t.gap !== undefined);
@@ -1011,8 +1024,8 @@ function renderGuide(data) {
     const widestId = idThemesAll.reduce((a,b) => (b.gap||0) > (a.gap||0) ? b : a);
     let dynamicsBody;
     if((widestId.gap||0) >= 5) {
-      const dir = (widestId.others||0) > (widestId.self||0) ? 'others see you as healthier here than you experience yourself' : 'you experience yourself as healthier here than others perceive';
-      dynamicsBody = 'The widest others-vs-self gap is in ' + emotionLabels[widestId.id] + ', at ' + widestId.gap + '% — ' + dir + '.';
+      const dir = (widestId.others||0) > (widestId.self||0) ? 'others rate your emotional maturity here higher than you rate it yourself' : 'you rate your own emotional maturity here higher than others perceive it';
+      dynamicsBody = 'The biggest gap between how others perceive your emotional maturity and how you perceive it yourself shows up in ' + emotionLabels[widestId.id] + ', at ' + widestId.gap + '% — ' + dir + '.';
     } else {
       dynamicsBody = 'How others see you and how you see yourself are closely aligned across your emotions — no gap wider than ' + (widestId.gap||0) + '%.';
     }
@@ -1058,7 +1071,7 @@ function renderGuide(data) {
     const hardList = topGap.hardVals.map(h => emotionLabels[h.t] + ' (' + h.score + '%)').join(', ');
     const posList = topGap.posVals.map(p => emotionLabels[p.t] + ' (' + p.score + '%)').join(' and ');
     intCards.push(discussionCard('Worth Noticing', null,
-      topGap.label + ' is notably weaker in your harder, more vulnerable emotions than in your more hopeful ones — ' + hardList + ', versus ' + posList + '.'));
+      glossed(topGap.label, postureGlossMap) + ' is notably weaker in your harder, more vulnerable emotions than in your more hopeful ones — ' + hardList + ', versus ' + posList + '.'));
   }
 
   const themeInsightsHtml = discussionSection(intCards);
