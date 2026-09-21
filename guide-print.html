@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -359,7 +355,7 @@ function renderGuide(data) {
     {num:'08', name:'Freedom to Be Myself', desc:'Valued for who you are, not what you produce'},
   ];
   const aboutRelationalHtml = '<div class="section-header">About Your Relational Scores</div>'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart was made to pump — to move blood between cells and organs. Without that interaction between the heart and the rest of the body, there is death. Similarly, the Relational Assessment is built to understand our interactions within our spheres. It measures the interaction between you and God, you and your significant others, as well as others. It measures the quality of the flow in those relationships, whether something real is moving between you and those in your life.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart was made to pump — to move blood between cells and organs. Without that interaction between the heart and the rest of the body, there is death. Similarly, the Relational Assessment is built to understand our interactions within our spheres. It measures the interaction between you and God, and between you and the people who make up your life — a significant other, family, friends, work or school, and the wider community around you. It measures the quality of the flow in those relationships, whether something real is moving between you and those in your life.</p>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.25rem;max-width:none">Here are the needs within those relationships that were measured in the assessment.</p>'
     + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.25rem">'
     + relDimCards.map(d =>
@@ -386,7 +382,7 @@ function renderGuide(data) {
   ];
   const aboutInteriorHtml = '<div class="section-header">About Your Interior Scores</div>'
     + '<div style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:1.5rem">'
-    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart has substance — muscle, fiber, tissue, weight. The Interior Assessment measures what you are carrying. Not just whether an emotion is present, but how processed it is — how far it has moved through the natural arc that healthy emotional maturity follows.</p>'
+    + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">The heart has substance — muscle, fiber, tissue, weight. The Interior Assessment measures what you are carrying. Not just whether an emotion is present, but how processed it is — how far it has moved through the natural arc that healthy carrying follows.</p>'
     + '<p style="font-size:.88rem;color:#4a3a2a;line-height:1.95;margin-bottom:.9rem;max-width:none">Grief, shame, fear, anger, desire, love — each one is scored not for its presence or absence, but for the quality of your relationship with it. A high score does not mean you carry more. It means what you carry has more room to move. Each emotion is measured across six postures — six stages of the movement from raw experience toward integration.</p>'
     + '</div>'
     + '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.4rem;margin-bottom:1.25rem">'
@@ -424,14 +420,14 @@ function renderGuide(data) {
   const realmLabelsAll = ['God','Sig. Other','Family','Friends','Work','Community'];
   const realmChartPairs = realmLabelsAll.map((label, i) => ({label, val: realmVals[i]})).filter(r => r.val > 0);
 
-  const relChartsHtml = '<div class="section-header">Relational Engagement Scores</div>'
+  const relChartsHtml = '<div class="section-header">Relational Scores Overview</div>'
     + '<div class="charts-grid">'
     + '<div class="chart-card"><div class="chart-label">By Relationship</div>' + cssVerticalBars(realmChartPairs.map(r=>r.label), realmChartPairs.map(r=>r.val)) + '</div>'
     + '<div class="chart-card"><div class="chart-label">By Need</div>' + cssHorizontalBars(['Being Seen','Being Known','Voice','Belonging','Support','Trust','Calling','Freedom'], relDimVals) + '</div>'
     + '</div>';
 
   // ── INTERIOR CHARTS ───────────────────────────────────────
-  const intChartsHtml = '<div class="section-header">Interior Health</div>'
+  const intChartsHtml = '<div class="section-header">Interior Scores Overview</div>'
     + '<div class="charts-grid">'
     + '<div class="chart-card"><div class="chart-label">By Emotion</div>' + cssVerticalBars(['Grief','Shame','Fear','Anger','Desire','Love'], themeVals) + '</div>'
     + '<div class="chart-card"><div class="chart-label">By Posture</div>' + cssHorizontalBars(['Awareness','Honesty','Movement','Safety','Direction','Peace'], intDimVals) + '</div>'
@@ -715,7 +711,7 @@ function renderGuide(data) {
         + '</tr>';
     }).join('');
 
-    intMatrixHtml = '<div class="section-header">Emotional Maturity at a Glance</div>'
+    intMatrixHtml = '<div class="section-header">Interior Scores at a Glance</div>'
       + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each cell shows how that emotion is scoring across each of the six heart postures. Green is healthy, gold is developing, red is worth attention.</div>'
       + '<div style="overflow-x:auto;margin-bottom:2rem">'
       + '<table style="width:100%;border-collapse:collapse;font-size:.72rem"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>'
@@ -1024,17 +1020,17 @@ function renderGuide(data) {
     const widestId = idThemesAll.reduce((a,b) => (b.gap||0) > (a.gap||0) ? b : a);
     let dynamicsBody;
     if((widestId.gap||0) >= 5) {
-      const dir = (widestId.others||0) > (widestId.self||0) ? 'others rate your emotional maturity here higher than you rate it yourself' : 'you rate your own emotional maturity here higher than others perceive it';
-      dynamicsBody = 'The biggest gap between how others perceive your emotional maturity and how you perceive it yourself shows up in ' + emotionLabels[widestId.id] + ', at ' + widestId.gap + '% — ' + dir + '.';
+      const dir = (widestId.others||0) > (widestId.self||0) ? 'others see you carrying this more than you see it in yourself' : 'you see yourself carrying this more than others perceive';
+      dynamicsBody = 'The biggest gap between how others see you carrying an emotion and how you see yourself carrying it shows up in ' + emotionLabels[widestId.id] + ', at ' + widestId.gap + '% — ' + dir + '.';
     } else {
       dynamicsBody = 'How others see you and how you see yourself are closely aligned across your emotions — no gap wider than ' + (widestId.gap||0) + '%.';
     }
     const othersHigherCount = idThemesAll.filter(t => (t.gap||0) >= 5 && (t.others||0) > (t.self||0)).length;
     const selfHigherCount = idThemesAll.filter(t => (t.gap||0) >= 5 && (t.self||0) > (t.others||0)).length;
     if(othersHigherCount >= 2 && othersHigherCount > selfHigherCount) {
-      dynamicsBody += ' Across most emotions, others tend to rate your maturity higher than you rate it yourself.';
+      dynamicsBody += ' Across most emotions, others tend to see you carrying more than you see in yourself.';
     } else if(selfHigherCount >= 2 && selfHigherCount > othersHigherCount) {
-      dynamicsBody += ' Across most emotions, you tend to rate your own maturity higher than others perceive it.';
+      dynamicsBody += ' Across most emotions, you tend to see yourself carrying more than others perceive.';
     } else if(othersHigherCount > 0 && selfHigherCount > 0) {
       dynamicsBody += ' The direction varies by emotion rather than following one consistent pattern.';
     }
@@ -1111,13 +1107,13 @@ function renderGuide(data) {
     return '<div style="background:'+cardBg+';'+cardBorder+';border-radius:4px;padding:.75rem 1rem;break-inside:avoid">'
       + '<div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.5rem;font-weight:500">'+themeLabel+'</div>'
       + '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0;border-bottom:1px solid #ede8e0">'
-      + '<div style="width:165px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3;white-space:nowrap">How others see my maturity</div>'
+      + '<div style="width:165px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3;white-space:nowrap">How others see me carrying this</div>'
       + '<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden"><div style="width:'+(id.others||0)+'%;height:100%;background:'+barColor(id.others||0)+';border-radius:4px"></div></div>'
       + '<div style="width:34px;font-size:.7rem;font-weight:500;color:'+barColor(id.others||0)+';text-align:right">'+(id.others||0)+'%</div>'
       + '<div style="font-size:.6rem;color:'+barColor(id.others||0)+';margin-left:4px;white-space:nowrap">'+maturityTag(id.others||0)+'</div>'
       + '</div>'
       + '<div style="display:flex;align-items:center;gap:.75rem;padding:.35rem 0">'
-      + '<div style="width:165px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3;white-space:nowrap">How I see my own maturity</div>'
+      + '<div style="width:165px;font-size:.68rem;color:#6a5a4a;flex-shrink:0;text-align:right;line-height:1.3;white-space:nowrap">How I see myself carrying this</div>'
       + '<div style="flex:1;height:7px;background:#ede8e0;border-radius:4px;overflow:hidden"><div style="width:'+(id.self||0)+'%;height:100%;background:'+barColor(id.self||0)+';border-radius:4px"></div></div>'
       + '<div style="width:34px;font-size:.7rem;font-weight:500;color:'+barColor(id.self||0)+';text-align:right">'+(id.self||0)+'%</div>'
       + '<div style="font-size:.6rem;color:'+barColor(id.self||0)+';margin-left:4px;white-space:nowrap">'+maturityTag(id.self||0)+'</div>'
@@ -1126,8 +1122,8 @@ function renderGuide(data) {
   }).filter(Boolean);
 
   const identityInsightsHtml = identityCards.length
-    ? '<div class="section-header">Your Maturity With Each Emotion</div>'
-      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each emotion shown as two bars — how others see your maturity with it, and how you see your own maturity. A highlighted card with a gap note indicates something worth exploring.</div>'
+    ? '<div class="section-header">How You\'re Carrying Each Emotion</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1rem;font-style:italic">Each emotion shown as two bars — how others see you carrying it, and how you see yourself carrying it. A highlighted card with a gap note indicates something worth exploring.</div>'
       + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:2rem;align-items:start">'
       + identityCards.join('')
       + '</div>'
@@ -1205,74 +1201,6 @@ function renderGuide(data) {
     };
 
     const bigHeader = '<div class="section-header">' + (sectionHeaders[s.id] || s.label) + '</div>';
-
-    // ── SCORE PILLS per section ──────────────────────────────
-    let sectionPillsHtml = '';
-
-    if(s.id === 'picture') {
-      // Top 2 relational + top 2 interior + bottom 2 relational + bottom 2 interior
-      const allRel = [
-        {label:'Friends', val:a1?.friends}, {label:'Family', val:a1?.family},
-        {label:'Significant Other', val:a1?.partner}, {label:'Work / School', val:a1?.work},
-        {label:'Relationship with God', val:a1?.god}, {label:'Community', val:a1?.community}
-      ].filter(r=>numVal(r.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
-      const allInt = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief',shame:'Shame',fear:'Fear',anger:'Anger',desire:'Desire',joy:'Love'}[k], val:hs?.[k]}))
-        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(b.val)-numVal(a.val));
-      const top = [...allRel.slice(0,2), ...allInt.slice(0,2)];
-      const bot = [...allRel.slice(-2).reverse(), ...allInt.slice(-2).reverse()];
-      const pills = top.map(i=>scorePill(i.label, i.val, '')).join('')
-        + '<span style="display:inline-flex;align-items:center;padding:4px 6px;font-size:.6rem;color:#c4a882;font-family:sans-serif;opacity:.6">·</span>'
-        + bot.map(i=>scorePill(i.label, i.val, '')).join('');
-      sectionPillsHtml = pillRow(pills);
-    }
-
-    if(s.id === 'interior') {
-      const themeSorted = ['grief','shame','fear','anger','desire','joy']
-        .map(k=>({label:{grief:'Grief & Loss',shame:'Shame & Guilt',fear:'Fear & Anxiety',anger:'Anger',desire:'Desire & Hope',joy:'Loved & Delighted In (by God)'}[k], val:hs?.[k]}))
-        .filter(t=>numVal(t.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val));
-      const postureSorted = [
-        {label:'Awareness', val:hs?.awareness},{label:'Honesty', val:hs?.honesty},
-        {label:'Movement', val:hs?.movement},{label:'Safety', val:hs?.safety},
-        {label:'Direction', val:hs?.direction},{label:'Peace', val:hs?.peace}
-      ].filter(p=>numVal(p.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,2);
-      const low = themeSorted.slice(0,2);
-      const high = themeSorted.slice(-2).reverse();
-      const pills = [...high, ...low, ...postureSorted].map(i=>scorePill(i.label, i.val, '')).join('');
-      sectionPillsHtml = pillRow(pills);
-    }
-
-    if(s.id === 'invitation') {
-      const godOverall = numVal(a1?.god);
-      const godOut = numVal(a1?.god_outward);
-      const godSelf = numVal(a1?.god_self);
-      const gap = Math.abs(godOut - godSelf);
-      const needEntries = realmNeedScores('god');
-      const topNeeds = needEntries.slice(0,3);
-      const botNeeds = needEntries.slice(-3).reverse();
-      let pills = scorePill('Relationship with God', a1?.god, '');
-      if(gap >= 10) pills += scorePill('God toward you', a1?.god_outward, '') + scorePill('You toward God', a1?.god_self, '');
-      const needPills = '<div style="text-align:center;margin:.25rem 0 1rem">'
-        + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.4rem;font-weight:500">Strongest Needs in This Relationship</div>'
-        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin-bottom:.75rem">'
-        + topNeeds.map(([l,v])=>scorePill(l,v+'')).join('')
-        + '</div>'
-        + '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#c4a882;margin-bottom:.4rem;font-weight:500">Weakest Needs in This Relationship</div>'
-        + '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0">'
-        + botNeeds.map(([l,v])=>scorePill(l,v+'')).join('')
-        + '</div>'
-        + '</div>';
-      sectionPillsHtml = '<div style="text-align:center;margin:.75rem 0 .5rem">' + pills + '</div>' + needPills;
-    }
-
-    if(s.id === 'soulcare') {
-      const postureSorted = [
-        {label:'Awareness', val:hs?.awareness},{label:'Honesty', val:hs?.honesty},
-        {label:'Movement', val:hs?.movement},{label:'Safety', val:hs?.safety},
-        {label:'Direction', val:hs?.direction},{label:'Peace', val:hs?.peace}
-      ].filter(p=>numVal(p.val)>0).sort((a,b)=>numVal(a.val)-numVal(b.val)).slice(0,3);
-      sectionPillsHtml = pillRow(postureSorted.map(p=>scorePill(p.label, p.val, '')).join(''));
-    }
 
     if(s.id === 'practices') {
       const pc = s.practicesContent || (typeof s.content === 'object' ? s.content : null);
@@ -1384,7 +1312,6 @@ function renderGuide(data) {
     const sectionQuote = sectionQuotes[s.id] || '';
     return bigHeader
       + '<div class="section">'
-      + sectionPillsHtml
       + (function() {
         const paraList = filteredParas.map(p => {
           let text = p.trim()
