@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -616,17 +614,10 @@ function submitGate(){
       }).join('');
       const equityEmailHtml=equityBlocksEmail?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Equity</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+equityBlocksEmail+'</tbody></table>') : '';
 
-      // ── Email versions of Worth Naming / Realm by Realm / Where to Start — table-based for email client safety ──
-      const emailWarnings=getWarnings(scores);
-      const warnColor={red:'#c97a5a',amber:'#d4a35a'};
-      const warningsEmailHtml=emailWarnings.length?('<p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Worth Naming</p>'
-        +emailWarnings.map(w=>'<table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-left:3px solid '+warnColor[w.severity]+';border-radius:4px;margin:0 0 12px"><tr><td style="padding:16px 18px">'
-          +'<p style="font-size:14px;font-weight:700;color:#f0e8df;margin:0 0 4px">'+w.title+'</p>'
-          +'<p style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:'+warnColor[w.severity]+';margin:0 0 10px">'+w.subtitle+'</p>'
-          +'<p style="font-size:13px;color:#c0b8b0;line-height:1.8;margin:0">'+w.text+'</p>'
-          +'</td></tr></table>').join('')
-        +'<div style="margin-bottom:8px"></div>') : '';
-
+      // ── Realm by Realm / Where to Start — table-based for email client safety ──
+      // (Worth Naming intentionally omitted from the email — data over interpretation.
+      // getWarnings() is still called separately in saveToSheets() so Steve keeps that
+      // information in the spreadsheet even though the client no longer sees it here.)
       const emailPatterns=realmOrder.filter(id=>realm[id]&&realm[id].answered>0).map(id=>{
         const p=getPattern(realm[id].outward,realm[id].self,id);
         return {label:realmLabels[id],pattern:p};
@@ -645,7 +636,15 @@ function submitGate(){
         +emailActionPlan.map((step,i)=>'<tr><td style="padding:8px 0;vertical-align:top;width:26px"><div style="width:22px;height:22px;border-radius:50%;background:#2a2520;border:1px solid #3a3530;color:#c4a882;font-size:12px;font-weight:700;text-align:center;line-height:22px">'+(i+1)+'</div></td><td style="padding:8px 0 8px 12px"><p style="font-size:13px;font-weight:700;color:#e8d7a0;margin:0 0 3px">'+step.title+'</p><p style="font-size:12px;color:#a09890;line-height:1.8;margin:0">'+step.text+'</p></td></tr>').join('')
         +'</table>') : '';
 
-      const htmlEmail='<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%"><tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center"><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr><tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px"><p style="font-size:15px;color:#d4ccc4;line-height:1.8;margin:0 0 20px">'+userName+', here are your Relational Health Assessment results.</p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'+needsEmailHtml+equityEmailHtml+warningsEmailHtml+patternsEmailHtml+actionPlanEmailHtml+'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br><span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p></td></tr><tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 The BoldHearts Group LLC</p></td></tr></table></td></tr></table></body></html>';
+      // ── Interior Health Assessment invitation — email equivalent of the on-page "Step 2 of 2" card ──
+      const interiorCtaEmailHtml='<table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1714;border:1px solid #2a2825;border-top:3px solid #c4a882;border-radius:4px;margin:0 0 24px"><tr><td style="padding:28px 26px;text-align:center">'
+        +'<p style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f0e8df;margin:0 0 10px">There\'s more beneath this.</p>'
+        +'<p style="font-size:13px;color:#a09890;line-height:1.85;margin:0 0 18px">Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it. I\'d love for you to take that next step when you\'re ready.</p>'
+        +'<a href="https://forneysteve.github.io/BoldHearts/interior.html" style="display:inline-block;font-family:Helvetica Neue,Arial,sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#111111;background-color:#c4a882;padding:12px 28px;border-radius:4px;text-decoration:none">Take the Interior Health Assessment &rarr;</a>'
+        +'<p style="font-size:11px;color:#5a5550;letter-spacing:.04em;margin:14px 0 0">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 48 questions &nbsp;&middot;&nbsp; Use the same email</p>'
+        +'</td></tr></table>';
+
+      const htmlEmail='<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0d0d;font-family:Helvetica Neue,Arial,sans-serif"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0d;padding:32px 16px"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%"><tr><td style="background:#1a1714;border:1px solid #2a2825;border-radius:4px 4px 0 0;padding:24px 32px;text-align:center"><p style="font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#f0e8df;margin:0">Bold<span style="color:#e8d7a0">Hearts</span></p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:6px 0 0">Relational Health Assessment</p></td></tr><tr><td style="background:#161412;border:1px solid #2a2825;border-top:none;border-radius:0 0 4px 4px;padding:28px 32px"><p style="font-size:15px;color:#d4ccc4;line-height:1.9;margin:0 0 20px">'+userName+', thank you for taking the time to look honestly at your relationships — that\'s not a small thing, and I don\'t take it for granted that you did. What follows is a snapshot of your Heart Engagement across the relationships in your life right now — not a verdict, just an honest starting point for a conversation.</p><p style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6a6258;margin:0 0 8px;border-bottom:1px solid #2a2825;padding-bottom:6px">Heart Engagement Scores</p><table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1b18;border:1px solid #2a2825;border-radius:4px;margin:0 0 20px"><tbody>'+realmRows+'</tbody></table>'+needsEmailHtml+equityEmailHtml+patternsEmailHtml+actionPlanEmailHtml+interiorCtaEmailHtml+'<p style="font-size:13px;color:#a09890;line-height:1.9;margin:0 0 18px">Whatever you\'re noticing as you read through this — something that stings, something that surprises you, something you want to talk through — I\'d love to hear from you. Just reply to this email, or let\'s find a time to talk it through together.</p><p style="font-size:13px;color:#a09890;line-height:1.9;margin:0">I\'m for you,<br><br><strong style="color:#e8d7a0">Steve Forney</strong><br><span style="color:#6a6258;font-size:12px">BoldHearts &nbsp;|&nbsp; boldhearts.org</span></p></td></tr><tr><td style="padding:16px 0;text-align:center"><p style="font-size:11px;color:#3a3530;margin:0">&copy; 2026 The BoldHearts Group LLC</p></td></tr></table></td></tr></table></body></html>';
       emailjs.send(EJSSVC,EJSTPL,{to_name:userName,to_email:userEmail,reply_to:userEmail,overall_score:scores.overall+'%',results_body:htmlEmail,from_name:'Steve Forney — BoldHearts'}).then(()=>{
         new Image().src=SHEETS_URL+'?'+new URLSearchParams({action:'updatepipeline',email:userEmail,rel_email_sent:'Yes'}).toString();
       }).catch(e=>console.error('Email error:',e));
@@ -737,7 +736,6 @@ function barRow(label,pct,tag,col){
 
 function renderResults(scores){
   const{realm,overall}=scores;
-  const warnings=getWarnings(scores);
   const ar=REALMS.filter(r=>realm[r.id].answered>0);
   const realmRows=REALMS.map(r=>{
     const s=realm[r.id];if(s.answered===0)return'';
@@ -764,16 +762,9 @@ function renderResults(scores){
   const lowestDim=dimScores.filter(d=>d.score>0).sort((a,b)=>a.score-b.score)[0];
   const gapRealm=REALMS.filter(r=>realm[r.id]&&realm[r.id].answered>0).map(r=>({label:r.label,gap:Math.abs(realm[r.id].self-realm[r.id].outward)})).sort((a,b)=>b.gap-a.gap)[0];
 
-  // ── WARNINGS — computed above, now actually rendered ──
-  const warningColors={red:'#c97a5a',amber:'#d4a35a'};
-  const warningsHtml=warnings.length?('<div class="section-label">Worth Naming</div>'
-    +'<div style="margin-bottom:1.5rem">'
-    +warnings.map(w=>'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.12);border-left:3px solid '+warningColors[w.severity]+';border-radius:4px;padding:1.5rem 1.75rem;margin-bottom:.85rem">'
-      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:.5rem"><i class="ti '+w.icon+'" style="color:'+warningColors[w.severity]+';font-size:18px"></i><h3 style="margin:0;color:#f0e8df;font-size:1.15rem">'+w.title+'</h3></div>'
-      +'<div style="font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:'+warningColors[w.severity]+';margin-bottom:.75rem">'+w.subtitle+'</div>'
-      +'<p style="font-size:.9rem;color:#c0b8b0;line-height:1.9;margin:0;max-width:none">'+w.text+'</p>'
-      +'</div>').join('')
-    +'</div>') : '';
+  // (Worth Naming intentionally omitted from the results page — data over interpretation.
+  // getWarnings() is still called separately in saveToSheets() so Steve keeps that
+  // information in the spreadsheet even though the client no longer sees it here.)
 
   // ── REALM PATTERNS — the specific Mutual/Disconnected/Giving More/Holding Back read per realm ──
   const patternCards=ar.map(r=>{
@@ -806,7 +797,6 @@ function renderResults(scores){
     +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+dimHtml+'</div>'
     +'<div class="section-label">Heart Engagement Equity</div>'
     +'<div style="background:#1a1816;border:1px solid rgba(196,168,130,.1);border-radius:4px;margin-bottom:1rem">'+engagementRows+'</div>'
-    +warningsHtml
     +patternsHtml
     +'<div class="deepdive-card" style="margin-top:2rem"><div class="dd-eyebrow">Step 1 of 2</div><h3>Where to start.</h3><div style="max-width:520px;margin:0 auto 1rem;text-align:left">'+actionPlanHtml+'</div></div>'
     +'<div class="deepdive-card"><div class="dd-eyebrow">Step 2 of 2</div><h3>The Interior Health Assessment goes deeper.</h3><p>Your relational scores show how connected you are to the people around you. The Interior Health Assessment goes deeper — what you\'re carrying underneath that shapes all of it.</p><a href="interior.html" class="deepdive-btn">Take the Interior Health Assessment &rarr;</a><div class="deepdive-note">Free &nbsp;&middot;&nbsp; 10 minutes &nbsp;&middot;&nbsp; 48 questions &nbsp;&middot;&nbsp; Use the same email</div></div>'
