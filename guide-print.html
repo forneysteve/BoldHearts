@@ -838,10 +838,10 @@ function renderGuide(data) {
       + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.85">'+bodyHtml+'</div>'
       + '</div>';
   }
-  function discussionSection(cardsArr) {
+  function discussionSection(cardsArr, label) {
     if(!cardsArr.length) return '';
-    return '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:2rem;break-inside:avoid">'
-      + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">Worth a Discussion</div>'
+    return '<div style="background:#fdf6e8;border:2px solid #c4a882;border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;break-inside:avoid">'
+      + '<div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#c4a882;margin-bottom:1rem;font-weight:600;padding-bottom:.5rem;border-bottom:1px solid #e8d8c0">'+(label || 'Your Synthesis')+'</div>'
       + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;align-items:start">'
       + cardsArr.join('')
       + '</div>'
@@ -961,7 +961,7 @@ function renderGuide(data) {
     }
   }
 
-  const relationalNotesHtml = discussionSection(relCards);
+  // (relCards feeds into the combined "Your Synthesis" section, built after intCards below)
 
   // ── INTERIOR CHARTS ───────────────────────────────────────
   // ── INTERIOR "WORTH A DISCUSSION" — fixed 4-card structure (mirrors relational) ──
@@ -1070,7 +1070,14 @@ function renderGuide(data) {
       glossed(topGap.label, postureGlossMap) + ' is notably weaker in your harder, more vulnerable emotions than in your more hopeful ones — ' + hardList + ', versus ' + posList + '.'));
   }
 
-  const themeInsightsHtml = discussionSection(intCards);
+  // ── YOUR SYNTHESIS — standalone section combining both card sets,
+  // placed right before the AI-generated narrative begins ─────
+  const yourSynthesisHtml = (relCards.length || intCards.length)
+    ? '<div class="section-header">Your Synthesis</div>'
+      + '<div style="font-size:.82rem;color:#4a3a2a;line-height:1.9;margin-bottom:1.25rem;font-style:italic">These are the patterns the numbers themselves point to once they are read together — not interpretation yet, just what the data adds up to.</div>'
+      + discussionSection(relCards, 'Relational')
+      + discussionSection(intCards, 'Interior')
+    : '';
 
   // ── IDENTITY INSIGHTS ────────────────────────────────────
   const identityData = hs?.identity || {};
@@ -1349,13 +1356,12 @@ function renderGuide(data) {
     + relChartsHtml
     + relMatrixHtml
     + realmCardsSection
-    + relationalNotesHtml
     + aboutInteriorHtml
     + intChartsHtml
     + intMatrixHtml
     + identityInsightsHtml
-    + themeInsightsHtml
     + disambiguationHtml
+    + yourSynthesisHtml
     + sectionsHtml
 
     
